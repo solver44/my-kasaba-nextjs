@@ -1,0 +1,34 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.input {
+  fieldset {
+    border: 1px solid #6e7080 !important;
+  }
+  border-radius: var(--input-radius);
+  & > :first-child {
+    padding: 10px !important;
+    min-height: auto !important;
+    font-size: 1rem;
+  }
+  &.invalid {
+    fieldset {
+      border: 1px solid red !important;
+    }
+  }
+}
+.row {
+  display: flex;
+  align-items: stretch;
+  &.full {
+    min-width: 75%;
+    .input {
+      width: 100% !important;
+    }
+  }
+}
+.label {
+  margin-right: 20px;
+}

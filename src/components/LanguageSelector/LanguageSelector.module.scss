@@ -1,0 +1,9 @@
+/* LanguageSelector.module.scss */
+.languageSelector {
+  border: none !important;
+  padding-right: 40px !important;
+  &:hover{
+    cursor: pointer;
+    box-shadow: none !important;
+  }
+}

@@ -1,0 +1,24 @@
+.wrapper{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.col{
+    display: flex;
+    flex-direction: column;
+}
+.row{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.title{
+    font-size: 44px;
+}
+.desc{
+    font-size: 16px;
+    color: #AEAEAE;
+}

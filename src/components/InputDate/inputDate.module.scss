@@ -1,0 +1,39 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+.input {
+  fieldset {
+    border: 1px solid #6e7080 !important;
+  }
+  border-radius: var(--input-radius);
+  input {
+    padding: 10px !important;
+  }
+  &.invalid{
+    fieldset {
+      border: 1px solid red !important;
+    }
+  }
+}
+.label {
+  font-weight: 400;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  gap: 20px;
+  &.textarea {
+    align-items: start;
+    span {
+      margin-top: 10px;
+    }
+  }
+  &.full {
+    width: 100%;
+    .input {
+      width: 75%;
+    }
+  }
+}

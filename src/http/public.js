@@ -1,0 +1,101 @@
+import axios from "axios";
+import { $axios, $publicAxios } from ".";
+
+export async function fetchSTIR(value) {
+  if (value?.length < 9) return;
+  try {
+    const data = await $publicAxios.post("/stir", {
+      tin: value,
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function fetchPINFL(value, givenDate) {
+  if (value?.length < 14) return;
+  try {
+    const data = await $publicAxios.post("/pinfl", {
+      pinfl: value,
+      givenDate,
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function sendApplication({
+  pinfl,
+  tin,
+  phone,
+  givenDate,
+  branchId,
+  soatoId,
+}) {
+  try {
+    const { data } = await $axios.post(
+      "/rest/services/application/apply",
+      {
+        application: {
+          pinfl,
+          tin,
+          phone,
+          givenDate,
+          branch: {
+            id: branchId,
+          },
+          soato: {
+            id: soatoId,
+          },
+        },
+      },
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function checkStatusApplication(code) {
+  try {
+    const { data } = await $axios.get("/rest/services/application/check", {
+      params: { code },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function getBranches() {
+  try {
+    const { data } = await $axios.get("/rest/services/classifiers/branchs");
+    return data;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function getRegions() {
+  try {
+    const { data } = await $axios.get("/rest/services/classifiers/regions");
+    return data;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function getDistricts(regionId) {
+  if (!regionId) return false;
+  try {
+    const { data } = await $axios.get("/rest/services/classifiers/districts", {
+      params: { regionId },
+    });
+    return data;
+  } catch (error) {
+    return [];
+  }
+}
