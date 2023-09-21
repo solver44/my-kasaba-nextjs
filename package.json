@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p 80",
-    "lint": "next lint"
+    "lint": "next lint",
+    "bg": "npm run clear && pm2 start npm -- start",
+    "clear": "pm2 stop all"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
