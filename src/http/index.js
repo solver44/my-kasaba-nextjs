@@ -61,13 +61,15 @@ $axios.interceptors.response.use(
 
 $axios.interceptors.request.use(async (config) => {
   let token = "";
-  if (typeof window === "undefined") {
-    // Running on the server-side (SSR)
-    token = (await readJSONFile())?.accessToken;
-  } else {
-    // Running on the client-side (browser)
-    token = TOKENS.ACCESS_TOKEN;
-  }
+  try {
+    if (typeof window === "undefined") {
+      // Running on the server-side (SSR)
+      token = (await readJSONFile())?.accessToken;
+    } else {
+      // Running on the client-side (browser)
+      token = TOKENS.ACCESS_TOKEN;
+    }
+  } catch (error) {}
   config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

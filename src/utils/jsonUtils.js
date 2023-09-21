@@ -1,10 +1,10 @@
 export async function readJSONFile() {
-  const fs = require("fs-extra");
-  const path = require("path");
-
-  const filePath = path.join(process.cwd(), "temp.json");
-
   try {
+    const fs = require("fs-extra");
+    const path = require("path");
+
+    const filePath = path.join(process.cwd(), "temp.json");
+
     const data = await fs.readFile(filePath, "utf-8");
     return JSON.parse(data);
   } catch (error) {
@@ -14,12 +14,12 @@ export async function readJSONFile() {
 }
 
 export async function writeJSONFile(data) {
-  const fs = require("fs-extra");
-  const path = require("path");
-
-  const filePath = path.join(process.cwd(), "temp.json");
-
   try {
+    const fs = require("fs-extra");
+    const path = require("path");
+  
+    const filePath = path.join(process.cwd(), "temp.json");
+
     await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
     console.log("JSON file updated successfully.");
   } catch (error) {
