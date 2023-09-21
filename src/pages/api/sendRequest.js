@@ -5,8 +5,13 @@ export default async function handler(req, res) {
     try {
       const { token, data } = req.body;
       const isValid = await verifyRecaptcha(token);
-      if (!isValid) {
-        res.status(498).json({ error: "reCAPTCHA verification failed'" });
+      if (isValid !== true) {
+        res
+          .status(498)
+          .json({
+            error: "reCAPTCHA verification failed'",
+            codes: isValid?.error,
+          });
       }
       const response = await sendApplication(data);
       // await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -33,6 +38,6 @@ async function verifyRecaptcha(token) {
   if (data?.success) {
     return true; // reCAPTCHA was successfully validated
   } else {
-    return false; // reCAPTCHA verification failed
+    return { error: (data || {})["error-codes"] }; // reCAPTCHA verification failed
   }
 }
