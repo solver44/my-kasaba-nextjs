@@ -1,6 +1,5 @@
 import { sendApplication } from "@/http/kasaba";
-
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
