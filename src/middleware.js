@@ -11,7 +11,7 @@ export function middleware(req) {
       !ref?.includes(process.env.APP_URL1) &&
       !ref?.includes(process.env.APP_URL2)
     ) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ message: "Not allowed" }, { status: 401 });
     }
   }
 

@@ -79,4 +79,4 @@ export async function sendApplication({
   } catch (error) {
     return error;
   }
-}Í
+}

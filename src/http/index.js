@@ -31,7 +31,11 @@ $axios.interceptors.response.use(
           TOKENS.ACCESS_TOKEN = "";
           TOKENS.REFRESH_TOKEN = "";
           // Refresh the token
-          const result = await axios.get("/api/refreshToken"); // Use $axios to make the request
+          try {
+            var result = await axios.get("/api/refreshToken"); // Use $axios to make the request
+          } catch (error) {
+            console.log(error);
+          }
           const tokens = result?.data;
           if (!tokens) return Promise.reject(error);
           const accessToken = tokens?.access_token;
