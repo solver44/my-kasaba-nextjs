@@ -22,7 +22,7 @@ const PrivateRoute = ({ children }) => {
 
   if (loading) {
     // Display a loading indicator while checking login status
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return children;
