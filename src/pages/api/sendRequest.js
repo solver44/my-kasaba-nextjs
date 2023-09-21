@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 }
 
 async function verifyRecaptcha(token) {
-  const url = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`;
+  const url = `https://www.google.com/recaptcha/api/siteverify?secret=6LeWaT4oAAAAAIWmh0s5zR4fAGQlsBLxDr_gViQj&response=${token}`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -30,7 +30,7 @@ async function verifyRecaptcha(token) {
   const data = await response.json();
 
   // Check if reCAPTCHA verification was successful
-  if (data.success) {
+  if (data?.success) {
     return true; // reCAPTCHA was successfully validated
   } else {
     return false; // reCAPTCHA verification failed
