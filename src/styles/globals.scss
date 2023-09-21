@@ -18,6 +18,7 @@ body {
 .wrapper {
   background-color: var(--wrapper-bg);
   padding: var(--wrapper-pg);
+  border-radius: var(--radius);
 }
 .row {
   display: flex;
@@ -97,6 +98,7 @@ body {
   font-weight: 500;
   border: none;
   font-size: 16px;
+  border-radius: var(--input-radius);
   background-color: var(--button-color);
   cursor: pointer;
   &:hover {

@@ -26,34 +26,13 @@ export async function fetchPINFL(value, givenDate) {
   }
 }
 
-export async function sendApplication({
-  pinfl,
-  tin,
-  phone,
-  givenDate,
-  branchId,
-  soatoId,
-}) {
+export async function sendApplicationViaBack(data, token) {
   try {
-    const { data } = await $axios.post(
-      "/rest/services/application/apply",
-      {
-        application: {
-          pinfl,
-          tin,
-          phone,
-          givenDate,
-          branch: {
-            id: branchId,
-          },
-          soato: {
-            id: soatoId,
-          },
-        },
-      },
-      { headers: { "Content-Type": "application/json" } }
-    );
-    return data;
+    const response = await $publicAxios.post("/sendRequest", {
+      data,
+      token,
+    });
+    return response;
   } catch (error) {
     return error;
   }

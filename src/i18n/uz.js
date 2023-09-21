@@ -3,7 +3,7 @@ export default {
   translation: {
     welcome: "Xush kelibsiz!",
     loginTitle: "Kirish",
-    registerTitle: "Ro'yhatdan o'tish",
+    registerTitle: "Murojaat yuborish",
     login: {
       title: "Kasaba uyushmasi portaliga",
     },
@@ -56,14 +56,14 @@ export default {
       step3: "BKUT hujjatlari",
     },
     "input-error": {
-      pinfl: "JSHSHIR da xatolik mavjud!",
+      pinfl: "JShShIR da xatolik mavjud!",
       date: "Sana xato kiritildi!",
       empty: "Maydon kiritilmadi!",
       fill: "Iltimos, maydonni to'ldiring.",
       applicationId: "Murojaat ID si xato kiritildi!",
     },
 
-    pinfl: "JSHSHIR",
+    pinfl: "JShShIR",
     "passport-given-date": "Passport berilgan sana",
     "first-name": "Ismi",
     "second-name": "Familiyasi",
@@ -130,5 +130,7 @@ export default {
       "Murojjatni yuborishda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
     "error-form-application": "Murojaat shakli noto'g'ri kiritilgan!",
     "not-found": "Yo'q",
+
+    "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang."
   },
 };

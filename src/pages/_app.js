@@ -41,6 +41,7 @@ const MyApp = ({ Component, pageProps, tokens }) => {
     >
       <Head>
         <title>Shaxsiy Kabinet | My Kasaba</title>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <link rel="shortcut icon" href="/icon.png" />
       </Head>
       <SnackbarProvider maxSnack={3}>

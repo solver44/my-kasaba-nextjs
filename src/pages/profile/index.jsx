@@ -1,5 +1,5 @@
 import React from "react";
-import HomeWrapper from "../Home/wrapper";
+import HomeWrapper from "../home/wrapper";
 import { useTranslation } from "react-i18next";
 import styles from "./profile.module.scss";
 import BigButton from "../../components/BigButton";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./registerBkut.module.scss";
-import HomeWrapper from "../Home/wrapper";
+import HomeWrapper from "../home/wrapper";
 import { useTranslation } from "react-i18next";
 import LinearStepper from "../../components/Stepper";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";

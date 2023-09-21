@@ -47,3 +47,36 @@ export async function findSTIR(tin) {
     return { status: error?.status, message: error?.message };
   }
 }
+
+export async function sendApplication({
+  pinfl,
+  tin,
+  phone,
+  givenDate,
+  branchId,
+  soatoId,
+}) {
+  try {
+    const { data } = await $axios.post(
+      "/rest/services/application/apply",
+      {
+        application: {
+          pinfl,
+          tin,
+          phone,
+          givenDate,
+          branch: {
+            id: branchId,
+          },
+          soato: {
+            id: soatoId,
+          },
+        },
+      },
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return data;
+  } catch (error) {
+    return error;
+  }
+}Í

@@ -1,3 +1,4 @@
+"use client";
 import styles from "./request.module.scss";
 import React, { useEffect, useRef, useState } from "react";
 import logo from "public/kasaba-logo.svg";
@@ -16,7 +17,7 @@ import {
   getBranches,
   getDistricts,
   getRegions,
-  sendApplication,
+  sendApplicationViaBack,
 } from "@/http/public";
 import DropDown from "@/components/DropDown";
 import { useSnackbar } from "notistack";
@@ -65,6 +66,24 @@ export default function RequestPage({ router }) {
 
   const { caches } = useSelector((state) => state);
   const actions = useActions();
+
+  useEffect(() => {
+    const initializeRecaptcha = () => {
+      if (window.grecaptcha && window.grecaptcha.render) {
+        // Initialize reCAPTCHA after the script has loaded
+        window.grecaptcha.render("recaptcha-container", {
+          sitekey: "6LeWaT4oAAAAAMCtmf03tyxo495eGt_J2xpn_fzp",
+          // Other reCAPTCHA options here
+        });
+      } else {
+        // Retry initialization after a short delay
+        setTimeout(initializeRecaptcha, 100);
+      }
+    };
+
+    initializeRecaptcha();
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       let dataProvinces = await getRegions();
@@ -110,6 +129,8 @@ export default function RequestPage({ router }) {
   };
 
   const handleSubmit = async () => {
+    // Check reCAPTCHA response
+    const recaptchaResponse = grecaptcha.getResponse();
     // Check if any input is invalid
     let isAnyInvalid = false;
     Object.values(formData).map((isValid, index) => {
@@ -128,19 +149,27 @@ export default function RequestPage({ router }) {
         }));
       }
     });
-    if (isAnyInvalid) {
-      enqueueSnackbar(t("error-form-application"), { variant: "error" });
+    if (isAnyInvalid || !recaptchaResponse) {
+      if (!recaptchaResponse)
+        enqueueSnackbar(t("recaptcha-error"), {
+          variant: "error",
+        });
+      if (isAnyInvalid)
+        enqueueSnackbar(t("error-form-application"), { variant: "error" });
       return;
     }
     actions.showLoading(true);
-    const data = await sendApplication({
-      pinfl: formData.pinfl,
-      tin: formData.inn,
-      phone: formData.phoneNumber,
-      givenDate: formData.passportGivenDate,
-      soatoId: formData.district,
-      branchId: formData.form3,
-    });
+    const data = await sendApplicationViaBack(
+      {
+        pinfl: formData.pinfl,
+        tin: formData.inn,
+        phone: formData.phoneNumber,
+        givenDate: formData.passportGivenDate,
+        soatoId: formData.district,
+        branchId: formData.form3,
+      },
+      recaptchaResponse
+    );
     if (data?.success) {
       actions.showLoading(false);
       actions.caches({
@@ -400,6 +429,7 @@ export default function RequestPage({ router }) {
               />
             </span>
             <div className={styles.bottom}>
+              <div id="recaptcha-container"></div>
               <button onClick={handleSubmit} className="primary-btn">
                 {t("request-page.submit")}
               </button>
