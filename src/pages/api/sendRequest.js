@@ -6,12 +6,10 @@ export default async function handler(req, res) {
       const { token, data } = req.body;
       const isValid = await verifyRecaptcha(token);
       if (isValid !== true) {
-        res
-          .status(498)
-          .json({
-            error: "reCAPTCHA verification failed'",
-            codes: isValid?.error,
-          });
+        res.status(498).json({
+          error: "reCAPTCHA verification failed'",
+          codes: isValid?.error,
+        });
       }
       const response = await sendApplication(data);
       // await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -26,7 +24,7 @@ export default async function handler(req, res) {
 }
 
 async function verifyRecaptcha(token) {
-  const url = `https://www.google.com/recaptcha/api/siteverify?secret=6LeWaT4oAAAAAIWmh0s5zR4fAGQlsBLxDr_gViQj&response=${token}`;
+  const url = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`;
 
   const response = await fetch(url, {
     method: "POST",

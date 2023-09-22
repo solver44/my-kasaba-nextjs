@@ -8,7 +8,7 @@ const config = {
   },
 };
 export const $axios = axios.create({
-  baseURL: "http://test.kasaba.uz:8000/",
+  baseURL: "http://test.kasaba.uz:8000",
   ...config,
 });
 
@@ -21,7 +21,7 @@ $axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (
-      error.response &&
+      error?.response &&
       (error.response?.data?.error === "invalid_token" ||
         error.response.status === 401)
     ) {

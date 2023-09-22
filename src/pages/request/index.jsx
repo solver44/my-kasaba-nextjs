@@ -70,11 +70,13 @@ export default function RequestPage({ router }) {
   useEffect(() => {
     const initializeRecaptcha = () => {
       if (window.grecaptcha && window.grecaptcha.render) {
-        // Initialize reCAPTCHA after the script has loaded
-        window.grecaptcha.render("recaptcha-container", {
-          sitekey: "6LeWaT4oAAAAAMCtmf03tyxo495eGt_J2xpn_fzp",
-          // Other reCAPTCHA options here
-        });
+        try {
+          // Initialize reCAPTCHA after the script has loaded
+          window.grecaptcha.render("recaptcha-container", {
+            sitekey: "6LeWaT4oAAAAAMCtmf03tyxo495eGt_J2xpn_fzp",
+            // Other reCAPTCHA options here
+          });
+        } catch (error) {}
       } else {
         // Retry initialization after a short delay
         setTimeout(initializeRecaptcha, 100);
@@ -167,6 +169,8 @@ export default function RequestPage({ router }) {
         givenDate: formData.passportGivenDate,
         soatoId: formData.district,
         branchId: formData.form3,
+        email: formData.email,
+        comment: formData.form4,
       },
       recaptchaResponse
     );

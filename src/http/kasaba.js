@@ -48,35 +48,41 @@ export async function findSTIR(tin) {
   }
 }
 
-export async function sendApplication({
-  pinfl,
-  tin,
-  phone,
-  givenDate,
-  branchId,
-  soatoId,
-}) {
+export async function sendApplication(_data) {
   try {
-    const { data } = await $axios.post(
-      "/rest/services/application/apply",
-      {
-        application: {
-          pinfl,
-          tin,
-          phone,
-          givenDate,
-          branch: {
-            id: branchId,
-          },
-          soato: {
-            id: soatoId,
-          },
+    const { pinfl, tin, phone, givenDate, branchId, email, comment, soatoId } =
+      _data;
+
+    // Define the request payload as a separate object for clarity
+    const requestData = {
+      application: {
+        pinfl,
+        tin,
+        phone,
+        givenDate,
+        email,
+        branch: {
+          id: branchId,
         },
+        soato: {
+          id: soatoId,
+        },
+        comment,
       },
-      { headers: { "Content-Type": "application/json" } }
+    };
+
+    // Make the POST request using axios
+    const response = await $axios.post(
+      "/rest/services/application/apply",
+      requestData,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
     );
-    return data;
+
+    return response?.data;
   } catch (error) {
-    return error;
+    // Handle the error and provide a meaningful response
+    return { status: error?.status, message: error?.message };
   }
 }
