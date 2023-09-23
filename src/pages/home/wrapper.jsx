@@ -8,7 +8,7 @@ import Logout from "../../components/Logout";
 import Image from "next/image";
 import PrivateRoute from "@/utils/withAuth";
 
-const HomeWrapper = ({ children, title, desc }) => {
+const HomeWrapper = ({ children, noHeader, title, desc }) => {
   return (
     <PrivateRoute>
       <div className={styles.container}>
@@ -23,7 +23,7 @@ const HomeWrapper = ({ children, title, desc }) => {
           </div>
         </div>
         <div className={"wrapper " + styles.right}>
-          <HomeContentWrapper title={title} desc={desc}>
+          <HomeContentWrapper noHeader={noHeader} title={title} desc={desc}>
             {children}
           </HomeContentWrapper>
         </div>

@@ -4,10 +4,10 @@ import EmailIcon from "@mui/icons-material/Email";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Profile from "../Profile";
 
-export default function HomeContentWrapper({ children, title, desc }) {
+export default function HomeContentWrapper({ children, noHeader, title, desc }) {
   return (
     <React.Fragment>
-      <div className={styles.wrapper}>
+      {!noHeader && <div className={styles.wrapper}>
         <div className={styles.col}>
           <div className={styles.title}>{title}</div>
           <div className={styles.desc}>{desc}</div>
@@ -17,7 +17,7 @@ export default function HomeContentWrapper({ children, title, desc }) {
           <NotificationsIcon htmlColor="#E3E3E3" />
           <Profile mini />
         </div>
-      </div>
+      </div>}
       {children}
     </React.Fragment>
   );

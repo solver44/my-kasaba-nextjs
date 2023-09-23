@@ -6,7 +6,7 @@
   border-radius: 70px;
   padding: 15px 20px;
   &.selected {
-    background-color: #e2eaf5;
+    background-color: var(--menu-selected-color);
   }
   &.mini{
     gap: 15px;
@@ -19,6 +19,7 @@
 }
 .image {
   border-radius: 50%;
+  background-color: white;
   height: 55px !important;
   width: 55px !important; 
   box-shadow: 0px 4px 4px 0px #00000040;
