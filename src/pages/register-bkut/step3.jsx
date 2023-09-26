@@ -12,8 +12,8 @@ export default function Step3() {
         <ChangableInput date label={t("founding-doc-date")} editable />
       </div>
       <div className={styles.grid_column}>
-        <ChangableInput label={t("electronic-file")} editable />
-        <ChangableInput label={t("application")} editable />
+        <ChangableInput fileInput label={t("electronic-file")} editable />
+        <ChangableInput fileInput label={t("application")} editable />
       </div>
     </div>
   );

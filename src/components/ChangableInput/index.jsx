@@ -4,6 +4,11 @@ import Input from "../Input";
 import { MenuItem, Select } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import InputDate from "../InputDate";
+import {
+  CloudCircleRounded,
+  UploadFileOutlined,
+  UploadRounded,
+} from "@mui/icons-material";
 
 export default function ChangableInput({
   editable = false,
@@ -13,6 +18,7 @@ export default function ChangableInput({
   date,
   invalid,
   select,
+  fileInput,
   dataSelect = [],
   name,
   ...props
@@ -22,6 +28,12 @@ export default function ChangableInput({
   function onChangeFunc({ target }) {
     if (!onChange) return;
     onChange({ target: { value: target.value } }, name);
+  }
+
+  function handleFileInputChange(event) {
+    if (!onChange) return;
+    // Pass the selected file to the onChange function
+    onChange(event.target.files[0], name);
   }
 
   return (
@@ -56,6 +68,18 @@ export default function ChangableInput({
             </MenuItem>
           ))}
         </Select>
+      ) : fileInput ? (
+        <label className={styles.fileInputLabel}>
+          <input
+            type="file"
+            accept="*/*"
+            style={{ display: "none" }}
+            onChange={handleFileInputChange}
+          />
+          <div className={styles.fileInput}></div>
+          <UploadRounded className={styles.cloudIcon} />
+          {/* Cloud icon */}
+        </label>
       ) : (
         <Input
           className={styles.input}

@@ -20,6 +20,24 @@
     font-size: 16px !important;
   }
 }
+.fileInputLabel {
+  position: relative;
+  & > :first-child {
+    width: 100%;
+  }
+}
+.cloudIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #808080;
+}
+.fileInput {
+  border-radius: var(--input-radius);
+  border: 1px solid var(--input-border-color);
+  min-height: 43px;
+}
 .select {
   fieldset {
     border: 1px solid var(--input-border-color) !important;
