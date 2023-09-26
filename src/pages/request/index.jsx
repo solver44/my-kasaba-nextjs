@@ -174,15 +174,14 @@ export default function RequestPage({ router }) {
       },
       recaptchaResponse
     );
+    actions.showLoading(false);
     if (data?.success) {
-      actions.showLoading(false);
       actions.caches({
         sent: true,
         fio: `${formData.firstName} ${formData.secondName} ${formData.thirdName}`,
         id: data.statusCheckCode,
       });
     } else {
-      actions.showLoading(false);
       enqueueSnackbar(t("error-send-application"), { variant: "error" });
     }
   };

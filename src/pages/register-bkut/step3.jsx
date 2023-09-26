@@ -9,7 +9,9 @@ export default function Step3() {
     <div className={styles.grid}>
       <div className={styles.grid_column}>
         <ChangableInput label={t("founding-doc-num")} editable />
-        <ChangableInput label={t("founding-doc-date")} editable />
+        <ChangableInput date label={t("founding-doc-date")} editable />
+      </div>
+      <div className={styles.grid_column}>
         <ChangableInput label={t("electronic-file")} editable />
         <ChangableInput label={t("application")} editable />
       </div>

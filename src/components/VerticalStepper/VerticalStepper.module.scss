@@ -1,0 +1,21 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding-bottom: 40px;
+}
+.block{
+    margin-bottom: 30px;
+}
+.title{
+    text-align: left;
+    margin: 0 0 30px 0;
+    padding: 0;
+}
+.button{
+    height: 44px;
+    font-size: 16px;
+}
+.content{
+    padding-left: 20px;
+}

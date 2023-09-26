@@ -133,6 +133,7 @@ const InsideInput = React.memo(
     mask,
     invalid,
     standart,
+    disabled,
     ...props
   }) => {
     const formattedMask = mask ? convertMask(mask) : mask; // Convert the mask
@@ -142,6 +143,7 @@ const InsideInput = React.memo(
         mask={formattedMask}
         value={value}
         onChange={onChangeFunc}
+        disabled={disabled}
       >
         {(inputProps) => (
           <TextField
@@ -151,6 +153,7 @@ const InsideInput = React.memo(
             className={[
               className,
               styles.input,
+              disabled ? styles.disabled : "",
               !!invalid ? styles.invalid : "",
             ].join(" ")}
             {...inputProps}
@@ -158,6 +161,7 @@ const InsideInput = React.memo(
             helperText={invalid}
             maxLength={maxLength}
             value={value}
+            disabled={disabled}
             {...props}
           />
         )}
@@ -165,9 +169,10 @@ const InsideInput = React.memo(
     ) : (
       <textarea
         value={value}
+        disabled={disabled}
         maxLength={maxLength}
         onChange={onChangeFunc}
-        className={styles.input + " " + className}
+        className={[styles.input, className, styles.textarea_input].join(" ")}
         rows={7}
       />
     );

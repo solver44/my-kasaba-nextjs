@@ -4,13 +4,19 @@
   --border-color: #ECECEC;
   --button-color: #197bbd;
   --secondary-button: #197bbd;
-  --menu-selected-color: #abceff;
+  --menu-selected-color: #eff6ff;
   --menu-selected-text-color: black;
+  --menu-selected-border-color: #c1d9ff;
   --radius: 55px;
+
   --input-radius: 4px;
+  --input-color: black;
+  --input-border-color: #c7c9d9;
+  --input-font-size: 16px;
+  --input-disabled-color: rgba(0, 0, 0, 0.03);
 
   --wrapper-bg: #fff;
-  --wrapper-pg: 30px 60px;
+  --wrapper-pg: 30px 45px;
 }
 
 body {

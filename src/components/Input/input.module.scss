@@ -2,9 +2,12 @@
   display: flex;
   align-items: center;
 }
+.textarea_input {
+  border: 1px solid var(--input-border-color);
+}
 .input {
   fieldset {
-    border: 1px solid #6e7080 !important;
+    border: 1px solid var(--input-border-color) !important;
   }
   border-radius: var(--input-radius);
   input {
@@ -12,19 +15,27 @@
     resize: vertical;
     font-size: 1rem;
   }
-  &.invalid{
-    fieldset{
-        border-color: red !important;
+  &.disabled {
+    input {
+      cursor: not-allowed !important;
+    }
+    fieldset {
+      background-color: var(--input-disabled-color);
+    }
+  }
+  &.invalid {
+    fieldset {
+      border-color: red !important;
     }
   }
 }
 .label {
   font-weight: 400;
-  color: black;
+  color: var(--input-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 16px;
+  font-size: var(--input-font-size);
   gap: 20px;
   &.textarea {
     align-items: start;

@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import styles from "./registerBkut.module.scss";
 import HomeWrapper from "../home/wrapper";
 import { useTranslation } from "react-i18next";
-import LinearStepper from "../../components/Stepper";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Step1 from "./step1";
 import Step2 from "./step2";
 import Step3 from "./step3";
+import VerticalStepper from "@/components/VerticalStepper";
 
 export default function RegisterBkut() {
   const { t } = useTranslation();
@@ -16,18 +16,28 @@ export default function RegisterBkut() {
   const handleFinish = () => {
     setLoading(true);
     setTimeout(() => {
-        setFinished(true);
-        setLoading(false);
+      setFinished(true);
+      setLoading(false);
     }, 1000);
-  }
+  };
   return (
     <HomeWrapper
       title={t("register-bkut-page.title")}
       desc={t("register-bkut-page.desc")}
     >
       <div className={styles.wrapper}>
+        {!isFinished && (
+          <div className={styles.top}>
+            <h1 className={styles.title}>"BUXGALTER" MChJ</h1>
+            <p className={styles.desc}>
+              Аxborot texnologiyalari va ommaviy kommunikatsiya xodimlari kasaba
+              uyushmasi
+            </p>
+          </div>
+        )}
+
         {!isFinished ? (
-          <LinearStepper
+          <VerticalStepper
             onFinish={handleFinish}
             loading={loading}
             steps={[

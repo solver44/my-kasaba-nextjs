@@ -79,8 +79,9 @@ export default function Step1() {
             },
           ]}
         />
-        <ChangableInput label={t("seniorOrganization")} editable />
+        <ChangableInput disabled label={t("seniorOrganization")} editable />
         <ChangableInput
+          disabled
           select
           dataSelect={branches}
           label={t("network")}
@@ -91,6 +92,7 @@ export default function Step1() {
         <div className="row g-3 full-children">
           <ChangableInput
             select
+            disabled
             dataSelect={provinces}
             name="province"
             onChange={handleProvince}
@@ -99,6 +101,7 @@ export default function Step1() {
           />
           <ChangableInput
             select
+            disabled
             dataSelect={districts}
             label={t("district")}
             editable

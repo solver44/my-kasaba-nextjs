@@ -11,10 +11,13 @@ import StepConnector, {
 import styled from "@emotion/styled";
 import CheckIcon from "@mui/icons-material/Check";
 import { useTranslation } from "react-i18next";
-import { LoadingButton } from "@mui/lab";
 import { CircularProgress } from "@mui/material";
 
-export default function LinearStepper({ steps = [], loading, onFinish }) {
+export default function LinearStepper({
+  steps = [],
+  loading,
+  onFinish,
+}) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const { t } = useTranslation();

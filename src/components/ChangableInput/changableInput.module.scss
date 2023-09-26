@@ -1,11 +1,11 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
 }
 .label {
-  font-size: 14px;
-  color: #808080;
+  font-size: var(--input-font-size);
+  color: var(--input-color);
 }
 .content {
   font-size: 15px;
@@ -22,13 +22,19 @@
 }
 .select {
   fieldset {
-    border: 1px solid #6e7080 !important;
+    border: 1px solid var(--input-border-color) !important;
   }
   border-radius: var(--input-radius);
   & > :first-child {
     padding: 10px !important;
     min-height: auto !important;
     font-size: 1rem;
+  }
+  &.disabled > :first-child {
+    cursor: not-allowed !important;
+  }
+  input:disabled ~ fieldset {
+    background-color: var(--input-disabled-color) !important;
   }
   &.invalid {
     fieldset {

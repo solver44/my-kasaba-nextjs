@@ -3,8 +3,11 @@
     align-items: flex-start;
     justify-content: space-between;
     padding: 10px;
+    padding-top: 5px;
+    padding-left: 0;
     width: 100%;
     margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
 }
 .col{
     display: flex;
@@ -16,7 +19,7 @@
     align-items: center;
 }
 .title{
-    font-size: 44px;
+    font-size: 42px;
 }
 .desc{
     font-size: 16px;

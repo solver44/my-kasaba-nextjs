@@ -21,6 +21,7 @@ export default function DataTable({ columns, rows }) {
             paginationModel: { page: 0, pageSize: 5 },
           },
         }}
+        className={styles.dataTable}
         pageSizeOptions={[5, 10]}
         checkboxSelection
       />

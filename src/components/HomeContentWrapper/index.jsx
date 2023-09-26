@@ -10,7 +10,7 @@ export default function HomeContentWrapper({ children, noHeader, title, desc }) 
       {!noHeader && <div className={styles.wrapper}>
         <div className={styles.col}>
           <div className={styles.title}>{title}</div>
-          <div className={styles.desc}>{desc}</div>
+          {/* <div className={styles.desc}>{desc}</div> */}
         </div>
         <div className={styles.row}>
           <EmailIcon htmlColor="#E3E3E3" />

@@ -28,11 +28,11 @@ export async function fetchPINFL(value, givenDate) {
 
 export async function sendApplicationViaBack(data, token) {
   try {
-    const response = await $publicAxios.post("/sendRequest", {
+    const { data: dataResponse } = await $publicAxios.post("/sendRequest", {
       data,
       token,
     });
-    return response;
+    return dataResponse;
   } catch (error) {
     return error;
   }
