@@ -7,6 +7,7 @@ import HomeContentWrapper from "../../components/HomeContentWrapper";
 import Logout from "../../components/Logout";
 import Image from "next/image";
 import PrivateRoute from "@/utils/withAuth";
+import AllMenu from "@/components/Menu/all";
 
 const HomeWrapper = ({ children, noHeader, title, desc }) => {
   return (
@@ -16,7 +17,7 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
           <div className={styles.top}>
             <Image className={styles.logo} src={logo} alt="logotip kasaba" />
             <Profile title="Asqarbek Abdullayev" />
-            <PartMenu />
+            <AllMenu />
           </div>
           <div className={styles.bottom}>
             <Logout />

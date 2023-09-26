@@ -113,6 +113,20 @@ export default {
     home: "Bosh sahifa",
     "register-bkut": "BKUTni ro’yhatdan o’tkazish",
 
+
+    //second menu
+    passortPrimaryOrganization:"Boshlang’ich tashkilot passporti",
+    industrialOrganizations:"Seh tashkilotlari",
+    groupOrganizations:"Guruh tashkilotlar",
+    statisticalInformation:"Statistik ma’lumotlar",
+    teamContracts:"Jamoa shartnomalari",
+    reports:"Hisobotlar",
+    basicTools:"Asosiy vositalar",
+    employees:"Xodimlar",
+    members:"A’zolar",
+    settings:"Sozlamalar",
+
+    
     save: "Saqlash",
     sent: "Yuborish",
     "saved-successfully": "Muvaffaqiyatli saqlandi",

@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/globals.scss";
 import "../styles/app.scss";
-import "../i18n/index";
+import "../i18n";
 import { Provider, useSelector } from "react-redux";
 import { store } from "../store";
 import { LocalizationProvider } from "@mui/x-date-pickers";
