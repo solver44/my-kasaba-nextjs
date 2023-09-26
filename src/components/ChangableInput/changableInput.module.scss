@@ -37,6 +37,8 @@
   border-radius: var(--input-radius);
   border: 1px solid var(--input-border-color);
   min-height: 43px;
+  padding: 10px;
+  text-overflow: ellipsis;
 }
 .select {
   fieldset {

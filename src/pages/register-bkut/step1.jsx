@@ -53,12 +53,12 @@ export default function Step1() {
     <div className={styles.grid}>
       <div className={styles.grid_column}>
         <div className="row g-3 full-children">
-          <ChangableInput name="bkutName" label={t("bkutName")} editable />
+          <ChangableInput name="bkutName" label={t("bkutName1")} editable />
           {mode == 1 && (
             <ChangableInput
               maxLength={9}
               name="bkutSTIR"
-              label={t("bkutSTIR")}
+              label={t("bkutSTIR1")}
               editable
             />
           )}
@@ -67,15 +67,15 @@ export default function Step1() {
           defaultValue={0}
           name="bkutType"
           onChange={(e) => setMode(e.target.value)}
-          label={t("bkutType")}
+          label={t("bkutType1")}
           data={[
             {
-              value: "0",
-              label: t("team"),
+              value: "1",
+              label: t("yes"),
             },
             {
-              value: "1",
-              label: t("legal"),
+              value: "0",
+              label: t("no"),
             },
           ]}
         />

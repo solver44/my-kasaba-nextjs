@@ -7,7 +7,7 @@ export default async function handler(req, res) {
       const isValid = await verifyRecaptcha(token);
       if (isValid !== true) {
         res.status(498).json({
-          error: "reCAPTCHA verification failed'",
+          error: "reCAPTCHA verification failed",
           codes: isValid?.error,
         });
       }

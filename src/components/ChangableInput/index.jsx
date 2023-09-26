@@ -5,8 +5,8 @@ import { MenuItem, Select } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import InputDate from "../InputDate";
 import {
-  CloudCircleRounded,
-  UploadFileOutlined,
+  ClearRounded,
+  HighlightOffRounded,
   UploadRounded,
 } from "@mui/icons-material";
 
@@ -25,15 +25,23 @@ export default function ChangableInput({
 }) {
   const language = useTranslation().i18n.language;
   const [text, setText] = useState(value || null);
+  const [fileName, setFileName] = useState("");
   function onChangeFunc({ target }) {
     if (!onChange) return;
     onChange({ target: { value: target.value } }, name);
   }
 
+  function clearFile() {
+    setFileName("");
+  }
   function handleFileInputChange(event) {
-    if (!onChange) return;
+    const file = event.target.files[0];
+    if (!file) return;
+    const nameOfFile = file.name ? file.name : "NOT SUPPORTED";
+    setFileName(nameOfFile);
     // Pass the selected file to the onChange function
-    onChange(event.target.files[0], name);
+    if (!onChange) return;
+    onChange(file, name);
   }
 
   return (
@@ -76,8 +84,11 @@ export default function ChangableInput({
             style={{ display: "none" }}
             onChange={handleFileInputChange}
           />
-          <div className={styles.fileInput}></div>
-          <UploadRounded className={styles.cloudIcon} />
+          <div className={styles.fileInput}>{fileName}</div>
+          <UploadRounded
+            style={{ cursor: "pointer" }}
+            className={styles.cloudIcon}
+          />
           {/* Cloud icon */}
         </label>
       ) : (

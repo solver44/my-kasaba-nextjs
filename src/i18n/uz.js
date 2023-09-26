@@ -33,7 +33,7 @@ export default {
       "form4-title": "Murojaat matni",
       submit: "Murojaatni yuborish",
       sent: `Xurmatli {{fio}} sizning murojaatingiz qabul qilindi va Kasaba uyushmalari Federasiyasining ma’sul tashkilotiga yuborildi. Murojaat xolatini
-      <a href="https://my.kasaba.uz/check-status?id={{id}}">https://my.kasaba.uz/check-status</a> manzilidan tekshirishingiz mumkin.
+      <a href="http://my.kasaba.uz/check-status?id={{id}}">http://my.kasaba.uz/check-status</a> manzilidan tekshirishingiz mumkin.
      Murojaatni tekshirish uchun ID raqam: <span style="font-weight: bold">{{id}}</span>. 
      ID raqamni saqlab qoling.`,
     },
@@ -51,9 +51,9 @@ export default {
     "register-bkut-page": {
       title: "BKUTni ro’yhatdan o’tkazish",
       desc: "Iltimos BKUT haqidagi ma’lumotlarni to’liq to’ldiring",
-      step1: "BKUT haqida ma’lumot",
-      step2: "BKUT xodimlari",
-      step3: "BKUT hujjatlari",
+      step1: "BKUT haqida ma’lumotlar",
+      step2: "BKUT xodimlari haqida ma'lumotlar",
+      step3: "BKUT tuzilganligi haqida hujjatlar",
     },
     "input-error": {
       pinfl: "JShShIR da xatolik mavjud!",
@@ -84,8 +84,13 @@ export default {
     requestGivenDate: "Murojaat berilgan sana",
     applicationSender: "Murojaat qilgan shaxs",
     bkutName: "BKUT nomi",
+    bkutName1: "Boshlang'ich tashkilot nomi",
     bkutSTIR: "BKUT STIR",
+    bkutSTIR1: "Boshlang'ich tashkilot STIR",
     bkutType: "BKUT turi",
+    bkutType1: "Boshlang'ich tashkilot yuridik shaxs maqomiga egami?",
+    yes: "Ha",
+    no: "Yo'q",
     team: "Jamoa",
     legal: "Yuridik",
     seniorOrganization: "Yuqori turuvchi tashkilot",
@@ -131,6 +136,7 @@ export default {
     "error-form-application": "Murojaat shakli noto'g'ri kiritilgan!",
     "not-found": "Yo'q",
 
-    "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang."
+    "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang.",
+    "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang."
   },
 };

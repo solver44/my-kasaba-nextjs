@@ -181,6 +181,8 @@ export default function RequestPage({ router }) {
         fio: `${formData.firstName} ${formData.secondName} ${formData.thirdName}`,
         id: data.statusCheckCode,
       });
+    } else if (data?.error == "reCAPTCHA verification failed") {
+      enqueueSnackbar(t("recaptcha-try"), { variant: "error" });
     } else {
       enqueueSnackbar(t("error-send-application"), { variant: "error" });
     }

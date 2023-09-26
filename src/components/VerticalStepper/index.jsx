@@ -7,8 +7,8 @@ export default function VerticalStepper({ steps = [], loading, onFinish }) {
   const { t } = useTranslation();
   return (
     <div className={styles.wrapper}>
-      {steps.map((step) => (
-        <div className={styles.block}>
+      {steps.map((step, i) => (
+        <div key={i} className={styles.block}>
           <h2 className={styles.title}>{step.label}</h2>
           <div className={styles.content}>{step.children}</div>
         </div>
