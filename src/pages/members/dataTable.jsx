@@ -19,9 +19,8 @@ export default function DataTable() {
   const handleSearch = (searchText) => {
     // Filter the rows based on the search text
     const filteredRows = rows.filter((row) => {
-      // Customize this logic based on how you want to perform the search
-      // For example, you can check if the 'name' field contains the search text
-      return row.name.toLowerCase().includes(searchText.toLowerCase());
+      // Convert both the searchText and fio to lowercase for case-insensitive search
+      return row.fio.toLowerCase().includes(searchText.toLowerCase());
     });
 
     setFilteredRows(filteredRows);

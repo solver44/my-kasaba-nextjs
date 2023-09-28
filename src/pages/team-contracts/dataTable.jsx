@@ -19,7 +19,7 @@ export default function DataTable() {
     const filteredRows = rows.filter((row) => {
       // Customize this logic based on how you want to perform the search
       // For example, you can check if the 'name' field contains the search text
-      return row.name.toLowerCase().includes(searchText.toLowerCase());
+      return row.contractDate.toLowerCase().includes(searchText.toLowerCase());
     });
 
     setFilteredRows(filteredRows);
