@@ -8,12 +8,12 @@ const menu = [
   {
     icon: Apartment,
     title: "passortPrimaryOrganization", 
-    path: "/passortPrimaryOrganization"
+    path: "/passort-primary-organization"
   },
   {
     icon: Business,
     title: "industrialOrganizations", 
-    path: "/profile"
+    path: "/industrial-organizations"
   },
   {
     icon: Group,

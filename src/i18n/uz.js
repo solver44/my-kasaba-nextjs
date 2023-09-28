@@ -48,6 +48,38 @@ export default {
       desc: "Iltimos o’zingiz haqingizdagi ma’lumotlarni to’liq to’ldiring",
       title1: "Shaxsiy ma'lumotlar",
     },
+    "passort-primary-organization":{
+      title:"Boshlang’ich tashkilot passporti",
+      firstOrganizationName:"Boshlang’ich tashkilot nomi:",
+      firstOrganizationType:"Boshlang’ich tashkilot tashkil etilish turi:",
+      firstOrganizationSTIR:"Boshlang’ich tashkilot STIR (INN) raqami:",
+      firstOrganizationNetwork:"Boshlang’ich tashkilot qarashli tarmoq:",
+      firstOrganizationOrg:"Boshlang’ich tashkilot (PPO) yuqori tashkilot:",
+      firstOrganizationFirm:"Boshlang’ich tashkilot faoliyat yuritayotgan korxona, tashkilot yoki muassasa:",
+      firstOrganizationFirmSTIR:"Korxona, tashkilot yoki muassasa STIR(INN) raqami:",
+      firstOrganizationDirektor:"Boshlang’ich tashkilot rahbari:",
+      firstOrganizationSoato:"МХОВТ(SOATO) raqami:",
+      firstOrganizationAdr:"Manzil:",
+      firstOrganizationTel:"Boshlang’ich tashkilot (PPO) telefon raqamlari:",
+      firstOrganizationEmail:"Elektron pochta manzil:",
+      firstOrganizationAgree:"Davlat (xisob) ro’yhatidan o’tganmi? :",
+      firstOrganizationH:"Hisob raqami:"
+
+    },
+    "industrial-organizations":{
+      title:"Seh tashkilotlari",
+      name:"Nomi (o’zbekcha)",
+      worker:"Ish beruvchi",
+      statistic:"Statistika",
+      direktor:"Rahbar",
+      firstorg:"Yuqori tashkilot",
+      tel:"Telefon",
+      soato:"MXOBT (SOATO) kodi",
+      adr:"Manzil",
+      okpo:"OKPO",
+      type:"Tarmoq"
+
+    },
     "register-bkut-page": {
       title: "BKUTni ro’yhatdan o’tkazish",
       desc: "Iltimos BKUT haqidagi ma’lumotlarni to’liq to’ldiring",

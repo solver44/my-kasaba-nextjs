@@ -1,0 +1,21 @@
+.containers{
+    width: 100%;
+}
+
+.flex{
+    display: flex;
+    padding: 20px;
+    justify-content: space-evenly;
+    & > label {
+        font-size: 20px;
+        padding-right: 5rem;
+        width: 50%;
+        text-align: right;
+        & >a{
+                text-decoration: none;
+                color: #2400FF;
+        }
+    }
+}
+  
+  
