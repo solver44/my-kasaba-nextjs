@@ -18,42 +18,42 @@ const menu = [
   {
     icon: Group,
     title: "groupOrganizations", 
-    path: "/profile"
+    path: "/group-organizations"
   },
   {
     icon: InsertChart,
     title: "statisticalInformation", 
-    path: "/profile"
+    path: "/statistical-information"
   },
   {
     icon: Diversity3,
     title: "teamContracts", 
-    path: "/profile"
+    path: "/team-contracts"
   },
   {
     icon: LibraryBooks,
     title: "reports", 
-    path: "/profile"
+    path: "/reports"
   },
   {
     icon: EmojiTransportation,
     title: "basicTools", 
-    path: "/profile"
+    path: "/basic-tools"
   },
   {
     icon: PeopleAlt,
     title: "employees", 
-    path: "/profile"
+    path: "/employees"
   },
   {
     icon: Hail,
     title: "members", 
-    path: "/profile"
+    path: "/members"
   },
   {
     icon: Settings,
     title: "settings", 
-    path: "/profile"
+    path: "/settings"
   },
 ];
 

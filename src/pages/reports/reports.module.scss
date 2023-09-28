@@ -1,0 +1,29 @@
+.containers{
+    width: 100%;
+    margin-top: 30px;
+}
+.text{
+    font-family: 'Abhaya Libre';
+    font-weight: 700;
+    color: #637497;
+    font-size: 25px;
+    line-height: 24.2px;
+    text-align: center;
+    
+}
+.flex{
+    display: flex;
+    padding: 20px;
+    justify-content: space-evenly;
+    & > label {
+        font-size: 20px;
+        padding-right: 5rem;
+        width: 50%;
+        text-align: right;
+        & >a{
+                text-decoration: none;
+                color: #2400FF;
+        }
+    }
+}
+  
