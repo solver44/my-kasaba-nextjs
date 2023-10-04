@@ -68,7 +68,7 @@ export default {
     },
     "industrial-organizations":{
       title:"Seh tashkilotlari",
-      name:"Nomi (o’zbekcha)",
+      name:"Nomi (o'zbekcha)",
       worker:"Ish beruvchi",
       statistic:"Statistika",
       direktor:"Rahbar",
@@ -210,6 +210,7 @@ export default {
     sent: "Yuborish",
     "saved-successfully": "Muvaffaqiyatli saqlandi",
     "sent-successfully": "Muvaffaqiyatli yuborildi",
+    "sent-successfully-bkut": "Ma'lumotlar ma'sul shaxsga muvaffaqiyatli yuborildi.",
     next: "Keyingisi",
     soato: "SOATO",
 

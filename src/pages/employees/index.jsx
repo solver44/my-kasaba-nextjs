@@ -1,17 +1,20 @@
-import React from 'react'
-import HomeWrapper from '../home/wrapper'
-import { useTranslation } from "react-i18next";
+import React from "react";
+import HomeWrapper from "../home/wrapper";
 import styles from "./employees.module.scss";
-import DataTable from './dataTable';
+import DataTable from "./dataTable";
 
-export default function industrialOrganizations() {
-    const { t } = useTranslation();
+export default function Employees() {
+  return (
+    <div className={styles.containers}>
+      <DataTable />
+    </div>
+  );
+}
+
+Employees.layout = function (Component, t) {
   return (
     <HomeWrapper title={t("employess.title")} desc={t("profile-page.desc")}>
-        <div className={styles.containers}>
-            <DataTable/>
-        </div>
+      {Component}
     </HomeWrapper>
-    
-  )
-}
+  );
+};

@@ -1,17 +1,23 @@
-import React from 'react'
-import HomeWrapper from '../home/wrapper'
-import { useTranslation } from "react-i18next";
+import React from "react";
+import HomeWrapper from "../home/wrapper";
 import styles from "./team-contracts.module.scss";
-import DataTable from './dataTable';
+import DataTable from "./dataTable";
 
-export default function industrialOrganizations() {
-    const { t } = useTranslation();
+export default function TermsContracts() {
   return (
-    <HomeWrapper title={t("team-contracts.title")} desc={t("profile-page.desc")}>
-        <div className={styles.containers}>
-            <DataTable/>
-        </div>
-    </HomeWrapper>
-    
-  )
+    <div className={styles.containers}>
+      <DataTable />
+    </div>
+  );
 }
+
+TermsContracts.layout = function (Component, t) {
+  return (
+    <HomeWrapper
+      title={t("team-contracts.title")}
+      desc={t("profile-page.desc")}
+    >
+      {Component}
+    </HomeWrapper>
+  );
+};

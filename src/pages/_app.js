@@ -30,7 +30,8 @@ function saveTokens(tokens) {
   TOKENS.REFRESH_TOKEN = tokens.refreshToken;
 }
 const MyApp = ({ Component, pageProps, tokens }) => {
-  const { i18n } = useTranslation();
+  const layout = Component?.layout || ((page) => page);
+  const { i18n, t } = useTranslation();
   const { showLoading } = useSelector((state) => state);
   saveTokens(tokens);
 
@@ -41,12 +42,16 @@ const MyApp = ({ Component, pageProps, tokens }) => {
     >
       <Head>
         <title>Shaxsiy Kabinet | My Kasaba</title>
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script
+          src="https://www.google.com/recaptcha/api.js"
+          async
+          defer
+        ></script>
         <link rel="shortcut icon" href="/icon.png" />
       </Head>
       <SnackbarProvider maxSnack={3}>
         {showLoading && <Loader />}
-        {<Component {...pageProps} />}
+        {layout(<Component {...pageProps} />, t)}
       </SnackbarProvider>
     </LocalizationProvider>
   );

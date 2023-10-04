@@ -3,10 +3,10 @@
   display: flex;
   flex-direction: column;
   // padding: 10px;
-  gap: 20px;
+  gap: 5px;
 }
 .menu_item {
-  transition: all 1s;
+  transition: padding 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -18,6 +18,6 @@
     background-color: var(--menu-selected-color);
     color: var(--menu-selected-text-color);
     border: 1px solid var(--menu-selected-border-color);
-    padding-left: 30px;
+    padding-left: 25px;
   }
 }

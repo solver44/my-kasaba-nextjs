@@ -1,9 +1,10 @@
 import { localStorage } from "@/utils/window";
-import { LOGIN_SUCCESS, LOGIN_FAILURE, SHOW_LOADING, CACHES } from "./actions";
+import { LOGIN_SUCCESS, LOGIN_FAILURE, SHOW_LOADING, CACHES, IS_MEMBER } from "./actions";
 
 const initialState = {
   isLoggedIn: !!localStorage.getItem("token") || false,
   showLoading: false,
+  isMember: false,
   caches: {},
 };
 
@@ -28,6 +29,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         caches: action.payload,
+      };
+    case IS_MEMBER:
+      return {
+        ...state,
+        isMember: action.payload,
       };
     default:
       return state;

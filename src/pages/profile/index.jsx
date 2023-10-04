@@ -10,7 +10,7 @@ import Profile from "../../components/Profile";
 export default function ProfilePage() {
   const { t } = useTranslation();
   return (
-    <HomeWrapper title={t("profile-page.title")} desc={t("profile-page.desc")}>
+    <React.Fragment>
       <div className={styles.top}>
         <p className={styles.subtitle}>{t("profile-page.title1")}</p>
         <BigButton Icon={EditIcon}>{t("change")}</BigButton>
@@ -44,6 +44,14 @@ export default function ProfilePage() {
           <ChangableInput label={t("job-position")} value="Mutaxassis" />
         </div>
       </div>
-    </HomeWrapper>
+    </React.Fragment>
   );
 }
+
+ProfilePage.layout = function (Component, t) {
+  return (
+    <HomeWrapper title={t("profile-page.title")} desc={t("profile-page.desc")}>
+      {Component}
+    </HomeWrapper>
+  );
+};

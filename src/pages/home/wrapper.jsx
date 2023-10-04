@@ -8,8 +8,11 @@ import Logout from "../../components/Logout";
 import Image from "next/image";
 import PrivateRoute from "@/utils/withAuth";
 import AllMenu from "@/components/Menu/all";
+import { useSelector } from "react-redux";
 
 const HomeWrapper = ({ children, noHeader, title, desc }) => {
+  const states = useSelector(state => state);
+
   return (
     <PrivateRoute>
       <div className={styles.container}>
@@ -17,7 +20,7 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
           <div className={styles.top}>
             <Image className={styles.logo} src={logo} alt="logotip kasaba" />
             <Profile title="Asqarbek Abdullayev" />
-            <AllMenu />
+            {!states.isMember ? <PartMenu/> : <AllMenu />}
           </div>
           <div className={styles.bottom}>
             <Logout />

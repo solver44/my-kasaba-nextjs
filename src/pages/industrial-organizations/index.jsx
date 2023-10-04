@@ -1,17 +1,23 @@
-import React from 'react'
-import HomeWrapper from '../home/wrapper'
-import { useTranslation } from "react-i18next";
+import React from "react";
+import HomeWrapper from "../home/wrapper";
 import styles from "./industrial-organizations.module.scss";
-import DataTables from './dataTables';
+import DataTables from "./dataTables";
 
-export default function industrialOrganizations() {
-    const { t } = useTranslation();
+export default function IndustrialOrganizations() {
   return (
-    <HomeWrapper title={t("industrial-organizations.title")} desc={t("profile-page.desc")}>
-        <div className={styles.containers}>
-            <DataTables/>
-        </div>
-    </HomeWrapper>
-    
-  )
+    <div className={styles.containers}>
+      <DataTables />
+    </div>
+  );
 }
+
+IndustrialOrganizations.layout = function (Component, t) {
+  return (
+    <HomeWrapper
+      title={t("industrial-organizations.title")}
+      desc={t("profile-page.desc")}
+    >
+      {Component}
+    </HomeWrapper>
+  );
+};
