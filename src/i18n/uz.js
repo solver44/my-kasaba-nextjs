@@ -48,84 +48,86 @@ export default {
       desc: "Iltimos o’zingiz haqingizdagi ma’lumotlarni to’liq to’ldiring",
       title1: "Shaxsiy ma'lumotlar",
     },
-    "passort-primary-organization":{
-      title:"Boshlang’ich tashkilot passporti",
-      firstOrganizationName:"Boshlang’ich tashkilot nomi:",
-      firstOrganizationType:"Boshlang’ich tashkilot tashkil etilish turi:",
-      firstOrganizationSTIR:"Boshlang’ich tashkilot STIR (INN) raqami:",
-      firstOrganizationNetwork:"Boshlang’ich tashkilot qarashli tarmoq:",
-      firstOrganizationOrg:"Boshlang’ich tashkilot (PPO) yuqori tashkilot:",
-      firstOrganizationFirm:"Boshlang’ich tashkilot faoliyat yuritayotgan korxona, tashkilot yoki muassasa:",
-      firstOrganizationFirmSTIR:"Korxona, tashkilot yoki muassasa STIR(INN) raqami:",
-      firstOrganizationDirektor:"Boshlang’ich tashkilot rahbari:",
-      firstOrganizationSoato:"МХОВТ(SOATO) raqami:",
-      firstOrganizationAdr:"Manzil:",
-      firstOrganizationTel:"Boshlang’ich tashkilot (PPO) telefon raqamlari:",
-      firstOrganizationEmail:"Elektron pochta manzil:",
-      firstOrganizationAgree:"Davlat (xisob) ro’yhatidan o’tganmi? :",
-      firstOrganizationH:"Hisob raqami:"
-
+    "passort-primary-organization": {
+      title: "Boshlang’ich tashkilot passporti",
+      firstOrganizationName: "Boshlang’ich tashkilot nomi:",
+      firstOrganizationType: "Boshlang’ich tashkilot tashkil etilish turi:",
+      firstOrganizationSTIR: "Boshlang’ich tashkilot STIR (INN) raqami:",
+      firstOrganizationNetwork: "Boshlang’ich tashkilot qarashli tarmoq:",
+      firstOrganizationOrg: "Boshlang’ich tashkilot (PPO) yuqori tashkilot:",
+      firstOrganizationFirm:
+        "Boshlang’ich tashkilot faoliyat yuritayotgan korxona, tashkilot yoki muassasa:",
+      firstOrganizationFirmSTIR:
+        "Korxona, tashkilot yoki muassasa STIR(INN) raqami:",
+      firstOrganizationDirektor: "Boshlang’ich tashkilot rahbari:",
+      firstOrganizationSoato: "МХОВТ(SOATO) raqami:",
+      firstOrganizationAdr: "Manzil:",
+      firstOrganizationTel: "Boshlang’ich tashkilot (PPO) telefon raqamlari:",
+      firstOrganizationEmail: "Elektron pochta manzil:",
+      firstOrganizationAgree: "Davlat (xisob) ro’yhatidan o’tganmi? :",
+      firstOrganizationH: "Hisob raqami:",
     },
-    "industrial-organizations":{
-      title:"Seh tashkilotlari",
-      name:"Nomi (o'zbekcha)",
-      worker:"Ish beruvchi",
-      statistic:"Statistika",
-      direktor:"Rahbar",
-      firstorg:"Yuqori tashkilot",
-      tel:"Telefon",
-      soato:"MXOBT (SOATO) kodi",
-      adr:"Manzil",
-      okpo:"OKPO",
-      type:"Tarmoq"
-
+    "industrial-organizations": {
+      title: "Seh tashkilotlari",
+      name: "Nomi (o'zbekcha)",
+      worker: "Ish beruvchi",
+      statistic: "Statistika",
+      direktor: "Rahbar",
+      firstorg: "Yuqori tashkilot",
+      tel: "Telefon",
+      soato: "MXOBT (SOATO) kodi",
+      adr: "Manzil",
+      okpo: "OKPO",
+      type: "Tarmoq",
     },
-    "group-organizations":{
-      title:"Guruh tashkilotlari",
-
+    "group-organizations": {
+      title: "Guruh tashkilotlari",
     },
-    "statistical-information":{
-      title:"Statistik ma’lumotlar",
-      date:"Sana",
-      total:"Jami ishchilar",
-      ku:"KU a’zolari",
-      student:"Talabalar",
-      direktor:"Rahbar",
-      kuStudent:"KUga a’zo talabalar",
-      adr:"Manzil",
-      pesioners:"Hisobdagi ishlamaydigan pensionerlar",
-      shtat:"Shtat birliklari"
+    "statistical-information": {
+      title: "Statistik ma’lumotlar",
+      date: "Sana",
+      total: "Jami ishchilar",
+      ku: "KU a’zolari",
+      student: "Talabalar",
+      direktor: "Rahbar",
+      kuStudent: "KUga a’zo talabalar",
+      adr: "Manzil",
+      pesioners: "Hisobdagi ishlamaydigan pensionerlar",
+      shtat: "Shtat birliklari",
     },
-    "team-contracts":{
-      title:"Jamoa shartnomalari",
-      contractDate:"Shartnoma raqami",
-      firstOrganization:"Boshlang’ich tashkilot",
-      agreeDate:"Qabul qilish sanasi",
-      sign:"Tashkilotdan imzoladi",
-      signK:"Kasaba uyushmasi imzoladi"
+    "team-contracts": {
+      title: "Jamoa shartnomalari",
+      contractDate: "Shartnoma raqami",
+      firstOrganization: "Boshlang’ich tashkilot",
+      agreeDate: "Qabul qilish sanasi",
+      sign: "Tashkilotdan imzoladi",
+      signK: "Kasaba uyushmasi imzoladi",
     },
-    "reportss":{
-      title:"Hisobotlar",
-      texts:"Kasaba uyushmasi qo’mitasi (kasaba uyushmasi tashkilotchisi)ning 2016 yil uchun statistik hisoboti",
-      textss:"Hisobot davrining oxiriga kelib ishlovchilar (talabalar, o’quvchilar) va kasaba uyushmasi a’zolari soni to’g’risida ma’lumot",
-      nameKasaba:"Kasaba uyushmasining nomi:",
-      information:"Kasaba uyushmasi qo’mitasi raisi (kasaba uyushmasi tashkilotchisi)ning familiyasi, ismi, otasining ismi",
-      tel:"Ish joyining telefon raqami :",
-      works:"Kasaba uyushmasi qo’mitasi raisi asosiy ishidan :",
-      pay:"Kasaba uyushmasi qo’mitasi haq to’lanadigan apparatiga :"
+    reportss: {
+      title: "Hisobotlar",
+      texts:
+        "Kasaba uyushmasi qo’mitasi (kasaba uyushmasi tashkilotchisi)ning 2016 yil uchun statistik hisoboti",
+      textss:
+        "Hisobot davrining oxiriga kelib ishlovchilar (talabalar, o’quvchilar) va kasaba uyushmasi a’zolari soni to’g’risida ma’lumot",
+      nameKasaba: "Kasaba uyushmasining nomi:",
+      information:
+        "Kasaba uyushmasi qo’mitasi raisi (kasaba uyushmasi tashkilotchisi)ning familiyasi, ismi, otasining ismi",
+      tel: "Ish joyining telefon raqami :",
+      works: "Kasaba uyushmasi qo’mitasi raisi asosiy ishidan :",
+      pay: "Kasaba uyushmasi qo’mitasi haq to’lanadigan apparatiga :",
     },
-    "basic-tools":{
-      title:"Asosiy vositalar"
+    "basic-tools": {
+      title: "Asosiy vositalar",
     },
-    "employess":{
-      title:"Xodimlar",
-      fio:"FIO",
-      position:"Lavozimi",
-      tel:"Telefon raqami",
-      email:"Elektron pochta manzili"
+    employess: {
+      title: "Xodimlar",
+      fio: "FIO",
+      position: "Lavozimi",
+      tel: "Telefon raqami",
+      email: "Elektron pochta manzili",
     },
-    "memberss":{
-      title:"A’zolar"
+    memberss: {
+      title: "A’zolar",
     },
     "register-bkut-page": {
       title: "BKUTni ro’yhatdan o’tkazish",
@@ -192,25 +194,27 @@ export default {
     home: "Bosh sahifa",
     "register-bkut": "BKUTni ro’yhatdan o’tkazish",
 
-
     //second menu
-    passortPrimaryOrganization:"Boshlang’ich tashkilot passporti",
-    industrialOrganizations:"Seh tashkilotlari",
-    groupOrganizations:"Guruh tashkilotlar",
-    statisticalInformation:"Statistik ma’lumotlar",
-    teamContracts:"Jamoa shartnomalari",
-    reports:"Hisobotlar",
-    basicTools:"Asosiy vositalar",
-    employees:"Xodimlar",
-    members:"A’zolar",
-    settings:"Sozlamalar",
+    passortPrimaryOrganization: "Boshlang’ich tashkilot passporti",
+    industrialOrganizations: "Seh tashkilotlari",
+    groupOrganizations: "Guruh tashkilotlar",
+    statisticalInformation: "Statistik ma’lumotlar",
+    teamContracts: "Jamoa shartnomalari",
+    reports: "Hisobotlar",
+    basicTools: "Asosiy vositalar",
+    employees: "Xodimlar",
+    members: "A’zolar",
+    settings: "Sozlamalar",
 
-    
     save: "Saqlash",
+    close: "Yopish",
+    search: "Qidirish",
+    open: "Ochish",
     sent: "Yuborish",
     "saved-successfully": "Muvaffaqiyatli saqlandi",
     "sent-successfully": "Muvaffaqiyatli yuborildi",
-    "sent-successfully-bkut": "Ma'lumotlar ma'sul shaxsga muvaffaqiyatli yuborildi.",
+    "sent-successfully-bkut":
+      "Ma'lumotlar ma'sul shaxsga muvaffaqiyatli yuborildi.",
     next: "Keyingisi",
     soato: "SOATO",
 
@@ -221,6 +225,7 @@ export default {
     "founding-doc-date": "Ta’sis bayonnoma sanasi",
     "electronic-file": "Bayonnoma elektron fayli",
     application: "Ariza",
+    "successfully-saved": "Muvaffaqiyatli saqlandi.",
 
     "invalid-email": "Elektron pochta manzili xato kiritildi",
     "invalid-input": "Maydonda xatolik mavjud!",
@@ -231,6 +236,44 @@ export default {
     "not-found": "Yo'q",
 
     "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang.",
-    "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang."
+    "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang.",
+    "pinfl-fetch-error": "Ma'lumotlarni yuklashda xatolik mavjud.",
+
+    dTable: {
+      toolbarDensity: "O'lcham",
+      toolbarDensityLabel: "O'lcham",
+      toolbarDensityCompact: "Kichik",
+      toolbarDensityStandard: "O'rtancha",
+      toolbarDensityComfortable: "Katta",
+
+      toolbarExport: "Eksport",
+      toolbarExportLabel: "Eksport",
+      toolbarExportCSV: "CSV format",
+      toolbarExportPrint: "Chop etish",
+
+      columnHeaderFiltersLabel: "Ustunlar",
+      columnMenuHideColumn: "Yashirish",
+      columnMenuLabel: "Ustunlar",
+      columnMenuShowColumns: "Ko'rsatish",
+      columnsPanelShowAllButton: "Barchasi ko'rsatish",
+      columnsPanelHideAllButton: "Barchasini yashirish",
+      columnsPanelTextFieldLabel: "Ustun nomi",
+      columnsPanelTextFieldPlaceholder: "Qidirish",
+      toolbarColumnsLabel: "Ustunlar",
+
+      toolbarFilters: "Filtrlash",
+      filterPanelInputLabel: "Qiymat",
+      filterPanelOperator: "Operator",
+      filterOperatorContains: "o'z ichiga oladi",
+      filterOperatorEquals: "teng",
+      filterOperatorStartsWith: "boshlangan",
+      filterOperatorEndsWith: "yakunlangan",
+      filterOperatorIsEmpty: "bo'sh bo'lgan",
+      filterOperatorIsNotEmpty: "bo'sh bo'lmagan",
+      filterOperatorIsAnyOf: "har qanday",
+
+      footerRowSelected: "{{num}} ta qator tanlandi",
+      labelRowsPerPage: "Bir sahifadagi qatorlar soni",
+    },
   },
 };

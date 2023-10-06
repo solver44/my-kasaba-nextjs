@@ -1,0 +1,13 @@
+.modal-content{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 0;
+}
+.modal-row{
+    display: flex;
+    gap: 20px;
+    & > *{
+        width: 100%;
+    }
+}

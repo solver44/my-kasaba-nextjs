@@ -1,0 +1,23 @@
+.main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.content {
+  background-color: white;
+  border-radius: 5px;
+  padding: 30px 30px;
+  outline: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  min-width: 40%;
+}
+.close{
+    align-self: flex-end;
+    cursor: pointer;
+}
+.row{
+    display: flex;
+    gap: 20px;
+}

@@ -138,7 +138,7 @@ export default function RequestPage({ router }) {
     Object.values(formData).map((isValid, index) => {
       const key = Object.keys(inputValidation)[index];
       if (!isValid) {
-        if (key === "form4") return;
+        if (key === "form4" || key === "form3") return;
         setInputValidation((inputValidation) => ({
           ...inputValidation,
           [key]: false,

@@ -1,11 +1,24 @@
-.wrapper{
-    display: flex;
-    flex-direction: column;
+.wrapper {
+  display: flex;
+  flex-direction: column;
 }
-.dataTable{
-    font-size: 16px;
+.dataTable {
+  border-radius: var(--input-radius);
+  font-size: 16px;
+  & > :nth-child(2) > :nth-child(2) {
+    height: 200px !important;
+  }
 }
-.control{
-    align-self: flex-end;
-    margin-bottom: 20px;
+.toolbars {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  transform: translateY(-100%);
+}
+.control {
+  align-self: flex-end;
+  margin-bottom: 20px;
+}
+.tool{
+  border-radius: var(--input-radius);
 }

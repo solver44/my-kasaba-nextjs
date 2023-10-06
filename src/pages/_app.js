@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/globals.scss";
 import "../styles/app.scss";
+import "../styles/modal.scss";
 import "../i18n";
 import { Provider, useSelector } from "react-redux";
 import { store } from "../store";
