@@ -43,6 +43,7 @@ export default function ModalUI({
               >
                 {t("save")}
               </Button>
+              
               <Button onClick={handleClose}>{t("close")}</Button>
             </div>
           </React.Fragment>
