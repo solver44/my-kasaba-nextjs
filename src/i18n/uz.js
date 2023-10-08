@@ -124,7 +124,10 @@ export default {
       fio: "FIO",
       position: "Lavozimi",
       tel: "Telefon raqami",
+      dateSign:"Kasaba uyushmaga a’zo bo’lgan sanasi",
       email: "Elektron pochta manzili",
+      passNumber:"Guvohnoma nomeri",
+      workPlace:"Ish joyi",
     },
     memberss: {
       title: "A’zolar",
@@ -162,6 +165,8 @@ export default {
     district: "Tuman",
     address: "Manzil",
 
+    createDoc:"Guvohnoma yaratish",
+    certificate:"Guvohnoma",
     requestGivenDate: "Murojaat berilgan sana",
     applicationSender: "Murojaat qilgan shaxs",
     bkutName: "BKUT nomi",

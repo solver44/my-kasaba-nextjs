@@ -1,12 +1,15 @@
-import React, { useState }  from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import DataTable from "../../components/DataTable";
-import SearchButton from "@/components/SearchButton";
-import InDataTable from "@/components/InDataTable";
+import DataTable from "@/components/DataTable";
+import FormInput from "@/components/FormInput";
+import { useSnackbar } from "notistack";
+import { Box } from "@mui/material";
 
-export default function DataTables() {
+export default function InDataTable() {
   const { t } = useTranslation();
-  const [filteredRows, setFilteredRows] = useState(null);
+  const [rows, setRows] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
   const columns = [
     { field: "id", headerName: "Kod", width: 102 },
     { field: "name", headerName: t("industrial-organizations.name"), minWidth: 200 },
@@ -20,160 +23,66 @@ export default function DataTables() {
     { field: "okpo", headerName: t("industrial-organizations.okpo"), minWidth: 70 },
     { field: "type", headerName: t("industrial-organizations.type"), minWidth: 110 },
   ];
-  const handleSearch = (searchText) => {
-    // Filter the rows based on the search text
-    const filteredRows = rows.filter((row) => {
-      // Customize this logic based on how you want to perform the search
-      // For example, you can check if the 'name' field contains the search text
-      return row.name.toLowerCase().includes(searchText.toLowerCase());
-    });
+  function onSubmitModal(forms, hideModal) {
+    setRows((rows) => [
+      ...rows,
+      { id: rows[Math.max(rows.length - 1, 0)]?.id ?? 0, ...forms },
+    ]);
+    enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+    hideModal();
+  }
 
-    setFilteredRows(filteredRows);
-  };
-  const rows = [
-    {
-      id: 202314,
-      name: "Madadkor qurilish korxonasi KU qo’mitasi",
-      worker: "1703",
-      statistic: "20",
-      direktor: "Mirzaev I.A.",
-      firstorg: "Adliya vazirligi",
-      tel: "+998971234567",
-      soato: "12345678",
-      adr: "Navoiy ",
-      okpo: "4123847",
-      type: "",
+  return (
+    <DataTable
+      columns={columns}
+      rows={rows}
+      onSubmitModal={onSubmitModal}
+      isFormModal
+      modal={(hideModal) => <ModalUI hideModal={hideModal} />}
+    />
+  );
+}
+function ModalUI({ hideModal }) {
+  const { t } = useTranslation();
 
-    },
-    {
-        id: 202314,
-        name: "Madadkor qurilish korxonasi KU qo’mitasi",
-        worker: "1703",
-        statistic: "20",
-        direktor: "Mirzaev I.A.",
-        firstorg: "Adliya vazirligi",
-        tel: "+998971234567",
-        soato: "12345678",
-        adr: "Navoiy ",
-        okpo: "4123847",
-        type: "",
-  
-      },
-      {
-        id: 202314,
-        name: "Madadkor qurilish korxonasi KU qo’mitasi",
-        worker: "1703",
-        statistic: "20",
-        direktor: "Mirzaev I.A.",
-        firstorg: "Adliya vazirligi",
-        tel: "+998971234567",
-        soato: "12345678",
-        adr: "Navoiy ",
-        okpo: "4123847",
-        type: "",
-  
-      },
-      {
-        id: 202314,
-        name: "Madadkor qurilish korxonasi KU qo’mitasi",
-        worker: "1703",
-        statistic: "20",
-        direktor: "Mirzaev I.A.",
-        firstorg: "Adliya vazirligi",
-        tel: "+998971234567",
-        soato: "12345678",
-        adr: "Navoiy ",
-        okpo: "4123847",
-        type: "",
-  
-      },
-      {
-        id: 202314,
-        name: "Madadkor qurilish korxonasi KU qo’mitasi",
-        worker: "1703",
-        statistic: "20",
-        direktor: "Mirzaev I.A.",
-        firstorg: "Adliya vazirligi",
-        tel: "+998971234567",
-        soato: "12345678",
-        adr: "Navoiy ",
-        okpo: "4123847",
-        type: "",
-  
-      },
-      {
-        id: 202314,
-        name: "Madadkor qurilish korxonasi KU qo’mitasi",
-        worker: "1703",
-        statistic: "20",
-        direktor: "Mirzaev I.A.",
-        firstorg: "Adliya vazirligi",
-        tel: "+998971234567",
-        soato: "12345678",
-        adr: "Navoiy ",
-        okpo: "4123847",
-        type: "",
-  
-      },
-      {
-        id: 202314,
-        name: "Madadkor qurilish korxonasi KU qo’mitasi",
-        worker: "1703",
-        statistic: "20",
-        direktor: "Mirzaev I.A.",
-        firstorg: "Adliya vazirligi",
-        tel: "+998971234567",
-        soato: "12345678",
-        adr: "Navoiy ",
-        okpo: "4123847",
-        type: "",
-  
-      },
-      {
-        id: 202314,
-        name: "Madadkor qurilish korxonasi KU qo’mitasi",
-        worker: "1703",
-        statistic: "20",
-        direktor: "Mirzaev I.A.",
-        firstorg: "Adliya vazirligi",
-        tel: "+998971234567",
-        soato: "12345678",
-        adr: "Navoiy ",
-        okpo: "4123847",
-        type: "",
-  
-      },
-      {
-        id: 202314,
-        name: "Madadkor qurilish korxonasi KU qo’mitasi",
-        worker: "1703",
-        statistic: "20",
-        direktor: "Mirzaev I.A.",
-        firstorg: "Adliya vazirligi",
-        tel: "+998971234567",
-        soato: "12345678",
-        adr: "Navoiy ",
-        okpo: "4123847",
-        type: "",
-  
-      },
-      {
-        id: 202314,
-        name: "Madadkor qurilish korxonasi KU qo’mitasi",
-        worker: "1703",
-        statistic: "20",
-        direktor: "Mirzaev I.A.",
-        firstorg: "Adliya vazirligi",
-        tel: "+998971234567",
-        soato: "12345678",
-        adr: "Navoiy ",
-        okpo: "4123847",
-        type: "",
-  
-      },
-  ];
-  return <div>
-     
-      <InDataTable handle={handleSearch} columns={columns} rows={filteredRows !== null ? filteredRows : rows} />  
-  </div> ;
+  return (
+    <Box
+      sx={{
+        width: 720,
+        height: 720,
+      }}
+    >
+    <div className="modal-content">
+      
+      <FormInput
+        select
+        name="name"
+        dataSelect={["Buxoro MCHJ"]}
+        label={t("industrial-organizations.name")}
+      />
+        <FormInput label={t("industrial-organizations.worker")} name="worker" required />
+        <FormInput label={t("industrial-organizations.statistic")} name="statistic" required />
+        <FormInput label={t("industrial-organizations.direktor")} name="direktor" required />
+        <FormInput label={t("industrial-organizations.firstorg")} required name="firstorg" />
+      <div className="modal-row">
+        <FormInput label={t("phone-number")} name="phoneNumber" required />
+        <FormInput
+        select
+        name="soato"
+        dataSelect={["Buxoro MCHJ"]}
+        label={t("industrial-organizations.soato")}
+      />
+      </div>
+      <FormInput label={t("industrial-organizations.adr")} required name="adr" />
+      <div className="modal-row">
+      <FormInput label={t("industrial-organizations.okpo")} name="industrial-organizations.okpo" required />
+        <FormInput
+        select
+        name="type"
+        dataSelect={["Buxoro MCHJ"]}
+        label={t("industrial-organizations.type")}
+      />
+      </div>
+    </div></Box>
+  );
 }
