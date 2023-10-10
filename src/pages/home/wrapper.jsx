@@ -25,6 +25,7 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
       const data = await getBKUTData();
       if (data?.response?.data?.error == "Invalid entity ID") {
         // enqueueSnackbar(t("successfully-saved"), { variant: "error" });
+        actions.loginFailure();
         localStorage.removeItem("token");
         route.replace("/auth");
         return;
