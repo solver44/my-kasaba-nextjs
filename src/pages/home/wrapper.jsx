@@ -27,6 +27,7 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
         // enqueueSnackbar(t("successfully-saved"), { variant: "error" });
         actions.loginFailure();
         localStorage.removeItem("token");
+        actions.showLoading(false);
         route.replace("/auth");
         return;
       }
