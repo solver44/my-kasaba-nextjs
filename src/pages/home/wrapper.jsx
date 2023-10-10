@@ -11,16 +11,23 @@ import AllMenu from "@/components/Menu/all";
 import { useSelector } from "react-redux";
 import { getBKUTData } from "@/http/data";
 import useActions from "@/hooks/useActions";
+import { useRouter } from "next/router";
 
 const HomeWrapper = ({ children, noHeader, title, desc }) => {
   const states = useSelector((state) => state);
   const actions = useActions();
+  const route = useRouter();
 
   useEffect(() => {
     if (states.bkutData?.id) return;
     const fetchData = async () => {
       actions.showLoading(true);
       const data = await getBKUTData();
+      if (data.response.data.error == "Invalid entity ID") {
+        // enqueueSnackbar(t("successfully-saved"), { variant: "error" });
+        route.replace("/auth");
+        return;
+      }
       actions.bkutData(data);
       if (data?.protocolFile) {
         actions.isMember(true);
