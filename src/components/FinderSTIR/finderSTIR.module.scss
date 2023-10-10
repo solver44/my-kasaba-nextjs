@@ -2,18 +2,14 @@
   display: flex;
   gap: 15px;
   align-items: flex-end;
+  & > :first-child {
+    width: 100%;
+  }
   p {
     position: absolute !important;
     bottom: -2px;
     right: 0;
     transform: translateY(100%);
-  }
-  & > :first-child,
-  & > :nth-child(2) {
-    width: 40%;
-  }
-  & > :nth-child(3) {
-    width: 20%;
   }
 }
 .btn {

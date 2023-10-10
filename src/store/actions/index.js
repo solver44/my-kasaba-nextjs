@@ -3,6 +3,7 @@ export const LOGIN_FAILURE = "LOGIN_FAILURE";
 export const SHOW_LOADING = "SHOW_LOADING";
 export const CACHES = "CACHES";
 export const IS_MEMBER = "IS_MEMBER";
+export const BKUT_DATA = "BKUT_DATA";
 
 const loginSuccess = () => {
   return {
@@ -37,10 +38,18 @@ const isMember = (payload) => {
   };
 };
 
+const bkutData = (payload) => {
+  return {
+    type: BKUT_DATA,
+    payload,
+  };
+};
+
 export default {
   showLoading,
   loginFailure,
   loginSuccess,
   caches,
-  isMember
+  isMember,
+  bkutData,
 };

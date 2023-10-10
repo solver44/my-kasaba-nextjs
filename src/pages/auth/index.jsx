@@ -20,6 +20,7 @@ import { auth } from "@/http/public";
 import Input from "@/components/Input";
 import { validateEmpty } from "@/utils/validation";
 import { useSnackbar } from "notistack";
+import { getBKUTID } from "@/http/data";
 
 export default function Auth() {
   const actions = useActions();
@@ -49,16 +50,16 @@ export default function Auth() {
     });
     if (isInvalid) {
       // Handle the case where there are input errors (e.g., display an error message)
-      console.log("Please fill in all fields.");
       setInputErrors({ username: true, password: true });
       return;
     }
     actions.showLoading(true);
-    const data = { access_token: "test!token" }; //await auth(inputData.username, inputData.password);
-    if (data?.access_token) {
-      localStorage.setItem("token", data.access_token);
+
+    const data = await getBKUTID(inputData.username, inputData.password);
+    if (data?.success) {
+      localStorage.setItem("token", data.id);
       actions.loginSuccess();
-      navigate.push("/");
+      await navigate.push("/");
     } else {
       enqueueSnackbar(t("error-auth"), { variant: "error" });
     }

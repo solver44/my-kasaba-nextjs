@@ -9,7 +9,6 @@ export default function SuccessRegisterBkut() {
   const actions = useActions();
 
   useEffect(() => {
-    console.log("true");
     actions.isMember(true);
   }, [])
   

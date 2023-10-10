@@ -34,6 +34,7 @@ export default function CheckStatus() {
     let data = await checkStatusApplication(currentID);
     if (!data?.success) {
       enqueueSnackbar(t("input-error.applicationId"), { variant: "error" });
+      actions.showLoading(false);
       return;
     }
     data = data.application;

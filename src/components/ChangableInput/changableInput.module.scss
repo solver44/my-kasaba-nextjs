@@ -25,6 +25,14 @@
   & > :first-child {
     width: 100%;
   }
+  &.invalid {
+    .fileInput {
+      border-color: red;
+    }
+    .cloudIcon{
+      top: 32% !important;
+    }
+  }
 }
 .cloudIcon {
   position: absolute;
@@ -40,7 +48,21 @@
   padding: 10px;
   text-overflow: ellipsis;
 }
+.invalid_title {
+  color: #d32f2f;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.66;
+  letter-spacing: 0.03333em;
+  text-align: left;
+  margin-top: 3px;
+  margin-right: 14px;
+  margin-bottom: 0;
+  margin-left: 14px;
+}
 .select {
+  max-width: 500px;
   fieldset {
     border: 1px solid var(--input-border-color) !important;
   }

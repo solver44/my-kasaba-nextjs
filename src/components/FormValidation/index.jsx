@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-export default function FormValidation({ children, className, onSubmit }) {
+export default function FormValidation({
+  children,
+  className,
+  button,
+  onSubmit,
+}) {
   const methods = useForm();
 
   const handleSubmitFunc = (data, t) => {
@@ -13,9 +18,9 @@ export default function FormValidation({ children, className, onSubmit }) {
     <FormProvider {...methods}>
       <form
         className={className}
-        onSubmit={methods.handleSubmit(handleSubmitFunc)}
+        onSubmit={button ? null : methods.handleSubmit(handleSubmitFunc)}
       >
-        {children}
+        {button ? children(methods.handleSubmit(handleSubmitFunc)) : children}
       </form>
     </FormProvider>
   );

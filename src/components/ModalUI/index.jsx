@@ -12,12 +12,15 @@ export default function ModalUI({
   isForm,
   handleClose,
   children,
+  bottomModal,
 }) {
   const { t } = useTranslation();
   const parent = isForm
     ? (children) => (
         <div>
-          <FormValidation className={styles.content} onSubmit={onSubmit}>{children}</FormValidation>
+          <FormValidation button className={styles.content} onSubmit={onSubmit}>
+            {(onSubmit) => children(onSubmit)}
+          </FormValidation>
         </div>
       )
     : (children) => <div className={styles.content}>{children}</div>;
@@ -32,22 +35,25 @@ export default function ModalUI({
     >
       <Slide direction="up" in={open}>
         {/* <CloseRounded onClick={handleClose} className={styles.close} /> */}
-        {parent(
+        {parent((handleSubmit) => (
           <React.Fragment>
             {children}
-            <div className={styles.row}>
-              <Button
-                type={isForm ? "submit" : "button"}
-                onClick={isForm ? null : onSubmit}
-                variant="contained"
-              >
-                {t("save")}
-              </Button>
-              
-              <Button onClick={handleClose}>{t("close")}</Button>
-            </div>
+            {bottomModal ? (
+              bottomModal(handleSubmit, handleClose)
+            ) : (
+              <div className={styles.row}>
+                <Button
+                  onClick={isForm ? handleSubmit : onSubmit}
+                  variant="contained"
+                >
+                  {t("save")}
+                </Button>
+
+                <Button onClick={handleClose}>{t("close")}</Button>
+              </div>
+            )}
           </React.Fragment>
-        )}
+        ))}
       </Slide>
     </Modal>
   );

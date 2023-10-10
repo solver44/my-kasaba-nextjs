@@ -9,7 +9,7 @@
 .grid{
     width: 100%;
     display: grid;
-    column-gap: 100px;
+    column-gap: 50px;
     grid-template-columns: repeat(2, 1fr);
 }
 .grid_column{

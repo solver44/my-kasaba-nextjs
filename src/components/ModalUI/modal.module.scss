@@ -1,9 +1,10 @@
-.main{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .content {
+  overflow-y: auto;
   background-color: white;
   border-radius: 5px;
   padding: 30px 30px;
@@ -11,13 +12,14 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  min-width: 40%;
+  min-width: 60vw;
+  max-height: 90vh;
 }
-.close{
-    align-self: flex-end;
-    cursor: pointer;
+.close {
+  align-self: flex-end;
+  cursor: pointer;
 }
-.row{
-    display: flex;
-    gap: 20px;
+.row {
+  display: flex;
+  gap: 20px;
 }

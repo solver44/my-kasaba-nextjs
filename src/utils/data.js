@@ -19,3 +19,30 @@ export function showOrNot(text) {
 export function getBearerToken(req) {
   return (req.headers?.Authorization || " ").split(" ")[1];
 }
+
+export function getLocalizationNames(object = {}, i18n) {
+  return (
+    object[i18n.language === "uz" ? "nameUz" : "nameRu"] ??
+    object["nameUz"] ??
+    ""
+  );
+}
+
+export function replaceValueWithLabel(obj) {
+  const newObj = { ...obj }; // Create a new object to avoid modifying the original
+  for (const key in newObj) {
+    if (newObj[key]?.label) {
+      newObj[key] = newObj[key].label;
+    }
+  }
+  return newObj;
+}
+
+export function replaceValuesInArray(arr) {
+  return arr.map((obj) => replaceValueWithLabel(obj));
+}
+
+export const POSITIONS = (t) => [
+  { value: 1, label: t("employees.chairman") },
+  { value: 2, label: t("employees.accountant") },
+];

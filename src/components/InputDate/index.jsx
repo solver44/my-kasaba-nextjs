@@ -47,7 +47,7 @@ export default function InputDate({
 const InsideInput = ({ value, onChangeFunc, invalid, className }) => (
   <DatePicker
     format="DD.MM.YYYY"
-    value={value}
+    value={value == "Invalid Date" || !value ? null : value}
     slotProps={{
       textField: {
         color: "error",

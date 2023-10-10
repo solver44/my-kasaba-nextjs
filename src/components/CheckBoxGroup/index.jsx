@@ -1,18 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
-import styles from "./radioGroup.module.scss";
-import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import styles from "./checkBoxGroup.module.scss";
+import { FormControlLabel, Checkbox, FormGroup } from "@mui/material"; // Import Checkbox and FormGroup
 import { useController, useFormContext } from "react-hook-form";
 
-function RadioGroups({
+function CheckBoxGroup({
   onChange,
   defaultValue,
   row = true,
-  data,
+  data = [],
   name,
   required,
   value: propValue,
   label,
 }) {
+  const currentData = useRef(
+    data.reduce((result, d) => {
+      result[d.value] = false;
+      return result;
+    }, {})
+  );
   const { control, setValue } = useFormContext() ?? { control: false };
   const { field } = !control
     ? { field: { value: propValue, name } }
@@ -22,9 +28,10 @@ function RadioGroups({
         rules: { required: !!required },
       });
 
-  function onChangeFunc(e) {
-    if (!onChange) onChange(e, name);
-    if (field.onChange) field.onChange(e, name);
+  function onChangeFunc(e, key) {
+    currentData.current[key] = e.target.checked;
+    if (onChange) onChange(currentData.current, name);
+    if (field.onChange) field.onChange(currentData.current, name);
   }
 
   useEffect(() => {
@@ -37,24 +44,24 @@ function RadioGroups({
   return (
     <div className={styles.wrapper}>
       <label className={styles.label}>{label}</label>
-      <RadioGroup
-        style={{ justifyContent: "center", gap: 30 }}
+      <FormGroup
+        style={{ gap: 30 }}
         defaultValue={defaultValue}
         value={field.value ?? ""}
         row={row}
-        onChange={onChangeFunc}
       >
-        {data.map((radio) => (
+        {data.map((checkbox) => (
           <FormControlLabel
-            key={radio.value}
-            value={radio.value}
-            control={<Radio />}
-            label={radio.label}
+            onChange={(e) => onChangeFunc(e, checkbox.value)}
+            key={checkbox.value}
+            value={checkbox.value}
+            control={<Checkbox />} // Use Checkbox component here
+            label={checkbox.label}
           />
         ))}
-      </RadioGroup>
+      </FormGroup>
     </div>
   );
 }
 
-export default React.memo(RadioGroups);
+export default React.memo(CheckBoxGroup);

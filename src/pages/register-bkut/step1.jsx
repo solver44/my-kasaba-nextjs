@@ -1,18 +1,33 @@
 import React, { useEffect, useState } from "react";
 import styles from "./registerBkut.module.scss";
-import ChangableInput from "../../components/ChangableInput";
 import { useTranslation } from "react-i18next";
 import RadioGroups from "../../components/RadioGroup";
 import { useSnackbar } from "notistack";
 import { getBranches, getDistricts, getRegions } from "@/http/public";
+import { getLocalizationNames } from "@/utils/data";
+import FormInput from "@/components/FormInput";
 
-export default function Step1() {
-  const { t } = useTranslation();
+export default function Step1({ bkutData = {} }) {
+  const { t, i18n } = useTranslation();
   const [mode, setMode] = useState(0);
   const [provinces, setProvinces] = useState();
   const [districts, setDistricts] = useState();
   const [branches, setBranches] = useState();
+  const [values, setValues] = useState({
+    provinceId: "",
+    districtId: "",
+    branchId: "",
+  });
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    const soato = bkutData.eLegalEntity?.soatoDistrict?.id;
+    if (!soato) return;
+    const provinceId = soato.slice(0, 4);
+    const districtId = soato;
+    handleProvince({ target: { value: provinceId } });
+    setValues({ provinceId, districtId, branchId: bkutData.branch?.id });
+  }, [bkutData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,11 +68,19 @@ export default function Step1() {
     <div className={styles.grid}>
       <div className={styles.grid_column}>
         <div className="row g-3 full-children">
-          <ChangableInput name="bkutName" label={t("bkutName1")} editable />
+          <FormInput
+            required
+            name="bkutName"
+            label={t("bkutName1")}
+            editable
+            value={bkutData.name}
+          />
           {mode == 1 && (
-            <ChangableInput
+            <FormInput
+              required
               maxLength={9}
               name="bkutSTIR"
+              value={bkutData?.application?.tin}
               label={t("bkutSTIR1")}
               editable
             />
@@ -65,6 +88,7 @@ export default function Step1() {
         </div>
         <RadioGroups
           defaultValue={0}
+          value={bkutData?.bkutType ?? 0}
           name="bkutType"
           onChange={(e) => setMode(e.target.value)}
           label={t("bkutType1")}
@@ -79,10 +103,20 @@ export default function Step1() {
             },
           ]}
         />
-        <ChangableInput disabled label={t("seniorOrganization")} editable />
-        <ChangableInput
+        <FormInput
+          required
+          disabled
+          name="seniorOrganization"
+          label={t("seniorOrganization")}
+          value={getLocalizationNames(bkutData?.parent, i18n)}
+          editable
+        />
+        <FormInput
+          required
           disabled
           select
+          name="network"
+          value={values.branchId}
           dataSelect={branches}
           label={t("network")}
           editable
@@ -90,26 +124,50 @@ export default function Step1() {
       </div>
       <div className={styles.grid_column}>
         <div className="row g-3 full-children">
-          <ChangableInput
+          <FormInput
+            required
             select
             disabled
             dataSelect={provinces}
             name="province"
+            value={values.provinceId}
             onChange={handleProvince}
             label={t("province")}
             editable
           />
-          <ChangableInput
+          <FormInput
+            required
             select
             disabled
             dataSelect={districts}
+            value={values.districtId}
+            name="district"
             label={t("district")}
             editable
           />
         </div>
-        <ChangableInput label={t("address")} editable />
-        <ChangableInput label={t("phone-number")} useMask editable />
-        <ChangableInput label={t("email")} name="email" editable />
+        <FormInput
+          required
+          name="address"
+          label={t("address")}
+          editable
+          value={bkutData.eLegalEntity?.address}
+        />
+        <FormInput
+          required
+          name="phoneNumber"
+          label={t("phone-number")}
+          value={bkutData.phone}
+          useMask
+          editable
+        />
+        <FormInput
+          required
+          label={t("email")}
+          value={bkutData.application?.email}
+          name="email"
+          editable
+        />
       </div>
     </div>
   );

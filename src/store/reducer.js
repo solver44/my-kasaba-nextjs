@@ -1,5 +1,12 @@
 import { localStorage } from "@/utils/window";
-import { LOGIN_SUCCESS, LOGIN_FAILURE, SHOW_LOADING, CACHES, IS_MEMBER } from "./actions";
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  SHOW_LOADING,
+  CACHES,
+  IS_MEMBER,
+  BKUT_DATA,
+} from "./actions";
 
 const initialState = {
   isLoggedIn: !!localStorage.getItem("token") || false,
@@ -34,6 +41,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isMember: action.payload,
+      };
+    case BKUT_DATA:
+      return {
+        ...state,
+        bkutData: action.payload,
       };
     default:
       return state;

@@ -15,12 +15,14 @@ import { LinearProgress } from "@mui/material";
 import CustomNoRowsOverlay from "./noRows";
 import { localizationTable } from "./localization";
 import ModalUI from "../ModalUI";
+import { replaceValuesInArray } from "@/utils/data";
 
 export default function DataTable({
   columns,
   onSubmitModal,
   isFormModal,
   loading,
+  bottomModal,
   rows,
   modal = () => "",
 }) {
@@ -60,7 +62,7 @@ export default function DataTable({
         <DataGrid
           checkboxSelection
           disableRowSelectionOnClick
-          rows={rows}
+          rows={replaceValuesInArray(rows)}
           // autoPageSize
           disableColumnMenu
           columns={columns}
@@ -79,6 +81,7 @@ export default function DataTable({
         onSubmit={(data) => onSubmitModal(data, () => toggleModal(false))}
         isForm={isFormModal}
         open={show}
+        bottomModal={bottomModal}
         handleClose={() => toggleModal(false)}
       >
         {modal(() => toggleModal(false))}

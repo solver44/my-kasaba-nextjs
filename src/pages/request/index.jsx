@@ -175,6 +175,7 @@ export default function RequestPage({ router }) {
       recaptchaResponse
     );
     actions.showLoading(false);
+    console.log(data);
     if (data?.success) {
       actions.caches({
         sent: true,

@@ -69,10 +69,10 @@ export default {
     },
     "industrial-organizations": {
       title: "Seh tashkilotlari",
-      name: "Nomi (o'zbekcha)",
+      name: "Nomi",
       worker: "Ish beruvchi",
       statistic: "Statistika",
-      direktor: "Rahbar",
+      direktor: "Seh tashkiloti tashkilotchisi",
       firstorg: "Yuqori tashkilot",
       tel: "Telefon",
       soato: "MXOBT (SOATO) kodi",
@@ -119,15 +119,18 @@ export default {
     "basic-tools": {
       title: "Asosiy vositalar",
     },
-    employess: {
+    employees: {
       title: "Xodimlar",
       fio: "FIO",
       position: "Lavozimi",
       tel: "Telefon raqami",
-      dateSign:"Kasaba uyushmaga a’zo bo’lgan sanasi",
+      dateSign: "Kasaba uyushmasiga a’zo bo’lgan sanasi",
       email: "Elektron pochta manzili",
-      passNumber:"Guvohnoma nomeri",
-      workPlace:"Ish joyi",
+      passNumber: "Guvohnoma raqami",
+      workPlace: "Ish joyi",
+      empty: "Xodimlar kiritilmadi.",
+      chairman: "Rais",
+      accountant: "Hisobchi",
     },
     memberss: {
       title: "A’zolar",
@@ -165,8 +168,8 @@ export default {
     district: "Tuman",
     address: "Manzil",
 
-    createDoc:"Guvohnoma yaratish",
-    certificate:"Guvohnoma",
+    createDoc: "Guvohnoma yaratish",
+    certificate: "Guvohnoma",
     requestGivenDate: "Murojaat berilgan sana",
     applicationSender: "Murojaat qilgan shaxs",
     bkutName: "BKUT nomi",
@@ -207,7 +210,7 @@ export default {
     teamContracts: "Jamoa shartnomalari",
     reports: "Hisobotlar",
     basicTools: "Asosiy vositalar",
-    employees: "Xodimlar",
+    employeesTitle: "Xodimlar",
     members: "A’zolar",
     settings: "Sozlamalar",
 
@@ -235,14 +238,22 @@ export default {
     "invalid-email": "Elektron pochta manzili xato kiritildi",
     "invalid-input": "Maydonda xatolik mavjud!",
     "error-auth": "Login yoki parol topilmadi.",
+    "upload-file-error":
+      "Faylni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
+    "error-send-bkut":
+      "Ma'lumotlarni yuborishda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
     "error-send-application":
-      "Murojjatni yuborishda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
+      "Murojaatni yuborishda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
     "error-form-application": "Murojaat shakli noto'g'ri kiritilgan!",
     "not-found": "Yo'q",
 
     "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang.",
     "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang.",
     "pinfl-fetch-error": "Ma'lumotlarni yuklashda xatolik mavjud.",
+    isStudent: "Talaba",
+    isPensioner: "Pensioner",
+    isHomemaker: "Ishsiz",
+    isInvalid: "Nogiron",
 
     dTable: {
       toolbarDensity: "O'lcham",

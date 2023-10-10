@@ -3,7 +3,12 @@ import styles from "./VerticalStepper.module.scss";
 import { Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-export default function VerticalStepper({ steps = [], loading, onFinish }) {
+export default function VerticalStepper({
+  steps = [],
+  validation,
+  loading,
+  onFinish,
+}) {
   const { t } = useTranslation();
   return (
     <div className={styles.wrapper}>
@@ -17,7 +22,8 @@ export default function VerticalStepper({ steps = [], loading, onFinish }) {
         disabled={loading}
         variant="contained"
         className={styles.button}
-        onClick={onFinish}
+        type={validation ? "submit" : "button"}
+        onClick={validation ? null : onFinish}
       >
         {t("sent")}
       </Button>

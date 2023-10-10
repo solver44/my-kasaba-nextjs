@@ -20,7 +20,10 @@ export default function ChangableInput({
   ...props
 }) {
   const value = propValue || undefined;
-  const language = useTranslation().i18n.language;
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
   const [fileName, setFileName] = useState("");
   function onChangeFunc({ target }) {
     if (!onChange) return;
@@ -55,7 +58,7 @@ export default function ChangableInput({
           name={name}
           onChange={onChangeFunc}
           displayEmpty
-          value={value}
+          value={propValue ?? -1}
           className={[
             styles.select,
             props.disabled ? styles.disabled : "",
@@ -70,7 +73,12 @@ export default function ChangableInput({
           ))}
         </Select>
       ) : fileInput ? (
-        <label className={styles.fileInputLabel}>
+        <label
+          className={[
+            styles.fileInputLabel,
+            invalid ? styles.invalid : "",
+          ].join(" ")}
+        >
           <input
             type="file"
             accept="*/*"
@@ -82,7 +90,9 @@ export default function ChangableInput({
             style={{ cursor: "pointer" }}
             className={styles.cloudIcon}
           />
-          {/* Cloud icon */}
+          {invalid && (
+            <div className={styles.invalid_title}>{t("invalid-input")}</div>
+          )}
         </label>
       ) : (
         <Input

@@ -10,6 +10,7 @@ export default async function handler(req, res) {
           error: "reCAPTCHA verification failed",
           codes: isValid?.error,
         });
+        return;
       }
       const response = await sendApplication(data);
       // await new Promise((resolve) => setTimeout(resolve, 2000));

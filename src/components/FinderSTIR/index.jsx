@@ -1,43 +1,35 @@
 import React, { useState } from "react";
-import styles from "./finderPINFL.module.scss";
+import styles from "./finderSTIR.module.scss";
 import { useTranslation } from "react-i18next";
 import { SearchRounded } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import FormInput from "../FormInput";
-import { fetchPINFL } from "@/http/public";
+import { fetchSTIR } from "@/http/public";
 import { useSnackbar } from "notistack";
 
-export default function FinderPINFL({ required, onFetch = () => {} }) {
+export default function FinderSTIR({ required, onFetch = () => {} }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const [forms, setForms] = useState({ pinfl: "", givenDate: "" });
+  const [forms, setForms] = useState({ tin: "" });
   const [inputValidation, setInputValidation] = useState({
-    pinfl: false,
-    givenDate: false,
+    tin: false,
   });
 
   async function fetchData() {
     let isValid = true;
 
-    if (!forms.givenDate) {
+    if (forms.tin?.length < 9) {
       setInputValidation((inputValidation) => ({
         ...inputValidation,
-        givenDate: true,
-      }));
-      isValid = false;
-    }
-    if (forms.pinfl?.length < 14) {
-      setInputValidation((inputValidation) => ({
-        ...inputValidation,
-        pinfl: true,
+        tin: true,
       }));
       isValid = false;
     }
     if (!isValid) return;
 
     setLoading(true);
-    const { data } = await fetchPINFL(forms.pinfl, forms.givenDate);
+    const { data } = await fetchSTIR(forms.tin);
     setLoading(false);
     if (!data?.success) {
       enqueueSnackbar(t("pinfl-fetch-error"), {
@@ -48,26 +40,18 @@ export default function FinderPINFL({ required, onFetch = () => {} }) {
     }
     onFetch(data?.data);
   }
+
   return (
     <div className={styles.wrapper}>
       <FormInput
         required
-        name="pinfl"
-        label={t("pinfl")}
-        invalid={inputValidation.pinfl}
+        name="tin"
+        maxLength={9}
+        label={t("stir")}
+        invalid={inputValidation.tin}
         onChange={(e, name) =>
           setForms((forms) => ({ ...forms, [name]: e.target.value }))
         }
-      />
-      <FormInput
-        required
-        date
-        invalid={inputValidation.givenDate}
-        onChange={(e, name) =>
-          setForms((forms) => ({ ...forms, [name]: e.target.value }))
-        }
-        name="givenDate"
-        label={t("passport-given-date")}
       />
       <LoadingButton
         loading={loading}

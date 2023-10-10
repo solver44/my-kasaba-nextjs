@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Profile from "../../components/Profile";
 import PartMenu from "../../components/Menu/part";
 import styles from "./home.module.scss";
@@ -9,9 +9,26 @@ import Image from "next/image";
 import PrivateRoute from "@/utils/withAuth";
 import AllMenu from "@/components/Menu/all";
 import { useSelector } from "react-redux";
+import { getBKUTData } from "@/http/data";
+import useActions from "@/hooks/useActions";
 
 const HomeWrapper = ({ children, noHeader, title, desc }) => {
-  const states = useSelector(state => state);
+  const states = useSelector((state) => state);
+  const actions = useActions();
+
+  useEffect(() => {
+    if (states.bkutData?.id) return;
+    const fetchData = async () => {
+      actions.showLoading(true);
+      const data = await getBKUTData();
+      actions.bkutData(data);
+      if (data?.protocolFile) {
+        actions.isMember(true);
+      }
+      actions.showLoading(false);
+    };
+    fetchData();
+  }, []);
 
   return (
     <PrivateRoute>
@@ -20,7 +37,7 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
           <div className={styles.top}>
             <Image className={styles.logo} src={logo} alt="logotip kasaba" />
             <Profile title="Asqarbek Abdullayev" />
-            {!states.isMember ? <PartMenu/> : <AllMenu />}
+            {!states.isMember ? <PartMenu /> : <AllMenu />}
           </div>
           <div className={styles.bottom}>
             <Logout />

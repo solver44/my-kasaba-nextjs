@@ -3,29 +3,74 @@ import { useTranslation } from "react-i18next";
 import DataTable from "@/components/DataTable";
 import FinderPINFL from "@/components/FinderPINFL";
 import FormInput from "@/components/FormInput";
-import dayjs from "dayjs";
 import { useSnackbar } from "notistack";
+import { useEffect } from "react";
+import { sendEmployee } from "@/http/data";
+import { useSelector } from "react-redux";
+import { POSITIONS, getLocalizationNames } from "@/utils/data";
+import { convertStringToFormatted } from "@/utils/date";
+import dayjs from "dayjs";
 
-export default function InDataTable() {
-  const { t } = useTranslation();
+export default function InDataTable({ onUpload }) {
+  const { t, i18n } = useTranslation();
   const [rows, setRows] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+  const { bkutData = {} } = useSelector((states) => states);
 
   const columns = [
-    { field: "id", headerName: "ID", width: 80 },
-    { field: "fio", headerName: t("fio"), minWidth: 180 },
+    // { field: "id", headerName: "ID", width: 80 },
+    { field: "fio", headerName: t("fio"), minWidth: 300 },
     { field: "position", headerName: t("job-position") },
     { field: "birthDate", headerName: t("birth-date"), minWidth: 150 },
     { field: "phoneNumber", headerName: t("phone-number"), minWidth: 180 },
     { field: "email", headerName: t("email"), minWidth: 200 },
   ];
 
-  function onSubmitModal(forms, hideModal) {
-    setRows((rows) => [
-      ...rows,
-      { id: rows[Math.max(rows.length - 1, 0)]?.id ?? 0, ...forms },
-    ]);
-    enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+  useEffect(() => {
+    if (!bkutData?.employees?.length) return;
+    setRows(
+      bkutData?.employees.map((e) => {
+        return {
+          id: e.employee.id,
+          fio: `${e.employee.firstName} ${e.employee.lastName} ${e.employee.middleName}`,
+          position: {
+            label: getLocalizationNames(e.position, i18n),
+            value: e.position.id,
+          },
+          birthDate: convertStringToFormatted(e.employee.birthDate),
+          phoneNumber: e.employee.phone,
+          email: e.employee.email,
+        };
+      })
+    );
+  }, [bkutData]);
+
+  useEffect(() => {
+    if (onUpload) onUpload({ columns, rows });
+  }, [rows]);
+
+  async function onSubmitModal(forms, hideModal) {
+    const fio = forms.fio.split(" ");
+    const requestData = {
+      bkutId: bkutData.id,
+      pinfl: forms.pinfl,
+      lastName: fio[0],
+      firstName: fio[1],
+      middleName: fio[2],
+      phone: forms.phoneNumber,
+      email: forms.email,
+      position: forms.position
+    };
+    const response = await sendEmployee(requestData);
+    if (response?.success) {
+      setRows((rows) => [
+        ...rows,
+        { id: rows[Math.max(rows.length - 1, 0)]?.id ?? 0, ...forms },
+      ]);
+      enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+    } else {
+      enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
+    }
     hideModal();
   }
 
@@ -60,8 +105,9 @@ function ModalUI({ hideModal }) {
       </div>
       <FormInput
         select
+        required
         name="position"
-        dataSelect={[]}
+        dataSelect={POSITIONS(t)}
         label={t("job-position")}
       />
       <div className="modal-row">

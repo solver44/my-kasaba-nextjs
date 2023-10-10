@@ -42,7 +42,7 @@ const menu = [
   },
   {
     icon: PeopleAlt,
-    title: "employees", 
+    title: "employeesTitle", 
     path: "/employees"
   },
   {
