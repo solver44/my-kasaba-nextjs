@@ -9,12 +9,14 @@ import { getDistricts, getRegions } from "@/http/public";
 import { useEmployees } from "../employees";
 import { sendDepartment } from "@/http/data";
 import { useSelector } from "react-redux";
+import useActions from "@/hooks/useActions";
 
 export default function InDataTable() {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const { bkutData = {} } = useSelector((states) => states);
   const { enqueueSnackbar } = useSnackbar();
+  const actions = useActions();
 
   const columns = [
     {
@@ -49,7 +51,7 @@ export default function InDataTable() {
       bkut: {
         id: bkutData.id,
       },
-      departmentType: "SEH",
+      departmentType: "GURUH",
       name: forms.name,
       phone: forms.phone,
       email: forms.email,
@@ -66,28 +68,42 @@ export default function InDataTable() {
     };
     const response = await sendDepartment(requestData);
     if (response?.success) {
+      const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
       setRows((rows) => [
-        ...rows,
-        { id: rows[Math.max(rows.length - 1, 0)]?.id ?? 0, ...forms },
+        ...rows.filter((r) => r.id != newId),
+        { id: newId, ...forms },
       ]);
       enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+      actions.updateData();
     } else {
       enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
     }
     hideModal();
   }
 
+  async function fetchData(id) {
+    const data = (bkutData.departments ?? []).find((ok) => ok.id == id);
+    return data;
+  }
+  function deleteRow(id) {
+    setRows((rows) => rows.filter((row) => row?.id != id));
+  }
+
   return (
     <DataTable
+      fetchData={fetchData}
+      handleDeleteClick={deleteRow}
       columns={columns}
       rows={rows}
       onSubmitModal={onSubmitModal}
       isFormModal
-      modal={(hideModal) => <ModalUI hideModal={hideModal} />}
+      modal={(hideModal, dataModal) => (
+        <ModalUI hideModal={hideModal} data={dataModal} />
+      )}
     />
   );
 }
-function ModalUI({ hideModal }) {
+function ModalUI({ hideModal, data }) {
   const { t } = useTranslation();
   const [employees, bkutData] = useEmployees();
 
@@ -158,6 +174,21 @@ function ModalUI({ hideModal }) {
     }));
   }
 
+  const { phone, soato = {}, employee = {} } = data;
+  useEffect(() => {
+    if (!data?.id) return;
+    let soatoId = soato.id ?? "";
+    const provinceId = soatoId.slice(0, 4);
+    const districtId = soatoId;
+    setValues((values) => ({
+      ...values,
+      name: data.name,
+      address: data.address,
+      provinceId,
+      districtId,
+    }));
+  }, [data]);
+
   return (
     <div className="modal-content">
       <Alert className="modal-alert" severity="info">
@@ -172,13 +203,19 @@ function ModalUI({ hideModal }) {
       />
       <div className="modal-row">
         <FormInput
-          label={t("industrial-organizations.direktor")}
+          label={t("group-organizations.direktor")}
           name="director"
+          value={employee.id}
           dataSelect={employees}
           select
           required
         />
-        <FormInput label={t("phone-number")} name="phoneNumber" required />
+        <FormInput
+          value={phone}
+          label={t("phone-number")}
+          name="phoneNumber"
+          required
+        />
       </div>
       <div className="row g-3 full-children">
         <FormInput

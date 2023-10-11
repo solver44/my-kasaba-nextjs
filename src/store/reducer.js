@@ -6,11 +6,15 @@ import {
   CACHES,
   IS_MEMBER,
   BKUT_DATA,
+  DATA_LOADING,
+  UPDATE_DATA,
 } from "./actions";
 
 const initialState = {
   isLoggedIn: !!localStorage.getItem("token") || false,
   showLoading: false,
+  dataLoading: false,
+  updateData: 0,
   isMember: false,
   caches: {},
 };
@@ -46,6 +50,16 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         bkutData: action.payload,
+      };
+    case DATA_LOADING:
+      return {
+        ...state,
+        dataLoading: action.payload,
+      };
+    case UPDATE_DATA:
+      return {
+        ...state,
+        updateData: state.updateData + action.payload,
       };
     default:
       return state;

@@ -12,6 +12,7 @@ export default function ModalUI({
   isForm,
   handleClose,
   children,
+  isView,
   bottomModal,
 }) {
   const { t } = useTranslation();
@@ -39,7 +40,7 @@ export default function ModalUI({
           <React.Fragment>
             {children}
             {bottomModal ? (
-              bottomModal(handleSubmit, handleClose)
+              bottomModal(handleSubmit, handleClose, isView)
             ) : (
               <div className={styles.row}>
                 <Button
@@ -48,7 +49,6 @@ export default function ModalUI({
                 >
                   {t("save")}
                 </Button>
-
                 <Button onClick={handleClose}>{t("close")}</Button>
               </div>
             )}

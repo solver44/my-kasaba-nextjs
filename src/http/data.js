@@ -40,6 +40,16 @@ export async function initFile(file) {
     return error;
   }
 }
+export async function getFile(fileRef) {
+  try {
+    const { data } = await $axios.get(`/rest/files/`, {
+      params: { fileRef },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
 
 export async function sendDepartment(data) {
   try {
@@ -148,6 +158,15 @@ export async function sendMember(requestData, data) {
     result = await sendEBKUT(requestData);
 
     return result;
+  } catch (error) {
+    return error;
+  }
+}
+export async function fetchMember(id) {
+  try {
+    const { data } = await $axios.get("/rest/entities/EMembers/" + id);
+
+    return data;
   } catch (error) {
     return error;
   }

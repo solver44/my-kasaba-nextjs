@@ -7,21 +7,23 @@ import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 import { sendEmployee } from "@/http/data";
 import { useSelector } from "react-redux";
-import { POSITIONS, getLocalizationNames } from "@/utils/data";
+import { POSITIONS, getFIO, getLocalizationNames } from "@/utils/data";
 import { convertStringToFormatted } from "@/utils/date";
 import dayjs from "dayjs";
+import useActions from "@/hooks/useActions";
 
 export default function InDataTable({ onUpload }) {
   const { t, i18n } = useTranslation();
   const [rows, setRows] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const { bkutData = {} } = useSelector((states) => states);
+  const actions = useActions();
 
   const columns = [
     // { field: "id", headerName: "ID", width: 80 },
-    { field: "fio", headerName: t("fio"), minWidth: 300 },
+    { field: "fio", headerName: t("fio"), minWidth: 320 },
     { field: "position", headerName: t("job-position") },
-    { field: "birthDate", headerName: t("birth-date"), minWidth: 150 },
+    // { field: "birthDate", headerName: t("birth-date"), minWidth: 150 },
     { field: "phoneNumber", headerName: t("phone-number"), minWidth: 180 },
     { field: "email", headerName: t("email"), minWidth: 200 },
   ];
@@ -59,35 +61,50 @@ export default function InDataTable({ onUpload }) {
       middleName: fio[2],
       phone: forms.phoneNumber,
       email: forms.email,
-      position: forms.position
+      position: forms.position,
     };
     const response = await sendEmployee(requestData);
     if (response?.success) {
+      const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
       setRows((rows) => [
-        ...rows,
-        { id: rows[Math.max(rows.length - 1, 0)]?.id ?? 0, ...forms },
+        ...rows.filter((r) => r.id != newId),
+        { id: newId, ...forms },
       ]);
       enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+      actions.updateData();
     } else {
       enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
     }
     hideModal();
   }
 
+  async function fetchData(id) {
+    const data = (bkutData.employees ?? []).find((e) => e.employee.id == id);
+    return data;
+  }
+  function deleteRow(id) {
+    setRows((rows) => rows.filter((row) => row?.id != id));
+  }
+
   return (
     <DataTable
+      fetchData={fetchData}
+      handleDeleteClick={deleteRow}
       columns={columns}
       rows={rows}
       onSubmitModal={onSubmitModal}
       isFormModal
-      modal={(hideModal) => <ModalUI hideModal={hideModal} />}
+      modal={(hideModal, dataModal) => (
+        <ModalUI hideModal={hideModal} data={dataModal} />
+      )}
     />
   );
 }
 
-function ModalUI({ hideModal }) {
+function ModalUI({ hideModal, data = {} }) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ fio: "", birthDate: "" });
+  const { employee = {}, position = {}, phone, email } = data;
 
   function onFetchPINFL(data) {
     if (!data) return;
@@ -98,31 +115,43 @@ function ModalUI({ hideModal }) {
     });
   }
 
+  useEffect(() => {
+    const FIO = getFIO(employee);
+    if (!FIO) return;
+    setFormData({ fio: FIO, birthDate: "" });
+  }, [data]);
+
   return (
     <div className="modal-content">
       <div className="modal-row">
-        <FinderPINFL onFetch={onFetchPINFL} />
+        <FinderPINFL pinflValue={employee.pinfl} onFetch={onFetchPINFL} />
       </div>
-      <FormInput
-        select
-        required
-        name="position"
-        dataSelect={POSITIONS(t)}
-        label={t("job-position")}
-      />
       <div className="modal-row">
         <FormInput label={t("fio")} name="fio" required value={formData.fio} />
         <FormInput
-          date
-          label={t("birth-date")}
+          select
           required
-          name="birthDate"
-          value={formData.birthDate}
+          value={position.id}
+          name="position"
+          dataSelect={POSITIONS(t)}
+          label={t("job-position")}
         />
       </div>
+      <FormInput
+        date
+        label={t("birth-date")}
+        required
+        name="birthDate"
+        value={formData.birthDate}
+      />
       <div className="modal-row">
-        <FormInput label={t("phone-number")} name="phoneNumber" required />
-        <FormInput label={t("email")} required name="email" />
+        <FormInput
+          value={phone}
+          label={t("phone-number")}
+          name="phoneNumber"
+          required
+        />
+        <FormInput value={email} label={t("email")} required name="email" />
       </div>
     </div>
   );

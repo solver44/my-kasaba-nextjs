@@ -82,6 +82,7 @@ export default {
     },
     "group-organizations": {
       title: "Guruh tashkilotlari",
+      direktor: "Guruh tashkiloti tashkilotchisi",
     },
     "statistical-information": {
       title: "Statistik ma’lumotlar",
@@ -184,8 +185,10 @@ export default {
     legal: "Yuridik",
     seniorOrganization: "Yuqori turuvchi tashkilot",
     legalEntity: "Yuridik shaxs",
+    physicalPerson: "Jismoniy shaxs",
     network: "Tarmoq",
     inspection: "Ijroda",
+    soatoFull: "Viloyat, tuman (SOATO)",
     or: "YOKI",
     "forgot-password": "Login yoki parolingizni unutdingizmi?",
     "not-registered": "Ro'yhatdan o'tmaganmisiz?",
@@ -251,9 +254,11 @@ export default {
     "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang.",
     "pinfl-fetch-error": "Ma'lumotlarni yuklashda xatolik mavjud.",
     isStudent: "Talaba",
-    isPensioner: "Pensioner",
-    isHomemaker: "Ishsiz",
+    isPensioner: "Nafaqada",
+    isHomemaker: "Kasanachi",
     isInvalid: "Nogiron",
+    "data-not-full": "Ma'lumotlar to'liq emas",
+    "data-full": "Ma'lumotlar to'liq kiritilgan",
 
     dTable: {
       toolbarDensity: "O'lcham",

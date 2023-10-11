@@ -1,0 +1,47 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+}
+.title {
+  font-size: 22px;
+}
+.content {
+  position: absolute;
+  top: 20%;
+  max-width: 650px;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+}
+.row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  & > :first-child{
+    width: 50%;
+    text-align: right;
+  }
+  & > :last-child{
+    width: 50%;
+    text-decoration: dashed;
+  }
+  &:last-child {
+    width: 100%;
+    margin-top: 20px;
+    float: right;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+.top {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.logo {
+  height: 50px;
+  width: auto;
+}

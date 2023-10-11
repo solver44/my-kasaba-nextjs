@@ -14,20 +14,22 @@ import useActions from "@/hooks/useActions";
 import { useRouter } from "next/router";
 
 const HomeWrapper = ({ children, noHeader, title, desc }) => {
-  const states = useSelector((state) => state);
+  const { updateData, ...states } = useSelector((state) => state);
   const actions = useActions();
   const route = useRouter();
 
   useEffect(() => {
-    if (states.bkutData?.id) return;
+    if (!states.isLoggedIn) return;
     const fetchData = async () => {
       actions.showLoading(true);
+      actions.dataLoading(true);
       const data = await getBKUTData();
       if (data?.response?.data?.error == "Invalid entity ID") {
         // enqueueSnackbar(t("successfully-saved"), { variant: "error" });
         actions.loginFailure();
         localStorage.removeItem("token");
         actions.showLoading(false);
+        actions.dataLoading(false);
         route.replace("/auth");
         return;
       }
@@ -35,10 +37,11 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
       if (data?.protocolFile) {
         actions.isMember(true);
       }
+      actions.dataLoading(false);
       actions.showLoading(false);
     };
     fetchData();
-  }, []);
+  }, [updateData]);
 
   return (
     <PrivateRoute>
@@ -46,7 +49,7 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
         <div className={styles.left}>
           <div className={styles.top}>
             <Image className={styles.logo} src={logo} alt="logotip kasaba" />
-            <Profile title="Asqarbek Abdullayev" />
+            <Profile />
             {!states.isMember ? <PartMenu /> : <AllMenu />}
           </div>
           <div className={styles.bottom}>

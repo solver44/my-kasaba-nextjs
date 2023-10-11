@@ -46,3 +46,10 @@ export const POSITIONS = (t) => [
   { value: 1, label: t("employees.chairman") },
   { value: 2, label: t("employees.accountant") },
 ];
+
+export function getFIO(obj = {}) {
+  const firstName = obj.firstName ?? obj.first_name ?? "";
+  const lastName = obj.lastName ?? obj.last_name ?? "";
+  const middleName = obj.middleName ?? obj.middle_name ?? "";
+  return !firstName ? "" : `${firstName} ${lastName} ${middleName}`;
+}

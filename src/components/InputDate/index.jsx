@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./inputDate.module.scss";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 
 export default function InputDate({
   titleText,
@@ -21,6 +22,11 @@ export default function InputDate({
     if (!onChange) return;
     onChange({ target: { value } }, name);
   };
+
+  useEffect(() => {
+    if (!dayjs.isDayjs(value)) return;
+    onChangeFunc(value);
+  }, [value]);
 
   return titleText ? (
     <div style={containerStyle} className={styles.wrapper}>

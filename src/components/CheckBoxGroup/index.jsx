@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import styles from "./checkBoxGroup.module.scss";
-import { FormControlLabel, Checkbox, FormGroup } from "@mui/material"; // Import Checkbox and FormGroup
+import { FormControlLabel, Checkbox, FormGroup } from "@mui/material";
 import { useController, useFormContext } from "react-hook-form";
+import areEqual from "@/utils/areEqual";
 
 function CheckBoxGroup({
   onChange,
-  defaultValue,
   row = true,
   data = [],
   name,
@@ -13,12 +13,6 @@ function CheckBoxGroup({
   value: propValue,
   label,
 }) {
-  const currentData = useRef(
-    data.reduce((result, d) => {
-      result[d.value] = false;
-      return result;
-    }, {})
-  );
   const { control, setValue } = useFormContext() ?? { control: false };
   const { field } = !control
     ? { field: { value: propValue, name } }
@@ -28,34 +22,34 @@ function CheckBoxGroup({
         rules: { required: !!required },
       });
 
-  function onChangeFunc(e, key) {
-    currentData.current[key] = e.target.checked;
-    if (onChange) onChange(currentData.current, name);
-    if (field.onChange) field.onChange(currentData.current, name);
-  }
-
   useEffect(() => {
-    if (typeof propValue === undefined) return;
-    setValue(name, propValue);
-    if (onChange) onChange({ target: { value: propValue } }, name);
-    if (field.onChange) field.onChange({ target: { value: propValue } }, name);
+    if (typeof propValue !== "undefined") {
+      setValue(name, propValue);
+      if (onChange) onChange({ target: { value: propValue } }, name);
+      if (field.onChange)
+        field.onChange({ target: { value: propValue } }, name);
+    }
   }, [propValue]);
+
+  const handleCheckboxChange = (e, key) => {
+    field.onChange({
+      target: { name, value: { ...field.value, [key]: e.target.checked } },
+    });
+  };
 
   return (
     <div className={styles.wrapper}>
       <label className={styles.label}>{label}</label>
-      <FormGroup
-        style={{ gap: 30 }}
-        defaultValue={defaultValue}
-        value={field.value ?? ""}
-        row={row}
-      >
+      <FormGroup style={{ gap: 30 }} row={row}>
         {data.map((checkbox) => (
           <FormControlLabel
-            onChange={(e) => onChangeFunc(e, checkbox.value)}
+            onChange={(e) => handleCheckboxChange(e, checkbox.value)}
             key={checkbox.value}
-            value={checkbox.value}
-            control={<Checkbox />} // Use Checkbox component here
+            control={
+              <Checkbox
+                checked={(field.value || {})[checkbox.value] || false}
+              />
+            }
             label={checkbox.label}
           />
         ))}
@@ -64,4 +58,4 @@ function CheckBoxGroup({
   );
 }
 
-export default React.memo(CheckBoxGroup);
+export default React.memo(CheckBoxGroup, areEqual);

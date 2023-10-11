@@ -4,6 +4,8 @@ export const SHOW_LOADING = "SHOW_LOADING";
 export const CACHES = "CACHES";
 export const IS_MEMBER = "IS_MEMBER";
 export const BKUT_DATA = "BKUT_DATA";
+export const DATA_LOADING = "DATA_LOADING";
+export const UPDATE_DATA = "UPDATE_DATA";
 
 const loginSuccess = () => {
   return {
@@ -45,6 +47,20 @@ const bkutData = (payload) => {
   };
 };
 
+const dataLoading = (payload) => {
+  return {
+    type: DATA_LOADING,
+    payload,
+  };
+};
+
+const updateData = () => {
+  return {
+    type: UPDATE_DATA,
+    payload: 1,
+  };
+};
+
 export default {
   showLoading,
   loginFailure,
@@ -52,4 +68,6 @@ export default {
   caches,
   isMember,
   bkutData,
+  dataLoading,
+  updateData,
 };

@@ -3,11 +3,14 @@ import styles from "./profile.module.scss";
 import PersonIcon from "@mui/icons-material/Person";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { getFIO } from "@/utils/data";
 
-export default function Profile({ img, title, imgOnly, mini }) {
+export default function Profile({ img, imgOnly, mini }) {
   const { t } = useTranslation();
   const navigate = useRouter();
   const isSelected = !mini && navigate.pathname === "/profile";
+  const { isMember, bkutData = {} } = useSelector((states) => states);
 
   const handleClick = () => {
     navigate.push("/profile");
@@ -33,8 +36,16 @@ export default function Profile({ img, title, imgOnly, mini }) {
         <PersonIcon className={styles.image} />
       )}
       <div className={styles.col}>
-        <p className={styles.title}>{title}</p>
-        <p className={styles.description}>{t("member")}</p>
+        <p className={styles.title}>
+          {getFIO(bkutData?.application?.passport)}
+        </p>
+        <p
+          className={[styles.description, !isMember ? styles.red : ""].join(
+            " "
+          )}
+        >
+          {isMember ? t("data-full") : t("data-not-full")}
+        </p>
       </div>
     </div>
   );

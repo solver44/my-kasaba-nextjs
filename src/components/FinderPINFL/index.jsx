@@ -7,11 +7,16 @@ import FormInput from "../FormInput";
 import { fetchPINFL } from "@/http/public";
 import { useSnackbar } from "notistack";
 
-export default function FinderPINFL({ required, onFetch = () => {} }) {
+export default function FinderPINFL({
+  required,
+  pinflValue = "",
+  givenDate = "",
+  onFetch = () => {},
+}) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const [forms, setForms] = useState({ pinfl: "", givenDate: "" });
+  const [forms, setForms] = useState({ pinfl: pinflValue, givenDate });
   const [inputValidation, setInputValidation] = useState({
     pinfl: false,
     givenDate: false,
@@ -53,6 +58,7 @@ export default function FinderPINFL({ required, onFetch = () => {} }) {
       <FormInput
         required
         name="pinfl"
+        value={pinflValue}
         label={t("pinfl")}
         invalid={inputValidation.pinfl}
         onChange={(e, name) =>

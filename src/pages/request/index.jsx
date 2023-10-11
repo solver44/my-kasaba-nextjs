@@ -168,14 +168,13 @@ export default function RequestPage({ router }) {
         phone: formData.phoneNumber,
         givenDate: formData.passportGivenDate,
         soatoId: formData.district,
-        branchId: formData.form3,
+        branchId: formData?.form3,
         email: formData.email,
         comment: formData.form4,
       },
       recaptchaResponse
     );
     actions.showLoading(false);
-    console.log(data);
     if (data?.success) {
       actions.caches({
         sent: true,
