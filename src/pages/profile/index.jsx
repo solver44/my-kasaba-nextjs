@@ -6,9 +6,13 @@ import BigButton from "../../components/BigButton";
 import EditIcon from "@mui/icons-material/Edit";
 import ChangableInput from "../../components/ChangableInput";
 import Profile from "../../components/Profile";
+import { useSelector } from "react-redux";
 
 export default function ProfilePage() {
   const { t } = useTranslation();
+  const { bkutData = {} } = useSelector((states) => states);
+  const { application = {} } = bkutData;
+
   return (
     <React.Fragment>
       <div className={styles.top}>
@@ -18,14 +22,23 @@ export default function ProfilePage() {
       <div className={styles.grid}>
         <Profile imgOnly />
         <div className={styles.grid_column}>
-          <ChangableInput label={t("first-name")} value="Asqarbek" />
-          <ChangableInput label={t("second-name")} value="Abdullayev" />
-          <ChangableInput label={t("third-name")} value="Abdullayevich" />
+          <ChangableInput
+            label={t("first-name")}
+            value={application.passport?.firstName}
+          />
+          <ChangableInput
+            label={t("second-name")}
+            value={application.passport?.lastName}
+          />
+          <ChangableInput
+            label={t("third-name")}
+            value={application.passport?.middleName}
+          />
           <ChangableInput label={t("nationality")} value="O'zbek" />
         </div>
         <div className={styles.grid_column}>
-          <ChangableInput label={t("birth-date")} value="02.02.1900" />
-          <ChangableInput label={t("stir")} value="123456789" />
+          <ChangableInput label={t("birth-date")} />
+          <ChangableInput label={t("stir")} value={application.tin} />
           <ChangableInput label={t("birth-place")} value="O'zbekiston" />
         </div>
         <div className={styles.grid_column}>
@@ -35,13 +48,16 @@ export default function ProfilePage() {
         </div>
         <div className={styles.grid_column}>
           <p>{t("contact-info")}</p>
-          <ChangableInput label={t("phone-number")} value="+1238944590" />
-          <ChangableInput label={t("email")} value="admin@kasaba.uz" />
+          <ChangableInput label={t("phone-number")} value={application.phone} />
+          <ChangableInput label={t("email")} value={application.email} />
         </div>
         <div className={styles.grid_column}>
           <p>{t("job-status")}</p>
-          <ChangableInput label={t("job-place")} value='"Ozbekneftgaz" MCHJ' />
-          <ChangableInput label={t("job-position")} value="Mutaxassis" />
+          <ChangableInput label={t("job-place")} value={bkutData.name} />
+          <ChangableInput
+            label={t("job-position")}
+            value={t("employees.chairman")}
+          />
         </div>
       </div>
     </React.Fragment>

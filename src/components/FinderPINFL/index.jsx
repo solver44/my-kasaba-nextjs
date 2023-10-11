@@ -66,7 +66,6 @@ export default function FinderPINFL({
         }
       />
       <FormInput
-        required
         date
         invalid={inputValidation.givenDate}
         onChange={(e, name) =>

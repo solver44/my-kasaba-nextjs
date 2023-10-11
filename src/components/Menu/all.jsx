@@ -2,62 +2,74 @@ import React from "react";
 import styles from "./menu.module.scss";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
-import { HomeOutlined, Apartment, Business, Group, InsertChart, Diversity3, LibraryBooks, EmojiTransportation, PeopleAlt, Hail, Settings} from "@mui/icons-material";
+import {
+  HomeOutlined,
+  Apartment,
+  Business,
+  Group,
+  InsertChart,
+  Diversity3,
+  LibraryBooks,
+  EmojiTransportation,
+  PeopleAlt,
+  Hail,
+  Settings,
+} from "@mui/icons-material";
 const menu = [
   { icon: HomeOutlined, title: "home", path: "/" },
   {
     icon: Apartment,
-    title: "passortPrimaryOrganization", 
-    path: "/passort-primary-organization"
+    title: "passortPrimaryOrganization",
+    path: "/passort-primary-organization",
   },
   {
     icon: Business,
-    title: "industrialOrganizations", 
-    path: "/industrial-organizations"
+    title: "industrialOrganizations",
+    path: "/industrial-organizations",
   },
   {
     icon: Group,
-    title: "groupOrganizations", 
-    path: "/group-organizations"
+    title: "groupOrganizations",
+    path: "/group-organizations",
   },
   {
     icon: InsertChart,
-    title: "statisticalInformation", 
-    path: "/statistical-information"
+    title: "statisticalInformation",
+    path: "/statistical-information",
   },
   {
     icon: Diversity3,
-    title: "teamContracts", 
-    path: "/team-contracts"
+    title: "teamContracts",
+    path: "/team-contracts",
   },
   {
     icon: LibraryBooks,
-    title: "reports", 
-    path: "/reports"
+    title: "reports",
+    path: "/reports",
   },
   {
     icon: EmojiTransportation,
-    title: "basicTools", 
-    path: "/basic-tools"
+    title: "basicTools",
+    path: "/basic-tools",
   },
   {
     icon: PeopleAlt,
-    title: "employeesTitle", 
-    path: "/employees"
+    title: "employeesTitle",
+    path: "/employees",
   },
   {
     icon: Hail,
-    title: "members", 
-    path: "/members"
+    title: "members",
+    path: "/members",
   },
   {
     icon: Settings,
-    title: "settings", 
-    path: "/settings"
+    title: "settings",
+    path: "/settings",
   },
 ];
 
-export default function AllMenu() {
+export default function AllMenu({ collapsed }) {
   const { t } = useTranslation();
   const navigate = useRouter();
 
@@ -66,7 +78,9 @@ export default function AllMenu() {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={[styles.wrapper, collapsed ? styles.collapsed : ""].join(" ")}
+    >
       {menu.map((menu) => (
         <div
           key={menu.path}
@@ -77,10 +91,9 @@ export default function AllMenu() {
           ].join(" ")}
         >
           <menu.icon />
-          {t(menu.title)}
+          <span>{t(menu.title)}</span>
         </div>
       ))}
     </div>
   );
 }
-

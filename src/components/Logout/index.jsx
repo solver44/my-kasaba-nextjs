@@ -5,7 +5,7 @@ import useActions from "../../hooks/useActions";
 import { useRouter } from "next/router";
 import { localStorage } from "@/utils/window";
 
-export default function Logout() {
+export default function Logout({ collapsed }) {
   const { t } = useTranslation();
   const actions = useActions();
   const navigate = useRouter();
@@ -19,10 +19,10 @@ export default function Logout() {
     <div
       onClick={handleClick}
       style={{ cursor: "pointer" }}
-      className="row g-3 a-center"
+      className={"row g-3 a-center " + (collapsed ? "j-center" : "")}
     >
       <LogoutIcon />
-      <p>{t("logout")}</p>
+      {!collapsed && <p>{t("logout")}</p>}
     </div>
   );
 }

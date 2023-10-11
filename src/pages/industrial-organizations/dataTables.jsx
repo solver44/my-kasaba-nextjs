@@ -54,6 +54,7 @@ export default function InDataTable() {
       departmentType: "SEH",
       name: forms.name,
       phone: forms.phone,
+      email: forms.email,
       soato: {
         id: forms.district,
       },
@@ -116,15 +117,6 @@ function ModalUI({ hideModal, data }) {
   });
 
   useEffect(() => {
-    const soato = null;
-    if (!soato) return;
-    const provinceId = soato.slice(0, 4);
-    const districtId = soato;
-    handleProvince({ target: { value: provinceId } });
-    setValues({ provinceId, districtId });
-  }, []);
-
-  useEffect(() => {
     const fetchData = async () => {
       let dataProvinces = await getRegions();
       setProvinces(
@@ -173,19 +165,23 @@ function ModalUI({ hideModal, data }) {
     }));
   }
 
-  const { phone, soato = {}, employee = {} } = data;
+  const { phone, tin, email, soato = {}, employee = {} } = data;
   useEffect(() => {
-    if (!data?.id) return;
-    let soatoId = soato.id ?? "";
-    const provinceId = soatoId.slice(0, 4);
-    const districtId = soatoId;
-    setValues((values) => ({
-      ...values,
-      name: data.name,
-      address: data.address,
-      provinceId,
-      districtId,
-    }));
+    const fetchData = async () => {
+      if (!data?.id) return;
+      let soatoId = soato.id ?? "";
+      const provinceId = soatoId.slice(0, 4);
+      const districtId = soatoId;
+      await handleProvince({ target: { value: provinceId } });
+      setValues((values) => ({
+        ...values,
+        name: data.name,
+        address: data.address,
+        provinceId,
+        districtId,
+      }));
+    };
+    fetchData();
   }, [data]);
 
   return (
@@ -193,26 +189,20 @@ function ModalUI({ hideModal, data }) {
       <Alert className="modal-alert" severity="info">
         "{bkutData?.eLegalEntity.name}"
       </Alert>
-      <FinderSTIR onFetch={onFetchSTIR} />
-      <FormInput
-        name="name"
-        required
-        value={values.name}
-        label={t("industrial-organizations.name")}
-      />
+      <FinderSTIR stirValue={tin} onFetch={onFetchSTIR} />
       <div className="modal-row">
+        <FormInput
+          name="name"
+          required
+          value={values.name}
+          label={t("industrial-organizations.name")}
+        />
         <FormInput
           label={t("industrial-organizations.direktor")}
           name="director"
           value={employee.id}
           dataSelect={employees}
           select
-          required
-        />
-        <FormInput
-          value={phone}
-          label={t("phone-number")}
-          name="phoneNumber"
           required
         />
       </div>
@@ -243,6 +233,15 @@ function ModalUI({ hideModal, data }) {
           required
           value={values.address}
           name="address"
+        />
+      </div>
+      <div className="modal-row">
+        <FormInput label={t("email")} required value={email} name="email" />
+        <FormInput
+          value={phone}
+          label={t("phone-number")}
+          name="phoneNumber"
+          required
         />
       </div>
     </div>

@@ -7,7 +7,7 @@ import FormInput from "../FormInput";
 import { fetchSTIR } from "@/http/public";
 import { useSnackbar } from "notistack";
 
-export default function FinderSTIR({ required, onFetch = () => {} }) {
+export default function FinderSTIR({ required, stirValue, onFetch = () => {} }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -47,6 +47,7 @@ export default function FinderSTIR({ required, onFetch = () => {} }) {
         required
         name="tin"
         maxLength={9}
+        value={stirValue}
         label={t("stir")}
         invalid={inputValidation.tin}
         onChange={(e, name) =>

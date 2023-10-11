@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { getFIO } from "@/utils/data";
 
-export default function Profile({ img, imgOnly, mini }) {
+export default function Profile({ img, collapsed, imgOnly, mini }) {
   const { t } = useTranslation();
   const navigate = useRouter();
   const isSelected = !mini && navigate.pathname === "/profile";
@@ -28,6 +28,7 @@ export default function Profile({ img, imgOnly, mini }) {
         styles.wrapper,
         isSelected ? styles.selected : "",
         mini ? styles.mini : "",
+        collapsed ? styles.collapsed : "",
       ].join(" ")}
     >
       {img ? (

@@ -5,14 +5,29 @@
 }
 .left {
   width: 100%;
-  max-width: 340px;
-  padding: 10px;
+  position: relative;
+  max-width: 320px;
+  padding: 10px 0;
   padding-top: 30px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-right: 1px solid var(--border-color) !important;
-
+  transition: all 0.2s;
+  overflow: hidden;
+  &.collapsed{
+    max-width: 80px;
+    .collapseBtn{
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+    }
+    .logo{
+      margin-top: 10px;
+      margin-bottom: -20px;
+      width: 70px;
+    }
+  }
 }
 .right {
   width: 100%;
@@ -36,4 +51,11 @@
 .bottom{
     padding: 28px 20px 20px 20px;
     // border-top: 1px solid var(--border-color);
+}
+
+.collapseBtn{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
 }

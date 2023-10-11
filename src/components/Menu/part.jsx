@@ -13,7 +13,7 @@ const menu = [
   },
 ];
 
-export default function PartMenu() {
+export default function PartMenu({ collapsed }) {
   const { t } = useTranslation();
   const navigate = useRouter();
 
@@ -22,7 +22,9 @@ export default function PartMenu() {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={[styles.wrapper, collapsed ? styles.collapsed : ""].join(" ")}
+    >
       {menu.map((menu) => (
         <div
           key={menu.path}
@@ -33,7 +35,7 @@ export default function PartMenu() {
           ].join(" ")}
         >
           <menu.icon />
-          {t(menu.title)}
+          <span>{t(menu.title)}</span>
         </div>
       ))}
     </div>
