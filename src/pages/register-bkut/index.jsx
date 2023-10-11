@@ -23,74 +23,77 @@ export default function RegisterBkut() {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleFinish = async (data) => {
-    setLoading(true);
-    if (employees.current?.rows?.length < 1) {
-      enqueueSnackbar(t("employees.empty"), { variant: "error" });
-      return;
-    }
-    const employeesRequest = employees.current.rows.map((e) => ({
-      position: {
-        id: e.position.value,
-      },
-      employee: {
-        id: e.id,
-      },
-      bkut: {
+    try {
+      setLoading(true);
+      if (employees.current?.rows?.length < 1) {
+        enqueueSnackbar(t("employees.empty"), { variant: "error" });
+        return;
+      }
+      const employeesRequest = employees.current.rows.map((e) => ({
+        position: {
+          id: e.position.value,
+        },
+        employee: {
+          id: e.id,
+        },
+        bkut: {
+          id: bkutData.id,
+        },
+      }));
+      let applicationFileRef, protocolFileRef;
+      let responseFile = await initFile(data.electronicFile);
+      if (!responseFile?.fileRef) {
+        enqueueSnackbar(t("upload-file-error"), { variant: "error" });
+        return;
+      }
+      protocolFileRef = responseFile.fileRef;
+      responseFile = await initFile(data.application);
+      if (!responseFile?.fileRef) {
+        enqueueSnackbar(t("upload-file-error"), { variant: "error" });
+        return;
+      }
+      applicationFileRef = responseFile.fileRef;
+
+      const requestData = {
         id: bkutData.id,
-      },
-    }));
-    let applicationFileRef, protocolFileRef;
-    let responseFile = await initFile(data.electronicFile);
-    if (!responseFile?.fileRef) {
-      enqueueSnackbar(t("upload-file-error"), { variant: "error" });
-      return;
+        code: "1111",
+        employees: employeesRequest,
+        soato: {
+          id: data.district,
+        },
+        adress: data.address,
+        branch: {
+          id: data.network,
+        },
+        eLegalEntity: {
+          id: bkutData.eLegalEntity.id,
+        },
+        parent: {
+          id: bkutData.parent.id,
+        },
+        applicationFile: applicationFileRef,
+        protocolNumber: data.foundingDocNum,
+        bkutType: data.bkutType,
+        email: data.email,
+        protocolFile: protocolFileRef,
+        inn: bkutData.application.tin,
+        phone: data.phoneNumber,
+        protocolDate: data.foundingDocDate,
+        name: data.bkutName,
+        decisionDate: dayjs().format("YYYY-MM-DD"),
+      };
+
+      const response = await sendEBKUT(requestData);
+
+      if (response?.id) {
+        setFinished(true);
+      } else {
+        enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
     }
-    protocolFileRef = responseFile.fileRef;
-    responseFile = await initFile(data.application);
-    if (!responseFile?.fileRef) {
-      enqueueSnackbar(t("upload-file-error"), { variant: "error" });
-      return;
-    }
-    applicationFileRef = responseFile.fileRef;
-
-    const requestData = {
-      id: bkutData.id,
-      code: "1111",
-      employees: employeesRequest,
-      soato: {
-        id: data.district,
-      },
-      adress: data.address,
-      branch: {
-        id: data.network,
-      },
-      eLegalEntity: {
-        id: bkutData.eLegalEntity.id,
-      },
-      parent: {
-        id: bkutData.parent.id,
-      },
-      applicationFile: applicationFileRef,
-      protocolNumber: data.foundingDocNum,
-      bkutType: data.bkutType,
-      email: data.email,
-      protocolFile: protocolFileRef,
-      inn: bkutData.application.tin,
-      phone: data.phoneNumber,
-      protocolDate: data.foundingDocDate,
-      name: data.bkutName,
-      decisionDate: dayjs().format("YYYY-MM-DD"),
-    };
-
-    const response = await sendEBKUT(requestData);
-
-    if (response?.id) {
-      setFinished(true);
-    } else {
-      enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
-    }
-
-    setLoading(false);
   };
   return (
     <div className={styles.wrapper}>
