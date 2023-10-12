@@ -33,7 +33,7 @@ export async function sendApplicationViaBack(data, token) {
     });
     return dataResponse;
   } catch (error) {
-    return error;
+    return error?.response?.data;
   }
 }
 

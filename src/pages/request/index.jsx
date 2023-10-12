@@ -67,22 +67,21 @@ export default function RequestPage({ router }) {
   const { caches } = useSelector((state) => state);
   const actions = useActions();
 
+  const initializeRecaptcha = () => {
+    if (window.grecaptcha && window.grecaptcha.render) {
+      try {
+        // Initialize reCAPTCHA after the script has loaded
+        window.grecaptcha.render("recaptcha-container", {
+          sitekey: "6LeWaT4oAAAAAMCtmf03tyxo495eGt_J2xpn_fzp",
+          // Other reCAPTCHA options here
+        });
+      } catch (error) {}
+    } else {
+      // Retry initialization after a short delay
+      setTimeout(initializeRecaptcha, 100);
+    }
+  };
   useEffect(() => {
-    const initializeRecaptcha = () => {
-      if (window.grecaptcha && window.grecaptcha.render) {
-        try {
-          // Initialize reCAPTCHA after the script has loaded
-          window.grecaptcha.render("recaptcha-container", {
-            sitekey: "6LeWaT4oAAAAAMCtmf03tyxo495eGt_J2xpn_fzp",
-            // Other reCAPTCHA options here
-          });
-        } catch (error) {}
-      } else {
-        // Retry initialization after a short delay
-        setTimeout(initializeRecaptcha, 100);
-      }
-    };
-
     initializeRecaptcha();
   }, []);
 
@@ -186,6 +185,7 @@ export default function RequestPage({ router }) {
     } else {
       enqueueSnackbar(t("error-send-application"), { variant: "error" });
     }
+    initializeRecaptcha();
   };
 
   function resetValidation() {
