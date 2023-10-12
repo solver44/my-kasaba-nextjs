@@ -193,10 +193,11 @@ export default function RequestPage({ router }) {
       });
     } else if (data?.error == "reCAPTCHA verification failed") {
       enqueueSnackbar(t("recaptcha-try"), { variant: "error" });
+      initializeRecaptcha();
     } else {
       enqueueSnackbar(t("error-send-application"), { variant: "error" });
+      initializeRecaptcha();
     }
-    initializeRecaptcha();
   };
 
   function resetValidation() {
