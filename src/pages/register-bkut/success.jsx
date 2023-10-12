@@ -10,13 +10,14 @@ export default function SuccessRegisterBkut() {
 
   useEffect(() => {
     actions.isMember(true);
-  }, [])
-  
+  }, []);
 
   return (
-    <div className={styles.center_row}>
-      <CheckCircleIcon className={styles.check} />
-      <p>{t("sent-successfully-bkut")}</p>
+    <div className={styles.wrapSuccess}>
+      <div className={styles.center_row}>
+        <CheckCircleIcon className={styles.check} />
+        <p>{t("sent-successfully-bkut")}</p>
+      </div>
     </div>
   );
 }

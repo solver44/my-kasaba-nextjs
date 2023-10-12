@@ -13,6 +13,7 @@ import FormValidation from "@/components/FormValidation";
 import { useSnackbar } from "notistack";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
+import useActions from "@/hooks/useActions";
 
 export default function RegisterBkut() {
   const { t, i18n } = useTranslation();
@@ -21,6 +22,7 @@ export default function RegisterBkut() {
   const [loading, setLoading] = useState(false);
   const employees = useRef({});
   const { enqueueSnackbar } = useSnackbar();
+  const actions = useActions();
 
   const handleFinish = async (data) => {
     try {
@@ -87,6 +89,7 @@ export default function RegisterBkut() {
 
       if (response?.id) {
         setFinished(true);
+        actions.updateData();
       } else {
         enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
       }
