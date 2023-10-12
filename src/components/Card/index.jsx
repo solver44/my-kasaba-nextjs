@@ -4,7 +4,7 @@ import styles from "./card.module.scss";
 
 export default function CardUI({ children, label, value }) {
   return (
-    <Card variant="outlined" elevation={3} className={styles.container}>
+    <Card variant="outlined" className={styles.container}>
       {children ? (
         children
       ) : (

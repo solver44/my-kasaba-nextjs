@@ -83,6 +83,11 @@ export default function RequestPage({ router }) {
       setTimeout(initializeRecaptcha, 100);
     }
   };
+  function reloadCaptcha() {
+    if (window.grecaptcha && window.grecaptcha.reset) {
+      window.grecaptcha.reset();
+    }
+  }
   useEffect(() => {
     initializeRecaptcha();
     if (localStorage.getItem("reglementViewed")) {
@@ -192,11 +197,11 @@ export default function RequestPage({ router }) {
         id: data.statusCheckCode,
       });
     } else if (data?.error == "reCAPTCHA verification failed") {
+      reloadCaptcha();
       enqueueSnackbar(t("recaptcha-try"), { variant: "error" });
-      initializeRecaptcha();
     } else {
       enqueueSnackbar(t("error-send-application"), { variant: "error" });
-      initializeRecaptcha();
+      reloadCaptcha();
     }
   };
 
