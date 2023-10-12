@@ -176,6 +176,7 @@ export default function RequestPage({ router }) {
       return;
     }
     actions.showLoading(true);
+    const branchId = formData?.form3;
     const data = await sendApplicationViaBack(
       {
         pinfl: formData.pinfl,
@@ -183,7 +184,7 @@ export default function RequestPage({ router }) {
         phone: formData.phoneNumber,
         givenDate: formData.passportGivenDate,
         soatoId: formData.district,
-        branchId: formData?.form3,
+        branchId,
         email: formData.email,
         comment: formData.form4,
       },
