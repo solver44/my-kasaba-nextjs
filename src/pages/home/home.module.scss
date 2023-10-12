@@ -59,3 +59,16 @@
   right: 20px;
   cursor: pointer;
 }
+
+.titleHome{
+  font-size: 30px;
+  font-weight: 600;
+}
+.grid{
+  margin-top: 20px;
+  justify-content: center;
+  display: flex;
+  gap: 20px;
+  row-gap: 50px;
+  flex-wrap: wrap;
+}

@@ -14,7 +14,6 @@ export default function PassortPrimaryOrganization() {
     applicationFile: {},
     protocolFile: {},
   });
-  console.log(bkutData);
   const director = (bkutData.employees ?? []).find(
     (e) => e?.position?.id == 1
   )?.employee;

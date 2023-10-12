@@ -92,7 +92,8 @@ export default function HomeContentWrapper({
               }
             >
               <AlertTitle>Qaytarildi!</AlertTitle>
-              Sizning BKUT haqidagi yuborgan ma'lumotlaringiz bekor qilindi. Tahrirlab qayta yuboring.
+              Sizning BKUT haqidagi yuborgan ma'lumotlaringiz bekor qilindi.
+              Tahrirlab qayta yuboring.
             </Alert>
           </Collapse>
         </div>

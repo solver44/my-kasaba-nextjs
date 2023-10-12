@@ -22,6 +22,8 @@ import {
 import DropDown from "@/components/DropDown";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
+import Reglament from "@/components/Reglament";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export default function RequestPage({ router }) {
   const { t } = useTranslation();
@@ -63,7 +65,7 @@ export default function RequestPage({ router }) {
     form3: true,
     form4: true,
   });
-
+  const [isReglament, setIsReglament] = useState(false);
   const { caches } = useSelector((state) => state);
   const actions = useActions();
 
@@ -83,7 +85,16 @@ export default function RequestPage({ router }) {
   };
   useEffect(() => {
     initializeRecaptcha();
+    if (localStorage.getItem("reglementViewed")) {
+      setIsReglament(false);
+    } else {
+      setIsReglament(true);
+    }
   }, []);
+  function hideReglament() {
+    setIsReglament(false);
+    localStorage.setItem("reglementViewed", 1);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -266,11 +277,22 @@ export default function RequestPage({ router }) {
   return (
     <WrapperRequest
       toBack={caches?.sent}
+      onClickLink={() => {
+        setIsReglament(true);
+      }}
+      isReglament={isReglament}
       onBack={() => {
-        setSent(false);
+        actions.caches({ ...caches, sent: false });
       }}
     >
-      {caches?.sent ? (
+      {isReglament ? (
+        <Reglament
+          title="homePage.title"
+          message="homePage.message"
+          onClick={hideReglament}
+          buttonText="homePage.send"
+        />
+      ) : caches?.sent ? (
         <RequestHasBeenSent />
       ) : (
         <React.Fragment>
@@ -459,7 +481,14 @@ const RequestHasBeenSent = ({}) => {
     </div>
   );
 };
-export const WrapperRequest = ({ children, toBack, onBack }) => {
+export const WrapperRequest = ({
+  children,
+  isReglament,
+  onClickLink,
+  toBack,
+  onBack,
+}) => {
+  const [parentAnimation] = useAutoAnimate();
   const { t } = useTranslation();
   const navigate = useRouter();
   const onBackFunc = () => {
@@ -467,11 +496,16 @@ export const WrapperRequest = ({ children, toBack, onBack }) => {
     else navigate.replace("/request");
   };
   return (
-    <div className={"wrapper " + styles.wrapper}>
+    <div ref={parentAnimation} className={"wrapper " + styles.wrapper}>
       <div className={styles.top}>
         <div className={styles.row}>
           <Image className="logo" src={logo} alt="logo kasaba" />
           <h2 className="title">{t("request-page.title")}</h2>
+          {!isReglament && (
+            <p onClick={onClickLink} className={styles.link}>
+              {t("reglament")}
+            </p>
+          )}
         </div>
         <div className={styles.row}>
           <LanguageSelector />

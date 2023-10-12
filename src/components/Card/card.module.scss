@@ -1,0 +1,17 @@
+.container {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-width: 200px;
+}
+.value {
+  font-size: 30px;
+  margin: 0;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.label {
+  font-size: 20px;
+  margin: 0;
+}

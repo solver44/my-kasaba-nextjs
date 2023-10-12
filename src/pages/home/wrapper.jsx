@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Profile from "../../components/Profile";
 import PartMenu from "../../components/Menu/part";
 import styles from "./home.module.scss";
@@ -13,14 +13,21 @@ import { getBKUTData } from "@/http/data";
 import useActions from "@/hooks/useActions";
 import { useRouter } from "next/router";
 import MenuIcon from "@mui/icons-material/Menu";
+import { getAnimation } from "@/utils/animation";
 
 const HomeWrapper = ({ children, noHeader, title, desc }) => {
   const { updateData, ...states } = useSelector((state) => state);
   const actions = useActions();
   const route = useRouter();
   const [collapsed, setCollapsed] = useState();
+  const animRef = useRef();
 
   useEffect(() => {
+    animRef.current &&
+      getAnimation().then((func) => {
+        func(animRef.current);
+      });
+
     if (!states.isLoggedIn) return;
     const fetchData = async () => {
       actions.showLoading(true);
@@ -72,7 +79,7 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
             <Logout collapsed={collapsed} />
           </div>
         </div>
-        <div className={"wrapper " + styles.right}>
+        <div ref={animRef} className={"wrapper " + styles.right}>
           <HomeContentWrapper noHeader={noHeader} title={title} desc={desc}>
             {children}
           </HomeContentWrapper>

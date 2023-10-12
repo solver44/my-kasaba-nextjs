@@ -10,8 +10,8 @@ export default {
     back: "Ortga qaytish",
     check: "Tekshirish",
     homePage: {
-      send: "Ariza yuborish",
-      title: "BKUTni ro’yhatdan o’tkazish reglamenti",
+      send: "Murojaat yuborish",
+      title: "Kasaba uyushmasi tashkiloti qanday tuziladi?",
       message: `Аgar korxona, tashkilot, muassasada kasaba uyushmasi tashkiloti boʼlmasa u qanday tuziladi?
       <br>
       <br>
@@ -192,6 +192,7 @@ export default {
     or: "YOKI",
     "forgot-password": "Login yoki parolingizni unutdingizmi?",
     "not-registered": "Ro'yhatdan o'tmaganmisiz?",
+    "reglament": "Reglament bilan tanishish",
 
     member: "A'zo",
     logout: "Chiqish",

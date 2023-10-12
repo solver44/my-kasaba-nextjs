@@ -9,6 +9,7 @@ export default function Reglament({
   onClick = () => {},
 }) {
   const { t } = useTranslation();
+  
   return (
     <div className={styles.wrapper}>
       <p className={styles.title}>{t(title)}</p>
