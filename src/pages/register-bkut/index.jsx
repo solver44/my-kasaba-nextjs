@@ -58,7 +58,7 @@ export default function RegisterBkut() {
 
       const requestData = {
         id: bkutData.id,
-        code: "1111",
+        code: bkutData.code,
         employees: employeesRequest,
         soato: {
           id: data.district,

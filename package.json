@@ -9,7 +9,8 @@
     "lint": "next lint",
     "bg": "npm run clear && pm2 start npm -- start",
     "clear": "pm2 kill",
-    "update-remote": "CONFIG_FILE=config.json; SSH_PASSWORD=$(jq -r .SSH_PASSWORD $CONFIG_FILE); SUPERUSER_PASSWORD=$(jq -r .SUPERUSER_PASSWORD $CONFIG_FILE); expect -c \"spawn ssh -p 11226 sunnat@84.54.82.162; expect {\"password:\" {send \"$SSH_PASSWORD\r\"; exp_continue} \"# \" {send \"su -\r\"; exp_continue} \"Password:\" {send \"$SUPERUSER_PASSWORD\r\"; exp_continue} \"# \" {send \"./update.sh\r\"; exp_continue} \"# \" {send \"exit\r\"; interact}}\""
+    "test": "CONFIG_FILE=config.json; SSH_PASSWORD=$(jq -r .SSH_PASSWORD $CONFIG_FILE); SUPERUSER_PASSWORD=$(jq -r .SUPERUSER_PASSWORD $CONFIG_FILE);",
+    "update-remote": "expect -c 'spawn ssh -p 11226 sunnat@84.54.82.162; expect \"password:\"; send \"MySunnat@123\\r\"; expect \"# \"; send \"su -\\r\"; expect \"Password:\"; send \"MyKasaba@123\\r\"; expect \"# \"; send \"./update.sh\\r\"; expect \"# \"; send \"exit\\r\"; interact'"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -20,6 +21,7 @@
     "@mui/material": "^5.14.6",
     "@mui/x-data-grid": "^6.11.2",
     "@mui/x-date-pickers": "^6.12.0",
+    "@pdftron/webviewer": "^10.4.0",
     "axios": "^1.3.4",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.9",

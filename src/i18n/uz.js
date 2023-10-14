@@ -265,6 +265,8 @@ export default {
     "delete-title": "O'chirish",
     "are-you-sure-delete": "Haqiqatan ham o'chirib tashlamoqchimisiz?",
 
+    "1ti": "1T forma",
+
     dTable: {
       toolbarDensity: "O'lcham",
       toolbarDensityLabel: "O'lcham",

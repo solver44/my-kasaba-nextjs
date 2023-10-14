@@ -14,6 +14,7 @@ import {
   PeopleAlt,
   Hail,
   Settings,
+  Report,
 } from "@mui/icons-material";
 const menu = [
   { icon: HomeOutlined, title: "home", path: "/" },
@@ -63,9 +64,9 @@ const menu = [
     path: "/members",
   },
   {
-    icon: Settings,
-    title: "settings",
-    path: "/settings",
+    icon: LibraryBooks,
+    title: "1ti",
+    path: "/1ti",
   },
 ];
 
