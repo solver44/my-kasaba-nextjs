@@ -54,22 +54,36 @@ export async function sendApplication(_data) {
       _data;
 
     // Define the request payload as a separate object for clarity
-    const requestData = {
-      application: {
-        pinfl,
-        tin,
-        phone,
-        givenDate,
-        email,
-        branch: {
-          id: branchId,
-        },
-        soato: {
-          id: soatoId,
-        },
-        comment,
-      },
-    };
+    const requestData = branchId
+      ? {
+          application: {
+            pinfl,
+            tin,
+            phone,
+            givenDate,
+            email,
+            branch: {
+              id: branchId,
+            },
+            soato: {
+              id: soatoId,
+            },
+            comment,
+          },
+        }
+      : {
+          application: {
+            pinfl,
+            tin,
+            phone,
+            givenDate,
+            email,
+            soato: {
+              id: soatoId,
+            },
+            comment,
+          },
+        };
 
     // Make the POST request using axios
     const response = await $axios.post(

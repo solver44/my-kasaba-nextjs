@@ -176,7 +176,7 @@ export default function RequestPage({ router }) {
       return;
     }
     actions.showLoading(true);
-    const branchId = formData?.form3 || null;
+    const branchId = formData?.form3 ?? "";
     const data = await sendApplicationViaBack(
       {
         pinfl: formData.pinfl,
