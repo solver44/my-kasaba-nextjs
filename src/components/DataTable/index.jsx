@@ -164,19 +164,22 @@ export default function DataTable({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{t("delete-title")}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
+            {t("are-you-sure-delete")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={toggleDeleteDialog}>Disagree</Button>
-          <Button onClick={() => func2 && func2(currentId.current)} autoFocus>
-            Agree
+          <Button onClick={toggleDeleteDialog}>{t("no")}</Button>
+          <Button
+            onClick={() => {
+              func2 && func2(currentId.current);
+              toggleDeleteDialog();
+            }}
+            autoFocus
+          >
+            {t("yes")}
           </Button>
         </DialogActions>
       </Dialog>

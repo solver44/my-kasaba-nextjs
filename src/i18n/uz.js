@@ -192,7 +192,7 @@ export default {
     or: "YOKI",
     "forgot-password": "Login yoki parolingizni unutdingizmi?",
     "not-registered": "Ro'yhatdan o'tmaganmisiz?",
-    "reglament": "Reglament bilan tanishish",
+    reglament: "Reglament bilan tanishish",
 
     member: "A'zo",
     logout: "Chiqish",
@@ -261,6 +261,8 @@ export default {
     isInvalid: "Nogiron",
     "data-not-full": "Ma'lumotlar to'liq emas",
     "data-full": "Ma'lumotlar to'liq kiritilgan",
+    "delete-title": "O'chirish",
+    "are-you-sure-delete": "Haqiqatan ham o'chirib tashlamoqchimisiz?",
 
     dTable: {
       toolbarDensity: "O'lcham",
