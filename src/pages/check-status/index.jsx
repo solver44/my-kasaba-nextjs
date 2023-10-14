@@ -60,7 +60,7 @@ export default function CheckStatus() {
         {
           title: "network",
           value: showOrNot(
-            data.branch[i18n.language === "uz" ? "nameUz" : "nameRu"]
+            (data?.branch || {})[i18n.language === "uz" ? "nameUz" : "nameRu"]
           ),
         },
         {
