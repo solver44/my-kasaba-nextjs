@@ -8,7 +8,8 @@
     "start": "next start -p 80",
     "lint": "next lint",
     "bg": "npm run clear && pm2 start npm -- start",
-    "clear": "pm2 kill"
+    "clear": "pm2 kill",
+    "update-remote": "CONFIG_FILE=config.json; SSH_PASSWORD=$(jq -r .SSH_PASSWORD $CONFIG_FILE); SUPERUSER_PASSWORD=$(jq -r .SUPERUSER_PASSWORD $CONFIG_FILE); expect -c \"spawn ssh -p 11226 sunnat@84.54.82.162; expect {\"password:\" {send \"$SSH_PASSWORD\r\"; exp_continue} \"# \" {send \"su -\r\"; exp_continue} \"Password:\" {send \"$SUPERUSER_PASSWORD\r\"; exp_continue} \"# \" {send \"./update.sh\r\"; exp_continue} \"# \" {send \"exit\r\"; interact}}\""
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
