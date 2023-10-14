@@ -215,6 +215,7 @@ export default {
     reports: "Hisobotlar",
     basicTools: "Asosiy vositalar",
     employeesTitle: "Xodimlar",
+    allEmployeesTitle: "Ishchi xodimlar",
     members: "A’zolar",
     settings: "Sozlamalar",
 

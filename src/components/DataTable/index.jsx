@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./dataTable.module.scss";
 import {
   DataGrid,
@@ -12,7 +12,15 @@ import {
 import BigButton from "../BigButton";
 import AddIcon from "@mui/icons-material/Add";
 import { useTranslation } from "react-i18next";
-import { LinearProgress } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  LinearProgress,
+} from "@mui/material";
 import CustomNoRowsOverlay from "./noRows";
 import { localizationTable } from "./localization";
 import ModalUI from "../ModalUI";
@@ -47,6 +55,12 @@ export default function DataTable({
   const [show, setShow] = useState(false);
   const [dataModal, setDataModal] = useState();
   const { dataLoading } = useSelector((state) => state);
+  const [openDilaog, setOpenDialog] = useState(false);
+  const currentId = useRef();
+
+  const toggleDeleteDialog = () => {
+    setOpenDialog(!openDilaog);
+  };
 
   const handleViewClick = async (id) => {
     const data = await fetchData(id);
@@ -55,7 +69,8 @@ export default function DataTable({
   };
 
   const handleDeleteClick = (id) => {
-    if (func2) func2(id);
+    currentId.current = id;
+    toggleDeleteDialog();
   };
 
   function toggleModal(value) {
@@ -143,6 +158,28 @@ export default function DataTable({
       >
         {modal(() => toggleModal(false), dataModal ?? {})}
       </ModalUI>
+      <Dialog
+        open={openDilaog}
+        onClose={toggleDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={toggleDeleteDialog}>Disagree</Button>
+          <Button onClick={() => func2 && func2(currentId.current)} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   );
 }

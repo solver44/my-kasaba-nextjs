@@ -45,8 +45,8 @@ export default function Home() {
       <h1 className={styles.titleHome}>{bkutData.name}</h1>
       <div className={styles.grid}>
         <Card
-          value={bkutData.employees?.length ?? 0}
-          label={t("employeesTitle")}
+          value={bkutData.eLegalEntity?.emloyeeCount ?? 0}
+          label={t("allEmployeesTitle")}
         />
         <Card value={bkutData.members?.length ?? 0} label={t("members")} />
         <Card
