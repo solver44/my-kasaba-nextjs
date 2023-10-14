@@ -33,7 +33,15 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
       actions.showLoading(true);
       actions.dataLoading(true);
       const data = await getBKUTData();
-      if (data?.response?.data?.error == "Invalid entity ID") {
+      const resError = data?.response?.data?.error;
+      if (resError == "Entity not found") {
+        actions.loginFailure();
+        localStorage.removeItem("token");
+        actions.showLoading(false);
+        actions.dataLoading(false);
+        route.replace("/auth");
+        return;
+      } else if (resError == "Invalid entity ID") {
         // enqueueSnackbar(t("successfully-saved"), { variant: "error" });
         actions.loginFailure();
         localStorage.removeItem("token");

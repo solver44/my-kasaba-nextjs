@@ -333,14 +333,16 @@ export default function RequestPage({ router }) {
               fullWidth
               titleText={t("pinfl")}
               buttonText={t("check")}
-            />
-            <InputDate
-              name="passportGivenDate"
-              fullWidth
-              invalid={!inputValidation.passportGivenDate}
-              validationError={"input-error.date"}
-              onChange={handleInputChange}
-              titleText={t("passport-given-date")}
+              secondInput={
+                <InputDate
+                  name="passportGivenDate"
+                  fullWidth
+                  invalid={!inputValidation.passportGivenDate}
+                  validationError={"input-error.date"}
+                  onChange={handleInputChange}
+                  titleText={t("passport-given-date")}
+                />
+              }
             />
             <Input
               name="firstName"

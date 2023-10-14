@@ -15,6 +15,7 @@ export default function InputButton({
   invalid: _invalid,
   name,
   validationError,
+  secondInput,
   fullWidth = false,
 }) {
   const [loading, setLoading] = useState(false);
@@ -51,8 +52,9 @@ export default function InputButton({
           onChange={onChangeFunc}
           validationError={validationError}
           invalid={invalid}
-          className={styles.input}
+          className={[styles.input, secondInput ? styles.additional : ""].join(" ")}
         />
+        {secondInput && <div className={styles.second}>{secondInput}</div>}
         <LoadingButton
           onClick={onClickFunc}
           // disabled={loading}

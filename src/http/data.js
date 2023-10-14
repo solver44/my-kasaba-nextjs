@@ -119,6 +119,9 @@ export async function sendEmployee(data) {
     }
     const requestData = {
       id: data.bkutId,
+      phone: data.phone,
+      email: data.email,
+      birthDate: data.birthDate,
       employees: [
         {
           position: {

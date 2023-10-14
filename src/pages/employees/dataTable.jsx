@@ -12,7 +12,7 @@ import { convertStringToFormatted } from "@/utils/date";
 import dayjs from "dayjs";
 import useActions from "@/hooks/useActions";
 
-export default function InDataTable({ onUpload }) {
+export default function InDataTable({ onUpload, min }) {
   const { t, i18n } = useTranslation();
   const [rows, setRows] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
@@ -61,6 +61,7 @@ export default function InDataTable({ onUpload }) {
       middleName: fio[2],
       phone: forms.phoneNumber,
       email: forms.email,
+      birthDate: forms.birthDate,
       position: forms.position,
     };
     const response = await sendEmployee(requestData);
@@ -92,6 +93,7 @@ export default function InDataTable({ onUpload }) {
       handleDeleteClick={deleteRow}
       columns={columns}
       rows={rows}
+      min={min}
       onSubmitModal={onSubmitModal}
       isFormModal
       modal={(hideModal, dataModal) => (
@@ -104,7 +106,7 @@ export default function InDataTable({ onUpload }) {
 function ModalUI({ hideModal, data = {} }) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ fio: "", birthDate: "" });
-  const { employee = {}, position = {}, phone, email } = data;
+  const { employee = {}, position = {}, birthDate, phone, email } = data;
 
   function onFetchPINFL(data) {
     if (!data) return;
@@ -118,7 +120,7 @@ function ModalUI({ hideModal, data = {} }) {
   useEffect(() => {
     const FIO = getFIO(employee);
     if (!FIO) return;
-    setFormData({ fio: FIO, birthDate: "" });
+    setFormData({ fio: FIO, birthDate: birthDate ? dayjs(birthDate) : "" });
   }, [data]);
 
   return (
@@ -145,13 +147,8 @@ function ModalUI({ hideModal, data = {} }) {
         value={formData.birthDate}
       />
       <div className="modal-row">
-        <FormInput
-          value={phone}
-          label={t("phone-number")}
-          name="phoneNumber"
-          required
-        />
-        <FormInput value={email} label={t("email")} required name="email" />
+        <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
+        <FormInput value={email} label={t("email")} name="email" />
       </div>
     </div>
   );

@@ -8,18 +8,21 @@ export default function Table({ topComponent, data = [] }) {
     <div className={styles.wrapper}>
       {topComponent}
       <div className={styles.container}>
-        {data.map((options, index) => (
-          <div
-            key={index}
-            className={[
-              styles.row,
-              (index + 1) % 2 === 0 ? styles.even : "",
-            ].join(" ")}
-          >
-            <span>{t(options.title)}:</span>
-            <span>{options.value}</span>
-          </div>
-        ))}
+        {data.map(
+          (options, index) =>
+            options.title && (
+              <div
+                key={index}
+                className={[
+                  styles.row,
+                  (index + 1) % 2 === 0 ? styles.even : "",
+                ].join(" ")}
+              >
+                <span>{t(options.title)}:</span>
+                <span>{options.value}</span>
+              </div>
+            )
+        )}
       </div>
     </div>
   );

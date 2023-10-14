@@ -44,6 +44,7 @@ export default function DataTable({
   columns = [],
   onSubmitModal,
   isFormModal,
+  min,
   loading,
   bottomModal,
   fetchData,
@@ -127,7 +128,7 @@ export default function DataTable({
 
   return (
     <React.Fragment>
-      <div className={styles.wrapper}>
+      <div className={[styles.wrapper, min ? styles.mini : ""].join(" ")}>
         <div className={styles.control}>
           <BigButton onClick={() => toggleModal()} Icon={AddIcon}>
             {t("add")}

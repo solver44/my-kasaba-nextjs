@@ -23,7 +23,7 @@ function RadioGroups({
       });
 
   function onChangeFunc(e) {
-    if (!onChange) onChange(e, name);
+    if (onChange) onChange(e, name);
     if (field.onChange) field.onChange(e, name);
   }
 

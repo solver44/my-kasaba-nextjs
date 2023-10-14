@@ -1,7 +1,10 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 80vh;
+  // &.mini{
+  //   min-height: 0;
+  //   height: auto;
+  // }
 }
 .dataTable {
   border-radius: var(--input-radius);

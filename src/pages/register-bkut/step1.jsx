@@ -90,7 +90,9 @@ export default function Step1({ bkutData = {} }) {
           defaultValue={0}
           value={bkutData?.bkutType ?? 0}
           name="bkutType"
-          onChange={(e) => setMode(e.target.value)}
+          onChange={(e) => {
+            setMode(e.target.value);
+          }}
           label={t("bkutType1")}
           data={[
             {

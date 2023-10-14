@@ -193,6 +193,7 @@ export default {
     "forgot-password": "Login yoki parolingizni unutdingizmi?",
     "not-registered": "Ro'yhatdan o'tmaganmisiz?",
     reglament: "Reglament bilan tanishish",
+    "reject-message": "Rad qilinish sababi",
 
     member: "A'zo",
     logout: "Chiqish",

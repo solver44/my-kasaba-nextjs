@@ -208,13 +208,11 @@ function ModalUI({ hideModal, data = {} }) {
         <FormInput
           value={phone}
           label={t("phone-number")}
-          required
           name="phoneNumber"
         />
         <FormInput
           value={email}
           label={t("employees.email")}
-          required
           name="email"
         />
       </div>

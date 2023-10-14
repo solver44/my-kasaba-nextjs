@@ -10,7 +10,7 @@ export function generateUniqueId(length = 9) {
   return result;
 }
 
-export function showOrNot(text) {
+export function showOrNot(text = "") {
   const result = (text || "").trim();
   if (!result) return "-";
   return result;

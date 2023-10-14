@@ -69,6 +69,10 @@ export default function CheckStatus() {
             data.soato[i18n.language === "uz" ? "nameUz" : "nameRu"]
           ),
         },
+        data.status.nameUz == "Qaytarilgan" && {
+          title: "reject-message",
+          value: showOrNot(data?.rejectReason || data?.status?.rejectReason),
+        },
       ],
     };
     actions.caches(dataTable);
