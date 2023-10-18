@@ -50,7 +50,11 @@ const MyApp = ({ Component, pageProps, tokens }) => {
         ></script>
         <link rel="shortcut icon" href="/icon.png" />
       </Head>
-      <SnackbarProvider maxSnack={3}>
+      <SnackbarProvider
+        maxSnack={3}
+        autoHideDuration={8000}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
         {showLoading && <Loader />}
         {layout(<Component {...pageProps} />, t)}
       </SnackbarProvider>

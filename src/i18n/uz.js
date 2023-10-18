@@ -122,6 +122,7 @@ export default {
     },
     employees: {
       title: "Xodimlar",
+      title1: "Kasaba uyushmasi qo'mitasi xodimlari",
       fio: "FIO",
       position: "Lavozimi",
       tel: "Telefon raqami",
@@ -255,7 +256,8 @@ export default {
 
     "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang.",
     "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang.",
-    "pinfl-fetch-error": "Ma'lumotlarni yuklashda xatolik mavjud.",
+    "pinfl-fetch-error":
+      "Ma'lumotlarni yuklashda xatolik mavjud. Iltimos qayta urinib ko'ring.",
     isStudent: "Talaba",
     isPensioner: "Nafaqada",
     isHomemaker: "Kasanachi",
@@ -263,9 +265,21 @@ export default {
     "data-not-full": "Ma'lumotlar to'liq emas",
     "data-full": "Ma'lumotlar to'liq kiritilgan",
     "delete-title": "O'chirish",
+    checkStatusTitle: "Murojaat holatini tekshirish",
     "are-you-sure-delete": "Haqiqatan ham o'chirib tashlamoqchimisiz?",
+    "rewrite-pinfl":
+      "Ushbu JShShIR bilan xodim qo'shilgan. O'zgartirishni istaysizmi?",
+    "rewrite-pinfl-member":
+      "Ushbu JShShIR bilan a'zo qo'shilgan. O'zgartirishni istaysizmi?",
+    "rewrite-stir":
+      "Ushbu STIR bilan tashkilot mavjud. O'zgartirishni istaysizmi?",
+    "found-on-industrion":
+      "Ushbu tashkilot SEH tashkilotlarida mavjud. O'zgartirish uchun SEH tashkilotlari bo'limiga o'ting.",
+    "found-on-group":
+      "Ushbu tashkilot GURUH tashkilotlarida mavjud. O'zgartirish uchun GURUH tashkilotlari bo'limiga o'ting.",
 
-    "1ti": "1T forma",
+    "1ti": "1TI hisobot",
+    "1t-report": "1TI hisobot",
 
     dTable: {
       toolbarDensity: "O'lcham",

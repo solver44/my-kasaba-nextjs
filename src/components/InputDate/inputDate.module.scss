@@ -22,7 +22,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 16px;
+  font-size: var(--input-font-size);
   gap: 20px;
   &.textarea {
     align-items: start;

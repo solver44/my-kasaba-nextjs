@@ -12,6 +12,7 @@
   font-weight: 500;
 }
 .input {
+  font-size: var(--input-font-size);
   fieldset {
     border-radius: 4px;
   }
@@ -42,6 +43,7 @@
   color: #808080;
 }
 .fileInput {
+  font-size: var(--input-font-size);
   border-radius: var(--input-radius);
   border: 1px solid var(--input-border-color);
   min-height: 43px;
@@ -70,7 +72,7 @@
   & > :first-child {
     padding: 10px !important;
     min-height: auto !important;
-    font-size: 1rem;
+    font-size: var(--input-font-size);
   }
   &.disabled > :first-child {
     cursor: not-allowed !important;

@@ -5,12 +5,19 @@ import FinderPINFL from "@/components/FinderPINFL";
 import FormInput from "@/components/FormInput";
 import { useSnackbar } from "notistack";
 import { useEffect } from "react";
-import { sendEmployee } from "@/http/data";
+import { getPositions, sendEmployee } from "@/http/data";
 import { useSelector } from "react-redux";
-import { POSITIONS, getFIO, getLocalizationNames } from "@/utils/data";
+import {
+  POSITIONS,
+  getFIO,
+  getLocalizationNames,
+  splitFIO,
+} from "@/utils/data";
 import { convertStringToFormatted } from "@/utils/date";
 import dayjs from "dayjs";
 import useActions from "@/hooks/useActions";
+import { showYesNoDialog } from "@/utils/dialog";
+import useDynamicData from "@/hooks/useDynamicData";
 
 export default function InDataTable({ onUpload, min }) {
   const { t, i18n } = useTranslation();
@@ -34,7 +41,7 @@ export default function InDataTable({ onUpload, min }) {
       bkutData?.employees.map((e) => {
         return {
           id: e.employee.id,
-          fio: `${e.employee.firstName} ${e.employee.lastName} ${e.employee.middleName}`,
+          fio: getFIO(e.employee),
           position: {
             label: getLocalizationNames(e.position, i18n),
             value: e.position.id,
@@ -51,20 +58,40 @@ export default function InDataTable({ onUpload, min }) {
     if (onUpload) onUpload({ columns, rows });
   }, [rows]);
 
-  async function onSubmitModal(forms, hideModal) {
-    const fio = forms.fio.split(" ");
+  async function onSubmitModal(forms, hideModal, isView) {
+    if (
+      !isView &&
+      (bkutData?.employees ?? []).find((e) => e.employee.pinfl == forms.pinfl)
+    ) {
+      showYesNoDialog(
+        t("rewrite-pinfl"),
+        () => sendData(forms, hideModal, true),
+        () => {},
+        t
+      );
+      return;
+    }
+    sendData(forms, hideModal, isView);
+  }
+
+  async function sendData(forms, hideModal, isChanging) {
+    const fio = splitFIO(forms.fio);
     const requestData = {
       bkutId: bkutData.id,
       pinfl: forms.pinfl,
-      lastName: fio[0],
-      firstName: fio[1],
+      fio: forms.fio,
+      firstName: fio[0],
+      lastName: fio[1],
       middleName: fio[2],
       phone: forms.phoneNumber,
       email: forms.email,
       birthDate: forms.birthDate,
       position: forms.position,
     };
-    const response = await sendEmployee(requestData);
+    const employees = (bkutData.employees ?? []).filter((e) =>
+      isChanging ? e.employee.pinfl != forms.pinfl : true
+    );
+    const response = await sendEmployee(requestData, employees);
     if (response?.success) {
       const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
       setRows((rows) => [
@@ -107,12 +134,13 @@ function ModalUI({ hideModal, data = {} }) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ fio: "", birthDate: "" });
   const { employee = {}, position = {}, birthDate, phone, email } = data;
+  const [positions] = useDynamicData({ positions: true });
 
   function onFetchPINFL(data) {
     if (!data) return;
 
     setFormData({
-      fio: `${data.first_name} ${data.last_name} ${data.middle_name}`,
+      fio: getFIO(data),
       birthDate: dayjs(data.birth_date),
     });
   }
@@ -126,7 +154,11 @@ function ModalUI({ hideModal, data = {} }) {
   return (
     <div className="modal-content">
       <div className="modal-row">
-        <FinderPINFL pinflValue={employee.pinfl} onFetch={onFetchPINFL} />
+        <FinderPINFL
+          pinflValue={employee.pinfl}
+          disablePINFL
+          onFetch={onFetchPINFL}
+        />
       </div>
       <div className="modal-row">
         <FormInput label={t("fio")} name="fio" required value={formData.fio} />
@@ -135,7 +167,7 @@ function ModalUI({ hideModal, data = {} }) {
           required
           value={position.id}
           name="position"
-          dataSelect={POSITIONS(t)}
+          dataSelect={positions}
           label={t("job-position")}
         />
       </div>

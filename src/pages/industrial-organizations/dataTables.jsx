@@ -46,12 +46,30 @@ export default function InDataTable() {
     );
   }, [bkutData]);
 
-  async function onSubmitModal(forms, hideModal) {
+  async function onSubmitModal(forms, hideModal, isView) {
+    const duplicate = (bkutData?.departments ?? []).find(
+      (e) => e.tin == forms.tin
+    );
+    if (!isView && duplicate) {
+      const isAnother = duplicate.departmentType == "GURUH";
+      showYesNoDialog(
+        t(isAnother ? "found-on-group" : "rewrite-stir"),
+        isAnother ? null : () => sendData(forms, hideModal),
+        () => {},
+        t
+      );
+      return;
+    }
+    sendData(forms, hideModal);
+  }
+
+  async function sendData(forms, hideModal) {
     const requestData = {
       bkut: {
         id: bkutData.id,
       },
       departmentType: "SEH",
+      tin: forms.tin,
       name: forms.name,
       phone: forms.phone,
       email: forms.email,
@@ -237,11 +255,7 @@ function ModalUI({ hideModal, data }) {
       </div>
       <div className="modal-row">
         <FormInput label={t("email")} value={email} name="email" />
-        <FormInput
-          value={phone}
-          label={t("phone-number")}
-          name="phoneNumber"
-        />
+        <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
       </div>
     </div>
   );

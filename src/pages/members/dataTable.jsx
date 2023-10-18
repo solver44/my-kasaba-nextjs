@@ -7,11 +7,12 @@ import dayjs from "dayjs";
 import styles from "./members.module.scss";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
-import { POSITIONS, getFIO } from "@/utils/data";
+import { POSITIONS, getFIO, splitFIO } from "@/utils/data";
 import { useSelector } from "react-redux";
 import { fetchMember, sendMember } from "@/http/data";
 import CheckBoxGroup from "@/components/CheckBoxGroup";
 import useActions from "@/hooks/useActions";
+import { showYesNoDialog } from "@/utils/dialog";
 
 export default function InDataTable() {
   const { t } = useTranslation();
@@ -62,7 +63,38 @@ export default function InDataTable() {
     );
   }, [bkutData]);
 
-  async function onSubmitModal(forms, hideModal) {
+  async function onSubmitModal(forms, hideModal, isView) {
+    if (
+      !isView &&
+      (bkutData?.members ?? []).find((e) => e.member.pinfl == forms.pinfl)
+    ) {
+      showYesNoDialog(
+        t("rewrite-pinfl-member"),
+        () => sendData(forms, hideModal, true),
+        () => {},
+        t
+      );
+      return;
+    }
+    sendData(forms, hideModal, isView);
+  }
+
+  async function sendData(forms, hideModal, isView) {
+    const members = (bkutData.members ?? [])
+      .filter((e) => (isView ? e.member.pinfl != forms.pinfl : true))
+      .map((e) => ({
+        ...e,
+        bkut: {
+          id: bkutData.id,
+        },
+        member: {
+          id: e.member.id,
+        },
+        joinDate: e.joinDate,
+        position: e.position,
+        phone: e.phoneNumber,
+        email: e.email,
+      }));
     const requestData = {
       id: bkutData.id,
       members: [
@@ -81,15 +113,15 @@ export default function InDataTable() {
         },
       ],
     };
-    const fio = forms.fio.split(" ");
+    const fio = splitFIO(forms.fio);
     const data = {
       bkutId: requestData.id,
       pinfl: forms.pinfl,
-      lastName: fio[0],
-      firstName: fio[1],
+      firstName: fio[0],
+      lastName: fio[1],
       middleName: fio[2],
     };
-    const response = await sendMember(requestData, data);
+    const response = await sendMember(requestData, data, members);
     if (response?.success) {
       const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
       setRows((rows) => [
@@ -205,16 +237,8 @@ function ModalUI({ hideModal, data = {} }) {
         />
       </div>
       <div className="modal-row">
-        <FormInput
-          value={phone}
-          label={t("phone-number")}
-          name="phoneNumber"
-        />
-        <FormInput
-          value={email}
-          label={t("employees.email")}
-          name="email"
-        />
+        <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
+        <FormInput value={email} label={t("employees.email")} name="email" />
       </div>
       <CheckBoxGroup
         name="personInfo"

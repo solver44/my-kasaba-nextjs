@@ -140,7 +140,7 @@ export default function DataTable({
           rows={replaceValuesInArray(rows)}
           columns={modifiedColumns} // Use the modified columns definition
           loading={loading || dataLoading}
-          className={styles.dataTable}
+          className={[styles.dataTable, min ? styles.mini : ""].join(" ")}
           slots={{
             toolbar: CustomToolbar,
             loadingOverlay: LinearProgress,
@@ -150,7 +150,9 @@ export default function DataTable({
         />
       </div>
       <ModalUI
-        onSubmit={(data) => onSubmitModal(data, () => toggleModal(false))}
+        onSubmit={(data) =>
+          onSubmitModal(data, () => toggleModal(false), !!dataModal)
+        }
         isForm={isFormModal}
         open={show}
         isView={!!dataModal}

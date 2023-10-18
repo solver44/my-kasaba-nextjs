@@ -9,6 +9,7 @@ import { useSnackbar } from "notistack";
 
 export default function FinderPINFL({
   required,
+  disablePINFL,
   pinflValue = "",
   givenDate = "",
   onFetch = () => {},
@@ -58,7 +59,9 @@ export default function FinderPINFL({
       <FormInput
         required
         name="pinfl"
+        disabled={disablePINFL && !!pinflValue}
         value={pinflValue}
+        maxLength={14}
         label={t("pinfl")}
         invalid={inputValidation.pinfl}
         onChange={(e, name) =>

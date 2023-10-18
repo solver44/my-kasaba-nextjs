@@ -11,6 +11,7 @@ export default function ChangableInput({
   onChange,
   value: propValue,
   label,
+  required,
   date,
   invalid,
   select,
@@ -42,7 +43,10 @@ export default function ChangableInput({
 
   return (
     <div className={styles.wrapper}>
-      <label className={styles.label}>{label}</label>
+      <label className={styles.label}>
+        {label}
+        {required ? <span className="red"> *</span> : ""}
+      </label>
       {!editable ? (
         <span className={styles.content}>{value}</span>
       ) : date ? (

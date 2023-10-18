@@ -50,6 +50,14 @@ export async function getFile(fileRef) {
     return error;
   }
 }
+export async function getPositions() {
+  try {
+    const { data } = await $axios.get(`/rest/entities/HBkutEmployeePosition`);
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
 
 export async function sendDepartment(data) {
   try {
@@ -80,9 +88,10 @@ export async function sendEBKUT(data) {
   }
 }
 
-export async function getEmployee(data) {
+export async function getEmployee(data, isPost) {
   try {
-    const { data: response1 } = await $axios.post(
+    let response1;
+    const { data: _data } = await $axios.post(
       "/rest/entities/HIndividual/search",
       {
         filter: {
@@ -99,36 +108,53 @@ export async function getEmployee(data) {
         headers: { "Content-Type": "application/json" },
       }
     );
+    response1 = _data;
+
+    if (isPost) {
+      // if (response1?.length > 0) {
+      //   response1 = response1[0];
+      // } else {
+      response1 = (
+        await $axios.post("/rest/entities/HIndividual", data, {
+          headers: { "Content-Type": "application/json" },
+        })
+      ).data;
+      // }
+    }
+
     return response1;
   } catch (error) {
     return error;
   }
 }
 
-export async function sendEmployee(data) {
+export async function sendEmployee(_data, employees = []) {
   try {
     let result;
-    let response1 = await getEmployee(data);
+    let response1 = await getEmployee(_data, true);
+    const { fio, firstName, lastName, middleName, ...data } = _data;
 
-    if (response1?.length > 0) {
-    } else {
-      await $axios.post("/rest/entities/HIndividual", data, {
-        headers: { "Content-Type": "application/json" },
-      });
-      response1 = await getEmployee(data);
-    }
     const requestData = {
       id: data.bkutId,
-      phone: data.phone,
-      email: data.email,
-      birthDate: data.birthDate,
+      ...data,
       employees: [
+        ...employees.map((e) => ({
+          position: {
+            id: e.position.id,
+          },
+          employee: {
+            id: e.employee.id,
+          },
+          bkut: {
+            id: data.bkutId,
+          },
+        })),
         {
           position: {
             id: data.position,
           },
           employee: {
-            id: response1[0].id,
+            id: response1.id,
           },
           bkut: {
             id: data.bkutId,
@@ -144,20 +170,14 @@ export async function sendEmployee(data) {
   }
 }
 
-export async function sendMember(requestData, data) {
+export async function sendMember(requestData, data, oldMembers = []) {
   try {
     let result;
-    let response1 = await getEmployee(data);
+    let response1 = await getEmployee(data, true);
 
-    if (response1?.length > 0) {
-    } else {
-      await $axios.post("/rest/entities/HIndividual", data, {
-        headers: { "Content-Type": "application/json" },
-      });
-      response1 = await getEmployee(data);
-    }
-    const memberId = response1[0].id;
+    const memberId = response1.id;
     requestData.members[0].member.id = memberId;
+    requestData.members.unshift(...oldMembers);
     result = await sendEBKUT(requestData);
 
     return result;

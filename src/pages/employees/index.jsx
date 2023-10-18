@@ -3,6 +3,7 @@ import HomeWrapper from "../home/wrapper";
 import styles from "./employees.module.scss";
 import DataTable from "./dataTable";
 import { useSelector } from "react-redux";
+import { getFIO } from "@/utils/data";
 
 export default function Employees() {
   return (
@@ -20,7 +21,7 @@ export function useEmployees() {
     if (!bkutData?.employees?.length) return;
     setData(
       bkutData.employees.map((e) => ({
-        label: `${e.employee.firstName} ${e.employee.lastName} ${e.employee.middleName}`,
+        label: getFIO(e.employee),
         value: e.employee.id,
       }))
     );
@@ -31,7 +32,7 @@ export function useEmployees() {
 
 Employees.layout = function (Component, t) {
   return (
-    <HomeWrapper title={t("employees.title")} desc={t("profile-page.desc")}>
+    <HomeWrapper title={t("employees.title1")} desc={t("profile-page.desc")}>
       {Component}
     </HomeWrapper>
   );

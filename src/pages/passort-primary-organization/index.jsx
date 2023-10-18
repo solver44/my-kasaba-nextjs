@@ -3,7 +3,7 @@ import HomeWrapper from "../home/wrapper";
 import styles from "./passort-primary-organization.module.scss";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { getLocalizationNames } from "@/utils/data";
+import { getFIO, getLocalizationNames } from "@/utils/data";
 import { getFile } from "@/http/data";
 import DownloadLink from "@/components/DownloadLink";
 
@@ -64,7 +64,7 @@ export default function PassortPrimaryOrganization() {
           {t("passort-primary-organization.firstOrganizationNetwork")}
         </label>
         <label style={{ textAlign: "left" }}>
-          <a href="">{getLocalizationNames(bkutData.branch, i18n)}</a>
+          {getLocalizationNames(bkutData.branch, i18n)}
         </label>
       </div>
       <div className={styles.flex}>
@@ -87,9 +87,7 @@ export default function PassortPrimaryOrganization() {
         <label>
           {t("passort-primary-organization.firstOrganizationDirektor")}
         </label>
-        <label
-          style={{ textAlign: "left" }}
-        >{`${director?.firstName} ${director?.lastName} ${director?.middleName}`}</label>
+        <label style={{ textAlign: "left" }}>{getFIO(director)}</label>
       </div>
       <div className={styles.flex} style={{ background: "#F9F9F9" }}>
         <label>{t("passort-primary-organization.firstOrganizationAdr")}</label>

@@ -41,6 +41,7 @@
 }
 .label {
   margin-right: 20px;
+  font-size: var(--input-font-size);
 }
 .button {
   border-radius: var(--input-radius);
@@ -51,7 +52,7 @@
   min-width: 150px !important;
   text-transform: none;
   font-weight: 400;
-  font-size: 16px;
+  font-size: var(--input-font-size);
   font-family: "Inter";
   max-height: 43px;
 }

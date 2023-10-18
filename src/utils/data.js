@@ -47,9 +47,18 @@ export const POSITIONS = (t) => [
   { value: 2, label: t("employees.accountant") },
 ];
 
-export function getFIO(obj = {}) {
+export function getFIO(obj = {}, isNotEmpty) {
   const firstName = obj.firstName ?? obj.first_name ?? "";
   const lastName = obj.lastName ?? obj.last_name ?? "";
   const middleName = obj.middleName ?? obj.middle_name ?? "";
-  return !firstName ? "" : `${firstName} ${lastName} ${middleName}`;
+  return (
+    `${firstName} ${lastName} ${middleName}`.trim() || (isNotEmpty ? "-" : "")
+  );
+}
+export function splitFIO(fio = "") {
+  let splitted = fio.split(" ");
+  if (splitted.length < 3) splitted.push("");
+  if (splitted.length < 3) splitted.push("");
+  if (splitted.length < 3) splitted.push("");
+  return splitted;
 }

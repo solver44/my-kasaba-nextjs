@@ -35,6 +35,7 @@ export default function FormInput({
     <ChangableInput
       {...props}
       name={field.name}
+      required={required}
       invalid={invalidProps || invalid}
       onChange={onChangeFunc} // send value to hook form
       value={field.value} // input value

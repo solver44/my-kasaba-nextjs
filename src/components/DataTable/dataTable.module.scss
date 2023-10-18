@@ -1,17 +1,20 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  // &.mini{
-  //   min-height: 0;
-  //   height: auto;
-  // }
+  height: 80vh;
+  &.mini {
+    height: auto;
+  }
 }
 .dataTable {
   border-radius: var(--input-radius);
-  font-size: 16px;
-  & > :nth-child(2) > :nth-child(2) {
-    height: 200px !important;
-  }
+  font-size: var(--input-font-size);
+  // & > :nth-child(2) > :nth-child(2) {
+  //   height: 200px;
+  // }
+  // &.mini > :nth-child(2) > :nth-child(2) {
+  //   height: 80vh !important;
+  // }
 }
 .toolbars {
   position: absolute;

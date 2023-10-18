@@ -34,6 +34,16 @@ const menu = [
     path: "/group-organizations",
   },
   {
+    icon: PeopleAlt,
+    title: "employeesTitle",
+    path: "/employees",
+  },
+  {
+    icon: Hail,
+    title: "members",
+    path: "/members",
+  },
+  {
     icon: InsertChart,
     title: "statisticalInformation",
     path: "/statistical-information",
@@ -52,16 +62,6 @@ const menu = [
     icon: EmojiTransportation,
     title: "basicTools",
     path: "/basic-tools",
-  },
-  {
-    icon: PeopleAlt,
-    title: "employeesTitle",
-    path: "/employees",
-  },
-  {
-    icon: Hail,
-    title: "members",
-    path: "/members",
   },
   {
     icon: LibraryBooks,

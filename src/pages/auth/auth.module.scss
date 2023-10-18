@@ -2,9 +2,12 @@
   display: flex;
 }
 .top {
-  align-self: flex-end;
   margin-bottom: 50px;
-  width: min-content;
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
 }
 .left {
   padding: 150px 50px;

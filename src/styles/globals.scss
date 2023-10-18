@@ -7,12 +7,13 @@
   --menu-selected-color: #eff6ff;
   --menu-selected-text-color: black;
   --menu-selected-border-color: #c1d9ff;
+  --menu-font-size: 18px;
   --radius: 55px;
 
   --input-radius: 4px;
   --input-color: black;
   --input-border-color: #c7c9d9;
-  --input-font-size: 16px;
+  --input-font-size: 18px;
   --input-disabled-color: rgba(0, 0, 0, 0.03);
 
   --wrapper-bg: #fff;
@@ -23,6 +24,9 @@ body {
   background-color: var(--dark-bg);
 }
 
+.red{
+  color: red;
+}
 .wrapper {
   background-color: var(--wrapper-bg);
   padding: var(--wrapper-pg);
@@ -84,7 +88,7 @@ body {
   text-align: center;
 }
 .title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 500;
   &.bold {
     margin: 0;

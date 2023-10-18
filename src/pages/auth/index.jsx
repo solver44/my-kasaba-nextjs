@@ -79,6 +79,9 @@ export default function Auth() {
         </div>
         <div className={"wrapper " + styles.right}>
           <div className={styles.top}>
+            <Link href="/check-status" className="unfocus">
+              {t("checkStatusTitle")}
+            </Link>
             <LanguageSelector />
           </div>
           <div className={styles.auth_content}>

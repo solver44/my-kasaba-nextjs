@@ -50,16 +50,22 @@ export default function OneTI() {
 
           setTimeout(() => {
             const removeCanvasElements = () => {
-              const canvasElements = document.querySelectorAll("canvas");
-              console.log(document);
-              canvasElements.forEach((canvas) => {
-                canvas.remove();
+              document.querySelectorAll("iframe").forEach((item) => {
+                // const canvasElements =
+                item.contentWindow.document;
+                //   .body.querySelectorAll(
+                //     "canvas.hacc"
+                //   );
+                // canvasElements.forEach((canvas) => {
+                //   console.log(canvas);
+                //   canvas.style.display = "none !important";
+                // });
               });
             };
 
             // Call the function to remove canvas elements when the component mounts
             removeCanvasElements();
-          }, 1000);
+          }, 0);
         });
       });
     }
@@ -73,5 +79,5 @@ export default function OneTI() {
 }
 
 OneTI.layout = function (Component, t) {
-  return <HomeWrapper title="1T shakli">{Component}</HomeWrapper>;
+  return <HomeWrapper title={t("1t-report")}>{Component}</HomeWrapper>;
 };
