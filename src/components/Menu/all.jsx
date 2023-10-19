@@ -44,30 +44,30 @@ const menu = [
     path: "/members",
   },
   {
-    icon: InsertChart,
-    title: "statisticalInformation",
-    path: "/statistical-information",
-  },
-  {
     icon: Diversity3,
     title: "teamContracts",
     path: "/team-contracts",
   },
   {
-    icon: LibraryBooks,
-    title: "reports",
-    path: "/reports",
-  },
-  {
-    icon: EmojiTransportation,
-    title: "basicTools",
-    path: "/basic-tools",
+    icon: InsertChart,
+    title: "statisticalInformation",
+    path: "/statistical-information",
   },
   {
     icon: LibraryBooks,
     title: "1ti",
     path: "/1ti",
   },
+  // {
+  //   icon: LibraryBooks,
+  //   title: "reports",
+  //   path: "/reports",
+  // },
+  // {
+  //   icon: EmojiTransportation,
+  //   title: "basicTools",
+  //   path: "/basic-tools",
+  // },
 ];
 
 export default function AllMenu({ collapsed }) {

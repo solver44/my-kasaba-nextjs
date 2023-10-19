@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Button, Dialog, DialogActions } from "@mui/material";
+import { CheckCircleOutline, InfoOutlined } from "@mui/icons-material";
 
 export function showYesNoDialog(message, onYes, onNo, t = (c) => c) {
   const handleClose = () => {
@@ -22,8 +23,19 @@ export function showYesNoDialog(message, onYes, onNo, t = (c) => c) {
 
   const dialog = (
     <Dialog open={true} onClose={handleClose}>
-      <div style={{ padding: "16px" }}>
-        <p style={{ fontSize: "var(--input-font-size)" }}>{message}</p>
+      <div
+        style={{
+          padding: "16px",
+          display: "flex",
+          gap: 15,
+          paddingTop: 30,
+          alignItems: "flex-start",
+        }}
+      >
+        <InfoOutlined style={{ fontSize: 40, color: "#2195d6" }} />
+        <p style={{ fontSize: "var(--input-font-size)", marginTop: 0 }}>
+          {message}
+        </p>
       </div>
       <DialogActions>
         <Button onClick={handleNo} color="primary">

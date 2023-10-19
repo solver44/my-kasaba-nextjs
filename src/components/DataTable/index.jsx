@@ -45,6 +45,7 @@ export default function DataTable({
   onSubmitModal,
   isFormModal,
   min,
+  fullModal,
   loading,
   bottomModal,
   fetchData,
@@ -155,6 +156,7 @@ export default function DataTable({
         }
         isForm={isFormModal}
         open={show}
+        full={fullModal}
         isView={!!dataModal}
         bottomModal={bottomModal}
         handleClose={() => toggleModal(false)}

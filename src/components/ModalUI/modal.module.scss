@@ -14,6 +14,14 @@
   gap: 30px;
   min-width: 60vw;
   max-height: 90vh;
+  &.full{
+    width: 100vw;
+    max-height: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }
 .close {
   align-self: flex-end;

@@ -1,0 +1,37 @@
+.container {
+  padding: 40px 20px 30px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: var(--input-radius);
+  position: relative;
+  margin: 20px 0 0 0;
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+
+  & > * {
+    width: 100%;
+  }
+  & > div[datatype="list"] {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  h3 {
+    font-weight: 500;
+    font-size: 16px;
+    color: #1565c0;
+  }
+}
+.title {
+  font-weight: bold;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  left: 15px;
+  font-size: 18px;
+  transform: translateY(-50%);
+  width: auto;
+  padding: 0 5px;
+  text-transform: uppercase;
+  color: #1565c0;
+}

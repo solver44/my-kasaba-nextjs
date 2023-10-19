@@ -132,7 +132,8 @@ export async function sendEmployee(_data, employees = []) {
   try {
     let result;
     let response1 = await getEmployee(_data, true);
-    const { fio, firstName, lastName, middleName, ...data } = _data;
+    const { fio, firstName, lastName, middleName, phone, email, ...data } =
+      _data;
 
     const requestData = {
       id: data.bkutId,
@@ -148,6 +149,8 @@ export async function sendEmployee(_data, employees = []) {
           bkut: {
             id: data.bkutId,
           },
+          phone: e.phone,
+          email: e.email,
         })),
         {
           position: {
@@ -159,6 +162,8 @@ export async function sendEmployee(_data, employees = []) {
           bkut: {
             id: data.bkutId,
           },
+          phone,
+          email,
         },
       ],
     };

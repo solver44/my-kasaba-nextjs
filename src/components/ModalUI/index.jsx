@@ -11,6 +11,7 @@ export default function ModalUI({
   onSubmit,
   isForm,
   handleClose,
+  full,
   children,
   isView,
   bottomModal,
@@ -19,12 +20,20 @@ export default function ModalUI({
   const parent = isForm
     ? (children) => (
         <div>
-          <FormValidation button className={styles.content} onSubmit={onSubmit}>
+          <FormValidation
+            button
+            className={[styles.content, full ? styles.full : ""].join(" ")}
+            onSubmit={onSubmit}
+          >
             {(onSubmit) => children(onSubmit)}
           </FormValidation>
         </div>
       )
-    : (children) => <div className={styles.content}>{children}</div>;
+    : (children) => (
+        <div className={[styles.content, full ? styles.full : ""].join(" ")}>
+          {children}
+        </div>
+      );
 
   return (
     <Modal
