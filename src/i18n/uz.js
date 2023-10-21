@@ -301,7 +301,7 @@ export default {
     checkStatusTitle: "Murojaat holatini tekshirish",
     "are-you-sure-delete": "Haqiqatan ham o'chirib tashlamoqchimisiz?",
     "are-you-sure-close":
-      "Kiritilgan ma'lumotlar saqlanib qolmaydi. Oynani yopish uchun tasdiqlang.",
+      "Kiritilgan ma'lumotlar saqlab qolinmaydi. Oynani yopish uchun tasdiqlang.",
     leave: "Qoldirish",
     "rewrite-pinfl":
       "Ushbu JShShIR bilan xodim qo'shilgan. O'zgartirishni istaysizmi?",
