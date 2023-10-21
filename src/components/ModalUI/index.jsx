@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styles from "./modal.module.scss";
 import Modal from "@mui/material/Modal";
 import { Button, Slide } from "@mui/material";
@@ -19,6 +19,9 @@ function ModalUI({
   bottomModal,
 }) {
   const { t } = useTranslation();
+  const [_isChanged, setIsChanged] = useState(false);
+  const isViewed = useRef(false);
+
   const parent = isForm
     ? (children) => (
         <div>
@@ -26,9 +29,23 @@ function ModalUI({
             button
             className={[styles.content, full ? styles.full : ""].join(" ")}
             onSubmit={onSubmit}
-            onChanged={onChanged}
+            isChanged={_isChanged}
+            onChanged={(data) => {
+              if (!isViewed.current) {
+                isViewed.current = true;
+                return;
+              }
+              let isChanged = false;
+              if (Object.keys(data)?.length > 0) {
+                if (!Object.values(data).find((d) => d)) isChanged = false;
+                else isChanged = true;
+              }
+
+              setIsChanged(isChanged);
+              onChanged && onChanged(isChanged, data);
+            }}
           >
-            {(onSubmit) => children(onSubmit)}
+            {(onSubmit) => children(onSubmit, _isChanged)}
           </FormValidation>
         </div>
       )
@@ -38,34 +55,43 @@ function ModalUI({
         </div>
       );
 
+  function onClose() {
+    setIsChanged(false);
+    isViewed.current = false;
+    handleClose && handleClose();
+  }
+
   return (
     <Modal
       className={styles.main}
       open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      onClose={onClose}
+      // aria-labelledby="modal-modal-title"
+      // aria-describedby="modal-modal-description"
     >
       <Slide direction="up" in={open}>
         {/* <CloseRounded onClick={handleClose} className={styles.close} /> */}
-        {parent((handleSubmit) => (
-          <React.Fragment>
-            {children}
-            {bottomModal ? (
-              bottomModal(handleSubmit, handleClose, isView)
-            ) : (
-              <div className={styles.row}>
-                <Button
-                  onClick={isForm ? handleSubmit : onSubmit}
-                  variant="contained"
-                >
-                  {t("save")}
-                </Button>
-                <Button onClick={handleClose}>{t("close")}</Button>
-              </div>
-            )}
-          </React.Fragment>
-        ))}
+        {parent((handleSubmit, isChanged) => {
+          return (
+            <React.Fragment>
+              {children}
+              {bottomModal ? (
+                bottomModal(handleSubmit, handleClose, isView, isChanged)
+              ) : (
+                <div className={styles.row}>
+                  <Button
+                    onClick={isForm ? handleSubmit : onSubmit}
+                    variant="contained"
+                    disabled={!isChanged}
+                  >
+                    {t("save")}
+                  </Button>
+                  <Button onClick={onClose}>{t("close")}</Button>
+                </div>
+              )}
+            </React.Fragment>
+          );
+        })}
       </Slide>
     </Modal>
   );

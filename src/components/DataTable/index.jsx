@@ -59,6 +59,7 @@ function DataTable({
   const { t } = useTranslation();
   const [show, setShow] = useState(false);
   const [dataModal, setDataModal] = useState();
+  const dataModalRef = useRef();
   const { dataLoading } = useSelector((state) => state);
   const [openDilaog, setOpenDialog] = useState(false);
   const currentId = useRef();
@@ -71,6 +72,7 @@ function DataTable({
   const handleViewClick = async (id) => {
     const data = await fetchData(id);
     setDataModal(data);
+    dataModalRef.current = data;
     setShow(true);
   };
 
@@ -80,7 +82,10 @@ function DataTable({
   };
 
   function toggleModal(value) {
-    if (dataModal) setDataModal();
+    if (dataModalRef.current) {
+      setDataModal();
+      dataModalRef.current = null;
+    }
     if (value !== undefined) {
       setShow(value);
       return;
@@ -132,6 +137,7 @@ function DataTable({
   });
 
   function closeModal() {
+    const isView = !!dataModalRef.current;
     if (isChanged.current) {
       showYesNoDialog(
         t("are-you-sure-close"),
@@ -139,7 +145,7 @@ function DataTable({
           toggleModal(false);
           isChanged.current = false;
         },
-        () => {},
+        () => (isChanged.current = false),
         t,
         "close",
         "leave"
@@ -147,6 +153,11 @@ function DataTable({
       return;
     }
     toggleModal(false);
+    isChanged.current = false;
+  }
+  function forceCloseModal() {
+    toggleModal(false);
+    isChanged.current = false;
   }
 
   return (
@@ -173,12 +184,10 @@ function DataTable({
         />
       </div>
       <ModalUI
-        onSubmit={(data) => onSubmitModal(data, closeModal, !!dataModal)}
-        onChanged={(data) => {
+        onSubmit={(data) => onSubmitModal(data, forceCloseModal, !!dataModal)}
+        onChanged={(_isChanged, data) => {
           if (onChangedModal) onChangedModal(data);
-          if (Object.keys(data).length < 1) return;
-          if (!Object.values(data).find((d) => d)) isChanged.current = false;
-          else isChanged.current = true;
+          isChanged.current = _isChanged;
         }}
         isForm={isFormModal}
         open={show}
