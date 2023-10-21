@@ -11,7 +11,7 @@ export function convertToDate(dateString) {
   // JavaScript months are 0-based, so we subtract 1 from the parsed month
   return new Date(year, month - 1, day);
 }
-export function convertStringToFormatted(dateString) {
+export function convertStringToFormatted(dateString, withTime) {
   const date = dayjs(dateString);
-  return date.format("DD.MM.YYYY");
+  return date.format(withTime ? "DD.MM.YYYY  HH:m:s" : "DD.MM.YYYY");
 }

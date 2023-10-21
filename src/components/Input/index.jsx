@@ -46,10 +46,10 @@ function Input({
       if (!onChange) return;
       onChange({ target: { value } }, name);
     }
-    if (name.includes("phone")) {
+    if (name.toLowerCase().includes("phone")) {
       setMask(true);
     }
-    if (name.includes("email")) {
+    if (name.toLowerCase().includes("email")) {
       isEmail.current = true;
     }
   }, []);
@@ -90,6 +90,7 @@ function Input({
           value={currentValue}
           standart={standart}
           mask={isMask ? mask : ""}
+          name={name.toLowerCase()}
           invalid={error}
           {...props}
         />
@@ -105,6 +106,7 @@ function Input({
       standart={standart}
       mask={isMask ? mask : ""}
       invalid={error}
+      name={name.toLowerCase()}
       {...props}
     />
   );
@@ -134,16 +136,23 @@ const InsideInput = React.memo(
     invalid,
     standart,
     disabled,
+    name,
     ...props
   }) => {
     const formattedMask = mask ? convertMask(mask) : mask; // Convert the mask
 
+    function getType(name) {
+      if (name.includes("phone")) return "phone";
+      else if (name.includes("email")) return "email";
+      return "text";
+    }
     return !textarea ? (
       <ReactInputMask
         mask={formattedMask}
         value={value}
         onChange={onChangeFunc}
         disabled={disabled}
+        type={getType(name)}
       >
         {(inputProps) => (
           <TextField

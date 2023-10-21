@@ -28,6 +28,8 @@ import { replaceValuesInArray } from "@/utils/data";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
+import areEqual from "@/utils/areEqual";
+import { showYesNoDialog } from "@/utils/dialog";
 
 function CustomToolbar() {
   return (
@@ -40,9 +42,10 @@ function CustomToolbar() {
   );
 }
 
-export default function DataTable({
+function DataTable({
   columns = [],
   onSubmitModal,
+  onChangedModal,
   isFormModal,
   min,
   fullModal,
@@ -59,6 +62,7 @@ export default function DataTable({
   const { dataLoading } = useSelector((state) => state);
   const [openDilaog, setOpenDialog] = useState(false);
   const currentId = useRef();
+  const isChanged = useRef(false);
 
   const toggleDeleteDialog = () => {
     setOpenDialog(!openDilaog);
@@ -127,6 +131,24 @@ export default function DataTable({
     return column;
   });
 
+  function closeModal() {
+    if (isChanged.current) {
+      showYesNoDialog(
+        t("are-you-sure-close"),
+        () => {
+          toggleModal(false);
+          isChanged.current = false;
+        },
+        () => {},
+        t,
+        "close",
+        "leave"
+      );
+      return;
+    }
+    toggleModal(false);
+  }
+
   return (
     <React.Fragment>
       <div className={[styles.wrapper, min ? styles.mini : ""].join(" ")}>
@@ -151,17 +173,21 @@ export default function DataTable({
         />
       </div>
       <ModalUI
-        onSubmit={(data) =>
-          onSubmitModal(data, () => toggleModal(false), !!dataModal)
-        }
+        onSubmit={(data) => onSubmitModal(data, closeModal, !!dataModal)}
+        onChanged={(data) => {
+          if (onChangedModal) onChangedModal(data);
+          if (Object.keys(data).length < 1) return;
+          if (!Object.values(data).find((d) => d)) isChanged.current = false;
+          else isChanged.current = true;
+        }}
         isForm={isFormModal}
         open={show}
         full={fullModal}
         isView={!!dataModal}
         bottomModal={bottomModal}
-        handleClose={() => toggleModal(false)}
+        handleClose={closeModal}
       >
-        {modal(() => toggleModal(false), dataModal ?? {})}
+        {modal(closeModal, dataModal ?? {})}
       </ModalUI>
       <Dialog
         open={openDilaog}
@@ -191,3 +217,5 @@ export default function DataTable({
     </React.Fragment>
   );
 }
+
+export default React.memo(DataTable, areEqual);

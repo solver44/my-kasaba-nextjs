@@ -27,7 +27,7 @@ export default {
       title: "O’ZBEKISTON KASABA UYUSHMALARI FEDERASIYASI",
       subtitle:
         "Boshlang’ich kasaba uyushmasi tashkilotini ro’yxatdan o’tkazish uchun murojaat",
-      "form1-title": "Murojaat yuboruvchi xaqida maʼlumotlar",
+      "form1-title": "Murojaat yuboruvchi haqida maʼlumotlar",
       "form2-title": "Tashkilot maʼlumotlari",
       "form3-title": "Tashkilot qaysi sohada faoliyat yuritadi",
       "form4-title": "Murojaat matni",
@@ -205,6 +205,8 @@ export default {
     certificate: "Guvohnoma",
     requestGivenDate: "Murojaat berilgan sana",
     applicationSender: "Murojaat qilgan shaxs",
+    applicationSenderPhone: "Murojaat qilgan shaxs telefon raqami",
+    applicationSenderEmail: "Murojaat qilgan shaxs elektron pochtasi",
     bkutName: "BKUT nomi",
     bkutName1: "Boshlang'ich tashkilot nomi",
     bkutSTIR: "BKUT STIR",
@@ -298,6 +300,9 @@ export default {
     "delete-title": "O'chirish",
     checkStatusTitle: "Murojaat holatini tekshirish",
     "are-you-sure-delete": "Haqiqatan ham o'chirib tashlamoqchimisiz?",
+    "are-you-sure-close":
+      "Kiritilgan ma'lumotlar saqlanib qolmaydi. Oynani yopish uchun tasdiqlang.",
+    leave: "Qoldirish",
     "rewrite-pinfl":
       "Ushbu JShShIR bilan xodim qo'shilgan. O'zgartirishni istaysizmi?",
     "rewrite-pinfl-member":

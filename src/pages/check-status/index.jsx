@@ -11,7 +11,7 @@ import { validateEmpty } from "@/utils/validation";
 import { useSnackbar } from "notistack";
 import { checkStatusApplication } from "@/http/public";
 import { convertStringToFormatted } from "@/utils/date";
-import { showOrNot } from "@/utils/data";
+import { getFIO, showOrNot } from "@/utils/data";
 
 export default function CheckStatus() {
   const { t, i18n } = useTranslation();
@@ -45,13 +45,19 @@ export default function CheckStatus() {
       data: [
         {
           title: "requestGivenDate",
-          value: convertStringToFormatted(data.createdDate),
+          value: convertStringToFormatted(data.createdDate, true),
         },
         {
           title: "applicationSender",
-          value: showOrNot(
-            `${data.passport?.firstName} ${data.passport?.lastName} ${data.passport?.middleName}`
-          ),
+          value: getFIO(data.passport, true),
+        },
+        {
+          title: "applicationSenderPhone",
+          value: showOrNot(data.passport?.phone || data.phone),
+        },
+        {
+          title: "applicationSenderEmail",
+          value: showOrNot(data.passport?.email || data.email),
         },
         {
           title: "legalEntity",

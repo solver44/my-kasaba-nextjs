@@ -3,7 +3,14 @@ import ReactDOM from "react-dom";
 import { Button, Dialog, DialogActions } from "@mui/material";
 import { CheckCircleOutline, InfoOutlined } from "@mui/icons-material";
 
-export function showYesNoDialog(message, onYes, onNo, t = (c) => c) {
+export function showYesNoDialog(
+  message,
+  onYes,
+  onNo,
+  t = (c) => c,
+  yesText,
+  noText
+) {
   const handleClose = () => {
     ReactDOM.unmountComponentAtNode(container);
   };
@@ -39,11 +46,11 @@ export function showYesNoDialog(message, onYes, onNo, t = (c) => c) {
       </div>
       <DialogActions>
         <Button onClick={handleNo} color="primary">
-          {t(onYes ? "no" : "close")}
+          {t(noText ?? (onYes ? "no" : "close"))}
         </Button>
         {onYes && (
           <Button onClick={handleYes} color="primary">
-            {t("yes")}
+            {t(yesText ?? "yes")}
           </Button>
         )}
       </DialogActions>

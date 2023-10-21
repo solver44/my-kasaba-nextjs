@@ -133,7 +133,7 @@ export default function InDataTable({ onUpload, min }) {
 function ModalUI({ hideModal, data = {} }) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ fio: "", birthDate: "" });
-  const { employee = {}, position = {}, birthDate, phone, email } = data;
+  const { employee = {}, position = {}, phone, email } = data;
   const [positions] = useDynamicData({ positions: true });
 
   function onFetchPINFL(data) {
@@ -148,7 +148,10 @@ function ModalUI({ hideModal, data = {} }) {
   useEffect(() => {
     const FIO = getFIO(employee);
     if (!FIO) return;
-    setFormData({ fio: FIO, birthDate: birthDate ? dayjs(birthDate) : "" });
+    setFormData({
+      fio: FIO,
+      birthDate: dayjs(employee.birthDate ?? ""),
+    });
   }, [data]);
 
   return (

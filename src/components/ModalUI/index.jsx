@@ -5,10 +5,12 @@ import { Button, Slide } from "@mui/material";
 // import { CloseRounded } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import FormValidation from "../FormValidation";
+import areEqual from "@/utils/areEqual";
 
-export default function ModalUI({
+function ModalUI({
   open,
   onSubmit,
+  onChanged,
   isForm,
   handleClose,
   full,
@@ -24,6 +26,7 @@ export default function ModalUI({
             button
             className={[styles.content, full ? styles.full : ""].join(" ")}
             onSubmit={onSubmit}
+            onChanged={onChanged}
           >
             {(onSubmit) => children(onSubmit)}
           </FormValidation>
@@ -67,3 +70,5 @@ export default function ModalUI({
     </Modal>
   );
 }
+
+export default React.memo(ModalUI, areEqual);

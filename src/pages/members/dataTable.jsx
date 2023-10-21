@@ -208,7 +208,11 @@ function ModalUI({ hideModal, data = {} }) {
   return (
     <div className="modal-content">
       <div className="modal-row">
-        <FinderPINFL pinflValue={member.pinfl} onFetch={onFetchPINFL} />
+        <FinderPINFL
+          disablePINFL
+          pinflValue={member.pinfl}
+          onFetch={onFetchPINFL}
+        />
       </div>
       <div className="modal-row">
         <FormInput
