@@ -13,7 +13,7 @@ export async function fetchSTIR(value) {
 }
 
 export async function fetchPINFL(value, givenDate) {
-  if (value?.length < 14) return;
+  if (value?.length < 14) return { data: { success: false } };
   try {
     const data = await $publicAxios.post("/pinfl", {
       pinfl: value,

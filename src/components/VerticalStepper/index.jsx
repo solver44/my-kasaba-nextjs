@@ -9,6 +9,7 @@ export default function VerticalStepper({
   validation,
   loading,
   onFinish,
+  noButton,
 }) {
   const { t } = useTranslation();
   return (
@@ -19,15 +20,17 @@ export default function VerticalStepper({
           <div className={styles.content}>{step.children}</div>
         </div>
       ))}
-      <LoadingButton
-        loading={loading}
-        variant="contained"
-        className={styles.button}
-        type={validation ? "submit" : "button"}
-        onClick={validation ? null : onFinish}
-      >
-        {t("sent")}
-      </LoadingButton>
+      {!noButton && (
+        <LoadingButton
+          loading={loading}
+          variant="contained"
+          className={styles.button}
+          type={validation ? "submit" : "button"}
+          onClick={validation ? null : onFinish}
+        >
+          {t("sent")}
+        </LoadingButton>
+      )}
     </div>
   );
 }

@@ -86,7 +86,7 @@ export default function CheckStatus() {
     actions.showLoading(false);
   };
   return (
-    <WrapperRequest>
+    <WrapperRequest noReglament>
       <div className={styles.wrapper}>
         <div className="card full">
           <p style={{ paddingBottom: 30 }} className="title bold start">

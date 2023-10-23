@@ -7,12 +7,14 @@ import dayjs from "dayjs";
 import styles from "./members.module.scss";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
-import { POSITIONS, getFIO, splitFIO } from "@/utils/data";
+import { getFIO, splitFIO } from "@/utils/data";
 import { useSelector } from "react-redux";
 import { fetchMember, sendMember } from "@/http/data";
 import CheckBoxGroup from "@/components/CheckBoxGroup";
 import useActions from "@/hooks/useActions";
 import { showYesNoDialog } from "@/utils/dialog";
+import RadioGroup from "@/components/RadioGroup";
+import useDynamicData from "@/hooks/useDynamicData";
 
 export default function InDataTable() {
   const { t } = useTranslation();
@@ -99,7 +101,6 @@ export default function InDataTable() {
       id: bkutData.id,
       members: [
         {
-          ...forms.personInfo,
           bkut: {
             id: bkutData.id,
           },
@@ -110,6 +111,7 @@ export default function InDataTable() {
           position: forms.position,
           phone: forms.phoneNumber,
           email: forms.email,
+          ...forms.personInfo,
         },
       ],
     };
@@ -120,7 +122,6 @@ export default function InDataTable() {
       firstName: fio[0],
       lastName: fio[1],
       middleName: fio[2],
-      birthDate: forms.birthDate,
     };
     const response = await sendMember(requestData, data, members);
     if (response?.success) {
@@ -152,10 +153,8 @@ export default function InDataTable() {
       handleDeleteClick={deleteRow}
       columns={columns}
       rows={rows}
-      bkutData={bkutData}
       onSubmitModal={onSubmitModal}
       isFormModal
-      modalWidth="80vw"
       bottomModal={(handleSubmit, handleClose, isView) => (
         <div className={styles.bottom}>
           <div className={styles.row}>
@@ -182,6 +181,8 @@ function ModalUI({ hideModal, data = {} }) {
     fio: "",
     birthDate: "",
   });
+  const [isMember, setIsMember] = useState(0);
+  const [positions] = useDynamicData({ positions: true });
   const {
     id,
     position,
@@ -197,7 +198,7 @@ function ModalUI({ hideModal, data = {} }) {
   useEffect(() => {
     const FIO = getFIO(data.member);
     if (!FIO) return;
-    setFormData({ fio: FIO, birthDate: dayjs(member.birthDate ?? "") });
+    setFormData({ fio: FIO, birthDate: "" });
   }, [data]);
 
   function onFetchPINFL(data) {
@@ -210,27 +211,32 @@ function ModalUI({ hideModal, data = {} }) {
   }
   return (
     <div className="modal-content">
+      <RadioGroup
+        left
+        value={0}
+        contained
+        name="isMember"
+        label={t("isMember")}
+        onChange={(e) => {
+          // console.log(e.target.value);
+          setIsMember(e.target.value);
+        }}
+        data={[
+          {
+            value: "0",
+            label: t("memberYes"),
+          },
+          {
+            value: "1",
+            label: t("memberNo"),
+          },
+        ]}
+      />
       <div className="modal-row">
         <FinderPINFL
           disablePINFL
           pinflValue={member.pinfl}
           onFetch={onFetchPINFL}
-        />
-      </div>
-      <div className="modal-row">
-        <FormInput
-          date
-          label={t("employees.dateSign")}
-          value={joinDate ? dayjs(joinDate) : null}
-          required
-          name="signDate"
-          // value={formData.signDate}
-        />
-        <FormInput
-          required
-          value={position}
-          name="position"
-          label={t("employees.position")}
         />
       </div>
       <div className="modal-row">
@@ -242,33 +248,70 @@ function ModalUI({ hideModal, data = {} }) {
           name="birthDate"
           value={formData.birthDate}
         />
+        <FormInput
+          select
+          required
+          value={1}
+          name="gender"
+          dataSelect={[
+            { value: 1, label: t("man") },
+            { value: 0, label: t("woman") },
+          ]}
+          label={t("gender")}
+        />
       </div>
       <div className="modal-row">
         <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
         <FormInput value={email} label={t("employees.email")} name="email" />
       </div>
-      <CheckBoxGroup
-        name="personInfo"
-        value={inData}
-        data={[
-          {
-            value: "isStudent",
-            label: t("isStudent"),
-          },
-          {
-            value: "isPensioner",
-            label: t("isPensioner"),
-          },
-          {
-            value: "isHomemaker",
-            label: t("isHomemaker"),
-          },
-          {
-            value: "isInvalid",
-            label: t("isInvalid"),
-          },
-        ]}
-      />
+      <div className="modal-row">
+        <FormInput
+          select
+          required
+          value={position?.id}
+          name="position"
+          dataSelect={positions}
+          label={t("job-position")}
+        />
+        <FormInput
+          label={t("employment")}
+          select
+          multiple
+          required
+          dataSelect={[
+            {
+              value: "isStudent",
+              label: t("isStudent"),
+            },
+            {
+              value: "isPensioner",
+              label: t("isPensioner"),
+            },
+            {
+              value: "isHomemaker",
+              label: t("isHomemaker"),
+            },
+            {
+              value: "isInvalid",
+              label: t("isInvalid"),
+            },
+            {
+              value: "isWorker",
+              label: t("worker"),
+            },
+          ]}
+        />
+      </div>
+      {isMember == 1 && (
+        <FormInput
+          date
+          label={t("employees.dateSign")}
+          value={joinDate ? dayjs(joinDate) : null}
+          required
+          name="signDate"
+          // value={formData.signDate}
+        />
+      )}
     </div>
   );
 }

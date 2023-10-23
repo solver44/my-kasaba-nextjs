@@ -9,6 +9,7 @@ function CheckBoxGroup({
   row = true,
   data = [],
   name,
+  vertical,
   required,
   value: propValue,
   label,
@@ -39,8 +40,15 @@ function CheckBoxGroup({
 
   return (
     <div className={styles.wrapper}>
-      <label className={styles.label}>{label}</label>
-      <FormGroup style={{ gap: 30 }} row={row}>
+      {label && <label className={styles.label}>{label}</label>}
+      <FormGroup
+        style={{
+          gap: vertical ? 0 : 30,
+          flexDirection: vertical ? "column" : "row",
+          maxHeight: vertical ? 100 : "auto",
+        }}
+        row={row}
+      >
         {data.map((checkbox) => (
           <FormControlLabel
             onChange={(e) => handleCheckboxChange(e, checkbox.value)}

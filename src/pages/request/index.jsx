@@ -24,6 +24,7 @@ import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import Reglament from "@/components/Reglament";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { getFIO } from "@/utils/data";
 
 export default function RequestPage({ router }) {
   const { t } = useTranslation();
@@ -146,9 +147,7 @@ export default function RequestPage({ router }) {
   };
 
   const handleSubmit = async () => {
-    // Check reCAPTCHA response
     const recaptchaResponse = grecaptcha.getResponse();
-    // Check if any input is invalid
     let isAnyInvalid = false;
     Object.values(formData).map((isValid, index) => {
       const key = Object.keys(inputValidation)[index];
@@ -194,9 +193,12 @@ export default function RequestPage({ router }) {
     if (data?.success) {
       actions.caches({
         sent: true,
-        fio: `${formData.firstName} ${formData.secondName} ${formData.thirdName}`,
+        fio: getFIO(formData),
         id: data.statusCheckCode,
       });
+    } else if (data?.error == "bkut is already exists") {
+      reloadCaptcha();
+      enqueueSnackbar(t("bkut-exists"), { variant: "error" });
     } else if (data?.error == "reCAPTCHA verification failed") {
       reloadCaptcha();
       enqueueSnackbar(t("recaptcha-try"), { variant: "error" });
@@ -226,15 +228,27 @@ export default function RequestPage({ router }) {
       form4: true,
     });
   }
+  function reserSTIRForm() {
+    setFormData((d) => ({
+      ...d,
+      name: "",
+      province: "",
+      district: "",
+      address: "",
+    }));
+  }
 
   function responsePINFL(data, status) {
-    if (!data?.success) {
+    if (!status || !data?.success) {
       setInputValidation((inputValidation) => ({
         ...inputValidation,
         passportGivenDate: false,
       }));
+      if (data?.success === false)
+        enqueueSnackbar(t("pinfl-not-found"), { variant: "error" });
       return;
     }
+
     resetValidation();
 
     const personData = data?.data;
@@ -247,38 +261,49 @@ export default function RequestPage({ router }) {
     }));
   }
 
-  async function responseSTIR(data, status) {
-    if (!data?.success) {
+  async function responseSTIR(data, status, setLoading) {
+    try {
+      if (!status || !data?.success) {
+        setInputValidation((inputValidation) => ({
+          ...inputValidation,
+          inn: false,
+          innInvalid: data?.success === false ? "stir-not-found" : undefined,
+        }));
+        if (data?.success === false)
+          enqueueSnackbar(t("stir-not-found"), { variant: "error" });
+        reserSTIRForm();
+        return;
+      }
+      const entityData = data?.data;
+
+      let soato = entityData?.companyBillingAddress?.soato;
+      if (soato) {
+        soato = soato + "";
+        const provinceId = soato.slice(0, 4);
+        const districtId = soato;
+        await handleProvince({ target: { value: provinceId } });
+        setFormData((formData) => ({
+          ...formData,
+          province: provinceId,
+          district: districtId,
+        }));
+      }
       setInputValidation((inputValidation) => ({
         ...inputValidation,
-        inn: false,
+        inn: true,
       }));
-      return;
-    }
-    const entityData = data?.data;
 
-    let soato = entityData.companyBillingAddress.soato;
-    if (soato) {
-      soato = soato + "";
-      const provinceId = soato.slice(0, 4);
-      const districtId = soato;
-      await handleProvince({ target: { value: provinceId } });
       setFormData((formData) => ({
         ...formData,
-        province: provinceId,
-        district: districtId,
+        name: entityData.company.name,
+        address: entityData.companyBillingAddress.streetName,
       }));
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar(t("fetch-error"), { variant: "error" });
+    } finally {
+      setLoading(false);
     }
-    setInputValidation((inputValidation) => ({
-      ...inputValidation,
-      inn: true,
-    }));
-
-    setFormData((formData) => ({
-      ...formData,
-      name: entityData.company.name,
-      address: entityData.companyBillingAddress.streetName,
-    }));
   }
 
   return (
@@ -353,7 +378,7 @@ export default function RequestPage({ router }) {
               titleText={t("first-name")}
             />
             <Input
-              name="secondName"
+              name="lastName"
               fullWidth
               value={formData.secondName}
               invalid={!inputValidation.secondName}
@@ -361,7 +386,7 @@ export default function RequestPage({ router }) {
               titleText={t("second-name")}
             />
             <Input
-              name="thirdName"
+              name="middleName"
               fullWidth
               value={formData.thirdName}
               invalid={!inputValidation.thirdName}
@@ -400,8 +425,10 @@ export default function RequestPage({ router }) {
             <InputButton
               fullWidth
               name="inn"
+              preventLoading
               request={fetchSTIR}
               invalid={!inputValidation.inn}
+              validationError={inputValidation?.innInvalid}
               onResponse={responseSTIR}
               maxLength={9}
               onChange={handleInputChange}
@@ -493,6 +520,7 @@ const RequestHasBeenSent = ({}) => {
 export const WrapperRequest = ({
   children,
   isReglament,
+  noReglament,
   onClickLink,
   toBack,
   onBack,
@@ -510,7 +538,7 @@ export const WrapperRequest = ({
         <div className={styles.row}>
           <Image className="logo" src={logo} alt="logo kasaba" />
           <h2 className="title">{t("request-page.title")}</h2>
-          {!isReglament && (
+          {!isReglament && !noReglament && (
             <p onClick={onClickLink} className={styles.link}>
               {t("reglament")}
             </p>
@@ -518,7 +546,9 @@ export const WrapperRequest = ({
         </div>
         <div className={styles.row}>
           <LanguageSelector />
-          <Link href="/auth">{t("loginTitle")}</Link>
+          <Link className="login-btn" href="/auth">
+            {t("loginTitle")}
+          </Link>
         </div>
       </div>
       {toBack && (

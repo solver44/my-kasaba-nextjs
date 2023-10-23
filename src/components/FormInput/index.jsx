@@ -23,7 +23,7 @@ export default function FormInput({
       });
 
   useEffect(() => {
-    setValue(name, value);
+    if (setValue) setValue(name, value);
   }, [value]);
 
   function onChangeFunc(e, name) {

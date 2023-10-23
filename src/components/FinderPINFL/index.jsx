@@ -45,12 +45,25 @@ export default function FinderPINFL({
     setLoading(true);
     const { data } = await fetchPINFL(forms.pinfl, forms.givenDate);
     setLoading(false);
-    if (!data?.success) {
+    if (data?.success === false) {
+      enqueueSnackbar(t("pinfl-not-found"), {
+        variant: "error",
+      });
+      setInputValidation((inputValidation) => ({
+        ...inputValidation,
+        pinfl: true,
+        pinflError: "pinfl-not-found",
+      }));
+      onFetch(false);
+      return;
+    } else if (!data?.success) {
       enqueueSnackbar(t("pinfl-fetch-error"), {
         variant: "error",
       });
       onFetch(false);
       return;
+    } else {
+      setInputValidation({ pinfl: false, givenDate: false });
     }
     onFetch(data?.data);
   }
@@ -60,6 +73,7 @@ export default function FinderPINFL({
         required
         name="pinfl"
         disabled={disablePINFL && !!pinflValue}
+        validationError={inputValidation?.pinflError}
         value={pinflValue}
         maxLength={14}
         label={t("pinfl")}

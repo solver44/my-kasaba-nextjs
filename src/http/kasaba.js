@@ -37,6 +37,28 @@ export async function refreshToken(
   }
 }
 
+export async function findBKUT(tin) {
+  try {
+    const request = {
+      filter: {
+        conditions: [
+          {
+            property: "eLegalEntity.tin",
+            operator: "=",
+            value: tin,
+          },
+        ],
+      },
+    };
+    const { data } = await $axios.post("/rest/entities/EBKUT/search", request, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return data;
+  } catch (error) {
+    return error; // { status: error?.status, message: error?.message };
+  }
+}
+
 export async function findSTIR(tin) {
   try {
     const { data } = await $axios.get("/integration/legal-entity", {

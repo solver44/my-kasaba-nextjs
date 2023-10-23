@@ -7,3 +7,59 @@
   font-size: var(--input-font-size);
   color: var(--input-color);
 }
+
+.containedRadio {
+  width: 100%;
+  [type="radio"] {
+    display: none;
+  }
+  label {
+    display: block;
+    padding: 18px 60px;
+    background: var(--menu-selected-color);
+    border: 1px solid var(--menu-selected-border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 400;
+    min-width: 250px;
+    white-space: nowrap;
+    position: relative;
+    transition: 0.4s ease-in-out 0s;
+  }
+}
+.containedRadio label:after,
+.containedRadio label:before {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+.containedRadio label:after {
+  height: 19px;
+  width: 19px;
+  border: 2px solid #88baff;
+  left: 19px;
+  top: calc(50% - 12px);
+}
+.containedRadio label:before {
+  background: #4593ff;
+  height: 15px;
+  width: 15px;
+  left: 23px;
+  top: calc(50% - 8px);
+  transform: scale(5);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.4s ease-in-out 0s;
+}
+.containedRadio [type="radio"]:checked ~ label {
+  border-color: #4593ff;
+  &::before {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+  &::after{
+    border-color: #4593ff;
+  }
+}

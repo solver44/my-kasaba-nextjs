@@ -13,6 +13,7 @@ function ModalUI({
   onChanged,
   isForm,
   handleClose,
+  modalWidth,
   full,
   children,
   isView,
@@ -30,6 +31,7 @@ function ModalUI({
             className={[styles.content, full ? styles.full : ""].join(" ")}
             onSubmit={onSubmit}
             isChanged={_isChanged}
+            style={modalWidth ? { width: modalWidth } : {}}
             onChanged={(data) => {
               if (!isViewed.current) {
                 isViewed.current = true;
@@ -50,7 +52,10 @@ function ModalUI({
         </div>
       )
     : (children) => (
-        <div className={[styles.content, full ? styles.full : ""].join(" ")}>
+        <div
+          style={modalWidth ? { width: modalWidth } : {}}
+          className={[styles.content, full ? styles.full : ""].join(" ")}
+        >
           {children}
         </div>
       );

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import useActions from "../../hooks/useActions";
 import { useRouter } from "next/router";
 import { localStorage } from "@/utils/window";
+import Cookies from "universal-cookie";
 
 export default function Logout({ collapsed }) {
   const { t } = useTranslation();
@@ -12,7 +13,9 @@ export default function Logout({ collapsed }) {
   const handleClick = () => {
     actions.loginFailure();
     localStorage.removeItem("token");
-    navigate.push("/auth");
+    const cookies = new Cookies();
+    cookies.remove("token");
+    navigate.replace("/auth");
   };
 
   return (

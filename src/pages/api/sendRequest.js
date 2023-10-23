@@ -1,9 +1,17 @@
-import { sendApplication } from "@/http/kasaba";
+import { findBKUT, sendApplication } from "@/http/kasaba";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const { token, data } = req.body;
+      const tin = data.tin;
+      if (tin) {
+        const bkut = await findBKUT(tin);
+        if (bkut?.length > 1) {
+          res.status(400).json({ error: "bkut is already exists" });
+          return;
+        }
+      }
       const isValid = await verifyRecaptcha(token);
       if (isValid !== true) {
         res.status(498).json({

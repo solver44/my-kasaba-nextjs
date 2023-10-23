@@ -91,7 +91,7 @@ function Input({
           standart={standart}
           mask={isMask ? mask : ""}
           name={name.toLowerCase()}
-          invalid={error}
+          invalid={invalid ? t(validationError) : error}
           {...props}
         />
       </label>
@@ -105,7 +105,7 @@ function Input({
       value={currentValue}
       standart={standart}
       mask={isMask ? mask : ""}
-      invalid={error}
+      invalid={invalid ? t(validationError) : error}
       name={name.toLowerCase()}
       {...props}
     />

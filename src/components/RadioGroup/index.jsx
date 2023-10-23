@@ -10,8 +10,10 @@ function RadioGroups({
   data,
   name,
   required,
+  left,
   value: propValue,
   label,
+  contained,
 }) {
   const { control, setValue } = useFormContext() ?? { control: false };
   const { field } = !control
@@ -23,35 +25,57 @@ function RadioGroups({
       });
 
   function onChangeFunc(e) {
+    if (contained) {
+      const vl = e.target.checked ? e.target.value : defaultValue;
+      e.target.value = vl;
+    }
     if (onChange) onChange(e, name);
     if (field.onChange) field.onChange(e, name);
   }
 
   useEffect(() => {
     if (typeof propValue === undefined) return;
-    setValue(name, propValue);
+    if (setValue) setValue(name, propValue);
     if (onChange) onChange({ target: { value: propValue } }, name);
     if (field.onChange) field.onChange({ target: { value: propValue } }, name);
   }, [propValue]);
 
   return (
     <div className={styles.wrapper}>
-      <label className={styles.label}>{label}</label>
+      {!contained && label && <label className={styles.label}>{label}</label>}
       <RadioGroup
-        style={{ justifyContent: "center", gap: 30 }}
+        style={
+          contained
+            ? { gap: 15, flexWrap: "nowrap" }
+            : { justifyContent: left ? "left" : "center", gap: 30 }
+        }
         defaultValue={defaultValue}
         value={field.value ?? ""}
         row={row}
         onChange={onChangeFunc}
       >
-        {data.map((radio) => (
-          <FormControlLabel
-            key={radio.value}
-            value={radio.value}
-            control={<Radio />}
-            label={radio.label}
-          />
-        ))}
+        {data.map((radio) =>
+          contained ? (
+            <div key={radio.value} className={styles.containedRadio}>
+              <input
+                defaultChecked={radio.value == defaultValue}
+                value={radio.value}
+                onChange={onChangeFunc}
+                name="radio"
+                id={radio.value + "_radio"}
+                type="radio"
+              />
+              <label htmlFor={radio.value + "_radio"}>{radio.label}</label>
+            </div>
+          ) : (
+            <FormControlLabel
+              key={radio.value}
+              value={radio.value}
+              control={<Radio />}
+              label={radio.label}
+            />
+          )
+        )}
       </RadioGroup>
     </div>
   );

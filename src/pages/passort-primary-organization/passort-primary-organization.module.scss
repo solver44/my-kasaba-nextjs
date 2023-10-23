@@ -1,5 +1,8 @@
 .containers{
     width: 100%;
+    position: relative;
+    padding-top: 50px;
+    overflow: hidden;
 }
 
 .flex{
@@ -17,5 +20,11 @@
         }
     }
 }
-  
+.editBtn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 20px;
+}
   

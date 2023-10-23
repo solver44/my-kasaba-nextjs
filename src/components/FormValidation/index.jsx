@@ -2,7 +2,14 @@ import areEqual from "@/utils/areEqual";
 import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-function FormValidation({ children, className, button, onSubmit, onChanged }) {
+function FormValidation({
+  children,
+  style = {},
+  className,
+  button,
+  onSubmit,
+  onChanged,
+}) {
   const methods = useForm();
   const timeOut = useRef();
   methods.watch((d) => {
@@ -22,6 +29,7 @@ function FormValidation({ children, className, button, onSubmit, onChanged }) {
       <form
         className={className}
         onSubmit={button ? null : methods.handleSubmit(handleSubmitFunc)}
+        style={style}
       >
         {button ? children(methods.handleSubmit(handleSubmitFunc)) : children}
       </form>

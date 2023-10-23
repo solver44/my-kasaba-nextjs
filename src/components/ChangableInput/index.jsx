@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import styles from "./changableInput.module.scss";
 import Input from "../Input";
-import { MenuItem, Select } from "@mui/material";
+import { Box, Chip, MenuItem, Select } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import InputDate from "../InputDate";
 import { UploadRounded } from "@mui/icons-material";
+import dayjs from "dayjs";
+
+function getStyles(currentData, allData) {
+  const isSelected = allData.find((a) => a?.value == currentData?.value);
+  return {
+    fontWeight: isSelected ? "600" : "normal",
+    background: isSelected ? "aliceblue" : "white",
+  };
+}
 
 export default function ChangableInput({
   editable = true,
@@ -12,23 +21,45 @@ export default function ChangableInput({
   value: propValue,
   label,
   required,
+  multiple,
   date,
   invalid,
   select,
   fileInput,
+  nameOfFile,
   dataSelect = [],
   name,
   ...props
 }) {
-  const value = propValue || undefined;
+  let value = propValue || undefined;
+  if (date && !dayjs.isDayjs(propValue) && value) value = dayjs(value);
+
   const {
     t,
     i18n: { language },
   } = useTranslation();
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState(nameOfFile ?? "");
+  const [values, setValues] = useState([]);
   function onChangeFunc({ target }) {
+    if (multiple) {
+      const selectedValues = target.value || [];
+      const currentValue =
+        selectedValues.length > 1
+          ? selectedValues[selectedValues.length - 1]
+          : null;
+      setValues(
+        dataSelect.filter((d) => {
+          let checkValue = selectedValues.find(
+            (s) => s?.value == currentValue
+          )?.value;
+
+          if (d.value == checkValue) return false;
+          else return selectedValues.find((s) => (s?.value || s) == d.value);
+        })
+      );
+    }
     if (!onChange) return;
-    onChange({ target: { value: target.value } }, name);
+    onChange({ target }, name);
   }
 
   function handleFileInputChange(event) {
@@ -60,18 +91,36 @@ export default function ChangableInput({
       ) : select ? (
         <Select
           name={name}
+          multiple={!!multiple}
           onChange={onChangeFunc}
           displayEmpty
-          value={propValue ?? -1}
+          value={propValue ?? (multiple ? values : -1)}
           className={[
             styles.select,
             props.disabled ? styles.disabled : "",
             invalid ? styles.invalid : "",
           ].join(" ")}
+          renderValue={
+            multiple &&
+            ((selected) => {
+              if (!selected?.length) return null;
+              return (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {(selected ?? []).map((t) => (
+                    <Chip key={t.value} label={t.label} />
+                  ))}
+                </Box>
+              );
+            })
+          }
           {...props}
         >
           {dataSelect.map((current) => (
-            <MenuItem key={current.value} value={current.value}>
+            <MenuItem
+              key={current.value}
+              value={current.value}
+              style={getStyles(current, values)}
+            >
               {language === "uz" ? current.label : current?.labelRu}
             </MenuItem>
           ))}
@@ -89,7 +138,7 @@ export default function ChangableInput({
             style={{ display: "none" }}
             onChange={handleFileInputChange}
           />
-          <div className={styles.fileInput}>{fileName}</div>
+          <div className={styles.fileInput}>{fileName || nameOfFile}</div>
           <UploadRounded
             style={{ cursor: "pointer" }}
             className={styles.cloudIcon}

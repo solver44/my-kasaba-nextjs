@@ -1,7 +1,12 @@
 import { CircularProgress } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 
-export default function DownloadLink({ binaryData, fileName, style = {} }) {
+export default function DownloadLink({
+  binaryData,
+  loading,
+  fileName,
+  style = {},
+}) {
   const element = useRef();
   const createDownloadLink = () => {
     const blob = new Blob([binaryData], { type: "octet/stream" });
@@ -17,9 +22,20 @@ export default function DownloadLink({ binaryData, fileName, style = {} }) {
   };
 
   useEffect(() => {
-    if (!binaryData) return;
+    if (loading) {
+      return;
+    }
+    if (!binaryData) {
+      element.current.style.textDecoration = "none";
+      element.current.innerHTML = "-";
+      return;
+    }
     createDownloadLink();
-  }, [binaryData]);
+  }, [binaryData, loading]);
 
-  return <a style={style} ref={element}><CircularProgress size={25} /></a>;
+  return (
+    <a style={style} ref={element}>
+      <CircularProgress size={25} />
+    </a>
+  );
 }

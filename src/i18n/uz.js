@@ -268,16 +268,32 @@ export default {
 
     add: "Qo'shish",
     fio: "FIO",
+    isMember: "Kasaba uyushmasiga a'zomi?",
+    employment: "Bandligi",
+    gender: "Jinsi",
+    man: "Erkak",
+    woman: "Ayol",
+    worker: "Ishchi",
+    memberYes: "Kasaba uyushmasiga a'zo",
+    memberNo: "Kasaba uyushmasiga a'zo emas",
 
     "founding-doc-num": "Ta’sis bayonnoma raqami",
     "founding-doc-date": "Ta’sis bayonnoma sanasi",
     "electronic-file": "Bayonnoma elektron fayli",
     application: "Ariza",
+    "decision-title": "Qaror raqami",
+    "decision-date": "Qaror sanasi",
+    "decision-file": "Qaror fayli",
     "successfully-saved": "Muvaffaqiyatli saqlandi.",
 
     "invalid-email": "Elektron pochta manzili xato kiritildi",
     "invalid-input": "Maydonda xatolik mavjud!",
     "error-auth": "Login yoki parol topilmadi.",
+    "fetch-error":
+      "Ma'lumotlarni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
+    "stir-not-found": "Kiritilgan STIR tizimdan topilmadi.",
+    "pinfl-not-found":
+      "Kiritilgan PINFL yoki passport berilgan sana topilmadi.",
     "upload-file-error":
       "Faylni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "error-send-bkut":
@@ -289,10 +305,11 @@ export default {
 
     "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang.",
     "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang.",
+    "bkut-exists": "Ushbu STIR orqali avval tashkilot ro'yhatdan o'tkazilgan.",
     "pinfl-fetch-error":
       "Ma'lumotlarni yuklashda xatolik mavjud. Iltimos qayta urinib ko'ring.",
     isStudent: "Talaba",
-    isPensioner: "Nafaqada",
+    isPensioner: "Ishlamaydigan pensioner",
     isHomemaker: "Kasanachi",
     isInvalid: "Nogiron",
     "data-not-full": "Ma'lumotlar to'liq emas",

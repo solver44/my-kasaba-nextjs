@@ -49,6 +49,7 @@ function DataTable({
   isFormModal,
   min,
   fullModal,
+  modalWidth,
   loading,
   bottomModal,
   fetchData,
@@ -192,6 +193,7 @@ function DataTable({
         isForm={isFormModal}
         open={show}
         full={fullModal}
+        modalWidth={modalWidth}
         isView={!!dataModal}
         bottomModal={bottomModal}
         handleClose={closeModal}

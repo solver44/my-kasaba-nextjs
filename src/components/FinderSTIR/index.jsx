@@ -7,7 +7,11 @@ import FormInput from "../FormInput";
 import { fetchSTIR } from "@/http/public";
 import { useSnackbar } from "notistack";
 
-export default function FinderSTIR({ required, stirValue, onFetch = () => {} }) {
+export default function FinderSTIR({
+  required,
+  stirValue,
+  onFetch = () => {},
+}) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -31,13 +35,22 @@ export default function FinderSTIR({ required, stirValue, onFetch = () => {} }) 
     setLoading(true);
     const { data } = await fetchSTIR(forms.tin);
     setLoading(false);
-    if (!data?.success) {
+    if (data?.success === false) {
+      enqueueSnackbar(t("stir-not-found"), {
+        variant: "error",
+      });
+      onFetch(false);
+      return;
+    } else if (!data?.success) {
       enqueueSnackbar(t("pinfl-fetch-error"), {
         variant: "error",
       });
       onFetch(false);
       return;
     }
+    setInputValidation({
+      tin: false,
+    });
     onFetch(data?.data);
   }
 

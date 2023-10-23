@@ -30,6 +30,7 @@ function saveTokens(tokens) {
   TOKENS.ACCESS_TOKEN = tokens.accessToken;
   TOKENS.REFRESH_TOKEN = tokens.refreshToken;
 }
+
 const MyApp = ({ Component, pageProps, tokens }) => {
   const layout = Component?.layout || ((page) => page);
   const { i18n, t } = useTranslation();

@@ -21,6 +21,7 @@ import Input from "@/components/Input";
 import { validateEmpty } from "@/utils/validation";
 import { useSnackbar } from "notistack";
 import { getBKUTID } from "@/http/data";
+import Cookies from "universal-cookie";
 
 export default function Auth() {
   const actions = useActions();
@@ -58,6 +59,8 @@ export default function Auth() {
     const data = await getBKUTID(inputData.username, inputData.password);
     if (data?.success) {
       localStorage.setItem("token", data.id);
+      const cookies = new Cookies();
+      cookies.set("token", data.id);
       actions.loginSuccess();
       await navigate.push("/");
     } else {
@@ -67,85 +70,85 @@ export default function Auth() {
   };
 
   return (
-    <LoginRoute>
-      <div className={styles.wrapper}>
-        <div className={styles.left}>
-          <div className={styles.left_content}>
-            <Image style={{ marginBottom: 20 }} src={logo} alt="kasaba logo" />
-            <p className={styles.subtitle}>{t("login.title")}</p>
-            <p className={styles.title}>{t("welcome")}</p>
-          </div>
-          <Image className={styles.bg} src={bg} alt="auth background" />
+    // <LoginRoute>
+    <div className={styles.wrapper}>
+      <div className={styles.left}>
+        <div className={styles.left_content}>
+          <Image style={{ marginBottom: 20 }} src={logo} alt="kasaba logo" />
+          <p className={styles.subtitle}>{t("login.title")}</p>
+          <p className={styles.title}>{t("welcome")}</p>
         </div>
-        <div className={"wrapper " + styles.right}>
-          <div className={styles.top}>
-            <Link href="/check-status" className="unfocus">
-              {t("checkStatusTitle")}
-            </Link>
-            <LanguageSelector />
+        <Image className={styles.bg} src={bg} alt="auth background" />
+      </div>
+      <div className={"wrapper " + styles.right}>
+        <div className={styles.top}>
+          <Link href="/check-status" className="unfocus-link">
+            {t("checkStatusTitle")}
+          </Link>
+          <LanguageSelector />
+        </div>
+        <div className={styles.auth_content}>
+          <p className={styles.auth_title}>{t("loginTitle")}</p>
+          <Input
+            id="standard-basic"
+            label={t("email")}
+            validation={validateEmpty}
+            invalid={inputErrors.username}
+            validationError="input-error.empty"
+            // name="email"
+            standart
+            onChange={(e) => handleInput(e, "username")}
+          />
+          <Input
+            id="standard-basic"
+            label={t("password")}
+            standart
+            validationError="input-error.empty"
+            validation={validateEmpty}
+            invalid={inputErrors.password}
+            onChange={(e) => handleInput(e, "password")}
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end" style={{ marginRight: 10 }}>
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={(event) => event.preventDefault()}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            variant="standard"
+          />
+          <p className="unfocus t-center">- {t("or")} -</p>
+          <div className="center">
+            <Image
+              style={{ cursor: "pointer" }}
+              src={require("public/one_id.png")}
+              height={45}
+              width={85}
+              alt="ONE ID"
+            />
           </div>
-          <div className={styles.auth_content}>
-            <p className={styles.auth_title}>{t("loginTitle")}</p>
-            <Input
-              id="standard-basic"
-              label={t("email")}
-              validation={validateEmpty}
-              invalid={inputErrors.username}
-              validationError="input-error.empty"
-              // name="email"
-              standart
-              onChange={(e) => handleInput(e, "username")}
-            />
-            <Input
-              id="standard-basic"
-              label={t("password")}
-              standart
-              validationError="input-error.empty"
-              validation={validateEmpty}
-              invalid={inputErrors.password}
-              onChange={(e) => handleInput(e, "password")}
-              type={showPassword ? "text" : "password"}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end" style={{ marginRight: 10 }}>
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={(event) => event.preventDefault()}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              variant="standard"
-            />
-            <p className="unfocus t-center">- {t("or")} -</p>
-            <div className="center">
-              <Image
-                style={{ cursor: "pointer" }}
-                src={require("public/one_id.png")}
-                height={45}
-                width={85}
-                alt="ONE ID"
-              />
-            </div>
-            <button onClick={login} className={styles.button}>
-              {t("loginTitle")}
-            </button>
-            <a href="#/auth" className="unfocus t-center small">
-              {t("forgot-password")}
-            </a>
-            <div className="mt-2 row g-1 j-center">
-              <span className="unfocus">{t("not-registered")}</span>
-              <Link href="/request" className="unfocus t-center bold">
-                {t("registerTitle")}
-              </Link>
-            </div>
+          <button onClick={login} className={styles.button}>
+            {t("loginTitle")}
+          </button>
+          <a href="#/auth" className="unfocus t-center small">
+            {t("forgot-password")}
+          </a>
+          <div className="mt-2 row g-1 j-center">
+            <span className="unfocus">{t("not-registered")}</span>
+            <Link href="/request" className="unfocus-link">
+              {t("registerTitle")}
+            </Link>
           </div>
         </div>
       </div>
-    </LoginRoute>
+    </div>
+    // </LoginRoute>
   );
 }

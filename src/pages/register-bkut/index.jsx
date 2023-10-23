@@ -78,7 +78,7 @@ export default function RegisterBkut() {
         bkutType: data.bkutType,
         email: data.email,
         protocolFile: protocolFileRef,
-        inn: bkutData.application.tin,
+        inn: data.bkutSTIR || bkutData.application.tin,
         phone: data.phoneNumber,
         protocolDate: data.foundingDocDate,
         name: data.bkutName,

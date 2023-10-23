@@ -14,6 +14,7 @@ import useActions from "@/hooks/useActions";
 import { useRouter } from "next/router";
 import MenuIcon from "@mui/icons-material/Menu";
 import { getAnimation } from "@/utils/animation";
+import Cookies from "universal-cookie";
 
 const HomeWrapper = ({ children, noHeader, title, desc }) => {
   const { updateData, ...states } = useSelector((state) => state);
@@ -34,17 +35,11 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
       actions.dataLoading(true);
       const data = await getBKUTData();
       const resError = data?.response?.data?.error;
-      if (resError == "Entity not found") {
+      if (resError == "Entity not found" || resError == "Invalid entity ID") {
         actions.loginFailure();
         localStorage.removeItem("token");
-        actions.showLoading(false);
-        actions.dataLoading(false);
-        route.replace("/auth");
-        return;
-      } else if (resError == "Invalid entity ID") {
-        // enqueueSnackbar(t("successfully-saved"), { variant: "error" });
-        actions.loginFailure();
-        localStorage.removeItem("token");
+        const cookies = new Cookies();
+        cookies.remove("token");
         actions.showLoading(false);
         actions.dataLoading(false);
         route.replace("/auth");
@@ -65,35 +60,35 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
   }
 
   return (
-    <PrivateRoute>
-      <div className={styles.container}>
-        <div
-          className={[styles.left, collapsed ? styles.collapsed : ""].join(" ")}
-        >
-          <div className={styles.top}>
-            <MenuIcon
-              className={styles.collapseBtn}
-              onClick={toggleMenu}
-            ></MenuIcon>
-            <Image className={styles.logo} src={logo} alt="logotip kasaba" />
-            <Profile collapsed={collapsed} />
-            {!states.isMember ? (
-              <PartMenu collapsed={collapsed} />
-            ) : (
-              <AllMenu collapsed={collapsed} />
-            )}
-          </div>
-          <div className={styles.bottom}>
-            <Logout collapsed={collapsed} />
-          </div>
+    // <PrivateRoute>
+    <div className={styles.container}>
+      <div
+        className={[styles.left, collapsed ? styles.collapsed : ""].join(" ")}
+      >
+        <div className={styles.top}>
+          <MenuIcon
+            className={styles.collapseBtn}
+            onClick={toggleMenu}
+          ></MenuIcon>
+          <Image className={styles.logo} src={logo} alt="logotip kasaba" />
+          <Profile collapsed={collapsed} />
+          {!states.isMember ? (
+            <PartMenu collapsed={collapsed} />
+          ) : (
+            <AllMenu collapsed={collapsed} />
+          )}
         </div>
-        <div ref={animRef} className={"wrapper " + styles.right}>
-          <HomeContentWrapper noHeader={noHeader} title={title} desc={desc}>
-            {children}
-          </HomeContentWrapper>
+        <div className={styles.bottom}>
+          <Logout collapsed={collapsed} />
         </div>
       </div>
-    </PrivateRoute>
+      <div ref={animRef} className={"wrapper " + styles.right}>
+        <HomeContentWrapper noHeader={noHeader} title={title} desc={desc}>
+          {children}
+        </HomeContentWrapper>
+      </div>
+    </div>
+    // </PrivateRoute>
   );
 };
 

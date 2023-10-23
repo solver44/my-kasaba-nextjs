@@ -14,6 +14,7 @@ export default function InputButton({
   onResponse,
   invalid: _invalid,
   name,
+  preventLoading,
   validationError,
   secondInput,
   fullWidth = false,
@@ -32,9 +33,9 @@ export default function InputButton({
     if (!data?.data?.success) {
       setInvalid(data?.message || true);
     }
-    setLoading(false);
+    if (!preventLoading || !onResponse) setLoading(false);
     if (!onResponse) return;
-    onResponse(data?.data || data, data?.status);
+    onResponse(data?.data || data, value.current, (value) => setLoading(value));
   }
 
   function onChangeFunc(e) {
@@ -52,7 +53,9 @@ export default function InputButton({
           onChange={onChangeFunc}
           validationError={validationError}
           invalid={invalid}
-          className={[styles.input, secondInput ? styles.additional : ""].join(" ")}
+          className={[styles.input, secondInput ? styles.additional : ""].join(
+            " "
+          )}
         />
         {secondInput && <div className={styles.second}>{secondInput}</div>}
         <LoadingButton

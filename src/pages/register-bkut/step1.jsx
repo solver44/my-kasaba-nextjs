@@ -7,7 +7,7 @@ import { getBranches, getDistricts, getRegions } from "@/http/public";
 import { getLocalizationNames } from "@/utils/data";
 import FormInput from "@/components/FormInput";
 
-export default function Step1({ bkutData = {} }) {
+export default function Step1({ bkutData = {}, canChange }) {
   const { t, i18n } = useTranslation();
   const [mode, setMode] = useState(0);
   const [provinces, setProvinces] = useState();
@@ -72,7 +72,6 @@ export default function Step1({ bkutData = {} }) {
             required
             name="bkutName"
             label={t("bkutName1")}
-            editable
             value={bkutData.name}
           />
           {mode == 1 && (
@@ -82,7 +81,6 @@ export default function Step1({ bkutData = {} }) {
               name="bkutSTIR"
               value={bkutData?.application?.tin}
               label={t("bkutSTIR1")}
-              editable
             />
           )}
         </div>
@@ -107,21 +105,19 @@ export default function Step1({ bkutData = {} }) {
         />
         <FormInput
           required
-          disabled
+          disabled={!canChange}
           name="seniorOrganization"
           label={t("seniorOrganization")}
           value={getLocalizationNames(bkutData?.parent, i18n)}
-          editable
         />
         <FormInput
           required
-          disabled
+          disabled={!canChange}
           select
           name="network"
           value={values.branchId}
           dataSelect={branches}
           label={t("network")}
-          editable
         />
       </div>
       <div className={styles.grid_column}>
@@ -129,30 +125,27 @@ export default function Step1({ bkutData = {} }) {
           <FormInput
             required
             select
-            disabled
+            disabled={!canChange}
             dataSelect={provinces}
             name="province"
             value={values.provinceId}
             onChange={handleProvince}
             label={t("province")}
-            editable
           />
           <FormInput
             required
             select
-            disabled
+            disabled={!canChange}
             dataSelect={districts}
             value={values.districtId}
             name="district"
             label={t("district")}
-            editable
           />
         </div>
         <FormInput
           required
           name="address"
           label={t("address")}
-          editable
           value={bkutData.eLegalEntity?.address}
         />
         <FormInput
@@ -161,14 +154,12 @@ export default function Step1({ bkutData = {} }) {
           label={t("phone-number")}
           value={bkutData.phone}
           useMask
-          editable
         />
         <FormInput
           required
           label={t("email")}
           value={bkutData.application?.email}
           name="email"
-          editable
         />
       </div>
     </div>
