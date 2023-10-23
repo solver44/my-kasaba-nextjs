@@ -223,11 +223,11 @@ function ModalUI({ hideModal, data = {} }) {
         }}
         data={[
           {
-            value: "0",
+            value: "1",
             label: t("memberYes"),
           },
           {
-            value: "1",
+            value: "0",
             label: t("memberNo"),
           },
         ]}

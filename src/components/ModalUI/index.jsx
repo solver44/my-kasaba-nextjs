@@ -21,7 +21,7 @@ function ModalUI({
 }) {
   const { t } = useTranslation();
   const [_isChanged, setIsChanged] = useState(false);
-  const isViewed = useRef(false);
+  const currentData = useRef();
 
   const parent = isForm
     ? (children) => (
@@ -33,15 +33,11 @@ function ModalUI({
             isChanged={_isChanged}
             style={modalWidth ? { width: modalWidth } : {}}
             onChanged={(data) => {
-              if (!isViewed.current) {
-                isViewed.current = true;
+              if (!currentData.current || Object.values(data).length < 1) {
+                currentData.current = data;
                 return;
               }
-              let isChanged = false;
-              if (Object.keys(data)?.length > 0) {
-                if (!Object.values(data).find((d) => d)) isChanged = false;
-                else isChanged = true;
-              }
+              let isChanged = !areEqual(data, currentData.current);
 
               setIsChanged(isChanged);
               onChanged && onChanged(isChanged, data);
@@ -62,7 +58,7 @@ function ModalUI({
 
   function onClose() {
     setIsChanged(false);
-    isViewed.current = false;
+    currentData.current = undefined;
     handleClose && handleClose();
   }
 

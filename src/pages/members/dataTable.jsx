@@ -25,26 +25,22 @@ export default function InDataTable() {
     { field: "fio", headerName: t("employees.fio"), minWidth: 320 },
     { field: "signDate", headerName: t("employees.dateSign"), minWidth: 250 },
     {
-      field: "isHomemaker",
-      type: "boolean",
-      headerName: t("isHomemaker"),
-    },
-    {
-      field: "isInvalid",
-      type: "boolean",
-      headerName: t("isInvalid"),
-    },
-    {
-      field: "isPensioner",
-      type: "boolean",
-      headerName: t("isPensioner"),
-    },
-    {
-      field: "isStudent",
-      type: "boolean",
-      headerName: t("isStudent"),
+      field: "employment",
+      type: "chip",
+      headerName: t("employment"),
+      minWidth: 320,
     },
   ];
+
+  function getEmployeement(member) {
+    let result = [];
+    if (member.isHomemaker) result.push(t("isHomemaker"));
+    if (member.isInvalid) result.push(t("isInvalid"));
+    if (member.isPensioner) result.push(t("isPensioner"));
+    if (member.isStudent) result.push(t("isStudent"));
+
+    return result;
+  }
 
   useEffect(() => {
     if (!bkutData?.members?.length) return;
@@ -54,10 +50,7 @@ export default function InDataTable() {
           id: e.id,
           fio: getFIO(e.member),
           signDate: e.joinDate,
-          isHomemaker: e.isHomemaker,
-          isInvalid: e.isInvalid,
-          isPensioner: e.isPensioner,
-          isStudent: e.isStudent,
+          employment: getEmployeement(e),
         };
       })
     );

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import styles from "./dataTable.module.scss";
 import {
   DataGrid,
@@ -14,12 +14,14 @@ import AddIcon from "@mui/icons-material/Add";
 import { useTranslation } from "react-i18next";
 import {
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   LinearProgress,
+  Paper,
 } from "@mui/material";
 import CustomNoRowsOverlay from "./noRows";
 import { localizationTable } from "./localization";
@@ -30,6 +32,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
 import areEqual from "@/utils/areEqual";
 import { showYesNoDialog } from "@/utils/dialog";
+import MaterialReactTable from "material-react-table";
 
 function CustomToolbar() {
   return (
@@ -133,12 +136,27 @@ function DataTable({
         valueGetter: (params) => params.row[column.field], // Extract boolean value
         renderCell: renderBooleanCell, // Render as checkbox
       };
+    } else if (column.type === "chip") {
+      return {
+        ...column,
+        valueGetter: (params) => params.row[column.field], // Extract boolean value
+        renderCell: (params) =>
+          (params.value ?? []).map((p) => (
+            <Chip
+              color="primary"
+              variant="outlined"
+              clickable
+              key={p}
+              label={p}
+            />
+          )),
+      };
     }
     return column;
   });
 
   function closeModal() {
-    const isView = !!dataModalRef.current;
+    // const isView = !!dataModalRef.current;
     if (isChanged.current) {
       showYesNoDialog(
         t("are-you-sure-close"),
@@ -161,6 +179,16 @@ function DataTable({
     isChanged.current = false;
   }
 
+  // const modColumns = useMemo(
+  //   () =>
+  //     modifiedColumns.map((c) => ({
+  //       ...c,
+  //       accessorKey: c.field,
+  //       header: c.headerName,
+  //     })),
+  //   []
+  // );
+
   return (
     <React.Fragment>
       <div className={[styles.wrapper, min ? styles.mini : ""].join(" ")}>
@@ -169,20 +197,52 @@ function DataTable({
             {t("add")}
           </BigButton>
         </div>
-        <DataGrid
-          rowSelection
-          checkboxSelection={false}
-          rows={replaceValuesInArray(rows)}
-          columns={modifiedColumns} // Use the modified columns definition
-          loading={loading || dataLoading}
+        {/* <MaterialReactTable
+          data={rows}
+          columns={modColumns}
+          enableColumnResizing
+          localization={localizationTable(t)}
+          muiTableProps={{
+            sx: {
+              fontSize: 20,
+            },
+          }}
+          muiTableHeadCellProps={{
+            sx: {
+              flex: "0 0 auto",
+              fontSize: 18,
+            },
+          }}
+          muiTableBodyCellProps={{
+            sx: {
+              flex: "0 0 auto",
+              fontSize: 18,
+            },
+          }}
           className={[styles.dataTable, min ? styles.mini : ""].join(" ")}
+          loading={loading || dataLoading}
           slots={{
             toolbar: CustomToolbar,
             loadingOverlay: LinearProgress,
             noRowsOverlay: CustomNoRowsOverlay,
           }}
-          localeText={localizationTable(t)}
-        />
+        /> */}
+        <Paper elevation={3} className={styles.paper}>
+          <DataGrid
+            rowSelection
+            checkboxSelection={false}
+            rows={replaceValuesInArray(rows)}
+            columns={modifiedColumns} // Use the modified columns definition
+            loading={loading || dataLoading}
+            className={[styles.dataTable, min ? styles.mini : ""].join(" ")}
+            slots={{
+              toolbar: CustomToolbar,
+              loadingOverlay: LinearProgress,
+              noRowsOverlay: CustomNoRowsOverlay,
+            }}
+            localeText={localizationTable(t)}
+          />
+        </Paper>
       </div>
       <ModalUI
         onSubmit={(data) => onSubmitModal(data, forceCloseModal, !!dataModal)}

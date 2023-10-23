@@ -6,8 +6,14 @@
     height: 350px;
   }
 }
+.paper {
+  height: 100%;
+}
 .dataTable {
   border-radius: var(--input-radius);
+  padding-top: 20px;
+  border: none;
+  height: 100%;
   font-size: var(--input-font-size);
   // & > :nth-child(2) > :nth-child(2) {
   //   height: 200px;
@@ -15,6 +21,21 @@
   // &.mini > :nth-child(2) > :nth-child(2) {
   //   height: 80vh !important;
   // }
+  [role="row"] {
+    max-height: none !important;
+  }
+  [role="columnheader"] {
+    padding-left: 20px;
+  }
+  [role="cell"] {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    max-height: none !important;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
 }
 .toolbars {
   position: absolute;
