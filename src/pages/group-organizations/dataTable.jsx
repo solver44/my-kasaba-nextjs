@@ -11,6 +11,7 @@ import { sendDepartment } from "@/http/data";
 import { useSelector } from "react-redux";
 import useActions from "@/hooks/useActions";
 import { showYesNoDialog } from "@/utils/dialog";
+import { getFIO } from "@/utils/data";
 
 export default function InDataTable() {
   const { t } = useTranslation();
@@ -22,13 +23,28 @@ export default function InDataTable() {
   const columns = [
     {
       field: "name",
-      headerName: t("industrial-organizations.name"),
-      minWidth: 400,
+      headerName: "group-organizations.name",
+      size: 300,
     },
     {
       field: "address",
-      headerName: t("address"),
-      minWidth: 200,
+      headerName: "address",
+    },
+    {
+      field: "director",
+      headerName: "group-organizations.direktor",
+      hidden: true,
+    },
+    { field: "soato", headerName: "soatoFull", hidden: true },
+    {
+      field: "email",
+      headerName: "email",
+      hidden: true,
+    },
+    {
+      field: "phoneNumber",
+      headerName: "group-organizations.phone",
+      hidden: true,
     },
   ];
 
@@ -42,6 +58,10 @@ export default function InDataTable() {
             id: e.id,
             name: e.name,
             address: e.address,
+            director: getFIO(e.employee),
+            soato: e.soato._instanceName,
+            email: e.email,
+            phoneNumber: e.phoneNumber,
           };
         })
     );
@@ -112,8 +132,11 @@ export default function InDataTable() {
     <DataTable
       fetchData={fetchData}
       handleDeleteClick={deleteRow}
+      title={t("group-organizations.title")}
       columns={columns}
       rows={rows}
+      hideImport
+      bkutData={bkutData}
       onSubmitModal={onSubmitModal}
       isFormModal
       modal={(hideModal, dataModal) => (

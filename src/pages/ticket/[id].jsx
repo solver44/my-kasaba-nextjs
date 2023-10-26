@@ -19,22 +19,22 @@ export default function TicketPage(p) {
           </h1>
         </div>
         <p className={styles.row}>
-          <span>Familyasi</span> <u>Anvar</u>
+          <span>Familyasi</span> <u>Nabiyev</u>
         </p>
         <p className={styles.row}>
-          <span>Ismi</span> <u>Anvarov</u>
+          <span>Ismi</span> <u>Zafar</u>
         </p>
         <p className={styles.row}>
-          <span>Otasining ismi</span> <u>Anvarovich</u>
+          <span>Otasining ismi</span> <u>Irkinovich</u>
         </p>
         <p className={styles.row}>
-          <span>Tug'ilgan yili</span> <u>10.02.1986</u>
+          <span>Tug'ilgan yili</span> <u>13.03.1971</u>
         </p>
         <p className={styles.row}>
-          <span>Kasaba uyushmasiga a'zo bo'lgan yili</span> <u>19.01.2005</u>
+          <span>Kasaba uyushmasiga a'zo bo'lgan yili</span> <u>10.10.2000</u>
         </p>
         <p className={styles.row}>
-          <span>BKUT nomi</span> <u>"Buxgalter" MCHJ</u>
+          <span>BKUT nomi</span> <u>СОВЕТ ФЕДЕРАЦИИ ПРОФСОЮЗА</u>
         </p>
         <p className={styles.row}>
           <span>BKUT raisi</span> <u>Jamshidbek Jamshidbekov Anvarovich</u>

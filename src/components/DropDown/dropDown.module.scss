@@ -4,6 +4,7 @@
   justify-content: space-between;
 }
 .input {
+  background: var(--input-incolor);
   fieldset {
     border: 1px solid var(--input-border-color) !important;
   }

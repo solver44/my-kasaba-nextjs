@@ -44,8 +44,16 @@
   transform: translateY(-100%);
 }
 .control {
+  display: flex;
   align-self: flex-end;
-  margin-bottom: 20px;
+  align-items: center;
+  margin-bottom: 30px;
+  width: 100%;
+  justify-content: space-between;
+}
+.row{
+  display: flex;
+  flex-wrap: nowrap;
 }
 .tool {
   border-radius: var(--input-radius);

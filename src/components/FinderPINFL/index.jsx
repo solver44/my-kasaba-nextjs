@@ -45,7 +45,8 @@ export default function FinderPINFL({
     setLoading(true);
     const { data } = await fetchPINFL(forms.pinfl, forms.givenDate);
     setLoading(false);
-    if (data?.success === false) {
+    if (data === "") enqueueSnackbar(t("server-error"), { variant: "error" });
+    else if (data?.success === false) {
       enqueueSnackbar(t("pinfl-not-found"), {
         variant: "error",
       });

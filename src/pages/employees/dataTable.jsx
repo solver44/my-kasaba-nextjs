@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import {
   POSITIONS,
   getFIO,
+  getLocLabel,
   getLocalizationNames,
   splitFIO,
 } from "@/utils/data";
@@ -25,14 +26,21 @@ export default function InDataTable({ onUpload, min }) {
   const { enqueueSnackbar } = useSnackbar();
   const { bkutData = {} } = useSelector((states) => states);
   const actions = useActions();
+  const [positions] = useDynamicData({ positions: true });
 
   const columns = [
-    // { field: "id", headerName: "ID", width: 80 },
-    { field: "fio", headerName: t("fio"), minWidth: 320 },
-    { field: "position", headerName: t("job-position") },
-    // { field: "birthDate", headerName: t("birth-date"), minWidth: 150 },
-    { field: "phoneNumber", headerName: t("phone-number"), minWidth: 180 },
-    { field: "email", headerName: t("email"), minWidth: 200 },
+    { field: "fio", headerName: "fio", size: 300 },
+    {
+      field: "position",
+      headerName: "job-position",
+      tooltip: (positions || []).reduce((data, current) => {
+        const result = `${current.value} - ${getLocLabel(current)}\n`;
+        return data + result;
+      }, ""),
+    },
+    { field: "birthDate", headerName: "birth-date", hidden: true },
+    { field: "phoneNumber", headerName: "phone-number" },
+    { field: "email", headerName: "email" },
   ];
 
   useEffect(() => {
@@ -42,10 +50,11 @@ export default function InDataTable({ onUpload, min }) {
         return {
           id: e.employee.id,
           fio: getFIO(e.employee),
-          position: {
-            label: getLocalizationNames(e.position, i18n),
-            value: e.position.id,
-          },
+          position: getLocalizationNames(e.position, i18n),
+          // position: {
+          //   label: getLocalizationNames(e.position, i18n),
+          //   value: e.position.id,
+          // },
           birthDate: convertStringToFormatted(e.employee.birthDate),
           phoneNumber: e.employee.phone,
           email: e.employee.email,
@@ -74,7 +83,7 @@ export default function InDataTable({ onUpload, min }) {
     sendData(forms, hideModal, isView);
   }
 
-  async function sendData(forms, hideModal, isChanging) {
+  async function sendData(forms, hideModal, isView, noAlert) {
     const fio = splitFIO(forms.fio);
     const requestData = {
       bkutId: bkutData.id,
@@ -89,7 +98,7 @@ export default function InDataTable({ onUpload, min }) {
       position: forms.position,
     };
     const employees = (bkutData.employees ?? []).filter((e) =>
-      isChanging ? e.employee.pinfl != forms.pinfl : true
+      isView ? e.employee.pinfl != forms.pinfl : true
     );
     const response = await sendEmployee(requestData, employees);
     if (response?.success) {
@@ -98,12 +107,13 @@ export default function InDataTable({ onUpload, min }) {
         ...rows.filter((r) => r.id != newId),
         { id: newId, ...forms },
       ]);
-      enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+      if (!noAlert)
+        enqueueSnackbar(t("successfully-saved"), { variant: "success" });
       actions.updateData();
     } else {
       enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
     }
-    hideModal();
+    if (hideModal) hideModal();
   }
 
   async function fetchData(id) {
@@ -113,28 +123,36 @@ export default function InDataTable({ onUpload, min }) {
   function deleteRow(id) {
     setRows((rows) => rows.filter((row) => row?.id != id));
   }
+  async function onImportRow(rowData) {
+    const forms = {
+      ...rowData,
+    };
+    return await sendData(forms, null, false, true);
+  }
 
   return (
     <DataTable
       fetchData={fetchData}
       handleDeleteClick={deleteRow}
       columns={columns}
+      onImportRow={onImportRow}
       rows={rows}
+      bkutData={bkutData}
       min={min}
+      title={t("employees.title1")}
       onSubmitModal={onSubmitModal}
       isFormModal
       modal={(hideModal, dataModal) => (
-        <ModalUI hideModal={hideModal} data={dataModal} />
+        <ModalUI positions={positions} hideModal={hideModal} data={dataModal} />
       )}
     />
   );
 }
 
-function ModalUI({ hideModal, data = {} }) {
+function ModalUI({ hideModal, positions, data = {} }) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ fio: "", birthDate: "" });
   const { employee = {}, position = {}, phone, email } = data;
-  const [positions] = useDynamicData({ positions: true });
 
   function onFetchPINFL(data) {
     if (!data) return;

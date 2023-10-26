@@ -1,30 +1,23 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import styles from "./dataTable.module.scss";
-import {
-  DataGrid,
-  GridActionsCellItem,
-  GridToolbarColumnsButton,
-  GridToolbarContainer,
-  GridToolbarDensitySelector,
-  GridToolbarExport,
-  GridToolbarFilterButton,
-} from "@mui/x-data-grid";
 import BigButton from "../BigButton";
 import AddIcon from "@mui/icons-material/Add";
 import { useTranslation } from "react-i18next";
+import PrintIcon from "@mui/icons-material/Print";
+import CustomNoRowsOverlay from "./noRows";
 import {
+  Box,
   Button,
+  Checkbox,
   Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  LinearProgress,
-  Paper,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
-import CustomNoRowsOverlay from "./noRows";
-import { localizationTable } from "./localization";
 import ModalUI from "../ModalUI";
 import { replaceValuesInArray } from "@/utils/data";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -32,18 +25,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
 import areEqual from "@/utils/areEqual";
 import { showYesNoDialog } from "@/utils/dialog";
-import MaterialReactTable from "material-react-table";
-
-function CustomToolbar() {
-  return (
-    <GridToolbarContainer className={styles.toolbars}>
-      <GridToolbarFilterButton className={styles.tool} variant="outlined" />
-      <GridToolbarColumnsButton className={styles.tool} variant="outlined" />
-      <GridToolbarDensitySelector className={styles.tool} variant="outlined" />
-      <GridToolbarExport className={styles.tool} variant="outlined" />
-    </GridToolbarContainer>
-  );
-}
+import MaterialReactTable, {
+  MRT_FullScreenToggleButton,
+  MRT_GlobalFilterTextField,
+  MRT_ShowHideColumnsButton,
+  MRT_ToggleDensePaddingButton,
+  MRT_ToggleFiltersButton,
+} from "material-react-table";
+import { MRT_Localization_UZ } from "./uz";
+import ArrowButton from "../ArrowButton";
+import ExportTableForm from "@/utils/exportExcel";
+import ImportTableForm from "@/utils/importExcel";
+import { useSnackbar } from "notistack";
 
 function DataTable({
   columns = [],
@@ -52,22 +45,44 @@ function DataTable({
   isFormModal,
   min,
   fullModal,
+  title,
   modalWidth,
   loading,
   bottomModal,
   fetchData,
   handleDeleteClick: func2,
-  rows,
+  onImportRow,
+  onImportFinished,
+  hideExportImport,
+  hideImport,
+  bkutData,
+  rows = [],
   modal = () => "",
 }) {
   const { t } = useTranslation();
-  const [show, setShow] = useState(false);
-  const [dataModal, setDataModal] = useState();
-  const dataModalRef = useRef();
+  const rerender = useReducer(() => ({}), {})[1];
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [density, setDensity] = useState("comfortable");
+  const [showColumnFilters, setShowColumnFilters] = useState(false);
+  const [openImportModal, setOpenImportModal] = useState(false);
+  const [openExportModal, setOpenExportModal] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
   const { dataLoading } = useSelector((state) => state);
+
+  const [show, setShow] = useState(false);
+  const [tableInstanse, setTableInstanse] = useState();
+  const [dataModal, setDataModal] = useState();
   const [openDilaog, setOpenDialog] = useState(false);
-  const currentId = useRef();
+  const tableInstanceRef = useRef();
+  const dataModalRef = useRef();
   const isChanged = useRef(false);
+  const currentId = useRef();
+
+  useEffect(() => {
+    if (!tableInstanceRef.current) return;
+    setTableInstanse(tableInstanceRef.current);
+  }, []);
 
   const toggleDeleteDialog = () => {
     setOpenDialog(!openDilaog);
@@ -97,63 +112,38 @@ function DataTable({
     setShow(!show);
   }
 
-  // Define a function to render boolean values as checkboxes
-  function renderBooleanCell(params) {
-    return <input type="checkbox" checked={params.value} readOnly />;
-  }
-
-  // Modify the columns definition to conditionally render checkboxes
-  const modifiedColumns = [
-    ...columns,
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "",
-      width: 100,
-      cellClassName: "actions",
-      getActions: ({ id }) => {
-        return [
-          <GridActionsCellItem
-            icon={<VisibilityIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => handleViewClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={() => handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
-    },
-  ].map((column) => {
-    if (column.type === "boolean") {
-      return {
-        ...column,
-        valueGetter: (params) => params.row[column.field], // Extract boolean value
-        renderCell: renderBooleanCell, // Render as checkbox
+  const modifiedColumns = columns
+    .filter((c) => !c.hidden)
+    .map((column) => {
+      const temp = {
+        size: column.size,
+        accessorKey: column.field,
+        header: t(column.headerName),
       };
-    } else if (column.type === "chip") {
-      return {
-        ...column,
-        valueGetter: (params) => params.row[column.field], // Extract boolean value
-        renderCell: (params) =>
-          (params.value ?? []).map((p) => (
-            <Chip
-              color="primary"
-              variant="outlined"
-              clickable
-              key={p}
-              label={p}
-            />
-          )),
-      };
-    }
-    return column;
-  });
+      if (column.type === "boolean") {
+        return {
+          ...temp,
+          Cell: ({ cell }) => <Checkbox defaultChecked={cell.getValue()} />,
+        };
+      } else if (column.type === "chip") {
+        return {
+          ...temp,
+          Cell: ({ cell }) => {
+            const val = cell.getValue();
+            return (Array.isArray(val) ? val : []).map((p) => (
+              <Chip
+                color="primary"
+                variant="outlined"
+                clickable
+                key={p}
+                label={p}
+              />
+            ));
+          },
+        };
+      }
+      return temp;
+    });
 
   function closeModal() {
     // const isView = !!dataModalRef.current;
@@ -179,33 +169,135 @@ function DataTable({
     isChanged.current = false;
   }
 
-  // const modColumns = useMemo(
-  //   () =>
-  //     modifiedColumns.map((c) => ({
-  //       ...c,
-  //       accessorKey: c.field,
-  //       header: c.headerName,
-  //     })),
-  //   []
-  // );
+  function importExportClick(index) {
+    if (index === 0) {
+      setOpenExportModal((o) => !o);
+    } else {
+      setOpenImportModal((o) => !o);
+    }
+  }
+  async function onImportData(data = [], setProgress, onFinish) {
+    if (!onImportRow) return;
+    let countError = 0;
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      await new Promise((res) => setTimeout(res, 1000));
+      const result = await onImportRow(row);
+      if (!result) countError++;
+      setProgress(i + 1);
+      if (countError > 3) {
+        enqueueSnackbar(t("error-import-data"), { variant: "error" });
+        break;
+      }
+    }
+    if (onImportFinished) onImportFinished();
+    onFinish();
+  }
 
   return (
     <React.Fragment>
+      <ExportTableForm
+        columns={columns}
+        title={title}
+        rows={rows}
+        handleClose={() => setOpenExportModal(false)}
+        isOpen={openExportModal}
+      />
+      <ImportTableForm
+        onUpload={onImportData}
+        columns={columns}
+        title={title}
+        handleClose={() => setOpenImportModal(false)}
+        isOpen={openImportModal}
+      />
       <div className={[styles.wrapper, min ? styles.mini : ""].join(" ")}>
         <div className={styles.control}>
-          <BigButton onClick={() => toggleModal()} Icon={AddIcon}>
-            {t("add")}
-          </BigButton>
+          {tableInstanse && (
+            <React.Fragment>
+              <Box className={styles.row}>
+                <MRT_GlobalFilterTextField table={tableInstanse} />
+                <MRT_ToggleFiltersButton table={tableInstanse} />
+                <MRT_ShowHideColumnsButton table={tableInstanse} />
+                <MRT_ToggleDensePaddingButton table={tableInstanse} />
+                <Tooltip arrow title={t("print")}>
+                  <IconButton onClick={() => window.print()}>
+                    <PrintIcon />
+                  </IconButton>
+                </Tooltip>
+                <MRT_FullScreenToggleButton table={tableInstanse} />
+                {!hideExportImport && (
+                  <ArrowButton
+                    disabled={rows.length < 1}
+                    color="success"
+                    onClick={importExportClick}
+                    options={
+                      hideImport
+                        ? [t("export-to-excel")]
+                        : [t("export-to-excel"), t("import-from-excel")]
+                    }
+                  />
+                )}
+              </Box>
+              <Box>
+                <BigButton onClick={() => toggleModal()} Icon={AddIcon}>
+                  {t("add")}
+                </BigButton>
+              </Box>
+            </React.Fragment>
+          )}
         </div>
-        {/* <MaterialReactTable
+        <MaterialReactTable
+          tableInstanceRef={tableInstanceRef}
           data={rows}
-          columns={modColumns}
+          columns={modifiedColumns}
           enableColumnResizing
-          localization={localizationTable(t)}
-          muiTableProps={{
+          enablePinning
+          enableRowNumbers
+          enableStickyHeader
+          rowNumberMode="static"
+          localization={MRT_Localization_UZ}
+          enableTopToolbar={false}
+          initialState={{ showGlobalFilter: true }}
+          onColumnVisibilityChange={(updater) => {
+            setColumnVisibility((prev) =>
+              updater instanceof Function ? updater(prev) : updater
+            );
+            queueMicrotask(rerender); //hack to rerender after state update
+          }}
+          onDensityChange={(updater) => {
+            setDensity((prev) =>
+              updater instanceof Function ? updater(prev) : updater
+            );
+            queueMicrotask(rerender); //hack to rerender after state update
+          }}
+          onShowColumnFiltersChange={(updater) => {
+            setShowColumnFilters((prev) =>
+              updater instanceof Function ? updater(prev) : updater
+            );
+            queueMicrotask(rerender); //hack to rerender after state update
+          }}
+          state={{
+            columnVisibility,
+            density,
+            showColumnFilters,
+            isLoading: loading || dataLoading,
+          }}
+          muiTablePaperProps={{
+            elevation: 0,
             sx: {
-              fontSize: 20,
+              height: "100%",
+              border: "1px solid #e0e0e0",
+              borderRadius: "var(--input-radius)",
             },
+          }}
+          muiTableContainerProps={{ sx: { height: "91%" } }}
+          muiTableBodyProps={{
+            sx: () => ({
+              height: "100%",
+              "& tr:nth-of-type(odd)": {
+                backgroundColor: "var(--row-color)",
+              },
+            }),
           }}
           muiTableHeadCellProps={{
             sx: {
@@ -219,30 +311,23 @@ function DataTable({
               fontSize: 18,
             },
           }}
-          className={[styles.dataTable, min ? styles.mini : ""].join(" ")}
-          loading={loading || dataLoading}
-          slots={{
-            toolbar: CustomToolbar,
-            loadingOverlay: LinearProgress,
-            noRowsOverlay: CustomNoRowsOverlay,
+          // className={[styles.dataTable, min ? styles.mini : ""].join(" ")}
+          enableRowActions
+          renderEmptyRowsFallback={CustomNoRowsOverlay}
+          renderRowActions={({ row }) => {
+            const id = row.original.id;
+            return (
+              <Box className={styles.row}>
+                <IconButton onClick={() => handleViewClick(id)}>
+                  <VisibilityIcon />
+                </IconButton>
+                <IconButton onClick={() => handleDeleteClick(id)}>
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            );
           }}
-        /> */}
-        <Paper elevation={3} className={styles.paper}>
-          <DataGrid
-            rowSelection
-            checkboxSelection={false}
-            rows={replaceValuesInArray(rows)}
-            columns={modifiedColumns} // Use the modified columns definition
-            loading={loading || dataLoading}
-            className={[styles.dataTable, min ? styles.mini : ""].join(" ")}
-            slots={{
-              toolbar: CustomToolbar,
-              loadingOverlay: LinearProgress,
-              noRowsOverlay: CustomNoRowsOverlay,
-            }}
-            localeText={localizationTable(t)}
-          />
-        </Paper>
+        />
       </div>
       <ModalUI
         onSubmit={(data) => onSubmitModal(data, forceCloseModal, !!dataModal)}
@@ -250,9 +335,12 @@ function DataTable({
           if (onChangedModal) onChangedModal(data);
           isChanged.current = _isChanged;
         }}
+        bkutData={bkutData}
         isForm={isFormModal}
         open={show}
         full={fullModal}
+        title={title}
+        loading={loading}
         modalWidth={modalWidth}
         isView={!!dataModal}
         bottomModal={bottomModal}

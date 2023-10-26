@@ -18,7 +18,6 @@ function FormValidation({
       onChanged && onChanged(d);
     }, 20);
   });
-
   const handleSubmitFunc = (data, t) => {
     if (!data) return;
     onSubmit(data);

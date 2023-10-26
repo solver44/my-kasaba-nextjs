@@ -19,47 +19,38 @@ export default function InDataTable() {
   const actions = useActions();
 
   const columns = [
-    { field: "id", headerName: "Kod", width: 1 },
     {
       field: "date",
-      headerName: t("statistical-information.date"),
-      width: 102,
+      headerName: "statistical-information.date",
     },
     {
       field: "total",
-      headerName: t("statistical-information.total"),
-      minWidth: 200,
+      headerName: "statistical-information.total",
     },
-    { field: "ku", headerName: t("statistical-information.ku"), minWidth: 79 },
+    { field: "ku", headerName: "statistical-information.ku" },
     {
       field: "student",
-      headerName: t("statistical-information.student"),
-      minWidth: 150,
+      headerName: "statistical-information.student",
     },
     {
       field: "direktor",
-      headerName: t("statistical-information.direktor"),
-      minWidth: 130,
+      headerName: "statistical-information.direktor",
     },
     {
       field: "kuStudent",
-      headerName: t("statistical-information.kuStudent"),
-      minWidth: 130,
+      headerName: "statistical-information.kuStudent",
     },
     {
       field: "adr",
       headerName: t("statistical-information.adr"),
-      minWidth: 110,
     },
     {
       field: "pesioners",
       headerName: t("statistical-information.pesioners"),
-      minWidth: 244,
     },
     {
       field: "shtat",
       headerName: t("statistical-information.shtat"),
-      minWidth: 133,
     },
   ];
 
@@ -131,6 +122,7 @@ export default function InDataTable() {
       fetchData={fetchData}
       handleDeleteClick={deleteRow}
       columns={columns}
+      title={t("statistical-information.title")}
       rows={rows}
       onSubmitModal={onSubmitModal}
       isFormModal

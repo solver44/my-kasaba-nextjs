@@ -238,7 +238,8 @@ export default function RequestPage({ router }) {
     }));
   }
 
-  function responsePINFL(data, status) {
+  function responsePINFL(_data, status) {
+    const data = _data?.data;
     if (!status || !data?.success) {
       setInputValidation((inputValidation) => ({
         ...inputValidation,
@@ -246,23 +247,25 @@ export default function RequestPage({ router }) {
       }));
       if (data?.success === false)
         enqueueSnackbar(t("pinfl-not-found"), { variant: "error" });
+      else if (!data?.success)
+        enqueueSnackbar(t("server-error"), { variant: "error" });
       return;
     }
 
     resetValidation();
 
-    const personData = data?.data;
     setFormData((formData) => ({
       ...formData,
-      firstName: personData.first_name,
-      secondName: personData.last_name,
-      thirdName: personData.middle_name,
-      birthDate: dayjs(personData.birth_date),
+      firstName: data.first_name,
+      secondName: data.last_name,
+      thirdName: data.middle_name,
+      birthDate: dayjs(data.birth_date ?? ""),
     }));
   }
 
-  async function responseSTIR(data, status, setLoading) {
+  async function responseSTIR(_data, status, setLoading) {
     try {
+      const data = _data?.data;
       if (!status || !data?.success) {
         setInputValidation((inputValidation) => ({
           ...inputValidation,
@@ -271,12 +274,13 @@ export default function RequestPage({ router }) {
         }));
         if (data?.success === false)
           enqueueSnackbar(t("stir-not-found"), { variant: "error" });
+        else if (!data?.success)
+          enqueueSnackbar(t("server-error"), { variant: "error" });
         reserSTIRForm();
         return;
       }
-      const entityData = data?.data;
 
-      let soato = entityData?.companyBillingAddress?.soato;
+      let soato = data?.companyBillingAddress?.soato;
       if (soato) {
         soato = soato + "";
         const provinceId = soato.slice(0, 4);

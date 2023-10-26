@@ -35,7 +35,8 @@ export default function FinderSTIR({
     setLoading(true);
     const { data } = await fetchSTIR(forms.tin);
     setLoading(false);
-    if (data?.success === false) {
+    if (data === "") enqueueSnackbar(t("server-error"), { variant: "error" });
+    else if (data?.success === false) {
       enqueueSnackbar(t("stir-not-found"), {
         variant: "error",
       });

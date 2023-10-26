@@ -110,7 +110,7 @@ export async function getEmployee(data, isPost) {
     );
     response1 = _data;
 
-    if (isPost) {
+    if (isPost && !response1?.length) {
       // if (response1?.length > 0) {
       //   response1 = response1[0];
       // } else {
@@ -120,8 +120,11 @@ export async function getEmployee(data, isPost) {
         })
       ).data;
       // }
+    } else {
+      response1 = (Array.isArray(response1) ? response1 : [{}])[0];
     }
 
+    console.log(response1);
     return response1;
   } catch (error) {
     return error;

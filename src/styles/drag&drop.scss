@@ -1,0 +1,111 @@
+.dragn-drop-file {
+  border: 2px dashed #1c2127;
+  height: 300px;
+  //  width: 350px;
+  //  border-radius: 5px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  position: relative;
+  &.loading{
+    border: 2px solid #e5e5e5;
+  }
+}
+
+.dragn-drop-file.active {
+  border: 2px dashed #238551;
+  #orLabel {
+    display: none;
+  }
+}
+
+.dragn-drop-file .icon-upload {
+  font-size: 50px;
+  //  color: #fff
+}
+
+.dragn-drop-file h6 {
+  font-size: 20px;
+  font-weight: 400;
+  margin: 5px 0;
+  margin-top: 10px;
+}
+
+.dragn-drop-file #orLabel {
+  font-size: 14px;
+  font-weight: 400;
+  //  color: #fff;
+  margin: 10px 0 15px 0;
+}
+
+// .dragn-drop-file button {
+//   color: black;
+//   font-weight: normal;
+//   pointer-events: all;
+//   span {
+//     margin: 0;
+//   }
+// }
+
+.dragn-drop-file img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.columns-parametrs {
+  width: 100%;
+  h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+}
+
+.file-name {
+  box-shadow: 0 0 0 1px #238551;
+  padding: 10px;
+}
+.d-flex {
+  display: flex;
+}
+
+.import-bottom {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  padding-top: 0;
+}
+.import-content {
+  background-color: var(--modal-color);
+  width: 60vw;
+  position: relative;
+}
+.import-loader{
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  z-index: 100;
+}
+.export-content{
+  padding: 15px 15px;
+  width: 40vw;
+  max-width: 40vw;
+}
+.export-form{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.export-body{
+  margin-bottom: 20px;
+}

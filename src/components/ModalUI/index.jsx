@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 import styles from "./modal.module.scss";
 import Modal from "@mui/material/Modal";
-import { Button, Slide } from "@mui/material";
+import { Button, IconButton, Slide } from "@mui/material";
 // import { CloseRounded } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import FormValidation from "../FormValidation";
 import areEqual from "@/utils/areEqual";
+import { Close, CloseOutlined } from "@mui/icons-material";
 
 function ModalUI({
   open,
@@ -14,6 +15,8 @@ function ModalUI({
   isForm,
   handleClose,
   modalWidth,
+  loading,
+  title,
   full,
   children,
   isView,
@@ -30,6 +33,7 @@ function ModalUI({
             button
             className={[styles.content, full ? styles.full : ""].join(" ")}
             onSubmit={onSubmit}
+            loading={loading}
             isChanged={_isChanged}
             style={modalWidth ? { width: modalWidth } : {}}
             onChanged={(data) => {
@@ -49,6 +53,7 @@ function ModalUI({
       )
     : (children) => (
         <div
+          loading={loading}
           style={modalWidth ? { width: modalWidth } : {}}
           className={[styles.content, full ? styles.full : ""].join(" ")}
         >
@@ -66,7 +71,7 @@ function ModalUI({
     <Modal
       className={styles.main}
       open={open}
-      onClose={onClose}
+      // onClose={onClose}
       // aria-labelledby="modal-modal-title"
       // aria-describedby="modal-modal-description"
     >
@@ -75,6 +80,12 @@ function ModalUI({
         {parent((handleSubmit, isChanged) => {
           return (
             <React.Fragment>
+              <div className={styles.top}>
+                <h2 className={styles.title}>{title}</h2>
+                <IconButton onClick={onClose}>
+                  <CloseOutlined />
+                </IconButton>
+              </div>
               {children}
               {bottomModal ? (
                 bottomModal(handleSubmit, handleClose, isView, isChanged)

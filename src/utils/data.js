@@ -1,3 +1,5 @@
+import i18next, { t } from "i18next";
+
 export function generateUniqueId(length = 9) {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let result = "";
@@ -24,6 +26,13 @@ export function getLocalizationNames(object = {}, i18n) {
   return (
     object[i18n.language === "uz" ? "nameUz" : "nameRu"] ??
     object["nameUz"] ??
+    ""
+  );
+}
+export function getLocLabel(object = {}) {
+  return (
+    object[i18next.language === "uz" ? "label" : "labelRu"] ??
+    object["label"] ??
     ""
   );
 }
@@ -61,4 +70,19 @@ export function splitFIO(fio = "") {
   if (splitted.length < 3) splitted.push("");
   if (splitted.length < 3) splitted.push("");
   return splitted;
+}
+
+export function splitEmployement(employment = "") {
+  if (!employment) return {};
+  const splitted = employment.split(",").map((e) => e.trim().toLowerCase());
+  return splitted.reduce((old, current) => {
+    if (current.includes(t("isHomemaker").toLowerCase()))
+      old.isHomemaker = true;
+    if (current.includes(t("isInvalid").toLowerCase())) old.isInvalid = true;
+    if (current.includes(t("isPensioner").toLowerCase()))
+      old.isPensioner = true;
+    if (current.includes(t("isStudent").toLowerCase())) old.isStudent = true;
+
+    return old;
+  }, {});
 }

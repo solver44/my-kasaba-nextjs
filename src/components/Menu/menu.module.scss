@@ -27,6 +27,9 @@
   padding: 15px 20px;
   font-size: var(--menu-font-size);
   // border-radius: 10px;
+  &:hover {
+    background-color: var(--menu-hover-color);
+  }
   &.selected {
     background-color: var(--menu-selected-color);
     color: var(--menu-selected-text-color);

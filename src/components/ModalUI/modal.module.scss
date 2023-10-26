@@ -4,8 +4,10 @@
   justify-content: center;
 }
 .content {
+  position: relative;
   overflow-y: auto;
   background-color: white;
+  background-color: #f6f7f9;
   border-radius: 5px;
   padding: 30px 30px;
   outline: 0;
@@ -14,7 +16,8 @@
   gap: 30px;
   min-width: 60vw;
   max-height: 90vh;
-  &.full{
+  padding-top: 75px;
+  &.full {
     width: 100vw;
     max-height: 100vh;
     height: 100vh;
@@ -22,6 +25,28 @@
     flex-direction: column;
     justify-content: space-between;
   }
+}
+.top {
+  display: flex;
+  position: absolute;
+  box-shadow: 0 1px 0 rgba(17, 20, 24, 0.15);
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  justify-content: space-between;
+}
+.title {
+  margin: 8px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  flex: 1 1 auto;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 40px;
+  margin-left: 20px;
 }
 .close {
   align-self: flex-end;

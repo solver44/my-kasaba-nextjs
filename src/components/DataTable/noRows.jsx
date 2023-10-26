@@ -7,6 +7,9 @@ const StyledGridOverlay = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
   height: "100%",
+  background: "white",
+  paddingTop: 30,
+  paddingBottom: 30,
   "& .ant-empty-img-1": {
     fill: theme.palette.mode === "light" ? "#aeb8c2" : "#262626",
   },

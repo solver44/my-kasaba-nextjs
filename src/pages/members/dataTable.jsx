@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import DataTable from "@/components/DataTable";
 import FinderPINFL from "@/components/FinderPINFL";
@@ -7,28 +7,47 @@ import dayjs from "dayjs";
 import styles from "./members.module.scss";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
-import { POSITIONS, getFIO, splitFIO } from "@/utils/data";
+import { getFIO, splitEmployement, splitFIO } from "@/utils/data";
 import { useSelector } from "react-redux";
-import { fetchMember, sendMember } from "@/http/data";
+import { sendMember } from "@/http/data";
 import CheckBoxGroup from "@/components/CheckBoxGroup";
 import useActions from "@/hooks/useActions";
 import { showYesNoDialog } from "@/utils/dialog";
+import { LoadingButton } from "@mui/lab";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export default function InDataTable() {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
+  const [ticketCreated, setTickedCreated] = useState(false);
+  const [ticketLoading, setTicketLoading] = useState(false);
   const { bkutData = {} } = useSelector((states) => states);
+  const bkutDataRef = useRef(bkutData);
   const { enqueueSnackbar } = useSnackbar();
   const actions = useActions();
 
   const columns = [
-    { field: "fio", headerName: t("employees.fio"), minWidth: 320 },
-    { field: "signDate", headerName: t("employees.dateSign"), minWidth: 250 },
+    { field: "fio", headerName: "employees.fio", size: 280 },
+    { field: "signDate", headerName: "employees.dateSign" },
     {
       field: "employment",
       type: "chip",
-      headerName: t("employment"),
-      minWidth: 320,
+      headerName: "employment",
+      default: [
+        t("isHomemaker"),
+        t("isInvalid"),
+        t("isPensioner"),
+        t("isStudent"),
+      ].join(", "),
+    },
+    { field: "pinfl", headerName: "pinfl", hidden: true },
+    { field: "position", headerName: "job-position", hidden: true },
+    { field: "birthDate", headerName: "birth-date", hidden: true },
+    { field: "phoneNumber", headerName: "phone-number", hidden: true },
+    {
+      field: "email",
+      headerName: "email",
+      hidden: true,
     },
   ];
 
@@ -43,6 +62,7 @@ export default function InDataTable() {
   }
 
   useEffect(() => {
+    bkutDataRef.current = bkutData;
     if (!bkutData?.members?.length) return;
     setRows(
       bkutData?.members.map((e) => {
@@ -51,6 +71,11 @@ export default function InDataTable() {
           fio: getFIO(e.member),
           signDate: e.joinDate,
           employment: getEmployeement(e),
+          birthDate: e.member?.birthDate ?? "",
+          position: e.position,
+          phone: e.phone,
+          email: e.email,
+          pinfl: e.member?.pinfl,
         };
       })
     );
@@ -72,7 +97,8 @@ export default function InDataTable() {
     sendData(forms, hideModal, isView);
   }
 
-  async function sendData(forms, hideModal, isView) {
+  async function sendData(forms, hideModal, isView, noAlert) {
+    const bkutData = bkutDataRef.current;
     const members = (bkutData.members ?? [])
       .filter((e) => (isView ? e.member.pinfl != forms.pinfl : true))
       .map((e) => ({
@@ -122,21 +148,37 @@ export default function InDataTable() {
         ...rows.filter((r) => r.id != newId),
         { id: newId, ...forms },
       ]);
-      enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+      if (!noAlert) {
+        enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+        return true;
+      }
       actions.updateData();
     } else {
       enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
     }
-    hideModal();
+    if (noAlert) return false;
+    if (hideModal) hideModal();
   }
 
-  function generateDoc() {}
+  async function generateDoc() {
+    setTicketLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setTicketLoading(false);
+    setTickedCreated(true);
+  }
   async function fetchData(id) {
     const data = (bkutData.members ?? []).find((member) => member.id == id);
     return data;
   }
   function deleteRow(id) {
     setRows((rows) => rows.filter((row) => row?.id != id));
+  }
+  async function onImportRow(rowData) {
+    const forms = {
+      ...rowData,
+      personInfo: splitEmployement(rowData.employment),
+    };
+    return await sendData(forms, null, false, true);
   }
 
   return (
@@ -146,22 +188,41 @@ export default function InDataTable() {
       columns={columns}
       rows={rows}
       bkutData={bkutData}
+      onImportRow={onImportRow}
       onSubmitModal={onSubmitModal}
       isFormModal
+      title={t("memberss.title")}
+      loading={ticketLoading}
       modalWidth="80vw"
-      bottomModal={(handleSubmit, handleClose, isView) => (
-        <div className={styles.bottom}>
-          <div className={styles.row}>
-            <Button onClick={handleSubmit} variant="contained">
-              {t("save")}
-            </Button>
-            <Button onClick={handleClose}>{t("close")}</Button>
+      bottomModal={(handleSubmit, handleClose, isView) => {
+        return (
+          <div className={styles.bottom} style={{ position: "relative" }}>
+            <div className={styles.row}>
+              <Button onClick={handleSubmit} variant="contained">
+                {t("save")}
+              </Button>
+              <Button onClick={handleClose}>{t("close")}</Button>
+            </div>
+            <LoadingButton
+              style={ticketCreated ? { marginRight: 100 } : {}}
+              onClick={generateDoc}
+              loading={ticketLoading}
+              variant="contained"
+              color="success"
+            >
+              {ticketCreated && <VisibilityIcon style={{ marginRight: 5 }} />}
+              {ticketCreated ? t("showTicket") : t("createDoc")}
+            </LoadingButton>
+            {ticketCreated && (
+              <img
+                style={{ position: "absolute", bottom: -10, right: 0 }}
+                height={90}
+                src="https://www.qrstuff.com/images/default_qrcode.png"
+              />
+            )}
           </div>
-          <Button onClick={generateDoc} variant="contained" color="success">
-            {t("createDoc")}
-          </Button>
-        </div>
-      )}
+        );
+      }}
       modal={(hideModal, dataModal) => (
         <ModalUI data={dataModal} hideModal={hideModal} />
       )}

@@ -69,7 +69,7 @@ export default {
     },
     "industrial-organizations": {
       title: "Seh tashkilotlari",
-      name: "Nomi",
+      name: "Seh tashkilot nomi",
       worker: "Ish beruvchi",
       statistic: "Statistika",
       direktor: "Seh tashkiloti tashkilotchisi",
@@ -79,10 +79,13 @@ export default {
       adr: "Manzil",
       okpo: "OKPO",
       type: "Tarmoq",
+      phone: "Seh tashkiloti telefon raqami",
     },
     "group-organizations": {
       title: "Guruh tashkilotlari",
+      name: "Guruh tashkilot nomi",
       direktor: "Guruh tashkiloti tashkilotchisi",
+      phone: "Guruh tashkiloti telefon raqami",
     },
     "statistical-information": {
       title: "Statistik ma’lumotlar",
@@ -129,11 +132,16 @@ export default {
     },
     "team-contracts": {
       title: "Jamoa shartnomalari",
-      contractDate: "Shartnoma raqami",
-      firstOrganization: "Boshlang’ich tashkilot",
+      contractDate: "Shartnoma sanasi",
+      applicationNumber: "Bayon №",
+      employer: "Ish beruvchining F.I.O.",
+      director: "Kasaba uyushmasi qo'mitasi rasinining F.I.O.",
+      application: "Shartnoma ilovalari",
+
+      contractNumber: "Shartnoma raqami",
       agreeDate: "Qabul qilish sanasi",
       sign: "Tashkilotdan imzoladi",
-      signK: "Kasaba uyushmasi imzoladi",
+      signK: "Kasaba uyushmasidan imzoladi",
     },
     reportss: {
       title: "Hisobotlar",
@@ -285,6 +293,8 @@ export default {
     "decision-date": "Qaror sanasi",
     "decision-file": "Qaror fayli",
     "successfully-saved": "Muvaffaqiyatli saqlandi.",
+    "server-error":
+      "Serverda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
 
     "invalid-email": "Elektron pochta manzili xato kiritildi",
     "invalid-input": "Maydonda xatolik mavjud!",
@@ -333,6 +343,31 @@ export default {
 
     "1ti": "1TI hisobot",
     "1t-report": "1TI hisobot",
+    showTicket: "Guvohnomani ko'rish",
+    print: "Chop etish",
+    "export-to-excel": "Eksport (Excel)",
+    "import-from-excel": "Import (Excel)",
+    "download-template": "Namuna faylni yuklab olish",
+    "required-columns": "Talab qilingan ustunlar",
+    "additional-columns": "Qo'shimcha ustunlar",
+    "drag-and-drop-here": "Faylni ushbu joyga tashlang",
+    "select-file": "Faylni tanlash",
+    "not-validate-file": "Fayl formatida xatolik mavjud.",
+    "release-to-upload-file": "Faylni yuklash uchun qo'yib yuboring.",
+    "file-or-directory-not-found": "Fayl yoki papka topilmadi.",
+    "required-columns-did-not-match": "Talab qilingan ustunlar topilmadi.",
+    "data-not-found": "Ma'lumotlar topilmadi.",
+    template: "Namuna",
+    "data-is-ready-to-set":
+      "Ma'lumotlar import uchun tayyor ({{count}} ta qator topildi).",
+    "empty-rows": "{{rows}} chi qatorda ma'lumot to'liq emas.",
+    download: "Yuklab olish",
+    columns: "Ustunlar",
+    rows: "Qatorlar",
+    "import-label": "{{value}} / {{max}}",
+    "success-done": "Muvaffaqiyatli bajarildi",
+    "error-import-data":
+      "Ma'lumotlarni serverga yuklashda xatolik mavjud. Qayta tekshirib yuboring.",
 
     dTable: {
       toolbarDensity: "O'lcham",

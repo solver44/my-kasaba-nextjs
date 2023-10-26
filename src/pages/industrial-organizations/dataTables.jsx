@@ -10,6 +10,7 @@ import { useEmployees } from "../employees";
 import { useSelector } from "react-redux";
 import { sendDepartment } from "@/http/data";
 import useActions from "@/hooks/useActions";
+import { getFIO } from "@/utils/data";
 
 export default function InDataTable() {
   const { t } = useTranslation();
@@ -21,13 +22,28 @@ export default function InDataTable() {
   const columns = [
     {
       field: "name",
-      headerName: t("industrial-organizations.name"),
-      minWidth: 400,
+      headerName: "industrial-organizations.name",
+      size: 300,
     },
     {
       field: "address",
-      headerName: t("address"),
-      minWidth: 200,
+      headerName: "address",
+    },
+    {
+      field: "director",
+      headerName: "industrial-organizations.direktor",
+      hidden: true,
+    },
+    { field: "soato", headerName: "soatoFull", hidden: true },
+    {
+      field: "email",
+      headerName: "email",
+      hidden: true,
+    },
+    {
+      field: "phoneNumber",
+      headerName: "industrial-organizations.phone",
+      hidden: true,
     },
   ];
 
@@ -41,6 +57,10 @@ export default function InDataTable() {
             id: e.id,
             name: e.name,
             address: e.address,
+            director: getFIO(e.employee),
+            soato: e.soato._instanceName,
+            email: e.email,
+            phoneNumber: e.phoneNumber,
           };
         })
     );
@@ -91,12 +111,13 @@ export default function InDataTable() {
         ...rows.filter((r) => r.id != newId),
         { id: newId, ...forms },
       ]);
+
       enqueueSnackbar(t("successfully-saved"), { variant: "success" });
       actions.updateData();
     } else {
       enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
     }
-    hideModal();
+    if (hideModal) hideModal();
   }
 
   async function fetchData(id) {
@@ -111,8 +132,11 @@ export default function InDataTable() {
     <DataTable
       fetchData={fetchData}
       handleDeleteClick={deleteRow}
+      title={t("industrial-organizations.title")}
       columns={columns}
       rows={rows}
+      hideImport
+      bkutData={bkutData}
       onSubmitModal={onSubmitModal}
       isFormModal
       modal={(hideModal, dataModal) => (
@@ -254,8 +278,12 @@ function ModalUI({ hideModal, data }) {
         />
       </div>
       <div className="modal-row">
+        <FormInput
+          value={phone}
+          label={t("industrial-organizations.phone")}
+          name="phoneNumber"
+        />
         <FormInput label={t("email")} value={email} name="email" />
-        <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
       </div>
     </div>
   );

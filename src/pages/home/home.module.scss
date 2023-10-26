@@ -1,6 +1,7 @@
 .container {
   display: flex;
-  background-color: white;
+  // background-color: white;
+  background-color: #f6f7f9;
   min-height: 100vh;
 }
 .left {
@@ -12,17 +13,17 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 1px solid var(--border-color) !important;
+  // border-right: 1px solid var(--border-color) !important;
   transition: all 0.2s;
   overflow: hidden;
-  &.collapsed{
+  &.collapsed {
     max-width: 80px;
-    .collapseBtn{
+    .collapseBtn {
       left: 50%;
       right: auto;
       transform: translateX(-50%);
     }
-    .logo{
+    .logo {
       margin-top: 10px;
       margin-bottom: -20px;
       width: 70px;
@@ -33,38 +34,39 @@
   width: 100%;
   min-height: 100vh;
   overflow: auto;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  border-radius: 0;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 0 0 1px rgba(17, 20, 24, 0.1), 0 1px 1px rgba(17, 20, 24, 0.2);
   align-items: center;
 }
-.top{
-    display: flex;
-    flex-direction: column;
+.top {
+  display: flex;
+  flex-direction: column;
 }
-.logo{
-    align-self: center;
-    margin-bottom: 20px;
-    min-height: 85px;
+.logo {
+  align-self: center;
+  margin-bottom: 20px;
+  min-height: 85px;
 }
-.bottom{
-    padding: 28px 20px 20px 20px;
-    // border-top: 1px solid var(--border-color);
+.bottom {
+  padding: 28px 20px 20px 20px;
+  // border-top: 1px solid var(--border-color);
 }
 
-.collapseBtn{
+.collapseBtn {
   position: absolute;
   top: 20px;
   right: 20px;
   cursor: pointer;
 }
 
-.titleHome{
+.titleHome {
   font-size: 30px;
   font-weight: 600;
 }
-.grid{
+.grid {
   margin-top: 20px;
   justify-content: center;
   display: flex;

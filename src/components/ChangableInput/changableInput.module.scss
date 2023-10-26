@@ -43,6 +43,7 @@
   color: #808080;
 }
 .fileInput {
+  background: var(--input-incolor);
   font-size: var(--input-font-size);
   border-radius: var(--input-radius);
   border: 1px solid var(--input-border-color);
@@ -65,6 +66,7 @@
 }
 .select {
   max-width: 500px;
+  background: var(--input-incolor);
   fieldset {
     border: 1px solid var(--input-border-color) !important;
   }

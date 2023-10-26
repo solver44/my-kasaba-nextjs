@@ -55,6 +55,7 @@ function CheckBoxGroup({
             key={checkbox.value}
             control={
               <Checkbox
+                className={styles.checkbox}
                 checked={(field.value || {})[checkbox.value] || false}
               />
             }

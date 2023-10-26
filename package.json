@@ -38,10 +38,12 @@
     "react-i18next": "^12.1.5",
     "react-input-mask": "^2.0.4",
     "react-redux": "^8.0.5",
+    "read-excel-file": "^5.7.1",
     "recharts": "^2.8.0",
     "redux": "^4.2.1",
     "sharp": "^0.32.5",
-    "universal-cookie": "^6.1.1"
+    "universal-cookie": "^6.1.1",
+    "write-excel-file": "^1.4.27"
   },
   "devDependencies": {
     "sass": "^1.66.1"
