@@ -277,7 +277,7 @@ export default function RequestPage({ router }) {
         setInputValidation((inputValidation) => ({
           ...inputValidation,
           inn: false,
-          innInvalid: data?.success === false ? "stir-not-found" : undefined,
+          innInvalid: _data?.success === false ? "stir-not-found" : undefined,
         }));
         if (_data === "")
           enqueueSnackbar(t("server-error"), { variant: "error" });
