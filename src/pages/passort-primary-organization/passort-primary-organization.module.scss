@@ -1,30 +1,34 @@
-.containers{
-    width: 100%;
-    position: relative;
-    padding-top: 50px;
-    overflow: hidden;
+.containers {
+  width: 100%;
+  position: relative;
+  padding-top: 50px;
+  overflow: hidden;
 }
 
-.flex{
-    display: flex;
-    padding: 20px;
-    justify-content: space-evenly;
-    & > * {
-        font-size: 20px;
-        padding-right: 5rem;
-        width: 50%;
-        text-align: right;
-        & >a{
-                text-decoration: none;
-                color: #2400FF;
-        }
+.flex {
+  display: flex;
+  padding: 20px;
+  justify-content: space-evenly;
+  & > * {
+    font-size: 20px;
+    padding-right: 5rem;
+    width: 50%;
+    text-align: right;
+    & > a {
+      text-decoration: none;
+      color: #2400ff;
     }
+  }
+  &:nth-of-type(odd) {
+    background-color: #f9f9f9;
+  }
 }
-.editBtn{
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
-    gap: 20px;
+.colored {
 }
-  
+.editBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 20px;
+}

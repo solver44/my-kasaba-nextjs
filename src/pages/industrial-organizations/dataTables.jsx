@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { sendDepartment } from "@/http/data";
 import useActions from "@/hooks/useActions";
 import { getFIO } from "@/utils/data";
+import { showYesNoDialog } from "@/utils/dialog";
 
 export default function InDataTable() {
   const { t } = useTranslation();
@@ -24,6 +25,11 @@ export default function InDataTable() {
       field: "name",
       headerName: "industrial-organizations.name",
       size: 300,
+    },
+    {
+      field: "bkut",
+      headerName: "bkut1",
+      onlyShow: true,
     },
     {
       field: "address",
@@ -56,6 +62,7 @@ export default function InDataTable() {
           return {
             id: e.id,
             name: e.name,
+            bkut: bkutData.name,
             address: e.address,
             director: getFIO(e.employee),
             soato: e.soato._instanceName,
@@ -74,16 +81,16 @@ export default function InDataTable() {
       const isAnother = duplicate.departmentType == "GURUH";
       showYesNoDialog(
         t(isAnother ? "found-on-group" : "rewrite-stir"),
-        isAnother ? null : () => sendData(forms, hideModal),
+        isAnother ? null : () => sendData(forms, hideModal, duplicate),
         () => {},
         t
       );
       return;
     }
-    sendData(forms, hideModal);
+    sendData(forms, hideModal, duplicate);
   }
 
-  async function sendData(forms, hideModal) {
+  async function sendData(forms, hideModal, duplicate) {
     const requestData = {
       bkut: {
         id: bkutData.id,
@@ -104,6 +111,7 @@ export default function InDataTable() {
         id: bkutData.eLegalEntity.id,
       },
     };
+    if (duplicate) requestData.id = duplicate.id;
     const response = await sendDepartment(requestData);
     if (response?.success) {
       const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;

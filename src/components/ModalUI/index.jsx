@@ -37,6 +37,7 @@ function ModalUI({
             isChanged={_isChanged}
             style={modalWidth ? { width: modalWidth } : {}}
             onChanged={(data) => {
+              if (Object.keys(data).length < 1) return;
               if (!currentData.current || Object.values(data).length < 1) {
                 currentData.current = data;
                 return;

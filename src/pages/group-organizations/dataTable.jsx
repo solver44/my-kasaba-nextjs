@@ -75,16 +75,16 @@ export default function InDataTable() {
       const isAnother = duplicate.departmentType == "SEH";
       showYesNoDialog(
         t(isAnother ? "found-on-industrion" : "rewrite-stir"),
-        isAnother ? null : () => sendData(forms, hideModal),
+        isAnother ? null : () => sendData(forms, hideModal, duplicate),
         () => {},
         t
       );
       return;
     }
-    sendData(forms, hideModal);
+    sendData(forms, hideModal, duplicate);
   }
 
-  async function sendData(forms, hideModal) {
+  async function sendData(forms, hideModal, duplicate) {
     const requestData = {
       bkut: {
         id: bkutData.id,
@@ -105,6 +105,7 @@ export default function InDataTable() {
         id: bkutData.eLegalEntity.id,
       },
     };
+    if (duplicate) requestData.id = duplicate.id;
     const response = await sendDepartment(requestData);
     if (response?.success) {
       const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;

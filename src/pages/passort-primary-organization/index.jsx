@@ -3,7 +3,7 @@ import HomeWrapper from "../home/wrapper";
 import styles from "./passort-primary-organization.module.scss";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { getFIO, getLocalizationNames } from "@/utils/data";
+import { getFIO, getLocalizationNames, showOrNot } from "@/utils/data";
 import { getFile, initFile, sendEBKUT } from "@/http/data";
 import DownloadLink from "@/components/DownloadLink";
 import { Button } from "@mui/material";
@@ -19,6 +19,12 @@ import { convertStringToFormatted } from "@/utils/date";
 import { LoadingButton } from "@mui/lab";
 import useActions from "@/hooks/useActions";
 import areEqual from "@/utils/areEqual";
+
+async function parseFile(file) {
+  if (!file) return [null, null];
+  const res = await getFile(file);
+  return [res, decodeURIComponent(file.split("=")[1]).replace(/\+/g, " ")];
+}
 
 export default function PassortPrimaryOrganization() {
   const { t, i18n } = useTranslation();
@@ -41,30 +47,14 @@ export default function PassortPrimaryOrganization() {
   )?.employee;
 
   useEffect(() => {
-    if (!bkutData?.protocolFile) return;
     const fetchData = async () => {
-      let encodedFileName = bkutData.protocolFile.split("=")[1];
-      let decodedFileName = decodeURIComponent(encodedFileName).replace(
-        /\+/g,
-        " "
-      );
-      encodedFileName = bkutData.applicationFile.split("=")[1];
-      let decodedFileName1 = decodeURIComponent(encodedFileName).replace(
-        /\+/g,
-        " "
-      );
-      encodedFileName = bkutData.decisionFile.split("=")[1];
-      let decodedFileName2 = decodeURIComponent(encodedFileName).replace(
-        /\+/g,
-        " "
-      );
-      let response = await getFile(bkutData.protocolFile);
-      let response1 = await getFile(bkutData.applicationFile);
-      let response2 = await getFile(bkutData.decisionFile);
+      let res1 = await parseFile(bkutData.protocolFile);
+      let res2 = await parseFile(bkutData.applicationFile);
+      let res3 = await parseFile(bkutData.decisionFile);
       setFiles({
-        protocolFile: { name: decodedFileName, data: response },
-        applicationFile: { name: decodedFileName1, data: response1 },
-        decisionFile: { name: decodedFileName2, data: response2 },
+        protocolFile: { name: res1[1], data: res1[0] },
+        applicationFile: { name: res2[1], data: res2[0] },
+        decisionFile: { name: res3[1], data: res3[0] },
       });
     };
     fetchData();
@@ -187,90 +177,96 @@ export default function PassortPrimaryOrganization() {
           )}
         </div>
         {!editMode ? (
-          <div>
+          <div className={styles.colored}>
             <div className={styles.flex}>
               <label>
                 {t("passort-primary-organization.firstOrganizationName")}
               </label>
-              <label style={{ textAlign: "left", fontWeight: "bold" }}>
-                {bkutData.name}
-              </label>
-            </div>
-            <div className={styles.flex} style={{ background: "#F9F9F9" }}>
-              <label>
-                {t("passort-primary-organization.firstOrganizationType")}
-              </label>
-              <label style={{ textAlign: "left" }}>
-                {t(bkutData.bkutType == 1 ? "legalEntity" : "physicalPerson")}
-              </label>
+              <span style={{ textAlign: "left", fontWeight: "bold" }}>
+                {showOrNot(bkutData.name)}
+              </span>
             </div>
             <div className={styles.flex}>
               <label>
                 {t("passort-primary-organization.firstOrganizationSTIR")}
               </label>
-              <label style={{ textAlign: "left" }}>{bkutData.inn}</label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(bkutData.inn)}
+              </span>
             </div>
-            <div className={styles.flex} style={{ background: "#F9F9F9" }}>
+            <div className={styles.flex}>
               <label>
                 {t("passort-primary-organization.firstOrganizationNetwork")}
               </label>
-              <label style={{ textAlign: "left" }}>
-                {getLocalizationNames(bkutData.branch, i18n)}
-              </label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(getLocalizationNames(bkutData.branch, i18n))}
+              </span>
             </div>
             <div className={styles.flex}>
               <label>
                 {t("passort-primary-organization.firstOrganizationOrg")}
               </label>
-              <label style={{ textAlign: "left" }}>
-                {getLocalizationNames(bkutData.parent, i18n)}
-              </label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(getLocalizationNames(bkutData.parent, i18n))}
+              </span>
             </div>
-            <div className={styles.flex} style={{ background: "#F9F9F9" }}>
+            <div className={styles.flex}>
               <label>{t("soatoFull")}</label>
-              <label style={{ textAlign: "left" }}>{`${getLocalizationNames(
-                bkutData.eLegalEntity?.soatoRegion,
-                i18n
-              )}, ${getLocalizationNames(
-                bkutData.eLegalEntity?.soatoDistrict,
-                i18n
-              )}`}</label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(
+                  `${getLocalizationNames(
+                    bkutData.eLegalEntity?.soatoRegion,
+                    i18n
+                  )}, ${getLocalizationNames(
+                    bkutData.eLegalEntity?.soatoDistrict,
+                    i18n
+                  )}`
+                )}
+              </span>
             </div>
-            <div className={styles.flex} style={{ background: "#F9F9F9" }}>
+            <div className={styles.flex}>
               <label>
                 {t("passort-primary-organization.firstOrganizationDirektor")}
               </label>
-              <label style={{ textAlign: "left" }}>{getFIO(director)}</label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(getFIO(director))}
+              </span>
             </div>
-            <div className={styles.flex} style={{ background: "#F9F9F9" }}>
+            <div className={styles.flex}>
               <label>
                 {t("passort-primary-organization.firstOrganizationAdr")}
               </label>
-              <label style={{ textAlign: "left" }}>{bkutData.adress}</label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(bkutData.adress)}
+              </span>
             </div>
             <div className={styles.flex}>
               <label>
                 {t("passort-primary-organization.firstOrganizationTel")}
               </label>
-              <label style={{ textAlign: "left" }}>{bkutData.phone}</label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(bkutData.phone)}
+              </span>
             </div>
-            <div className={styles.flex} style={{ background: "#F9F9F9" }}>
+            <div className={styles.flex}>
               <label>
                 {t("passort-primary-organization.firstOrganizationEmail")}
               </label>
-              <label style={{ textAlign: "left" }}>{bkutData.email}</label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(bkutData.email)}
+              </span>
             </div>
             <div className={styles.flex}>
               <label>{t("founding-doc-num")}</label>
-              <label style={{ textAlign: "left" }}>
-                {bkutData.protocolNumber}
-              </label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(bkutData.protocolNumber)}
+              </span>
             </div>
             <div className={styles.flex}>
               <label>{t("founding-doc-date")}</label>
-              <label style={{ textAlign: "left" }}>
-                {convertStringToFormatted(bkutData.protocolDate)}
-              </label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(convertStringToFormatted(bkutData.protocolDate))}
+              </span>
             </div>
             <div className={styles.flex}>
               <label>{t("electronic-file")}</label>
@@ -292,15 +288,15 @@ export default function PassortPrimaryOrganization() {
             </div>
             <div className={styles.flex}>
               <label>{t("decision-title")}</label>
-              <label style={{ textAlign: "left" }}>
-                {bkutData.decisionNumber}
-              </label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(bkutData.decisionNumber)}
+              </span>
             </div>
             <div className={styles.flex}>
               <label>{t("decision-date")}</label>
-              <label style={{ textAlign: "left" }}>
+              <span style={{ textAlign: "left" }}>
                 {convertStringToFormatted(bkutData.decisionDate)}
-              </label>
+              </span>
             </div>
             <div className={styles.flex}>
               <label>{t("decision-file")}</label>

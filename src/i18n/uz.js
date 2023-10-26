@@ -216,6 +216,7 @@ export default {
     applicationSenderPhone: "Murojaat qilgan shaxs telefon raqami",
     applicationSenderEmail: "Murojaat qilgan shaxs elektron pochtasi",
     bkutName: "BKUT nomi",
+    bkut1: "Boshlang'ich tashkilot",
     bkutName1: "Boshlang'ich tashkilot nomi",
     bkutSTIR: "BKUT STIR",
     bkutSTIR1: "Boshlang'ich tashkilot STIR",

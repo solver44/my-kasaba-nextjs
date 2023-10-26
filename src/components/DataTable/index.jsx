@@ -112,6 +112,7 @@ function DataTable({
     setShow(!show);
   }
 
+  const importExportColumns = columns.filter((c) => !c?.onlyShow);
   const modifiedColumns = columns
     .filter((c) => !c.hidden)
     .map((column) => {
@@ -197,7 +198,7 @@ function DataTable({
   return (
     <React.Fragment>
       <ExportTableForm
-        columns={columns}
+        columns={importExportColumns}
         title={title}
         rows={rows}
         handleClose={() => setOpenExportModal(false)}
@@ -205,7 +206,7 @@ function DataTable({
       />
       <ImportTableForm
         onUpload={onImportData}
-        columns={columns}
+        columns={importExportColumns}
         title={title}
         handleClose={() => setOpenImportModal(false)}
         isOpen={openImportModal}
