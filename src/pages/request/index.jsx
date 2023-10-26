@@ -199,6 +199,11 @@ export default function RequestPage({ router }) {
     } else if (data?.error == "bkut is already exists") {
       reloadCaptcha();
       enqueueSnackbar(t("bkut-exists"), { variant: "error" });
+      setInputValidation((inputValidation) => ({
+        ...inputValidation,
+        inn: false,
+        innInvalid: "bkut-exists",
+      }));
     } else if (data?.error == "reCAPTCHA verification failed") {
       reloadCaptcha();
       enqueueSnackbar(t("recaptcha-try"), { variant: "error" });
