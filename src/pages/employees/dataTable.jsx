@@ -56,8 +56,8 @@ export default function InDataTable({ onUpload, min }) {
           //   value: e.position.id,
           // },
           birthDate: convertStringToFormatted(e.employee.birthDate),
-          phoneNumber: e.employee.phone,
-          email: e.employee.email,
+          phoneNumber: e.phone,
+          email: e.email,
         };
       })
     );

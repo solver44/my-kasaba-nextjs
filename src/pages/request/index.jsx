@@ -243,9 +243,9 @@ export default function RequestPage({ router }) {
     }));
   }
 
-  function responsePINFL(_data, status) {
+  function responsePINFL(_data, pinfl) {
     const data = _data?.data;
-    if (!status || !_data?.success) {
+    if (!pinfl || !_data?.success) {
       setInputValidation((inputValidation) => ({
         ...inputValidation,
         passportGivenDate: false,
@@ -270,10 +270,10 @@ export default function RequestPage({ router }) {
     }));
   }
 
-  async function responseSTIR(_data, status, setLoading) {
+  async function responseSTIR(_data, stir, setLoading) {
     try {
       const data = _data?.data;
-      if (!status || !_data?.success) {
+      if (!stir || !_data?.success) {
         setInputValidation((inputValidation) => ({
           ...inputValidation,
           inn: false,
