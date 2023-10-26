@@ -240,15 +240,17 @@ export default function RequestPage({ router }) {
 
   function responsePINFL(_data, status) {
     const data = _data?.data;
-    if (!status || !data?.success) {
+    if (!status || !_data?.success) {
       setInputValidation((inputValidation) => ({
         ...inputValidation,
         passportGivenDate: false,
       }));
-      if (data?.success === false)
-        enqueueSnackbar(t("pinfl-not-found"), { variant: "error" });
-      else if (!data?.success)
+      if (_data === "")
         enqueueSnackbar(t("server-error"), { variant: "error" });
+      else if (_data?.success === false)
+        enqueueSnackbar(t("pinfl-not-found"), { variant: "error" });
+      else if (!_data?.success)
+        enqueueSnackbar(t("fetch-error"), { variant: "error" });
       return;
     }
 
@@ -266,16 +268,18 @@ export default function RequestPage({ router }) {
   async function responseSTIR(_data, status, setLoading) {
     try {
       const data = _data?.data;
-      if (!status || !data?.success) {
+      if (!status || !_data?.success) {
         setInputValidation((inputValidation) => ({
           ...inputValidation,
           inn: false,
           innInvalid: data?.success === false ? "stir-not-found" : undefined,
         }));
-        if (data?.success === false)
-          enqueueSnackbar(t("stir-not-found"), { variant: "error" });
-        else if (!data?.success)
+        if (_data === "")
           enqueueSnackbar(t("server-error"), { variant: "error" });
+        else if (_data?.success === false)
+          enqueueSnackbar(t("stir-not-found"), { variant: "error" });
+        else if (!_data?.success)
+          enqueueSnackbar(t("fetch-error"), { variant: "error" });
         reserSTIRForm();
         return;
       }
@@ -299,8 +303,8 @@ export default function RequestPage({ router }) {
 
       setFormData((formData) => ({
         ...formData,
-        name: entityData.company.name,
-        address: entityData.companyBillingAddress.streetName,
+        name: data.company.name,
+        address: data.companyBillingAddress.streetName,
       }));
     } catch (error) {
       console.log(error);
