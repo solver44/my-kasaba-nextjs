@@ -5,6 +5,8 @@ import {
   Autocomplete,
   Box,
   Chip,
+  FormControl,
+  FormHelperText,
   MenuItem,
   Select,
   TextField,
@@ -15,7 +17,9 @@ import { UploadRounded } from "@mui/icons-material";
 import dayjs from "dayjs";
 
 function getStyles(currentData, multipleValues = []) {
-  const isSelected = multipleValues.find((a) => a == currentData?.value);
+  const isSelected = !Array.isArray(multipleValues)
+    ? currentData?.value == multipleValues
+    : multipleValues.find((a) => a == currentData?.value);
   return {
     fontWeight: isSelected ? "600" : "normal",
     background: isSelected ? "aliceblue" : "white",
@@ -87,6 +91,9 @@ export default function ChangableInput({
     (p) => propValue[p]
   );
 
+  const validationError =
+    typeof invalid === "string" ? validationError : "invalid-input";
+
   return (
     <div className={styles.wrapper}>
       <label className={styles.label}>
@@ -126,7 +133,12 @@ export default function ChangableInput({
               <TextField
                 {...params}
                 name={name}
-                className={styles.autocomplete_input}
+                error={!!invalid}
+                helperText={invalid ? t(validationError) : false}
+                className={[
+                  styles.autocomplete_input,
+                  !!invalid ? styles.invalid : "",
+                ].join(" ")}
                 inputProps={{
                   ...params.inputProps,
                   autoComplete: "new-password", // disable autocomplete and autofill
@@ -136,54 +148,70 @@ export default function ChangableInput({
           }}
         />
       ) : select ? (
-        <Select
-          name={name}
-          multiple={!!multiple}
-          onChange={onChangeFunc}
-          displayEmpty
-          value={
-            !!multiple ? multipleValues : propValue?.length ? propValue : -1
-          }
-          className={[
-            styles.select,
-            !!multiple ? styles.multipleSelect : "",
-            props.disabled ? styles.disabled : "",
-            invalid ? styles.invalid : "",
-          ].join(" ")}
-          renderValue={
-            multiple &&
-            ((selected) => {
-              if (!selected?.length) return null;
-              return (
-                <Box
-                  sx={{
-                    marginTop: "-4px",
-                    marginBottom: "-4px",
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 0.5,
-                  }}
-                >
-                  {(selected ?? []).map((t) => {
-                    const current = dataSelect.find((d) => d.value == t);
-                    return <Chip key={current.value} label={current.label} />;
-                  })}
-                </Box>
-              );
-            })
-          }
-          {...props}
-        >
-          {dataSelect.map((current) => (
-            <MenuItem
-              key={current.value}
-              value={current.value}
-              style={getStyles(current, multipleValues)}
-            >
-              {language === "uz" ? current.label : current?.labelRu}
-            </MenuItem>
-          ))}
-        </Select>
+        <FormControl>
+          <Select
+            name={name}
+            multiple={!!multiple}
+            onChange={onChangeFunc}
+            displayEmpty
+            value={
+              !!multiple
+                ? multipleValues
+                : dataSelect.find((d) => d.value == propValue)?.label ?? ""
+            }
+            className={[
+              styles.select,
+              !!multiple ? styles.multipleSelect : "",
+              props.disabled ? styles.disabled : "",
+              invalid ? styles.invalid : "",
+            ].join(" ")}
+            renderValue={
+              multiple
+                ? (selected) => {
+                    if (!selected?.length) return null;
+                    return (
+                      <Box
+                        sx={{
+                          marginTop: "-4px",
+                          marginBottom: "-4px",
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: 0.5,
+                        }}
+                      >
+                        {(selected ?? []).map((t) => {
+                          const current = dataSelect.find((d) => d.value == t);
+                          return (
+                            <Chip key={current.value} label={current.label} />
+                          );
+                        })}
+                      </Box>
+                    );
+                  }
+                : (selected) => {
+                    if (!selected) return "";
+                    return selected;
+                  }
+            }
+            {...props}
+          >
+            {dataSelect.map((current) => (
+              <MenuItem
+                key={current.value}
+                value={current.value}
+                style={getStyles(
+                  current,
+                  !!multiple ? multipleValues : propValue
+                )}
+              >
+                {language === "uz" ? current.label : current?.labelRu}
+              </MenuItem>
+            ))}
+          </Select>
+          {invalid && (
+            <FormHelperText error>{t(validationError)}</FormHelperText>
+          )}
+        </FormControl>
       ) : fileInput ? (
         <label
           className={[

@@ -17,6 +17,7 @@
     font-size: 1rem;
   }
   &.disabled {
+    background: var(--input-disabled-color) !important;
     input {
       cursor: not-allowed !important;
     }

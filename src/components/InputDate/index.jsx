@@ -14,6 +14,7 @@ export default function InputDate({
   validationError = "invalid-input",
   name,
   fullWidth,
+  disabled,
 }) {
   const { t } = useTranslation();
   const onChangeFunc = (e) => {
@@ -35,6 +36,7 @@ export default function InputDate({
         <InsideInput
           value={value}
           name={name}
+          disabled={disabled}
           invalid={invalid && t(validationError)}
           onChangeFunc={onChangeFunc}
           className={className}
@@ -44,6 +46,7 @@ export default function InputDate({
   ) : (
     <InsideInput
       value={value}
+      disabled={disabled}
       name={name}
       invalid={invalid && t(validationError)}
       onChangeFunc={onChangeFunc}
@@ -52,10 +55,18 @@ export default function InputDate({
   );
 }
 
-const InsideInput = ({ value, onChangeFunc, name, invalid, className }) => (
+const InsideInput = ({
+  value,
+  onChangeFunc,
+  disabled,
+  name,
+  invalid,
+  className,
+}) => (
   <DatePicker
     maxDate={name.includes("birth") ? dayjs().add(-18, "year") : null}
     format="DD.MM.YYYY"
+    disabled={disabled}
     value={value == "Invalid Date" || !value ? null : value}
     slotProps={{
       textField: {
@@ -65,8 +76,11 @@ const InsideInput = ({ value, onChangeFunc, name, invalid, className }) => (
       },
     }}
     onChange={onChangeFunc}
-    className={[styles.input, className, invalid ? styles.invalid : ""].join(
-      " "
-    )}
+    className={[
+      styles.input,
+      className,
+      invalid ? styles.invalid : "",
+      disabled ? styles.disabled : "",
+    ].join(" ")}
   />
 );

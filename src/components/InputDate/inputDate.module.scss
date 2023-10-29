@@ -11,9 +11,18 @@
   input {
     padding: 10px !important;
   }
-  &.invalid{
+  &.invalid {
     fieldset {
       border: 1px solid red !important;
+    }
+  }
+  &.disabled {
+    background: var(--input-disabled-color) !important;
+    input {
+      cursor: not-allowed !important;
+    }
+    fieldset {
+      background-color: var(--input-disabled-color);
     }
   }
 }

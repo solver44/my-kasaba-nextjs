@@ -16,7 +16,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { getAnimation } from "@/utils/animation";
 import Cookies from "universal-cookie";
 
-const HomeWrapper = ({ children, noHeader, title, desc }) => {
+const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
   const { updateData, ...states } = useSelector((state) => state);
   const actions = useActions();
   const route = useRouter();
@@ -83,7 +83,12 @@ const HomeWrapper = ({ children, noHeader, title, desc }) => {
         </div>
       </div>
       <div ref={animRef} className={"wrapper " + styles.right}>
-        <HomeContentWrapper noHeader={noHeader} title={title} desc={desc}>
+        <HomeContentWrapper
+          noHeader={noHeader}
+          noTitle={noTitle}
+          title={title}
+          desc={desc}
+        >
           {children}
         </HomeContentWrapper>
       </div>

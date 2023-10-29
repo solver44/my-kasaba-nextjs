@@ -227,7 +227,11 @@ export default function InDataTable({ onUpload, min }) {
 function ModalUI({ hideModal, positions, data = {} }) {
   const { t } = useTranslation();
   const [isMember, setIsMember] = useState(true);
-  const [formData, setFormData] = useState({ fio: "", birthDate: "" });
+  const [formData, setFormData] = useState({
+    fio: "",
+    birthDate: "",
+    gender: 1,
+  });
   const {
     employee = {},
     position = {},
@@ -244,6 +248,7 @@ function ModalUI({ hideModal, positions, data = {} }) {
     setFormData({
       fio: getFIO(data),
       birthDate: dayjs(data.birth_date),
+      gender: data.gender != 1 ? 0 : 1,
     });
   }
 
@@ -253,6 +258,7 @@ function ModalUI({ hideModal, positions, data = {} }) {
     setFormData({
       fio: FIO,
       birthDate: employee.birthDate ? dayjs(employee.birthDate) : "",
+      gender: employee.gender ?? formData.gender,
     });
   }, [data]);
 
@@ -284,12 +290,19 @@ function ModalUI({ hideModal, positions, data = {} }) {
         onFetch={onFetchPINFL}
       />
       <div className="modal-row">
-        <FormInput label={t("fio")} name="fio" required value={formData.fio} />
+        <FormInput
+          disabled
+          label={t("fio")}
+          name="fio"
+          required
+          value={formData.fio}
+        />
         <FormInput
           select
           required
-          value="1"
+          value={formData.gender}
           name="gender"
+          disabled
           dataSelect={[
             { value: 1, label: t("man") },
             { value: 0, label: t("woman") },
@@ -300,6 +313,7 @@ function ModalUI({ hideModal, positions, data = {} }) {
       <div className="modal-row">
         <FormInput
           date
+          disabled
           label={t("birth-date")}
           required
           name="birthDate"
@@ -307,7 +321,6 @@ function ModalUI({ hideModal, positions, data = {} }) {
         />
         <FormInput
           select
-          required
           value={position.id}
           name="position"
           dataSelect={positions}

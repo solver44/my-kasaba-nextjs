@@ -14,6 +14,7 @@ import { CloseRounded } from "@mui/icons-material";
 
 export default function HomeContentWrapper({
   children,
+  noTitle,
   noHeader,
   title,
   desc,
@@ -30,9 +31,12 @@ export default function HomeContentWrapper({
   return (
     <React.Fragment>
       {!noHeader && (
-        <div className={styles.wrapper}>
+        <div
+          className={styles.wrapper}
+          // style={noTitle ? { paddingBottom: 0, paddingTop: 0 } : {}}
+        >
           <div className={styles.col}>
-            <div className={styles.title}>{title}</div>
+            {!noTitle && <div className={styles.title}>{title}</div>}
             {/* <div className={styles.desc}>{desc}</div> */}
           </div>
           <div className={styles.row}>

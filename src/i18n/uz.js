@@ -80,6 +80,7 @@ export default {
       okpo: "OKPO",
       type: "Tarmoq",
       phone: "Seh tashkiloti telefon raqami",
+      files: "Qaror",
 
       tab1: "Seh tashkiloti passporti",
     },
@@ -178,6 +179,11 @@ export default {
     },
     memberss: {
       title: "A’zolar",
+    },
+    organization: {
+      employees: "Tashkilot tashkilotchisi",
+      members: "A'zolar",
+      statistic: "Tashkilot statistik ma'lumotlari",
     },
     "register-bkut-page": {
       title: "BKUTni ro’yhatdan o’tkazish",
@@ -317,7 +323,8 @@ export default {
     "error-send-application":
       "Murojaatni yuborishda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
     "error-form-application": "Murojaat shakli noto'g'ri kiritilgan!",
-    "delete-error": "O'chirishda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
+    "delete-error":
+      "O'chirishda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "not-found": "Yo'q",
 
     "main-info": "Asosiy ma'lumotlar",
@@ -377,6 +384,10 @@ export default {
     "success-done": "Muvaffaqiyatli bajarildi",
     "error-import-data":
       "Ma'lumotlarni serverga yuklashda xatolik mavjud. Qayta tekshirib yuboring.",
+
+    "active-employees": "Faollar",
+    "member-employees": "A'zo xodimlar",
+    "not-member-employees": "A'zo bo'lmagan xodimlar",
 
     dTable: {
       toolbarDensity: "O'lcham",

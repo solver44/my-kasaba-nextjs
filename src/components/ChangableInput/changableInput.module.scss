@@ -5,7 +5,7 @@
   p {
     position: absolute;
     bottom: -2px;
-    left: 0;
+    right: 0;
     transform: translateY(100%);
   }
 }
@@ -81,6 +81,11 @@
   fieldset {
     border: 1px solid var(--input-border-color) !important;
   }
+  &.invalid {
+    fieldset {
+      border-color: red !important;
+    }
+  }
   border-radius: var(--input-radius);
   input {
     padding: 8px !important;
@@ -89,11 +94,12 @@
     font-size: var(--input-font-size);
   }
   &.disabled {
+    background: var(--input-disabled-color) !important;
     input {
       cursor: not-allowed !important;
     }
     fieldset {
-      background-color: var(--input-disabled-color);
+      background-color: var(--input-disabled-color) !important;
     }
   }
   &.invalid {
@@ -114,8 +120,11 @@
     min-height: auto !important;
     font-size: var(--input-font-size);
   }
-  &.disabled > :first-child {
-    cursor: not-allowed !important;
+  &.disabled {
+    background: var(--input-disabled-color) !important;
+    & > :first-child {
+      cursor: not-allowed !important;
+    }
   }
   input:disabled ~ fieldset {
     background-color: var(--input-disabled-color) !important;

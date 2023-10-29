@@ -1,6 +1,7 @@
 import { useController, useFormContext } from "react-hook-form";
 import ChangableInput from "../ChangableInput";
 import { useEffect } from "react";
+import { getEmptyValue } from "@/utils/data";
 
 export default function FormInput({
   required,
@@ -19,11 +20,13 @@ export default function FormInput({
     : useController({
         name: name ?? "",
         control,
-        rules: { required: !!required },
+        rules: {
+          required: !!required,
+        },
       });
 
   useEffect(() => {
-    if (setValue) setValue(name, value);
+    if (setValue) setValue(name, getEmptyValue(value));
   }, [value]);
 
   function onChangeFunc(e, name) {

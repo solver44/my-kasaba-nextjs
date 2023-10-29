@@ -87,3 +87,14 @@ export function splitEmployement(employment = "") {
     return old;
   }, {});
 }
+
+export function getEmptyValue(obj) {
+  if (typeof obj !== "object" && obj) return obj;
+  for (var prop in (obj ?? {})) {
+    if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+      return obj;
+    }
+  }
+
+  return undefined;
+}

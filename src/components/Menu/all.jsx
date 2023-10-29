@@ -35,14 +35,14 @@ const menu = [
   },
   {
     icon: PeopleAlt,
-    title: "employeesTitle",
+    title: "allEmployeesTitle",
     path: "/employees",
   },
-  {
-    icon: Hail,
-    title: "members",
-    path: "/members",
-  },
+  // {
+  //   icon: Hail,
+  //   title: "members",
+  //   path: "/members",
+  // },
   {
     icon: Diversity3,
     title: "teamContracts",

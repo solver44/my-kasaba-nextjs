@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import HomeWrapper from "../home/wrapper";
 import styles from "./employees.module.scss";
-import DataTable from "./dataTable";
+import ActiveEmployeeDT from "./dataTable";
 import { useSelector } from "react-redux";
 import { getFIO } from "@/utils/data";
+import Tabs from "@/components/Tabs";
+import MembersDT from "../members/dataTable";
 
 export default function Employees() {
   return (
     <div className={styles.containers}>
-      <DataTable />
+      <Tabs
+        tabs={[
+          { label: "active-employees", children: <ActiveEmployeeDT /> },
+          { label: "member-employees", children: <MembersDT /> },
+          { label: "not-member-employees", children: <MembersDT /> },
+        ]}
+      />
     </div>
   );
 }
@@ -32,7 +40,11 @@ export function useEmployees() {
 
 Employees.layout = function (Component, t) {
   return (
-    <HomeWrapper title={t("employees.title1")} desc={t("profile-page.desc")}>
+    <HomeWrapper
+      noHeader
+      title={t("allEmployeesTitle")}
+      desc={t("profile-page.desc")}
+    >
       {Component}
     </HomeWrapper>
   );

@@ -282,11 +282,18 @@ function ModalUI({ hideModal, data = {} }) {
         />
       </div>
       <div className="modal-row">
-        <FormInput required label={t("fio")} name="fio" value={formData.fio} />
+        <FormInput
+          disabled
+          required
+          label={t("fio")}
+          name="fio"
+          value={formData.fio}
+        />
         <FormInput
           select
           required
           value="1"
+          disabled
           name="gender"
           dataSelect={[
             { value: 1, label: t("man") },
@@ -298,13 +305,13 @@ function ModalUI({ hideModal, data = {} }) {
       <div className="modal-row">
         <FormInput
           date
+          disabled
           label={t("birth-date")}
           required
           name="birthDate"
           value={formData.birthDate}
         />
         <FormInput
-          required
           value={position}
           name="position"
           autocomplete
