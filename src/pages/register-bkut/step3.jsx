@@ -19,7 +19,7 @@ export default function Step3({ bkutData = {}, files = {}, filesNotRequired }) {
           required
           name="foundingDocDate"
           date
-          value={dayjs(bkutData.protocolDate || "")}
+          value={bkutData.protocolDate ? dayjs(bkutData.protocolDate) : ""}
           label={t("founding-doc-date")}
         />
       </div>

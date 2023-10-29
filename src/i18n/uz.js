@@ -76,14 +76,17 @@ export default {
       firstorg: "Yuqori tashkilot",
       tel: "Telefon",
       soato: "MXOBT (SOATO) kodi",
-      adr: "Manzil",
+      adr: "Seh tashkiloti manzili",
       okpo: "OKPO",
       type: "Tarmoq",
       phone: "Seh tashkiloti telefon raqami",
+
+      tab1: "Seh tashkiloti passporti",
     },
     "group-organizations": {
       title: "Guruh tashkilotlari",
       name: "Guruh tashkilot nomi",
+      adr: "Guruh tashkiloti manzili",
       direktor: "Guruh tashkiloti tashkilotchisi",
       phone: "Guruh tashkiloti telefon raqami",
     },
@@ -222,6 +225,8 @@ export default {
     bkutSTIR1: "Boshlang'ich tashkilot STIR",
     bkutType: "BKUT turi",
     bkutType1: "Boshlang'ich tashkilot yuridik shaxs maqomiga egami?",
+    orgType1: "Tashkilot yuridik shaxs maqomiga ega",
+    orgType2: "Tashkilot yuridik shaxs maqomiga ega emas",
     yes: "Ha",
     no: "Yo'q",
     team: "Jamoa",
@@ -312,7 +317,10 @@ export default {
     "error-send-application":
       "Murojaatni yuborishda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
     "error-form-application": "Murojaat shakli noto'g'ri kiritilgan!",
+    "delete-error": "O'chirishda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "not-found": "Yo'q",
+
+    "main-info": "Asosiy ma'lumotlar",
 
     "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang.",
     "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang.",

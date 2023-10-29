@@ -9,12 +9,13 @@ import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
 import { getFIO, splitEmployement, splitFIO } from "@/utils/data";
 import { useSelector } from "react-redux";
-import { sendMember } from "@/http/data";
+import { deleteMember, sendMember } from "@/http/data";
 import CheckBoxGroup from "@/components/CheckBoxGroup";
 import useActions from "@/hooks/useActions";
 import { showYesNoDialog } from "@/utils/dialog";
 import { LoadingButton } from "@mui/lab";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import useDynamicData from "@/hooks/useDynamicData";
 
 export default function InDataTable() {
   const { t } = useTranslation();
@@ -97,7 +98,7 @@ export default function InDataTable() {
     sendData(forms, hideModal, isView);
   }
 
-  async function sendData(forms, hideModal, isView, noAlert) {
+  async function sendData(forms, hideModal, isView, noAlert = false) {
     const bkutData = bkutDataRef.current;
     const members = (bkutData.members ?? [])
       .filter((e) => (isView ? e.member.pinfl != forms.pinfl : true))
@@ -150,6 +151,7 @@ export default function InDataTable() {
       ]);
       if (!noAlert) {
         enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+      } else {
         return true;
       }
       actions.updateData();
@@ -170,8 +172,12 @@ export default function InDataTable() {
     const data = (bkutData.members ?? []).find((member) => member.id == id);
     return data;
   }
-  function deleteRow(id) {
-    setRows((rows) => rows.filter((row) => row?.id != id));
+  async function deleteRow(id) {
+    const res = await deleteMember(id);
+    if (res) {
+      setRows((rows) => rows.filter((row) => row?.id != id));
+      actions.updateData();
+    } else enqueueSnackbar(t("delete-error"), { variant: "error" });
   }
   async function onImportRow(rowData) {
     const forms = {
@@ -236,6 +242,7 @@ function ModalUI({ hideModal, data = {} }) {
     fio: "",
     birthDate: "",
   });
+  const [positions] = useDynamicData({ positions: true });
   const {
     id,
     position,
@@ -251,7 +258,10 @@ function ModalUI({ hideModal, data = {} }) {
   useEffect(() => {
     const FIO = getFIO(data.member);
     if (!FIO) return;
-    setFormData({ fio: FIO, birthDate: dayjs(member.birthDate ?? "") });
+    setFormData({
+      fio: FIO,
+      birthDate: member.birthDate ? dayjs(member.birthDate) : "",
+    });
   }, [data]);
 
   function onFetchPINFL(data) {
@@ -272,6 +282,37 @@ function ModalUI({ hideModal, data = {} }) {
         />
       </div>
       <div className="modal-row">
+        <FormInput required label={t("fio")} name="fio" value={formData.fio} />
+        <FormInput
+          select
+          required
+          value="1"
+          name="gender"
+          dataSelect={[
+            { value: 1, label: t("man") },
+            { value: 0, label: t("woman") },
+          ]}
+          label={t("gender")}
+        />
+      </div>
+      <div className="modal-row">
+        <FormInput
+          date
+          label={t("birth-date")}
+          required
+          name="birthDate"
+          value={formData.birthDate}
+        />
+        <FormInput
+          required
+          value={position}
+          name="position"
+          autocomplete
+          options={positions}
+          label={t("employees.position")}
+        />
+      </div>
+      <div className="modal-row">
         <FormInput
           date
           label={t("employees.dateSign")}
@@ -281,27 +322,41 @@ function ModalUI({ hideModal, data = {} }) {
           // value={formData.signDate}
         />
         <FormInput
+          label={t("employment")}
+          select
+          multiple
           required
-          value={position}
-          name="position"
-          label={t("employees.position")}
-        />
-      </div>
-      <div className="modal-row">
-        <FormInput required label={t("fio")} name="fio" value={formData.fio} />
-        <FormInput
-          date
-          label={t("birth-date")}
-          required
-          name="birthDate"
-          value={formData.birthDate}
+          value={inData}
+          name="personInfo"
+          dataSelect={[
+            {
+              value: "isStudent",
+              label: t("isStudent"),
+            },
+            {
+              value: "isPensioner",
+              label: t("isPensioner"),
+            },
+            {
+              value: "isHomemaker",
+              label: t("isHomemaker"),
+            },
+            {
+              value: "isInvalid",
+              label: t("isInvalid"),
+            },
+            {
+              value: "isWorker",
+              label: t("worker"),
+            },
+          ]}
         />
       </div>
       <div className="modal-row">
         <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
         <FormInput value={email} label={t("employees.email")} name="email" />
       </div>
-      <CheckBoxGroup
+      {/* <CheckBoxGroup
         name="personInfo"
         value={inData}
         data={[
@@ -322,7 +377,7 @@ function ModalUI({ hideModal, data = {} }) {
             label: t("isInvalid"),
           },
         ]}
-      />
+      /> */}
     </div>
   );
 }

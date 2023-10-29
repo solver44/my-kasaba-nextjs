@@ -24,6 +24,13 @@ function RadioGroups({
         rules: { required: !!required },
       });
 
+  useEffect(() => {
+    if (typeof defaultValue === "undefined") return;
+    if (onChange) onChange({ target: { value: defaultValue } }, name);
+    if (field.onChange)
+      field.onChange({ target: { value: defaultValue } }, name);
+  }, [defaultValue]);
+
   function onChangeFunc(e) {
     if (contained) {
       const vl = e.target.checked ? e.target.value : defaultValue;
@@ -34,7 +41,7 @@ function RadioGroups({
   }
 
   useEffect(() => {
-    if (typeof propValue === undefined) return;
+    if (typeof propValue === "undefined") return;
     if (setValue) setValue(name, propValue);
     if (onChange) onChange({ target: { value: propValue } }, name);
     if (field.onChange) field.onChange({ target: { value: propValue } }, name);

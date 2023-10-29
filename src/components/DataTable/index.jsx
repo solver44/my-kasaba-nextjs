@@ -37,6 +37,7 @@ import ArrowButton from "../ArrowButton";
 import ExportTableForm from "@/utils/exportExcel";
 import ImportTableForm from "@/utils/importExcel";
 import { useSnackbar } from "notistack";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 function DataTable({
   columns = [],
@@ -45,6 +46,7 @@ function DataTable({
   isFormModal,
   min,
   fullModal,
+  topButtons,
   title,
   modalWidth,
   loading,
@@ -71,13 +73,15 @@ function DataTable({
   const { dataLoading } = useSelector((state) => state);
 
   const [show, setShow] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [rowSelection, setRowSelection] = useState({});
   const [tableInstanse, setTableInstanse] = useState();
   const [dataModal, setDataModal] = useState();
   const [openDilaog, setOpenDialog] = useState(false);
   const tableInstanceRef = useRef();
   const dataModalRef = useRef();
   const isChanged = useRef(false);
-  const currentId = useRef();
+  const currentRow = useRef();
 
   useEffect(() => {
     if (!tableInstanceRef.current) return;
@@ -88,15 +92,15 @@ function DataTable({
     setOpenDialog(!openDilaog);
   };
 
-  const handleViewClick = async (id) => {
-    const data = await fetchData(id);
+  const handleViewClick = async (row) => {
+    const data = await fetchData(row.id);
     setDataModal(data);
     dataModalRef.current = data;
     setShow(true);
   };
 
-  const handleDeleteClick = (id) => {
-    currentId.current = id;
+  const handleDeleteClick = (row) => {
+    currentRow.current = row;
     toggleDeleteDialog();
   };
 
@@ -239,7 +243,8 @@ function DataTable({
                   />
                 )}
               </Box>
-              <Box>
+              <Box sx={{ display: "flex", gap: "10px" }}>
+                {topButtons && topButtons(selectedRows)}
                 <BigButton onClick={() => toggleModal()} Icon={AddIcon}>
                   {t("add")}
                 </BigButton>
@@ -255,10 +260,33 @@ function DataTable({
           enablePinning
           enableRowNumbers
           enableStickyHeader
+          // enableMultiRowSelection={false}
+          // enableRowSelection
+          onRowSelectionChange={setRowSelection}
+          muiTableBodyRowProps={({ row }) => {
+            const sx = { cursor: "pointer" };
+            if (rowSelection[row.index])
+              sx.backgroundColor = "var(--row-selected-color) !important";
+            return {
+              onClick: () => {
+                let isSelected = false;
+                setRowSelection((prev) => {
+                  if (!isSelected) isSelected = !prev[row.id];
+                  return {
+                    ...prev,
+                    [row.id]: !prev[row.id],
+                  };
+                });
+                setSelectedRows(isSelected ? [row.original] : []);
+              },
+              selected: rowSelection[row.id],
+              sx,
+            };
+          }}
           rowNumberMode="static"
           localization={MRT_Localization_UZ}
           enableTopToolbar={false}
-          initialState={{ showGlobalFilter: true }}
+          initialState={{ showGlobalFilter: true, showAlertBanner: true }}
           onColumnVisibilityChange={(updater) => {
             setColumnVisibility((prev) =>
               updater instanceof Function ? updater(prev) : updater
@@ -282,6 +310,7 @@ function DataTable({
             density,
             showColumnFilters,
             isLoading: loading || dataLoading,
+            rowSelection,
           }}
           muiTablePaperProps={{
             elevation: 0,
@@ -316,13 +345,12 @@ function DataTable({
           enableRowActions
           renderEmptyRowsFallback={CustomNoRowsOverlay}
           renderRowActions={({ row }) => {
-            const id = row.original.id;
             return (
               <Box className={styles.row}>
-                <IconButton onClick={() => handleViewClick(id)}>
+                <IconButton onClick={() => handleViewClick(row.original)}>
                   <VisibilityIcon />
                 </IconButton>
-                <IconButton onClick={() => handleDeleteClick(id)}>
+                <IconButton onClick={() => handleDeleteClick(row.original)}>
                   <DeleteIcon />
                 </IconButton>
               </Box>
@@ -355,24 +383,32 @@ function DataTable({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{t("delete-title")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {t("are-you-sure-delete")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={toggleDeleteDialog}>{t("no")}</Button>
-          <Button
-            onClick={() => {
-              func2 && func2(currentId.current);
-              toggleDeleteDialog();
-            }}
-            autoFocus
-          >
-            {t("yes")}
-          </Button>
-        </DialogActions>
+        <div className="row">
+          <DeleteForeverIcon color="error" className={styles.deleteIcon} />
+          <div>
+            <DialogTitle className={styles.dialogTitle} id="alert-dialog-title">
+              {t("delete-title")}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {t("are-you-sure-delete")}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={toggleDeleteDialog}>{t("no")}</Button>
+              <Button
+                onClick={() => {
+                  func2 && func2(currentRow.current.id, currentRow.current);
+                  toggleDeleteDialog();
+                }}
+                autoFocus
+                color="error"
+              >
+                {t("yes")}
+              </Button>
+            </DialogActions>
+          </div>
+        </div>
       </Dialog>
     </React.Fragment>
   );

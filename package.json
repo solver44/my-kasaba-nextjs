@@ -9,8 +9,7 @@
     "lint": "next lint",
     "bg": "npm run clear && pm2 start npm -- start",
     "clear": "pm2 kill",
-    "test": "CONFIG_FILE=config.json; SSH_PASSWORD=$(jq -r .SSH_PASSWORD $CONFIG_FILE); SUPERUSER_PASSWORD=$(jq -r .SUPERUSER_PASSWORD $CONFIG_FILE);",
-    "update-remote": "expect -c 'spawn ssh -p 11226 sunnat@84.54.82.162; expect \"password:\"; send \"MySunnat@123\\r\"; expect \"# \"; send \"su -\\r\"; expect \"Password:\"; send \"MyKasaba@123\\r\"; expect \"# \"; send \"./update.sh\\r\"; expect \"# \"; send \"exit\\r\"; interact'"
+    "test": "CONFIG_FILE=config.json; SSH_PASSWORD=$(jq -r .SSH_PASSWORD $CONFIG_FILE); SUPERUSER_PASSWORD=$(jq -r .SUPERUSER_PASSWORD $CONFIG_FILE);"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

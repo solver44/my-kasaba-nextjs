@@ -22,7 +22,8 @@ export function getBearerToken(req) {
   return (req.headers?.Authorization || " ").split(" ")[1];
 }
 
-export function getLocalizationNames(object = {}, i18n) {
+export function getLocalizationNames(object = {}, _i18n) {
+  let i18n = _i18n ?? i18next;
   return (
     object[i18n.language === "uz" ? "nameUz" : "nameRu"] ??
     object["nameUz"] ??

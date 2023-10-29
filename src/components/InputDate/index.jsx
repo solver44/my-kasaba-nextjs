@@ -34,6 +34,7 @@ export default function InputDate({
         <span>{titleText}</span>
         <InsideInput
           value={value}
+          name={name}
           invalid={invalid && t(validationError)}
           onChangeFunc={onChangeFunc}
           className={className}
@@ -43,6 +44,7 @@ export default function InputDate({
   ) : (
     <InsideInput
       value={value}
+      name={name}
       invalid={invalid && t(validationError)}
       onChangeFunc={onChangeFunc}
       className={className}
@@ -50,8 +52,9 @@ export default function InputDate({
   );
 }
 
-const InsideInput = ({ value, onChangeFunc, invalid, className }) => (
+const InsideInput = ({ value, onChangeFunc, name, invalid, className }) => (
   <DatePicker
+    maxDate={name.includes("birth") ? dayjs().add(-18, "year") : null}
     format="DD.MM.YYYY"
     value={value == "Invalid Date" || !value ? null : value}
     slotProps={{

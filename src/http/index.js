@@ -48,7 +48,8 @@ $axios.interceptors.response.use(
         error.config.headers.Authorization = `Bearer ${TOKENS.ACCESS_TOKEN}`;
 
         // Retry the original request with the updated token
-        return $axios.request(error.config); // Use $axios to make the request
+        // return $axios.request(error.config); // Use $axios to make the request
+        window.location.reload();
       } catch (refreshError) {
         throw refreshError;
       }

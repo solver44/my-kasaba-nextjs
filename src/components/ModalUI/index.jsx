@@ -6,7 +6,7 @@ import { Button, IconButton, Slide } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import FormValidation from "../FormValidation";
 import areEqual from "@/utils/areEqual";
-import { Close, CloseOutlined } from "@mui/icons-material";
+import { CloseOutlined } from "@mui/icons-material";
 
 function ModalUI({
   open,
@@ -24,7 +24,6 @@ function ModalUI({
 }) {
   const { t } = useTranslation();
   const [_isChanged, setIsChanged] = useState(false);
-  const currentData = useRef();
 
   const parent = isForm
     ? (children) => (
@@ -36,16 +35,11 @@ function ModalUI({
             loading={loading}
             isChanged={_isChanged}
             style={modalWidth ? { width: modalWidth } : {}}
-            onChanged={(data) => {
-              if (Object.keys(data).length < 1) return;
-              if (!currentData.current || Object.values(data).length < 1) {
-                currentData.current = data;
-                return;
-              }
-              let isChanged = !areEqual(data, currentData.current);
+            onChanged={(currentData, oldData) => {
+              let isChanged = !areEqual(oldData, currentData);
 
               setIsChanged(isChanged);
-              onChanged && onChanged(isChanged, data);
+              onChanged && onChanged(isChanged, currentData);
             }}
           >
             {(onSubmit) => children(onSubmit, _isChanged)}
@@ -58,13 +52,13 @@ function ModalUI({
           style={modalWidth ? { width: modalWidth } : {}}
           className={[styles.content, full ? styles.full : ""].join(" ")}
         >
-          {children}
+          {children(onSubmit)}
         </div>
       );
 
   function onClose() {
     setIsChanged(false);
-    currentData.current = undefined;
+    // currentData.current = undefined;
     handleClose && handleClose();
   }
 
@@ -87,11 +81,13 @@ function ModalUI({
                   <CloseOutlined />
                 </IconButton>
               </div>
-              {children}
+              <div className={styles.wrapper}>{children}</div>
               {bottomModal ? (
-                bottomModal(handleSubmit, handleClose, isView, isChanged)
+                <div className={styles.bottom}>
+                  {bottomModal(handleSubmit, onClose, isView, isChanged)}
+                </div>
               ) : (
-                <div className={styles.row}>
+                <div className={[styles.bottom, styles.row].join(" ")}>
                   <Button
                     onClick={isForm ? handleSubmit : onSubmit}
                     variant="contained"

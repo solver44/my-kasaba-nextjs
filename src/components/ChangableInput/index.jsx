@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import styles from "./changableInput.module.scss";
 import Input from "../Input";
-import { Box, Chip, MenuItem, Select } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Chip,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 import InputDate from "../InputDate";
 import { UploadRounded } from "@mui/icons-material";
 import dayjs from "dayjs";
 
-function getStyles(currentData, allData) {
-  const isSelected = allData.find((a) => a?.value == currentData?.value);
+function getStyles(currentData, multipleValues = []) {
+  const isSelected = multipleValues.find((a) => a == currentData?.value);
   return {
     fontWeight: isSelected ? "600" : "normal",
     background: isSelected ? "aliceblue" : "white",
@@ -25,8 +32,10 @@ export default function ChangableInput({
   date,
   invalid,
   select,
+  autocomplete,
   fileInput,
   nameOfFile,
+  options = [],
   dataSelect = [],
   name,
   ...props
@@ -39,16 +48,16 @@ export default function ChangableInput({
     i18n: { language },
   } = useTranslation();
   const [fileName, setFileName] = useState(nameOfFile ?? "");
-  const [values, setValues] = useState([]);
   function onChangeFunc({ target }) {
+    let result = null;
     if (multiple) {
       const selectedValues = target.value || [];
       const currentValue =
         selectedValues.length > 1
           ? selectedValues[selectedValues.length - 1]
           : null;
-      setValues(
-        dataSelect.filter((d) => {
+      result = dataSelect
+        .filter((d) => {
           let checkValue = selectedValues.find(
             (s) => s?.value == currentValue
           )?.value;
@@ -56,10 +65,12 @@ export default function ChangableInput({
           if (d.value == checkValue) return false;
           else return selectedValues.find((s) => (s?.value || s) == d.value);
         })
-      );
+        .reduce((old, current) => {
+          return { ...old, [current.value]: true };
+        }, {});
     }
     if (!onChange) return;
-    onChange({ target }, name);
+    onChange(result ? { target: { value: result } } : { target }, name);
   }
 
   function handleFileInputChange(event) {
@@ -71,6 +82,10 @@ export default function ChangableInput({
     if (!onChange) return;
     onChange(file, name);
   }
+
+  const multipleValues = Object.keys(propValue ?? {}).filter(
+    (p) => propValue[p]
+  );
 
   return (
     <div className={styles.wrapper}>
@@ -88,15 +103,50 @@ export default function ChangableInput({
           value={value}
           {...props}
         />
+      ) : autocomplete ? (
+        <Autocomplete
+          id={name + "_autocomplete"}
+          autoHighlight
+          freeSolo
+          inputValue={propValue ?? ""}
+          onChange={(event, value) => {
+            onChangeFunc({ target: { value: value?.label ?? "" } });
+          }}
+          options={options}
+          className={[
+            styles.autocomplete,
+            props.disabled ? styles.disabled : "",
+            invalid ? styles.invalid : "",
+          ].join(" ")}
+          getOptionLabel={(current) =>
+            language === "uz" ? current.label : current?.labelRu
+          }
+          renderInput={(params) => {
+            return (
+              <TextField
+                {...params}
+                name={name}
+                className={styles.autocomplete_input}
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: "new-password", // disable autocomplete and autofill
+                }}
+              />
+            );
+          }}
+        />
       ) : select ? (
         <Select
           name={name}
           multiple={!!multiple}
           onChange={onChangeFunc}
           displayEmpty
-          value={propValue ?? (multiple ? values : -1)}
+          value={
+            !!multiple ? multipleValues : propValue?.length ? propValue : -1
+          }
           className={[
             styles.select,
+            !!multiple ? styles.multipleSelect : "",
             props.disabled ? styles.disabled : "",
             invalid ? styles.invalid : "",
           ].join(" ")}
@@ -105,10 +155,19 @@ export default function ChangableInput({
             ((selected) => {
               if (!selected?.length) return null;
               return (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {(selected ?? []).map((t) => (
-                    <Chip key={t.value} label={t.label} />
-                  ))}
+                <Box
+                  sx={{
+                    marginTop: "-4px",
+                    marginBottom: "-4px",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 0.5,
+                  }}
+                >
+                  {(selected ?? []).map((t) => {
+                    const current = dataSelect.find((d) => d.value == t);
+                    return <Chip key={current.value} label={current.label} />;
+                  })}
                 </Box>
               );
             })
@@ -119,7 +178,7 @@ export default function ChangableInput({
             <MenuItem
               key={current.value}
               value={current.value}
-              style={getStyles(current, values)}
+              style={getStyles(current, multipleValues)}
             >
               {language === "uz" ? current.label : current?.labelRu}
             </MenuItem>

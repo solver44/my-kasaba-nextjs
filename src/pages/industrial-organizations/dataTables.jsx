@@ -3,19 +3,24 @@ import { useTranslation } from "react-i18next";
 import DataTable from "@/components/DataTable";
 import FormInput from "@/components/FormInput";
 import { useSnackbar } from "notistack";
-import { Alert, Box } from "@mui/material";
+import { Alert, Box, Button } from "@mui/material";
 import { getDistricts, getRegions } from "@/http/public";
 import FinderSTIR from "@/components/FinderSTIR";
 import { useEmployees } from "../employees";
 import { useSelector } from "react-redux";
-import { sendDepartment } from "@/http/data";
+import { deleteDepartment, sendDepartment } from "@/http/data";
 import useActions from "@/hooks/useActions";
-import { getFIO } from "@/utils/data";
+import { getFIO, splitFIO } from "@/utils/data";
 import { showYesNoDialog } from "@/utils/dialog";
+import Group from "@/components/Group";
+import dayjs from "dayjs";
+import ViewModal from "./modal";
+import RadioGroup from "@/components/RadioGroup";
 
 export default function InDataTable() {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
+  const [viewModal, setViewModal] = useState(false);
   const { bkutData = {} } = useSelector((states) => states);
   const { enqueueSnackbar } = useSnackbar();
   const actions = useActions();
@@ -91,6 +96,7 @@ export default function InDataTable() {
   }
 
   async function sendData(forms, hideModal, duplicate) {
+    const fio = splitFIO(forms.director);
     const requestData = {
       bkut: {
         id: bkutData.id,
@@ -104,8 +110,14 @@ export default function InDataTable() {
         id: forms.district,
       },
       address: forms.address,
+      director: {
+        firstName: fio[0],
+        lastName: fio[1],
+        middleName: fio[2],
+        birthDate: forms.birthDate,
+      },
       employee: {
-        id: forms.director,
+        id: "?",
       },
       legalEntity: {
         id: bkutData.eLegalEntity.id,
@@ -132,31 +144,58 @@ export default function InDataTable() {
     const data = (bkutData.departments ?? []).find((ok) => ok.id == id);
     return data;
   }
-  function deleteRow(id) {
-    setRows((rows) => rows.filter((row) => row?.id != id));
+  async function deleteRow(id) {
+    const res = await deleteDepartment(id);
+    if (res) {
+      setRows((rows) => rows.filter((row) => row?.id != id));
+      actions.updateData();
+    } else enqueueSnackbar(t("delete-error"), { variant: "error" });
+  }
+
+  function toggleViewModal(row) {
+    setViewModal((bkutData?.departments ?? []).find((e) => e.id == row.id));
   }
 
   return (
-    <DataTable
-      fetchData={fetchData}
-      handleDeleteClick={deleteRow}
-      title={t("industrial-organizations.title")}
-      columns={columns}
-      rows={rows}
-      hideImport
-      bkutData={bkutData}
-      onSubmitModal={onSubmitModal}
-      isFormModal
-      modal={(hideModal, dataModal) => (
-        <ModalUI hideModal={hideModal} data={dataModal} />
-      )}
-    />
+    <React.Fragment>
+      <DataTable
+        fetchData={fetchData}
+        handleDeleteClick={deleteRow}
+        topButtons={(selectedRows) => {
+          const isEmpty = selectedRows?.length < 1;
+          return (
+            <Button
+              variant="contained"
+              color="success"
+              disableElevation
+              disabled={isEmpty}
+              onClick={() => toggleViewModal(selectedRows[0])}
+            >
+              {t("passport")}
+            </Button>
+          );
+        }}
+        title={t("industrial-organizations.title")}
+        columns={columns}
+        rows={rows}
+        hideImport
+        modalWidth="80vw"
+        bkutData={bkutData}
+        onSubmitModal={onSubmitModal}
+        isFormModal
+        modal={(hideModal, dataModal) => (
+          <ModalUI hideModal={hideModal} data={dataModal} />
+        )}
+      />
+      <ViewModal isOpen={viewModal} handleClose={() => setViewModal(false)} />
+    </React.Fragment>
   );
 }
 function ModalUI({ hideModal, data }) {
   const { t } = useTranslation();
   const [employees, bkutData] = useEmployees();
 
+  const [mode, setMode] = useState(1);
   const [provinces, setProvinces] = useState();
   const [districts, setDistricts] = useState();
   const [values, setValues] = useState({
@@ -239,60 +278,89 @@ function ModalUI({ hideModal, data }) {
       <Alert className="modal-alert" severity="info">
         "{bkutData?.eLegalEntity.name}"
       </Alert>
-      <FinderSTIR stirValue={tin} onFetch={onFetchSTIR} />
-      <div className="modal-row">
+      <Group title={t("main-info")}>
+        <div datatype="list">
+          <RadioGroup
+            defaultValue={1}
+            contained
+            name="orgType"
+            onChange={(e) => {
+              setMode(e.target.value);
+            }}
+            data={[
+              {
+                value: "1",
+                label: t("orgType1"),
+              },
+              {
+                value: "0",
+                label: t("orgType2"),
+              },
+            ]}
+          />
+          {mode == 1 && <FinderSTIR stirValue={tin} onFetch={onFetchSTIR} />}
+          <FormInput
+            name="name"
+            required
+            value={values.name}
+            label={t("industrial-organizations.name")}
+          />
+        </div>
+      </Group>
+      <Group title={t("industrial-organizations.direktor")}>
         <FormInput
-          name="name"
-          required
-          value={values.name}
-          label={t("industrial-organizations.name")}
-        />
-        <FormInput
-          label={t("industrial-organizations.direktor")}
           name="director"
-          value={employee.id}
-          dataSelect={employees}
-          select
+          value={getFIO(employee)}
           required
-        />
-      </div>
-      <div className="row g-3 full-children">
-        <FormInput
-          required
-          select
-          dataSelect={provinces}
-          name="province"
-          value={values.provinceId}
-          onChange={handleProvince}
-          label={t("province")}
-          editable
+          label={t("fio")}
         />
         <FormInput
+          name="birthDate"
+          date
+          label={t("birth-date")}
           required
-          select
-          dataSelect={districts}
-          value={values.districtId}
-          name="district"
-          label={t("district")}
-          editable
+          value={employee.birthDate ? dayjs(employee.birthDate) : null}
         />
-      </div>
-      <div className="modal-row">
-        <FormInput
-          label={t("industrial-organizations.adr")}
-          required
-          value={values.address}
-          name="address"
-        />
-      </div>
-      <div className="modal-row">
-        <FormInput
-          value={phone}
-          label={t("industrial-organizations.phone")}
-          name="phoneNumber"
-        />
-        <FormInput label={t("email")} value={email} name="email" />
-      </div>
+      </Group>
+      <Group title={t("industrial-organizations.adr")}>
+        <div datatype="list">
+          <FormInput
+            label={t("address")}
+            required
+            value={values.address}
+            name="address"
+          />
+          <div className="row g-3 full-children">
+            <FormInput
+              required
+              select
+              dataSelect={provinces}
+              name="province"
+              value={values.provinceId}
+              onChange={handleProvince}
+              label={t("province")}
+              editable
+            />
+            <FormInput
+              required
+              select
+              dataSelect={districts}
+              value={values.districtId}
+              name="district"
+              label={t("district")}
+              editable
+            />
+          </div>
+          <div className="modal-row">
+            <FormInput
+              value={phone}
+              label={t("industrial-organizations.phone")}
+              name="phoneNumber"
+            />
+            <FormInput label={t("email")} value={email} name="email" />
+          </div>
+        </div>
+      </Group>
     </div>
   );
 }

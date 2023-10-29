@@ -11,13 +11,30 @@ function FormValidation({
   onChanged,
 }) {
   const methods = useForm();
+  const initialData = useRef();
   const timeOut = useRef();
-  methods.watch((d) => {
-    clearTimeout(timeOut.current);
-    timeOut.current = setTimeout(() => {
-      onChanged && onChanged(d);
-    }, 20);
-  });
+  // methods.watch((d) => {
+  //   clearTimeout(timeOut.current);
+  //   timeOut.current = setTimeout(() => {
+  //     if (Object.keys(d).length < 1) return;
+  //     onChanged && onChanged(d);
+  //   }, 40);
+  // });
+  useEffect(() => {
+    let unsubscribe = () => {};
+    setTimeout(() => {
+      initialData.current = methods.getValues();
+      const { unsubscribe: un } = methods.watch((d) => {
+        clearTimeout(timeOut.current);
+        timeOut.current = setTimeout(() => {
+          onChanged && onChanged(d, initialData.current);
+        }, 40);
+      });
+      unsubscribe = un;
+    }, 100);
+    return () => unsubscribe();
+  }, [methods.watch]);
+
   const handleSubmitFunc = (data, t) => {
     if (!data) return;
     onSubmit(data);

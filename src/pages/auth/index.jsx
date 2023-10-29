@@ -62,6 +62,7 @@ export default function Auth() {
       const cookies = new Cookies();
       cookies.set("token", data.id);
       actions.loginSuccess();
+      actions.isMember(false);
       await navigate.push("/");
     } else {
       enqueueSnackbar(t("error-auth"), { variant: "error" });

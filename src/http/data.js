@@ -59,8 +59,21 @@ export async function getPositions() {
   }
 }
 
-export async function sendDepartment(data) {
+export async function deleteDepartment(id) {
   try {
+    const data = await $axios.delete(
+      `/rest/entities/EBKUT/${id}?fetchPlan=bkut-cabinet`
+    );
+    return getDeleteResponse(data);
+  } catch (error) {
+    return false;
+  }
+}
+export async function sendDepartment(_data) {
+  try {
+    const { director, ...data } = _data;
+    let resDirector = await getEmployee(director, true);
+    data.employee.id = resDirector.id;
     const { data: response } = await $axios.post(
       "/rest/entities/EBkutDepartment",
       data,
@@ -91,31 +104,35 @@ export async function sendEBKUT(data) {
 export async function getEmployee(data, isPost) {
   try {
     let response1;
-    const { data: _data } = await $axios.post(
-      "/rest/entities/HIndividual/search",
-      {
-        filter: {
-          conditions: [
-            {
-              property: "pinfl",
-              operator: "=",
-              value: data.pinfl,
-            },
-          ],
+    if (data.pinfl) {
+      const { data: _data } = await $axios.post(
+        "/rest/entities/HIndividual/search",
+        {
+          filter: {
+            conditions: [
+              {
+                property: "pinfl",
+                operator: "=",
+                value: data.pinfl,
+              },
+            ],
+          },
         },
-      },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    response1 = _data;
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      response1 = _data;
+    }
 
-    if (isPost && !response1?.length) {
-      // if (response1?.length > 0) {
-      //   response1 = response1[0];
-      // } else {
+    if (isPost) {
+      const {position, bkutId, email, fio, ...req} = data;
+      if (response1?.length > 0) {
+        response1 = (Array.isArray(response1) ? response1 : [{}])[0];
+        req.id = response1.id;
+      }
       response1 = (
-        await $axios.post("/rest/entities/HIndividual", data, {
+        await $axios.post("/rest/entities/HIndividual", req, {
           headers: { "Content-Type": "application/json" },
         })
       ).data;
@@ -124,22 +141,41 @@ export async function getEmployee(data, isPost) {
       response1 = (Array.isArray(response1) ? response1 : [{}])[0];
     }
 
-    console.log(response1);
     return response1;
   } catch (error) {
     return error;
   }
 }
 
+export async function deleteEmployee(id) {
+  try {
+    const data = await $axios.delete("/rest/entities/EBkutEmployees/" + id);
+
+    return getDeleteResponse(data);
+  } catch (error) {
+    return false;
+  }
+}
 export async function sendEmployee(_data, employees = []) {
   try {
     let result;
     let response1 = await getEmployee(_data, true);
-    const { fio, firstName, lastName, middleName, phone, email, ...data } =
-      _data;
+    const {
+      fio,
+      firstName,
+      bkutId,
+      lastName,
+      middleName,
+      phone,
+      email,
+      position,
+      pinfl,
+      birthDate,
+      ...data
+    } = _data;
 
     const requestData = {
-      id: data.bkutId,
+      id: bkutId,
       ...data,
       employees: [
         ...employees.map((e) => ({
@@ -150,20 +186,20 @@ export async function sendEmployee(_data, employees = []) {
             id: e.employee.id,
           },
           bkut: {
-            id: data.bkutId,
+            id: bkutId,
           },
           phone: e.phone,
           email: e.email,
         })),
         {
           position: {
-            id: data.position,
+            id: position,
           },
           employee: {
             id: response1.id,
           },
           bkut: {
-            id: data.bkutId,
+            id: bkutId,
           },
           phone,
           email,
@@ -193,6 +229,15 @@ export async function sendMember(requestData, data, oldMembers = []) {
     return error;
   }
 }
+export async function deleteMember(id) {
+  try {
+    const data = await $axios.delete("/rest/entities/EMembers/" + id);
+
+    return getDeleteResponse(data);
+  } catch (error) {
+    return false;
+  }
+}
 export async function fetchMember(id) {
   try {
     const { data } = await $axios.get("/rest/entities/EMembers/" + id);
@@ -201,4 +246,8 @@ export async function fetchMember(id) {
   } catch (error) {
     return error;
   }
+}
+
+function getDeleteResponse(data) {
+  return data.status === 204 ? true : false;
 }

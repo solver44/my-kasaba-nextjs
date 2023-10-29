@@ -2,6 +2,12 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  p {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    transform: translateY(100%);
+  }
 }
 .label {
   font-size: var(--input-font-size);
@@ -30,7 +36,7 @@
     .fileInput {
       border-color: red;
     }
-    .cloudIcon{
+    .cloudIcon {
       top: 32% !important;
     }
   }
@@ -64,8 +70,40 @@
   margin-bottom: 0;
   margin-left: 14px;
 }
+.autocomplete {
+  background: var(--input-incolor);
+  & > :first-child > :first-child {
+    padding: 0;
+  }
+}
+.autocomplete_input {
+  background: var(--input-incolor);
+  fieldset {
+    border: 1px solid var(--input-border-color) !important;
+  }
+  border-radius: var(--input-radius);
+  input {
+    padding: 8px !important;
+    resize: vertical;
+    font-size: 1rem;
+    font-size: var(--input-font-size);
+  }
+  &.disabled {
+    input {
+      cursor: not-allowed !important;
+    }
+    fieldset {
+      background-color: var(--input-disabled-color);
+    }
+  }
+  &.invalid {
+    fieldset {
+      border-color: red !important;
+    }
+  }
+}
 .select {
-  max-width: 500px;
+  // max-width: 500px;
   background: var(--input-incolor);
   fieldset {
     border: 1px solid var(--input-border-color) !important;
@@ -87,4 +125,9 @@
       border: 1px solid red !important;
     }
   }
+}
+.multipleBox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5;
 }

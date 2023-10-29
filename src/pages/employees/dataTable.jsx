@@ -5,7 +5,12 @@ import FinderPINFL from "@/components/FinderPINFL";
 import FormInput from "@/components/FormInput";
 import { useSnackbar } from "notistack";
 import { useEffect } from "react";
-import { getPositions, sendEmployee } from "@/http/data";
+import {
+  deleteEmployee,
+  getPositions,
+  sendEmployee,
+  sendMember,
+} from "@/http/data";
 import { useSelector } from "react-redux";
 import {
   POSITIONS,
@@ -19,6 +24,8 @@ import dayjs from "dayjs";
 import useActions from "@/hooks/useActions";
 import { showYesNoDialog } from "@/utils/dialog";
 import useDynamicData from "@/hooks/useDynamicData";
+import RadioGroup from "@/components/RadioGroup";
+import useAnimation from "@/hooks/useAnimation";
 
 export default function InDataTable({ onUpload, min }) {
   const { t, i18n } = useTranslation();
@@ -49,6 +56,7 @@ export default function InDataTable({ onUpload, min }) {
       bkutData?.employees.map((e) => {
         return {
           id: e.employee.id,
+          employeeId: e.id,
           fio: getFIO(e.employee),
           position: getLocalizationNames(e.position, i18n),
           // position: {
@@ -83,6 +91,52 @@ export default function InDataTable({ onUpload, min }) {
     sendData(forms, hideModal, isView);
   }
 
+  async function sendMemberData(forms) {
+    const members = (bkutData.members ?? [])
+      .filter((e) => e.member.pinfl != forms.pinfl)
+      .map((e) => ({
+        ...e,
+        bkut: {
+          id: bkutData.id,
+        },
+        member: {
+          id: e.member.id,
+        },
+        joinDate: e.joinDate,
+        position: e.position,
+        phone: e.phoneNumber,
+        email: e.email,
+      }));
+    const requestData = {
+      id: bkutData.id,
+      members: [
+        {
+          ...forms.employment,
+          bkut: {
+            id: bkutData.id,
+          },
+          member: {
+            id: "?",
+          },
+          joinDate: forms.signDate,
+          position: positions.find((p) => p.value == forms.position).label,
+          phone: forms.phoneNumber,
+          email: forms.email,
+        },
+      ],
+    };
+    const fio = splitFIO(forms.fio);
+    const data = {
+      bkutId: requestData.id,
+      pinfl: forms.pinfl,
+      firstName: fio[0],
+      lastName: fio[1],
+      middleName: fio[2],
+      birthDate: forms.birthDate,
+    };
+    await sendMember(requestData, data, members);
+  }
+
   async function sendData(forms, hideModal, isView, noAlert) {
     const fio = splitFIO(forms.fio);
     const requestData = {
@@ -107,21 +161,42 @@ export default function InDataTable({ onUpload, min }) {
         ...rows.filter((r) => r.id != newId),
         { id: newId, ...forms },
       ]);
-      if (!noAlert)
+      if (!noAlert) {
+        if (forms.isMember == 1) await sendMemberData(forms);
         enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+      } else return true;
+
       actions.updateData();
     } else {
       enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
     }
+    if (noAlert) return false;
     if (hideModal) hideModal();
   }
 
   async function fetchData(id) {
-    const data = (bkutData.employees ?? []).find((e) => e.employee.id == id);
+    const employee = (bkutData.employees ?? []).find(
+      (e) => e.employee.id == id
+    );
+    const members = bkutData.members ?? [];
+    const data = {
+      ...(members.find((e) => e.member.pinfl == employee.employee.pinfl) ?? {}),
+      ...employee,
+    };
+    data.employment = {
+      isHomemaker: !!data.isHomemaker,
+      isInvalid: !!data.isInvalid,
+      isPensioner: !!data.isPensioner,
+      isStudent: !!data.isStudent,
+    };
     return data;
   }
-  function deleteRow(id) {
-    setRows((rows) => rows.filter((row) => row?.id != id));
+  async function deleteRow(id, row) {
+    const res = await deleteEmployee(row.employeeId);
+    if (res) {
+      setRows((rows) => rows.filter((row) => row?.id != id));
+      actions.updateData();
+    } else enqueueSnackbar(t("delete-error"), { variant: "error" });
   }
   async function onImportRow(rowData) {
     const forms = {
@@ -151,8 +226,17 @@ export default function InDataTable({ onUpload, min }) {
 
 function ModalUI({ hideModal, positions, data = {} }) {
   const { t } = useTranslation();
+  const [isMember, setIsMember] = useState(true);
   const [formData, setFormData] = useState({ fio: "", birthDate: "" });
-  const { employee = {}, position = {}, phone, email } = data;
+  const {
+    employee = {},
+    position = {},
+    employment = {},
+    joinDate,
+    phone,
+    email,
+  } = data;
+  const animRef = useAnimation();
 
   function onFetchPINFL(data) {
     if (!data) return;
@@ -168,21 +252,59 @@ function ModalUI({ hideModal, positions, data = {} }) {
     if (!FIO) return;
     setFormData({
       fio: FIO,
-      birthDate: dayjs(employee.birthDate ?? ""),
+      birthDate: employee.birthDate ? dayjs(employee.birthDate) : "",
     });
   }, [data]);
 
   return (
-    <div className="modal-content">
+    <div ref={animRef} className="modal-content">
+      <RadioGroup
+        left
+        defaultValue={1}
+        contained
+        name="isMember"
+        label={t("isMember")}
+        onChange={(e) => {
+          setIsMember(e.target.value);
+        }}
+        data={[
+          {
+            value: "1",
+            label: t("memberYes"),
+          },
+          {
+            value: "0",
+            label: t("memberNo"),
+          },
+        ]}
+      />
+      <FinderPINFL
+        pinflValue={employee.pinfl}
+        disablePINFL
+        onFetch={onFetchPINFL}
+      />
       <div className="modal-row">
-        <FinderPINFL
-          pinflValue={employee.pinfl}
-          disablePINFL
-          onFetch={onFetchPINFL}
+        <FormInput label={t("fio")} name="fio" required value={formData.fio} />
+        <FormInput
+          select
+          required
+          value="1"
+          name="gender"
+          dataSelect={[
+            { value: 1, label: t("man") },
+            { value: 0, label: t("woman") },
+          ]}
+          label={t("gender")}
         />
       </div>
       <div className="modal-row">
-        <FormInput label={t("fio")} name="fio" required value={formData.fio} />
+        <FormInput
+          date
+          label={t("birth-date")}
+          required
+          name="birthDate"
+          value={formData.birthDate}
+        />
         <FormInput
           select
           required
@@ -192,17 +314,50 @@ function ModalUI({ hideModal, positions, data = {} }) {
           label={t("job-position")}
         />
       </div>
-      <FormInput
-        date
-        label={t("birth-date")}
-        required
-        name="birthDate"
-        value={formData.birthDate}
-      />
       <div className="modal-row">
         <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
         <FormInput value={email} label={t("email")} name="email" />
       </div>
+      {isMember == 1 && (
+        <div className="modal-row">
+          <FormInput
+            date
+            label={t("employees.dateSign")}
+            value={joinDate ? dayjs(joinDate) : null}
+            name="signDate"
+            // value={formData.signDate}
+          />
+          <FormInput
+            label={t("employment")}
+            name="employment"
+            select
+            value={employment}
+            multiple
+            dataSelect={[
+              {
+                value: "isStudent",
+                label: t("isStudent"),
+              },
+              {
+                value: "isPensioner",
+                label: t("isPensioner"),
+              },
+              {
+                value: "isHomemaker",
+                label: t("isHomemaker"),
+              },
+              {
+                value: "isInvalid",
+                label: t("isInvalid"),
+              },
+              {
+                value: "isWorker",
+                label: t("worker"),
+              },
+            ]}
+          />
+        </div>
+      )}
     </div>
   );
 }
