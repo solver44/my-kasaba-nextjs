@@ -31,9 +31,25 @@
   margin-top: -10px;
   margin-bottom: 5px;
 }
-.modal-actions{
+.modal-actions {
   margin-top: 10px;
   justify-content: flex-end;
   display: flex;
   gap: 15px;
+}
+.viewModal-wrapper {
+  padding: 0 !important;
+  overflow: hidden;
+  & > div {
+    overflow: hidden;
+  }
+  & > div > div {
+    display: flex !important;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+    & > *:not(:first-child) {
+      overflow: auto;
+    }
+  }
 }

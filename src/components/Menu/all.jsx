@@ -35,7 +35,7 @@ const menu = [
   },
   {
     icon: PeopleAlt,
-    title: "allEmployeesTitle",
+    title: "employeesTitle",
     path: "/employees",
   },
   // {

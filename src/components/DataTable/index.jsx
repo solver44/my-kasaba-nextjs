@@ -75,7 +75,8 @@ function DataTable({
 
   const [show, setShow] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, _setRowSelection] = useState({});
+  const rowSelectionRef = useRef({});
   const [tableInstanse, setTableInstanse] = useState();
   const [dataModal, setDataModal] = useState();
   const [openDilaog, setOpenDialog] = useState(false);
@@ -83,6 +84,13 @@ function DataTable({
   const dataModalRef = useRef();
   const isChanged = useRef(false);
   const currentRow = useRef();
+
+  function setRowSelection(func) {
+    let value = func;
+    if (typeof func === "function") value = func(rowSelectionRef.current);
+    _setRowSelection(value);
+    rowSelectionRef.current = value;
+  }
 
   useEffect(() => {
     if (!tableInstanceRef.current) return;

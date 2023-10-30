@@ -16,8 +16,9 @@ import { showYesNoDialog } from "@/utils/dialog";
 import { LoadingButton } from "@mui/lab";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import useDynamicData from "@/hooks/useDynamicData";
+import RadioGroup from "@/components/RadioGroup";
 
-export default function InDataTable() {
+export default function AllEmployeesDT() {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const [ticketCreated, setTickedCreated] = useState(false);
@@ -126,6 +127,7 @@ export default function InDataTable() {
           member: {
             id: "?",
           },
+          isMember: forms.isMember,
           joinDate: forms.signDate,
           position: forms.position,
           phone: forms.phoneNumber,
@@ -197,7 +199,7 @@ export default function InDataTable() {
       onImportRow={onImportRow}
       onSubmitModal={onSubmitModal}
       isFormModal
-      title={t("memberss.title")}
+      title={t("allEmployeesTitle")}
       loading={ticketLoading}
       modalWidth="80vw"
       bottomModal={(handleSubmit, handleClose, isView) => {
@@ -238,6 +240,7 @@ export default function InDataTable() {
 
 function ModalUI({ hideModal, data = {} }) {
   const { t } = useTranslation();
+  const [isMember, setIsMember] = useState(0);
   const [formData, setFormData] = useState({
     fio: "",
     birthDate: "",
@@ -274,6 +277,25 @@ function ModalUI({ hideModal, data = {} }) {
   }
   return (
     <div className="modal-content">
+      <RadioGroup
+        left
+        defaultValue={1}
+        name="isMember"
+        contained
+        onChange={(e) => {
+          setIsMember(e.target.value);
+        }}
+        data={[
+          {
+            value: "1",
+            label: t("memberYes"),
+          },
+          {
+            value: "0",
+            label: t("memberNo"),
+          },
+        ]}
+      />
       <div className="modal-row">
         <FinderPINFL
           disablePINFL
@@ -324,6 +346,7 @@ function ModalUI({ hideModal, data = {} }) {
           value={joinDate ? dayjs(joinDate) : null}
           required
           name="signDate"
+          // value={formData.signDate}
         />
       </div>
       <div className="modal-row">
@@ -337,10 +360,6 @@ function ModalUI({ hideModal, data = {} }) {
           {
             value: "isStudent",
             label: t("isStudent"),
-          },
-          {
-            value: "isPensioner",
-            label: t("isPensioner"),
           },
           {
             value: "isHomemaker",

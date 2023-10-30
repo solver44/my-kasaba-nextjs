@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import DataTable from "@/components/DataTable";
 import FormInput from "@/components/FormInput";
 import { useSnackbar } from "notistack";
-import { Alert } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import FinderSTIR from "@/components/FinderSTIR";
 import { getDistricts, getRegions } from "@/http/public";
 import { useEmployees } from "../employees";
@@ -14,10 +14,12 @@ import { showYesNoDialog } from "@/utils/dialog";
 import { getFIO, splitFIO } from "@/utils/data";
 import Group from "@/components/Group";
 import RadioGroup from "@/components/RadioGroup";
+import ViewModal from "./modal";
 
 export default function InDataTable() {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
+  const [viewModal, setViewModal] = useState(false);
   const { bkutData = {} } = useSelector((states) => states);
   const { enqueueSnackbar } = useSnackbar();
   const actions = useActions();
@@ -142,22 +144,43 @@ export default function InDataTable() {
     } else enqueueSnackbar(t("delete-error"), { variant: "error" });
   }
 
+  function toggleViewModal(row) {
+    setViewModal((bkutData?.departments ?? []).find((e) => e.id == row.id));
+  }
+
   return (
-    <DataTable
-      fetchData={fetchData}
-      handleDeleteClick={deleteRow}
-      title={t("group-organizations.title")}
-      columns={columns}
-      rows={rows}
-      modalWidth="80vw"
-      hideImport
-      bkutData={bkutData}
-      onSubmitModal={onSubmitModal}
-      isFormModal
-      modal={(hideModal, dataModal) => (
-        <ModalUI hideModal={hideModal} data={dataModal} />
-      )}
-    />
+    <React.Fragment>
+      <ViewModal isOpen={viewModal} handleClose={() => setViewModal(false)} />
+      <DataTable
+        topButtons={(selectedRows) => {
+          const isEmpty = selectedRows?.length < 1;
+          return (
+            <Button
+              variant="contained"
+              color="success"
+              disableElevation
+              disabled={isEmpty}
+              onClick={() => toggleViewModal(selectedRows[0])}
+            >
+              {t("passport")}
+            </Button>
+          );
+        }}
+        fetchData={fetchData}
+        handleDeleteClick={deleteRow}
+        title={t("group-organizations.title")}
+        columns={columns}
+        rows={rows}
+        modalWidth="80vw"
+        hideImport
+        bkutData={bkutData}
+        onSubmitModal={onSubmitModal}
+        isFormModal
+        modal={(hideModal, dataModal) => (
+          <ModalUI hideModal={hideModal} data={dataModal} />
+        )}
+      />
+    </React.Fragment>
   );
 }
 function ModalUI({ hideModal, data }) {
@@ -334,10 +357,17 @@ function ModalUI({ hideModal, data }) {
       <Group title={t("industrial-organizations.files")}>
         <div datatype="list">
           <div className="modal-row">
-            <FormInput label={t("decision-title")} name="decisionNumber" />
-            <FormInput name="decisionDate" date label={t("decision-date")} />
+            <FormInput
+              label={t("decision-or-application-title")}
+              name="decisionNumber"
+            />
+            <FormInput name="decisionDate" date label={t("date")} />
           </div>
-          <FormInput name="decisionFile" fileInput label={t("decision-file")} />
+          <FormInput
+            name="decisionFile"
+            fileInput
+            label={t("decision-or-application-file")}
+          />
         </div>
       </Group>
     </div>

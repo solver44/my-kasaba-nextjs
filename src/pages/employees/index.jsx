@@ -6,15 +6,16 @@ import { useSelector } from "react-redux";
 import { getFIO } from "@/utils/data";
 import Tabs from "@/components/Tabs";
 import MembersDT from "../members/dataTable";
+import AllEmployeesDT from "../members/allEmployeesDataTable";
 
 export default function Employees() {
   return (
     <div className={styles.containers}>
       <Tabs
         tabs={[
-          { label: "active-employees", children: <ActiveEmployeeDT /> },
+          { label: "not-member-employees", children: <AllEmployeesDT /> },
+          { label: "employees.title1", children: <ActiveEmployeeDT /> },
           { label: "member-employees", children: <MembersDT /> },
-          { label: "not-member-employees", children: <MembersDT /> },
         ]}
       />
     </div>
@@ -38,11 +39,11 @@ export function useEmployees() {
   return [data, bkutData];
 }
 
-Employees.layout = function (Component, t) {
+Employees.layout = function (Component, t, bkutData = {}) {
   return (
     <HomeWrapper
-      noHeader
-      title={t("allEmployeesTitle")}
+      // noHeader
+      title={bkutData.name}
       desc={t("profile-page.desc")}
     >
       {Component}

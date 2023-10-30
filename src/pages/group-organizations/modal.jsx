@@ -28,7 +28,7 @@ export default function ViewModal({ isOpen, handleClose }) {
     <ModalUI
       isForm={false}
       full={true}
-      title={t("industrial-organizations.title")}
+      title={t("group-organizations.title")}
       open={!!isOpen}
       wrapperClass="viewModal-wrapper"
       handleClose={handleClose}
@@ -40,11 +40,11 @@ export default function ViewModal({ isOpen, handleClose }) {
           contentPadding
           tabs={[
             {
-              label: "industrial-organizations.tab1",
+              label: "group-organizations.tab1",
               children: (
                 <div className="colored-list">
                   <div className="flex">
-                    <label>{t("industrial-organizations.name")}</label>
+                    <label>{t("group-organizations.name")}</label>
                     <span style={{ textAlign: "left", fontWeight: "bold" }}>
                       {showOrNot(data.name)}
                     </span>
@@ -74,7 +74,7 @@ export default function ViewModal({ isOpen, handleClose }) {
                     </span>
                   </div>
                   <div className="flex">
-                    <label>{t("industrial-organizations.direktor")}</label>
+                    <label>{t("group-organizations.direktor")}</label>
                     <span style={{ textAlign: "left" }}>
                       {showOrNot(getFIO(data?.employee))}
                     </span>

@@ -4,11 +4,19 @@
   gap: 15px;
 }
 .label {
-  font-size: var(--input-font-size);
   color: var(--input-color);
+  font-size: var(--input-font-size);
 }
 .checkbox {
-  svg {
-    background: var(--input-incolor);
+  label {
+    font-size: var(--input-font-size);
+  }
+  // svg {
+  //   background: var(--input-incolor);
+  // }
+}
+.controlLabel {
+  & > :last-child {
+    font-size: var(--input-font-size);
   }
 }

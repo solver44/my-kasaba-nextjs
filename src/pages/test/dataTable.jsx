@@ -295,10 +295,6 @@ function ModalUI({ hideModal, data = {} }) {
               value: "isInvalid",
               label: t("isInvalid"),
             },
-            {
-              value: "isWorker",
-              label: t("worker"),
-            },
           ]}
         />
       </div>

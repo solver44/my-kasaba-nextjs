@@ -26,6 +26,7 @@ import { showYesNoDialog } from "@/utils/dialog";
 import useDynamicData from "@/hooks/useDynamicData";
 import RadioGroup from "@/components/RadioGroup";
 import useAnimation from "@/hooks/useAnimation";
+import CheckBoxGroup from "@/components/CheckBoxGroup";
 
 export default function InDataTable({ onUpload, min }) {
   const { t, i18n } = useTranslation();
@@ -214,6 +215,7 @@ export default function InDataTable({ onUpload, min }) {
       rows={rows}
       bkutData={bkutData}
       min={min}
+      modalWidth="80vw"
       title={t("employees.title1")}
       onSubmitModal={onSubmitModal}
       isFormModal
@@ -264,26 +266,6 @@ function ModalUI({ hideModal, positions, data = {} }) {
 
   return (
     <div ref={animRef} className="modal-content">
-      <RadioGroup
-        left
-        defaultValue={1}
-        contained
-        name="isMember"
-        label={t("isMember")}
-        onChange={(e) => {
-          setIsMember(e.target.value);
-        }}
-        data={[
-          {
-            value: "1",
-            label: t("memberYes"),
-          },
-          {
-            value: "0",
-            label: t("memberNo"),
-          },
-        ]}
-      />
       <FinderPINFL
         pinflValue={employee.pinfl}
         disablePINFL
@@ -297,6 +279,7 @@ function ModalUI({ hideModal, positions, data = {} }) {
           required
           value={formData.fio}
         />
+
         <FormInput
           select
           required
@@ -326,51 +309,57 @@ function ModalUI({ hideModal, positions, data = {} }) {
           dataSelect={positions}
           label={t("job-position")}
         />
+        <FormInput
+          date
+          label={t("employees.dateSign")}
+          value={joinDate ? dayjs(joinDate) : null}
+          name="signDate"
+          // value={formData.signDate}
+        />
       </div>
       <div className="modal-row">
         <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
         <FormInput value={email} label={t("email")} name="email" />
       </div>
-      {isMember == 1 && (
-        <div className="modal-row">
-          <FormInput
-            date
-            label={t("employees.dateSign")}
-            value={joinDate ? dayjs(joinDate) : null}
-            name="signDate"
-            // value={formData.signDate}
-          />
-          <FormInput
-            label={t("employment")}
-            name="employment"
-            select
-            value={employment}
-            multiple
-            dataSelect={[
-              {
-                value: "isStudent",
-                label: t("isStudent"),
-              },
-              {
-                value: "isPensioner",
-                label: t("isPensioner"),
-              },
-              {
-                value: "isHomemaker",
-                label: t("isHomemaker"),
-              },
-              {
-                value: "isInvalid",
-                label: t("isInvalid"),
-              },
-              {
-                value: "isWorker",
-                label: t("worker"),
-              },
-            ]}
-          />
-        </div>
-      )}
+      <div className="modal-row">
+        <CheckBoxGroup
+          name="employment"
+          value={employment}
+          data={[
+            {
+              value: "isStudent",
+              label: t("isStudent"),
+            },
+            {
+              value: "isHomemaker",
+              label: t("isHomemaker"),
+            },
+            {
+              value: "isInvalid",
+              label: t("isInvalid"),
+            },
+          ]}
+        />
+        <RadioGroup
+          left
+          defaultValue={1}
+          name="isMember"
+          label={t("isFired")}
+          onChange={(e) => {
+            setIsMember(e.target.value);
+          }}
+          data={[
+            {
+              value: "0",
+              label: t("yes"),
+            },
+            {
+              value: "1",
+              label: t("no"),
+            },
+          ]}
+        />
+      </div>
     </div>
   );
 }

@@ -131,7 +131,7 @@ function ModalUI({ hideModal, data }) {
           label={t("team-contracts.contractNumber")}
         />
         <FormInput
-          name="contractNumber"
+          name="contractDate"
           date
           label={t("team-contracts.contractDate")}
         />

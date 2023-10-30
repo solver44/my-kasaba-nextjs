@@ -364,10 +364,10 @@ function ModalUI({ hideModal, data }) {
       <Group title={t("industrial-organizations.files")}>
         <div datatype="list">
           <div className="modal-row">
-            <FormInput label={t("decision-title")} name="decisionNumber" />
-            <FormInput name="decisionDate" date label={t("decision-date")} />
+            <FormInput label={t("decision-or-application-title")} name="decisionNumber" />
+            <FormInput name="decisionDate" date label={t("date")} />
           </div>
-          <FormInput name="decisionFile" fileInput label={t("decision-file")} />
+          <FormInput name="decisionFile" fileInput label={t("decision-or-application-file")} />
         </div>
       </Group>
     </div>

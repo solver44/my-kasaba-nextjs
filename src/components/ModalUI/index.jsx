@@ -21,6 +21,7 @@ function ModalUI({
   children,
   isView,
   bottomModal,
+  wrapperClass = "",
 }) {
   const { t } = useTranslation();
   const [_isChanged, setIsChanged] = useState(false);
@@ -81,7 +82,9 @@ function ModalUI({
                   <CloseOutlined />
                 </IconButton>
               </div>
-              <div className={styles.wrapper}>{children}</div>
+              <div className={[styles.wrapper, wrapperClass].join(" ")}>
+                {children}
+              </div>
               {bottomModal ? (
                 <div className={styles.bottom}>
                   {bottomModal(handleSubmit, onClose, isView, isChanged)}

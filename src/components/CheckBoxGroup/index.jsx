@@ -11,6 +11,7 @@ function CheckBoxGroup({
   name,
   vertical,
   required,
+  multiple = false,
   value: propValue,
   label,
 }) {
@@ -33,9 +34,25 @@ function CheckBoxGroup({
   }, [propValue]);
 
   const handleCheckboxChange = (e, key) => {
-    field.onChange({
-      target: { name, value: { ...field.value, [key]: e.target.checked } },
-    });
+    if (multiple) {
+      // If multiple selections are allowed, toggle the selected state.
+      field.onChange({
+        target: {
+          name,
+          value: {
+            ...field.value,
+            [key]: e.target.checked,
+          },
+        },
+      });
+    } else {
+      field.onChange({
+        target: {
+          name,
+          value: { [key]: !field.value[key] },
+        },
+      });
+    }
   };
 
   return (
@@ -43,7 +60,7 @@ function CheckBoxGroup({
       {label && <label className={styles.label}>{label}</label>}
       <FormGroup
         style={{
-          gap: vertical ? 0 : 30,
+          gap: vertical ? 0 : 20,
           flexDirection: vertical ? "column" : "row",
           maxHeight: vertical ? 100 : "auto",
         }}
@@ -53,8 +70,10 @@ function CheckBoxGroup({
           <FormControlLabel
             onChange={(e) => handleCheckboxChange(e, checkbox.value)}
             key={checkbox.value}
+            className={styles.controlLabel}
             control={
               <Checkbox
+                size="large"
                 className={styles.checkbox}
                 checked={(field.value || {})[checkbox.value] || false}
               />
