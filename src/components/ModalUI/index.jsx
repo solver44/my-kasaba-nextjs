@@ -43,7 +43,7 @@ function ModalUI({
               onChanged && onChanged(isChanged, currentData);
             }}
           >
-            {(onSubmit) => children(onSubmit, _isChanged)}
+            {(onSubmit, data) => children(onSubmit, _isChanged, data)}
           </FormValidation>
         </div>
       )
@@ -73,7 +73,7 @@ function ModalUI({
     >
       <Slide direction="up" in={open}>
         {/* <CloseRounded onClick={handleClose} className={styles.close} /> */}
-        {parent((handleSubmit, isChanged) => {
+        {parent((handleSubmit, isChanged, currentData) => {
           return (
             <React.Fragment>
               <div className={styles.top}>
@@ -87,7 +87,13 @@ function ModalUI({
               </div>
               {bottomModal ? (
                 <div className={styles.bottom}>
-                  {bottomModal(handleSubmit, onClose, isView, isChanged)}
+                  {bottomModal(
+                    handleSubmit,
+                    onClose,
+                    isView,
+                    isChanged,
+                    currentData
+                  )}
                 </div>
               ) : (
                 <div className={[styles.bottom, styles.row].join(" ")}>

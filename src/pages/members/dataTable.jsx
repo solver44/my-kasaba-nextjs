@@ -16,6 +16,8 @@ import { showYesNoDialog } from "@/utils/dialog";
 import { LoadingButton } from "@mui/lab";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import useDynamicData from "@/hooks/useDynamicData";
+import { generateTicketData } from "@/utils/encryptdecrypt";
+import { openUrlWithQuery } from "@/utils/window";
 
 export default function InDataTable() {
   const { t } = useTranslation();
@@ -161,7 +163,21 @@ export default function InDataTable() {
     if (hideModal) hideModal();
   }
 
-  async function generateDoc() {
+  async function generateDoc(data) {
+    if (ticketCreated) {
+      const director = getFIO(
+        bkutData.employees.find((e) => e.position.id == 1).employee
+      );
+      const query = generateTicketData({
+        ...data,
+        id: "173T112211B-00000",
+        bkutName: bkutData.name,
+        director,
+      });
+      openUrlWithQuery("/ticket/0", { d: query });
+
+      return;
+    }
     setTicketLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setTicketLoading(false);
@@ -199,7 +215,7 @@ export default function InDataTable() {
       title={t("memberss.title")}
       loading={ticketLoading}
       modalWidth="80vw"
-      bottomModal={(handleSubmit, handleClose, isView) => {
+      bottomModal={(handleSubmit, handleClose, isView, _, data) => {
         return (
           <div className={styles.bottom} style={{ position: "relative" }}>
             <div className={styles.row}>
@@ -208,16 +224,18 @@ export default function InDataTable() {
               </Button>
               <Button onClick={handleClose}>{t("close")}</Button>
             </div>
-            <LoadingButton
-              style={ticketCreated ? { marginRight: 100 } : {}}
-              onClick={generateDoc}
-              loading={ticketLoading}
-              variant="contained"
-              color="success"
-            >
-              {ticketCreated && <VisibilityIcon style={{ marginRight: 5 }} />}
-              {ticketCreated ? t("showTicket") : t("createDoc")}
-            </LoadingButton>
+            {isView && (
+              <LoadingButton
+                style={ticketCreated ? { marginRight: 100 } : {}}
+                onClick={() => generateDoc(data)}
+                loading={ticketLoading}
+                variant="contained"
+                color="success"
+              >
+                {ticketCreated && <VisibilityIcon style={{ marginRight: 5 }} />}
+                {ticketCreated ? t("showTicket") : t("createDoc")}
+              </LoadingButton>
+            )}
             {ticketCreated && (
               <img
                 style={{ position: "absolute", bottom: -10, right: 0 }}

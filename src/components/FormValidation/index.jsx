@@ -47,7 +47,12 @@ function FormValidation({
         onSubmit={button ? null : methods.handleSubmit(handleSubmitFunc)}
         style={style}
       >
-        {button ? children(methods.handleSubmit(handleSubmitFunc)) : children}
+        {button
+          ? children(
+              methods.handleSubmit(handleSubmitFunc),
+              methods.getValues()
+            )
+          : children}
       </form>
     </FormProvider>
   );
