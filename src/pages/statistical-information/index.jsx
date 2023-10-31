@@ -143,6 +143,7 @@ export default function StatisticalInformation() {
             </CardUI>
             <CardUI className="full-grid-item">
               <BarCharts
+                width={1000}
                 title={t("statistical-information.group8")}
                 data={group8Data}
               />

@@ -20,12 +20,14 @@ if (typeof window !== `undefined`) {
 // ];
 export default function BarCharts({
   title = "",
+  width,
   data = [],
   categories = [""],
 }) {
   const chartOptions = {
     chart: {
       type: "column",
+      width,
     },
     title: {
       text: title,
