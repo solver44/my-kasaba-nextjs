@@ -7,11 +7,22 @@ import { getFIO } from "@/utils/data";
 import Tabs from "@/components/Tabs";
 import MembersDT from "../members/dataTable";
 import AllEmployeesDT from "../members/allEmployeesDataTable";
+import useQueryPage from "@/hooks/useQueryPage";
 
 export default function Employees() {
+  const { searchParams, addQueryToCurrentURL } = useQueryPage({
+    tab: 1,
+  });
+
+  function onChangeTabs(index) {
+    addQueryToCurrentURL({ tab: +index + 1 });
+  }
+
   return (
     <div className={styles.containers}>
       <Tabs
+        onChange={onChangeTabs}
+        value={(searchParams.get("tab") ?? 1) - 1}
         tabs={[
           { label: "not-member-employees", children: <AllEmployeesDT /> },
           { label: "employees.title1", children: <ActiveEmployeeDT /> },
@@ -41,11 +52,7 @@ export function useEmployees() {
 
 Employees.layout = function (Component, t, bkutData = {}) {
   return (
-    <HomeWrapper
-      // noHeader
-      title={bkutData.name}
-      desc={t("profile-page.desc")}
-    >
+    <HomeWrapper noHeader title={bkutData.name} desc={t("profile-page.desc")}>
       {Component}
     </HomeWrapper>
   );

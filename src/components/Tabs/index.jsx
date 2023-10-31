@@ -7,15 +7,18 @@ export default function Tabs({
   tabs = [],
   appBar,
   contentPadding,
+  onChange,
+  value: defaultValue,
   scrollable,
   color,
 }) {
   const { t } = useTranslation();
-  const [value, setValue] = useState("0");
+  const [value, setValue] = useState(defaultValue + "" || "0");
   const [animate, setAnimate] = useState(true);
   function handleChange(_, value) {
     setAnimate(false);
     setValue(value);
+    if (onChange) onChange(value);
     setTimeout(() => {
       setAnimate(true);
     }, 100);

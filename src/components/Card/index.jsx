@@ -2,9 +2,12 @@ import React from "react";
 import Card from "@mui/material/Card";
 import styles from "./card.module.scss";
 
-export default function CardUI({ children, label, value }) {
+export default function CardUI({ children, label, value, className = "" }) {
   return (
-    <Card variant="outlined" className={styles.container}>
+    <Card
+      variant="outlined"
+      className={[styles.container, className].join(" ")}
+    >
       {children ? (
         children
       ) : (

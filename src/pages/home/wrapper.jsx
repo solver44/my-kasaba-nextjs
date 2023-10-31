@@ -6,7 +6,6 @@ import logo from "public/kasaba-logo.svg";
 import HomeContentWrapper from "../../components/HomeContentWrapper";
 import Logout from "../../components/Logout";
 import Image from "next/image";
-import PrivateRoute from "@/utils/withAuth";
 import AllMenu from "@/components/Menu/all";
 import { useSelector } from "react-redux";
 import { getBKUTData } from "@/http/data";

@@ -15,8 +15,6 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { localStorage } from "@/utils/window";
 import Image from "next/image";
-import { LoginRoute } from "@/utils/withAuth";
-import { auth } from "@/http/public";
 import Input from "@/components/Input";
 import { validateEmpty } from "@/utils/validation";
 import { useSnackbar } from "notistack";

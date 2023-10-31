@@ -45,11 +45,10 @@ export default function AllEmployeesDT() {
     { field: "pinfl", headerName: "pinfl", hidden: true },
     { field: "position", headerName: "job-position", hidden: true },
     { field: "birthDate", headerName: "birth-date", hidden: true },
-    { field: "phoneNumber", headerName: "phone-number", hidden: true },
+    { field: "phoneNumber", headerName: "phone-number" },
     {
       field: "email",
       headerName: "email",
-      hidden: true,
     },
   ];
 

@@ -35,7 +35,7 @@ function saveTokens(tokens) {
 const MyApp = ({ Component, pageProps, tokens }) => {
   const layout = Component?.layout || ((page) => page);
   const { i18n, t } = useTranslation();
-  const { showLoading } = useSelector((state) => state);
+  const { showLoading, bkutData } = useSelector((state) => state);
   saveTokens(tokens);
 
   return (
@@ -58,7 +58,7 @@ const MyApp = ({ Component, pageProps, tokens }) => {
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         {showLoading && <Loader />}
-        {layout(<Component {...pageProps} />, t)}
+        {layout(<Component {...pageProps} />, t, bkutData)}
       </SnackbarProvider>
     </LocalizationProvider>
   );

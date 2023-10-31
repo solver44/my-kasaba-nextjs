@@ -1,4 +1,21 @@
-.containers{
-    width: 100%;
-    margin-top: 30px;
+.containers {
+  width: 100%;
+}
+.editBtn {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+.form {
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+}
+.grid {
+  margin-top: 20px;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }

@@ -25,6 +25,8 @@
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.9",
     "fs-extra": "^11.1.1",
+    "highcharts": "^11.2.0",
+    "highcharts-react-official": "^3.2.1",
     "i18next": "^23.5.1",
     "material-react-table": "^1.15.1",
     "next": "^13.5.4",

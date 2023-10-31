@@ -216,6 +216,8 @@ function FormBody({
 
           if (emptyRows.length) {
             setEmptyRows(emptyRows);
+          } else {
+            setEmptyRows();
           }
           if (data.length - emptyRows.length - 1 > 0) {
             enqueueSnackbar(
