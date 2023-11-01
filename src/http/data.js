@@ -62,7 +62,7 @@ export async function getPositions() {
 export async function deleteDepartment(id) {
   try {
     const data = await $axios.delete(
-      `/rest/entities/EBKUT/${id}?fetchPlan=bkut-cabinet`
+      `/rest/entities/EBkutDepartment/:id${id}`
     );
     return getDeleteResponse(data);
   } catch (error) {

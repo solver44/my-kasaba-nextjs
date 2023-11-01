@@ -8,7 +8,7 @@ export default function Tabs({
   appBar,
   contentPadding,
   onChange,
-  value: defaultValue,
+  value: defaultValue = "",
   scrollable,
   color,
 }) {

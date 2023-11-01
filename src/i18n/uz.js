@@ -320,6 +320,8 @@ export default {
     "server-error":
       "Serverda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
 
+    "doc-create-error":
+      "Guvohnomani yaratishda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "invalid-email": "Elektron pochta manzili xato kiritildi",
     "invalid-input": "Maydonda xatolik mavjud!",
     "error-auth": "Login yoki parol topilmadi.",

@@ -16,6 +16,8 @@ import areEqual from "@/utils/areEqual";
 import CardUI from "@/components/Card";
 import BarCharts from "@/components/Charts/Bar";
 import PieCharts from "@/components/Charts/Pie";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 export default function StatisticalInformation() {
   const { t } = useTranslation();
@@ -148,18 +150,44 @@ export default function StatisticalInformation() {
                 data={group8Data}
               />
             </CardUI>
-            <CardUI value="Ha" label={t("statistical-information.input10")} />
-            <CardUI value="Ha" label={t("statistical-information.input11")} />
-            <CardUI value="Ha" label={t("statistical-information.input12")} />
-            <CardUI value="Ha" label={t("statistical-information.input13")} />
-            <CardUI value="Ha" label={t("statistical-information.input14")} />
-            <CardUI value="Ha" label={t("statistical-information.input15")} />
+            <CardUI
+              value={<CheckedBox value={1} />}
+              label={t("statistical-information.input10")}
+            />
+            <CardUI
+              value={<CheckedBox value={1} />}
+              label={t("statistical-information.input11")}
+            />
+            <CardUI
+              value={<CheckedBox value={1} />}
+              label={t("statistical-information.input12")}
+            />
+            <CardUI
+              value={<CheckedBox value={0} />}
+              label={t("statistical-information.input13")}
+            />
+            <CardUI
+              value={<CheckedBox value={1} />}
+              label={t("statistical-information.input14")}
+            />
+            <CardUI
+              value={<CheckedBox value={0} />}
+              label={t("statistical-information.input15")}
+            />
           </div>
         ) : (
           <EditData />
         )}
       </div>
     </FormValidation>
+  );
+}
+
+function CheckedBox({ value }) {
+  return value ? (
+    <CheckBoxIcon className="big-icon" />
+  ) : (
+    <CheckBoxOutlineBlankIcon className="big-icon" />
   );
 }
 

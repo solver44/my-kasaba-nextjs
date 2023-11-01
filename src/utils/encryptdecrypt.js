@@ -19,14 +19,13 @@ export const decryptData = (text) => {
 };
 
 export function generateTicketData(data) {
-  const fio = splitFIO(data.fio);
   const reqData = {
     id: data.id,
-    firstName: fio[0],
-    lastName: fio[1],
-    middleName: fio[2],
-    birthDate: convertStringToFormatted(data.birthDate),
-    joinDate: convertStringToFormatted(data.signDate),
+    firstName: data.member.firstName,
+    lastName: data.member.lastName,
+    middleName: data.member.middleName,
+    birthDate: convertStringToFormatted(data.member.birthDate),
+    joinDate: convertStringToFormatted(data.joinDate),
     bkutName: data.bkutName,
     director: data.director,
   };

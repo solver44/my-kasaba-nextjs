@@ -18,11 +18,18 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import useDynamicData from "@/hooks/useDynamicData";
 import RadioGroup from "@/components/RadioGroup";
 import { generateTicketData } from "@/utils/encryptdecrypt";
-import { openUrlWithQuery } from "@/utils/window";
+import {
+  getUrlWithQuery,
+  openBlankURL,
+} from "@/utils/window";
+import QRCode from "react-qr-code";
+import SimpleDialog from "@/components/SimpleDialog";
 
 export default function AllEmployeesDT() {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
+  const [qrURL, setQRURL] = useState("");
+  const [isZoomQR, setIsZoomQR] = useState(false);
   const [ticketCreated, setTickedCreated] = useState(false);
   const [ticketLoading, setTicketLoading] = useState(false);
   const { bkutData = {} } = useSelector((states) => states);
@@ -165,8 +172,14 @@ export default function AllEmployeesDT() {
     if (hideModal) hideModal();
   }
 
-  async function generateDoc(data) {
+  async function generateDoc(_data) {
     if (ticketCreated) {
+      openBlankURL(qrURL);
+      return;
+    }
+    setTicketLoading(true);
+    try {
+      const data = bkutData.members.find((m) => m.member.pinfl == _data.pinfl);
       const director = getFIO(
         bkutData.employees.find((e) => e.position.id == 1).employee
       );
@@ -176,14 +189,16 @@ export default function AllEmployeesDT() {
         bkutName: bkutData.name,
         director,
       });
-      openUrlWithQuery("/ticket/0", { d: query });
-
-      return;
+      const url = getUrlWithQuery("/ticket/0", { d: query });
+      setQRURL(url);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setTickedCreated(true);
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar(t("doc-create-error"), { variant: "error" });
+    } finally {
+      setTicketLoading(false);
     }
-    setTicketLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setTicketLoading(false);
-    setTickedCreated(true);
   }
   async function fetchData(id) {
     const data = (bkutData.members ?? []).find((member) => member.id == id);
@@ -205,53 +220,75 @@ export default function AllEmployeesDT() {
   }
 
   return (
-    <DataTable
-      fetchData={fetchData}
-      handleDeleteClick={deleteRow}
-      columns={columns}
-      rows={rows}
-      bkutData={bkutData}
-      onImportRow={onImportRow}
-      onSubmitModal={onSubmitModal}
-      isFormModal
-      title={t("allEmployeesTitle")}
-      loading={ticketLoading}
-      modalWidth="80vw"
-      bottomModal={(handleSubmit, handleClose, isView, _, data) => {
-        return (
-          <div className={styles.bottom} style={{ position: "relative" }}>
-            <div className={styles.row}>
-              <Button onClick={handleSubmit} variant="contained">
-                {t("save")}
-              </Button>
-              <Button onClick={handleClose}>{t("close")}</Button>
+    <React.Fragment>
+      <SimpleDialog open={isZoomQR} onClose={() => setIsZoomQR(false)}>
+        <QRCode
+          size={400}
+          value={qrURL}
+          style={{ height: "auto" }}
+          viewBox={`0 0 400 400`}
+        />
+      </SimpleDialog>
+      <DataTable
+        fetchData={fetchData}
+        handleDeleteClick={deleteRow}
+        columns={columns}
+        rows={rows}
+        bkutData={bkutData}
+        onImportRow={onImportRow}
+        onSubmitModal={onSubmitModal}
+        isFormModal
+        title={t("allEmployeesTitle")}
+        loading={ticketLoading}
+        modalWidth="80vw"
+        bottomModal={(handleSubmit, handleClose, isView, _, data) => {
+          return (
+            <div className={styles.bottom} style={{ position: "relative" }}>
+              <div className={styles.row}>
+                <Button onClick={handleSubmit} variant="contained">
+                  {t("save")}
+                </Button>
+                <Button onClick={handleClose}>{t("close")}</Button>
+              </div>
+              {isView && (
+                <LoadingButton
+                  style={ticketCreated ? { marginRight: 130 } : {}}
+                  onClick={() => generateDoc(data)}
+                  loading={ticketLoading}
+                  variant="contained"
+                  color="success"
+                >
+                  {ticketCreated && (
+                    <VisibilityIcon style={{ marginRight: 5 }} />
+                  )}
+                  {ticketCreated ? t("showTicket") : t("createDoc")}
+                </LoadingButton>
+              )}
+              {ticketCreated && qrURL && (
+                <React.Fragment>
+                  <QRCode
+                    onClick={() => setIsZoomQR(true)}
+                    size={100}
+                    style={{
+                      cursor: "pointer",
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                      height: "auto",
+                    }}
+                    value={qrURL}
+                    viewBox={`0 0 100 100`}
+                  />
+                </React.Fragment>
+              )}
             </div>
-            {isView && (
-              <LoadingButton
-                style={ticketCreated ? { marginRight: 100 } : {}}
-                onClick={() => generateDoc(data)}
-                loading={ticketLoading}
-                variant="contained"
-                color="success"
-              >
-                {ticketCreated && <VisibilityIcon style={{ marginRight: 5 }} />}
-                {ticketCreated ? t("showTicket") : t("createDoc")}
-              </LoadingButton>
-            )}
-            {ticketCreated && (
-              <img
-                style={{ position: "absolute", bottom: -10, right: 0 }}
-                height={90}
-                src="https://www.qrstuff.com/images/default_qrcode.png"
-              />
-            )}
-          </div>
-        );
-      }}
-      modal={(hideModal, dataModal) => (
-        <ModalUI data={dataModal} hideModal={hideModal} />
-      )}
-    />
+          );
+        }}
+        modal={(hideModal, dataModal) => (
+          <ModalUI data={dataModal} hideModal={hideModal} />
+        )}
+      />
+    </React.Fragment>
   );
 }
 

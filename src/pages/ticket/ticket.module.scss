@@ -8,8 +8,9 @@
 }
 .qrCode {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
+  height: auto;
+  bottom: 20px;
+  left: 20px;
 }
 .content {
   position: absolute;
@@ -35,7 +36,7 @@
   }
   &:last-child {
     width: 100%;
-    margin-top: 30px;
+    margin-top: 50px;
     float: right;
     display: flex;
     justify-content: flex-end;

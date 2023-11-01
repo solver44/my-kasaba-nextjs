@@ -144,7 +144,8 @@ export default function InDataTable() {
     const data = (bkutData.departments ?? []).find((ok) => ok.id == id);
     return data;
   }
-  async function deleteRow(id) {
+  async function deleteRow(id, row) {
+    console.log(id, row)
     const res = await deleteDepartment(id);
     if (res) {
       setRows((rows) => rows.filter((row) => row?.id != id));

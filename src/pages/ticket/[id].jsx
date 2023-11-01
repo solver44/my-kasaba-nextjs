@@ -6,6 +6,8 @@ import logo from "public/kasaba-logo.svg";
 import Image from "next/image";
 import { decryptData } from "@/utils/encryptdecrypt";
 import { showOrNot } from "@/utils/data";
+import QRCode from "react-qr-code";
+import { enqueueSnackbar } from "notistack";
 
 export default function TicketPage(p) {
   const router = useRouter();
@@ -18,12 +20,20 @@ export default function TicketPage(p) {
     joinDate: "10.10.2000",
     bkutName: "СОВЕТ ФЕДЕРАЦИИ ПРОФСОЮЗА",
     director: "Jamshidbek Jamshidbekov Anvarovich",
+    url: "",
   });
   //same name as name of your file, can be [slug].js; [specialId].js - any name you want
   const { id, d } = router.query;
   useEffect(() => {
     if (!d) return;
-    setData(decryptData(d));
+    try {
+      setData({ ...decryptData(d), url: window.location.href });
+    } catch (error) {
+      setData({});
+      enqueueSnackbar("Ma'lumotlarni yuklashda xatolik mavjud.", {
+        variant: "error",
+      });
+    }
   }, [d]);
 
   return (
@@ -57,12 +67,21 @@ export default function TicketPage(p) {
         <p className={styles.row}>
           <span>BKUT raisi</span> <u>{showOrNot(data.director)}</u>
         </p>
-        <img
+
+        {data.url && (
+          <QRCode
+            size={120}
+            className={styles.qrCode}
+            value={data.url}
+            viewBox={`0 0 120 120`}
+          />
+        )}
+
+        {/* <img
           alt="qr code"
-          className={styles.qrCode}
           height={90}
           src="https://www.qrstuff.com/images/default_qrcode.png"
-        />
+        /> */}
         <p className={styles.row}>Shaxsiy imzo _______________</p>
       </Paper>
     </div>
