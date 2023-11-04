@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 import {
   deleteEmployee,
+  deleteMember,
   getPositions,
   sendEmployee,
   sendMember,
@@ -137,6 +138,13 @@ export default function InDataTable({ onUpload, min }) {
     };
     await sendMember(requestData, data, members);
   }
+  async function deleteMemberData(forms) {
+    const currentMember = (bkutData.members ?? []).find(
+      (e) => e.member.pinfl == forms.pinfl
+    );
+    if (!currentMember) return;
+    await deleteMember(currentMember.id);
+  }
 
   async function sendData(forms, hideModal, isView, noAlert) {
     const fio = splitFIO(forms.fio);
@@ -164,6 +172,7 @@ export default function InDataTable({ onUpload, min }) {
       ]);
       if (!noAlert) {
         if (forms.isMember == 1) await sendMemberData(forms);
+        else await deleteMemberData(forms);
         enqueueSnackbar(t("successfully-saved"), { variant: "success" });
       } else return true;
 
@@ -179,10 +188,13 @@ export default function InDataTable({ onUpload, min }) {
     const employee = (bkutData.employees ?? []).find(
       (e) => e.employee.id == id
     );
-    const members = bkutData.members ?? [];
+    const currentMember = (bkutData.members ?? []).find(
+      (e) => e.member.pinfl == employee.employee.pinfl
+    );
     const data = {
-      ...(members.find((e) => e.member.pinfl == employee.employee.pinfl) ?? {}),
+      ...(currentMember ?? {}),
       ...employee,
+      isFired: !!!currentMember,
     };
     data.employment = {
       isHomemaker: !!data.isHomemaker,
@@ -216,7 +228,7 @@ export default function InDataTable({ onUpload, min }) {
       bkutData={bkutData}
       min={min}
       modalWidth="80vw"
-      title={t("employees.title1")}
+      title={t("employees.title")}
       onSubmitModal={onSubmitModal}
       isFormModal
       modal={(hideModal, dataModal) => (
@@ -240,6 +252,7 @@ function ModalUI({ hideModal, positions, data = {} }) {
     employment = {},
     joinDate,
     phone,
+    isFired = false,
     email,
   } = data;
   const animRef = useAnimation();
@@ -343,6 +356,7 @@ function ModalUI({ hideModal, positions, data = {} }) {
         <RadioGroup
           left
           defaultValue={1}
+          value={isFired ? 0 : 1}
           name="isMember"
           label={t("isFired")}
           onChange={(e) => {

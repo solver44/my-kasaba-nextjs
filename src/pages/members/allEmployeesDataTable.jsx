@@ -18,10 +18,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import useDynamicData from "@/hooks/useDynamicData";
 import RadioGroup from "@/components/RadioGroup";
 import { generateTicketData } from "@/utils/encryptdecrypt";
-import {
-  getUrlWithQuery,
-  openBlankURL,
-} from "@/utils/window";
+import { getUrlWithQuery, openBlankURL } from "@/utils/window";
 import QRCode from "react-qr-code";
 import SimpleDialog from "@/components/SimpleDialog";
 
@@ -238,7 +235,7 @@ export default function AllEmployeesDT() {
         onImportRow={onImportRow}
         onSubmitModal={onSubmitModal}
         isFormModal
-        title={t("allEmployeesTitle")}
+        title={t("bkutEmployee")}
         loading={ticketLoading}
         modalWidth="80vw"
         bottomModal={(handleSubmit, handleClose, isView, _, data) => {
@@ -331,32 +328,11 @@ function ModalUI({ hideModal, data = {} }) {
   }
   return (
     <div className="modal-content">
-      <RadioGroup
-        left
-        defaultValue={1}
-        name="isMember"
-        contained
-        onChange={(e) => {
-          setIsMember(e.target.value);
-        }}
-        data={[
-          {
-            value: "1",
-            label: t("memberYes"),
-          },
-          {
-            value: "0",
-            label: t("memberNo"),
-          },
-        ]}
+      <FinderPINFL
+        disablePINFL
+        pinflValue={member.pinfl}
+        onFetch={onFetchPINFL}
       />
-      <div className="modal-row">
-        <FinderPINFL
-          disablePINFL
-          pinflValue={member.pinfl}
-          onFetch={onFetchPINFL}
-        />
-      </div>
       <div className="modal-row">
         <FormInput
           disabled
@@ -394,37 +370,59 @@ function ModalUI({ hideModal, data = {} }) {
           options={positions}
           label={t("employees.position")}
         />
-        <FormInput
-          date
-          label={t("employees.dateSign")}
-          value={joinDate ? dayjs(joinDate) : null}
-          required
-          name="signDate"
-          // value={formData.signDate}
-        />
+        {isMember == 1 && (
+          <FormInput
+            date
+            label={t("employees.dateSign")}
+            value={joinDate ? dayjs(joinDate) : null}
+            required
+            name="signDate"
+          />
+        )}
       </div>
       <div className="modal-row">
         <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
         <FormInput value={email} label={t("employees.email")} name="email" />
       </div>
-      <CheckBoxGroup
-        name="personInfo"
-        value={inData}
-        data={[
-          {
-            value: "isStudent",
-            label: t("isStudent"),
-          },
-          {
-            value: "isHomemaker",
-            label: t("isHomemaker"),
-          },
-          {
-            value: "isInvalid",
-            label: t("isInvalid"),
-          },
-        ]}
-      />
+      <div className="modal-row">
+        <CheckBoxGroup
+          name="personInfo"
+          value={inData}
+          data={[
+            {
+              value: "isStudent",
+              label: t("isStudent"),
+            },
+            {
+              value: "isHomemaker",
+              label: t("isHomemaker"),
+            },
+            {
+              value: "isInvalid",
+              label: t("isInvalid"),
+            },
+          ]}
+        />
+        <RadioGroup
+          left
+          defaultValue={1}
+          name="isMember"
+          label={t("isMember")}
+          onChange={(e) => {
+            setIsMember(e.target.value);
+          }}
+          data={[
+            {
+              value: "1",
+              label: t("yes"),
+            },
+            {
+              value: "0",
+              label: t("no"),
+            },
+          ]}
+        />
+      </div>
     </div>
   );
 }

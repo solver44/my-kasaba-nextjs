@@ -233,7 +233,7 @@ export default function InDataTable() {
         onImportRow={onImportRow}
         onSubmitModal={onSubmitModal}
         isFormModal
-        title={t("memberss.title")}
+        title={t("memberTitle")}
         loading={ticketLoading}
         modalWidth="80vw"
         bottomModal={(handleSubmit, handleClose, isView, _, data) => {

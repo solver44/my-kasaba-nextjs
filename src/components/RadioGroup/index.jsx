@@ -79,6 +79,7 @@ function RadioGroups({
               key={radio.value}
               value={radio.value}
               control={<Radio />}
+              className={styles.radioForm}
               label={radio.label}
             />
           )

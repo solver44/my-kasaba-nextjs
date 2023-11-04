@@ -71,11 +71,11 @@ const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
           ></MenuIcon>
           <Image className={styles.logo} src={logo} alt="logotip kasaba" />
           <Profile collapsed={collapsed} />
-          {!states.isMember ? (
+          {/* {!states.isMember ? (
             <PartMenu collapsed={collapsed} />
-          ) : (
-            <AllMenu collapsed={collapsed} />
-          )}
+          ) : ( */}
+          <AllMenu collapsed={collapsed} />
+          {/* )} */}
         </div>
         <div className={styles.bottom}>
           <Logout collapsed={collapsed} />

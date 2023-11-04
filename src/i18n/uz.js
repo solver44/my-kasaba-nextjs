@@ -166,7 +166,7 @@ export default {
       title: "Asosiy vositalar",
     },
     employees: {
-      title: "Xodimlar",
+      title: "Kasaba uyushmasi qo'mitasi xodimi",
       title1: "Kasaba uyushmasi qo'mitasi xodimlari",
       fio: "FIO",
       position: "Lavozimi",
@@ -179,9 +179,7 @@ export default {
       chairman: "Rais",
       accountant: "Hisobchi",
     },
-    memberss: {
-      title: "A’zolar",
-    },
+    memberTitle: "Kasaba uyushmasi a'zosi",
     organization: {
       stir: "Tashkilot STIR (INN) raqami",
       network: "Tashkilot qarashli tarmoq",
@@ -226,6 +224,7 @@ export default {
     isFired: "Xodim asosiy ishidan ozod etilganmi?",
     "senior-organization": "Yuqori turuvchi tashkilot",
     all: "Barchasi",
+    "bkutEmployee": "Boshlang'ich tashkilot xodimi",
 
     createDoc: "Guvohnoma yaratish",
     certificate: "Guvohnoma",
