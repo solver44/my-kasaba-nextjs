@@ -74,11 +74,9 @@ const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
           {/* {!states.isMember ? (
             <PartMenu collapsed={collapsed} />
           ) : ( */}
+          <Logout collapsed={collapsed} />
           <AllMenu collapsed={collapsed} />
           {/* )} */}
-        </div>
-        <div className={styles.bottom}>
-          <Logout collapsed={collapsed} />
         </div>
       </div>
       <div ref={animRef} className={"wrapper " + styles.right}>

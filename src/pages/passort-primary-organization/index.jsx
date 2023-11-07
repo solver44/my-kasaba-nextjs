@@ -64,8 +64,10 @@ export default function PassortPrimaryOrganization() {
     if (!data) return;
     try {
       setLoadingEditMode(true);
-      let applicationFileRef, protocolFileRef, responseFile;
-      if (data.electronicFile.includes("fs://")) {
+      console.log(data);
+      let applicationFileRef, protocolFileRef, responseFile, temp;
+      temp = data.electronicFile;
+      if (typeof temp === "string" && temp.includes("fs://")) {
         protocolFileRef = data.electronicFile;
       } else {
         responseFile = await initFile(data.electronicFile);
@@ -75,7 +77,8 @@ export default function PassortPrimaryOrganization() {
         }
         protocolFileRef = responseFile.fileRef;
       }
-      if (data.application.includes("fs://")) {
+      temp = data.application;
+      if (typeof temp === "string" && temp.includes("fs://")) {
         applicationFileRef = data.application;
       } else {
         responseFile = await initFile(data.application);

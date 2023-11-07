@@ -30,6 +30,9 @@ export default function DownloadLink({
       element.current.innerHTML = "-";
       return;
     }
+    else{
+      element.current.style.textDecoration = "underline";
+    }
     createDownloadLink();
   }, [binaryData, loading]);
 

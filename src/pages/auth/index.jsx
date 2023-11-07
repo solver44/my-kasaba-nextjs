@@ -18,7 +18,7 @@ import Image from "next/image";
 import Input from "@/components/Input";
 import { validateEmpty } from "@/utils/validation";
 import { useSnackbar } from "notistack";
-import { getBKUTID } from "@/http/data";
+import { getBKUTData, getBKUTID } from "@/http/data";
 import Cookies from "universal-cookie";
 
 export default function Auth() {
@@ -54,14 +54,20 @@ export default function Auth() {
     }
     actions.showLoading(true);
 
-    const data = await getBKUTID(inputData.username, inputData.password);
-    if (data?.success) {
-      localStorage.setItem("token", data.id);
+    const bkutData = await getBKUTID(inputData.username, inputData.password);
+    if (bkutData?.success) {
+      localStorage.setItem("token", bkutData.id);
       const cookies = new Cookies();
-      cookies.set("token", data.id);
+      cookies.set("token", bkutData.id);
       actions.loginSuccess();
-      actions.isMember(false);
-      await navigate.push("/");
+      const resData = await getBKUTData(bkutData.id);
+      if (resData?.protocolFile) {
+        actions.isMember(true);
+        await navigate.push("/");
+      } else {
+        actions.isMember(false);
+        await navigate.push("/register-bkut");
+      }
     } else {
       enqueueSnackbar(t("error-auth"), { variant: "error" });
     }

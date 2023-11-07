@@ -23,7 +23,7 @@
     border-radius: 4px;
   }
   input {
-    padding: 10px 20px !important;
+    padding: 10px 10px !important;
     font-size: 16px !important;
   }
 }
@@ -35,9 +35,6 @@
   &.invalid {
     .fileInput {
       border-color: red;
-    }
-    .cloudIcon {
-      top: 32% !important;
     }
   }
 }
@@ -69,6 +66,11 @@
   margin-right: 14px;
   margin-bottom: 0;
   margin-left: 14px;
+
+  position: absolute;
+  bottom: -2px;
+  right: 0;
+  transform: translateY(100%);
 }
 .autocomplete {
   background: var(--input-incolor);
@@ -109,13 +111,14 @@
   }
 }
 .select {
-  // max-width: 500px;
   background: var(--input-incolor);
   fieldset {
     border: 1px solid var(--input-border-color) !important;
   }
   border-radius: var(--input-radius);
   & > :first-child {
+    max-width: 500px;
+    overflow: hidden;
     padding: 10px !important;
     min-height: auto !important;
     font-size: var(--input-font-size);
