@@ -12,6 +12,7 @@
 .label {
   font-size: var(--input-font-size);
   color: var(--input-color);
+  font-weight: var(--input-font-weight);
 }
 .content {
   font-size: 15px;
@@ -24,7 +25,7 @@
   }
   input {
     padding: 10px 10px !important;
-    font-size: 16px !important;
+    font-size: var(--input-inside-font-size) !important;
   }
 }
 .fileInputLabel {
@@ -93,7 +94,7 @@
     padding: 8px !important;
     resize: vertical;
     font-size: 1rem;
-    font-size: var(--input-font-size);
+    font-size: var(--input-inside-font-size);
   }
   &.disabled {
     background: var(--input-disabled-color) !important;
@@ -121,7 +122,7 @@
     overflow: hidden;
     padding: 10px !important;
     min-height: auto !important;
-    font-size: var(--input-font-size);
+    font-size: var(--input-inside-font-size);
   }
   &.disabled {
     background: var(--input-disabled-color) !important;

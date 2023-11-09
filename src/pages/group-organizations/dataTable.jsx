@@ -15,6 +15,7 @@ import { getFIO, splitFIO } from "@/utils/data";
 import Group from "@/components/Group";
 import RadioGroup from "@/components/RadioGroup";
 import ViewModal from "./modal";
+import dayjs from "dayjs";
 
 export default function InDataTable() {
   const { t } = useTranslation();
@@ -265,7 +266,6 @@ function ModalUI({ hideModal, data }) {
     fetchData();
   }, [data]);
 
-  console.log(data);
   return (
     <div className="modal-content">
       <Alert className="modal-alert" severity="info">
@@ -312,7 +312,7 @@ function ModalUI({ hideModal, data }) {
           date
           label={t("birth-date")}
           required
-          value={employee.birthDate ? dayjs(employee.birthDate) : null}
+          value={employee?.birthDate ? dayjs(employee.birthDate) : null}
         />
       </Group>
       <Group title={t("group-organizations.adr")}>

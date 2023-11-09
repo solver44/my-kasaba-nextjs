@@ -49,7 +49,7 @@ export default {
       title1: "Shaxsiy ma'lumotlar",
     },
     "passort-primary-organization": {
-      title: "Boshlang’ich tashkilot passporti",
+      title: "Boshlang’ich tashkilot pasporti",
       firstOrganizationName: "Boshlang’ich tashkilot nomi:",
       firstOrganizationType: "Boshlang’ich tashkilot tashkil etilish turi:",
       firstOrganizationSTIR: "Boshlang’ich tashkilot STIR (INN) raqami:",
@@ -82,7 +82,7 @@ export default {
       phone: "Seh tashkilot telefon raqami",
       files: "Ro'yhatga olish",
 
-      tab1: "Seh tashkiloti passporti",
+      tab1: "Seh tashkiloti pasporti",
     },
     "group-organizations": {
       title: "Guruh tashkilotlari",
@@ -90,7 +90,7 @@ export default {
       adr: "Guruh tashkilotxw manzili",
       direktor: "Guruh tashkilot tashkilotchisi",
       phone: "Guruh tashkilot telefon raqami",
-      tab1: "Guruh tashkiloti passporti",
+      tab1: "Guruh tashkiloti pasporti",
     },
     "statistical-information": {
       title: "Statistik ma’lumotlar",
@@ -205,7 +205,7 @@ export default {
     },
 
     pinfl: "JShShIR",
-    "passport-given-date": "Passport berilgan sana",
+    "passport-given-date": "Pasport berilgan sana",
     "first-name": "Ismi",
     "second-name": "Familiyasi",
     "third-name": "Otasining ismi",
@@ -270,7 +270,7 @@ export default {
     "register-bkut": "BKUTni ro’yhatdan o’tkazish",
 
     //second menu
-    passortPrimaryOrganization: "Boshlang’ich tashkilot passporti",
+    passortPrimaryOrganization: "Boshlang’ich tashkilot pasporti",
     industrialOrganizations: "Seh tashkilotlari",
     groupOrganizations: "Guruh tashkilotlar",
     statisticalInformation: "Statistik ma’lumotlar",
@@ -328,7 +328,7 @@ export default {
       "Ma'lumotlarni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "stir-not-found": "Kiritilgan STIR tizimdan topilmadi.",
     "pinfl-not-found":
-      "Kiritilgan PINFL yoki passport berilgan sana topilmadi.",
+      "Kiritilgan PINFL yoki pasport berilgan sana topilmadi.",
     "upload-file-error":
       "Faylni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "error-send-bkut":

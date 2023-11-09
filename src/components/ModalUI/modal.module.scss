@@ -13,11 +13,13 @@
   display: flex;
   flex-direction: column;
   min-width: 60vw;
+  max-width: 1500px;
   max-height: 95vh;
   // padding-top: 75px;
   &.full {
     width: 100vw;
     max-height: 100vh;
+    max-width: none;
     height: 100vh;
     display: flex;
     flex-direction: column;

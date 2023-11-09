@@ -341,13 +341,13 @@ function DataTable({
           muiTableHeadCellProps={{
             sx: {
               flex: "0 0 auto",
-              fontSize: 18,
+              fontSize: "var(--table-font-size)",
             },
           }}
           muiTableBodyCellProps={{
             sx: {
               flex: "0 0 auto",
-              fontSize: 18,
+              fontSize: "var(--table-row-font-size)",
             },
           }}
           // className={[styles.dataTable, min ? styles.mini : ""].join(" ")}

@@ -17,6 +17,8 @@ import Head from "next/head";
 import App from "next/app";
 import { readJSONFile } from "@/utils/jsonUtils";
 import TOKENS from "@/utils/config";
+import { Inter } from "next/font/google";
+const inter = Inter({ subsets: ["latin"] });
 
 export default function _app(props) {
   return (
