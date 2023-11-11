@@ -62,14 +62,20 @@ export function getFIO(obj = {}, isNotEmpty) {
   const lastName = obj.lastName ?? obj.last_name ?? "";
   const middleName = obj.middleName ?? obj.middle_name ?? "";
   return (
-    `${firstName} ${lastName} ${middleName}`.trim() || (isNotEmpty ? "-" : "")
+    `${lastName} ${firstName} ${middleName}`.trim() || (isNotEmpty ? "-" : "")
   );
 }
 export function splitFIO(fio = "") {
   let splitted = fio.split(" ");
+  if (splitted.length > 3) {
+    splitted[2] = `${splitted[2]} ${splitted.pop()}`;
+  }
   if (splitted.length < 3) splitted.push("");
   if (splitted.length < 3) splitted.push("");
   if (splitted.length < 3) splitted.push("");
+  let firsName = splitted[1];
+  splitted[1] = splitted[0];
+  splitted[0] = firsName;
   return splitted;
 }
 
@@ -90,7 +96,7 @@ export function splitEmployement(employment = "") {
 
 export function getEmptyValue(obj) {
   if (typeof obj !== "object" && obj) return obj;
-  for (var prop in (obj ?? {})) {
+  for (var prop in obj ?? {}) {
     if (Object.prototype.hasOwnProperty.call(obj, prop)) {
       return obj;
     }

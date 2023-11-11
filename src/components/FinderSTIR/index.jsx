@@ -9,6 +9,7 @@ import { useSnackbar } from "notistack";
 
 export default function FinderSTIR({
   required,
+  label,
   stirValue,
   onFetch = () => {},
 }) {
@@ -62,7 +63,7 @@ export default function FinderSTIR({
         name="tin"
         maxLength={9}
         value={stirValue}
-        label={t("stir")}
+        label={label ?? t("stir")}
         invalid={inputValidation.tin}
         onChange={(e, name) =>
           setForms((forms) => ({ ...forms, [name]: e.target.value }))

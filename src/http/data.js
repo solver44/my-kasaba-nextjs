@@ -61,9 +61,7 @@ export async function getPositions() {
 
 export async function deleteDepartment(id) {
   try {
-    const data = await $axios.delete(
-      `/rest/entities/EBkutDepartment/:id${id}`
-    );
+    const data = await $axios.delete(`/rest/entities/EBkutDepartment/${id}`);
     return getDeleteResponse(data);
   } catch (error) {
     return false;
@@ -126,7 +124,7 @@ export async function getEmployee(data, isPost) {
     }
 
     if (isPost) {
-      const {position, bkutId, email, fio, ...req} = data;
+      const { position, bkutId, email, fio, ...req } = data;
       if (response1?.length > 0) {
         response1 = (Array.isArray(response1) ? response1 : [{}])[0];
         req.id = response1.id;

@@ -64,7 +64,7 @@ const InsideInput = ({
   className,
 }) => (
   <DatePicker
-    maxDate={name.includes("birth") ? dayjs().add(-18, "year") : null}
+    maxDate={name.includes("birth") ? dayjs().add(-18, "year") : dayjs()}
     format="DD.MM.YYYY"
     disabled={disabled}
     value={value == "Invalid Date" || !value ? null : value}

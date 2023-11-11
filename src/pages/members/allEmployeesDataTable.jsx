@@ -36,7 +36,7 @@ export default function AllEmployeesDT() {
 
   const columns = [
     { field: "fio", headerName: "employees.fio", size: 280 },
-    { field: "signDate", headerName: "employees.dateSign" },
+    { field: "signDate", headerName: "join-date" },
     {
       field: "employment",
       type: "chip",
@@ -375,7 +375,6 @@ function ModalUI({ hideModal, data = {} }) {
             date
             label={t("employees.dateSign")}
             value={joinDate ? dayjs(joinDate) : null}
-            required
             name="signDate"
           />
         )}

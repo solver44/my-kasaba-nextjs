@@ -16,20 +16,32 @@ import Group from "@/components/Group";
 import dayjs from "dayjs";
 import ViewModal from "./modal";
 import RadioGroup from "@/components/RadioGroup";
+import FinderPINFL from "@/components/FinderPINFL";
 
-export default function InDataTable() {
+function getTranslation(isGroup) {
+  return (key) =>
+    isGroup ? `group-organizations.${key}` : `industrial-organizations.${key}`;
+}
+
+export default function InDataTable({ isGroup }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const [viewModal, setViewModal] = useState(false);
   const { bkutData = {} } = useSelector((states) => states);
   const { enqueueSnackbar } = useSnackbar();
   const actions = useActions();
+  const getLocal = getTranslation(isGroup);
 
   const columns = [
     {
       field: "name",
-      headerName: "industrial-organizations.name",
+      headerName: getLocal("name"),
       size: 300,
+    },
+    {
+      field: "director",
+      headerName: getLocal("direktor1"),
+      hidden: false,
     },
     {
       field: "bkut",
@@ -40,11 +52,6 @@ export default function InDataTable() {
       field: "address",
       headerName: "address",
     },
-    {
-      field: "director",
-      headerName: "industrial-organizations.direktor",
-      hidden: true,
-    },
     { field: "soato", headerName: "soatoFull", hidden: true },
     {
       field: "email",
@@ -53,7 +60,7 @@ export default function InDataTable() {
     },
     {
       field: "phoneNumber",
-      headerName: "industrial-organizations.phone",
+      headerName: getLocal("phone"),
       hidden: true,
     },
   ];
@@ -62,7 +69,7 @@ export default function InDataTable() {
     if (!bkutData?.departments?.length) return;
     setRows(
       bkutData.departments
-        .filter((d) => d.departmentType == "SEH")
+        .filter((d) => d.departmentType == (isGroup ? "GURUH" : "SEH"))
         .map((e) => {
           return {
             id: e.id,
@@ -83,9 +90,15 @@ export default function InDataTable() {
       (e) => e.tin == forms.tin
     );
     if (!isView && duplicate) {
-      const isAnother = duplicate.departmentType == "GURUH";
+      const isAnother = duplicate.departmentType == (isGroup ? "SEH" : "GURUH");
       showYesNoDialog(
-        t(isAnother ? "found-on-group" : "rewrite-stir"),
+        t(
+          isAnother
+            ? isGroup
+              ? "found-on-industrion"
+              : "found-on-group"
+            : "rewrite-stir"
+        ),
         isAnother ? null : () => sendData(forms, hideModal, duplicate),
         () => {},
         t
@@ -101,7 +114,7 @@ export default function InDataTable() {
       bkut: {
         id: bkutData.id,
       },
-      departmentType: "SEH",
+      departmentType: isGroup ? "GURUH" : "SEH",
       tin: forms.tin,
       name: forms.name,
       phone: forms.phone,
@@ -145,7 +158,7 @@ export default function InDataTable() {
     return data;
   }
   async function deleteRow(id, row) {
-    console.log(id, row)
+    console.log(id, row);
     const res = await deleteDepartment(id);
     if (res) {
       setRows((rows) => rows.filter((row) => row?.id != id));
@@ -176,7 +189,7 @@ export default function InDataTable() {
             </Button>
           );
         }}
-        title={t("industrial-organizations.title")}
+        title={t(getLocal("title"))}
         columns={columns}
         rows={rows}
         hideImport
@@ -185,17 +198,22 @@ export default function InDataTable() {
         onSubmitModal={onSubmitModal}
         isFormModal
         modal={(hideModal, dataModal) => (
-          <ModalUI hideModal={hideModal} data={dataModal} />
+          <ModalUI hideModal={hideModal} data={dataModal} isGroup={isGroup} />
         )}
       />
       <ViewModal isOpen={viewModal} handleClose={() => setViewModal(false)} />
     </React.Fragment>
   );
 }
-function ModalUI({ hideModal, data }) {
+function ModalUI({ hideModal, data, isGroup }) {
+  const getLocal = getTranslation(isGroup);
   const { t } = useTranslation();
   const [employees, bkutData] = useEmployees();
-
+  const [formData, setFormData] = useState({
+    fio: "",
+    birthDate: "",
+    gender: 1,
+  });
   const [mode, setMode] = useState(1);
   const [provinces, setProvinces] = useState();
   const [districts, setDistricts] = useState();
@@ -272,58 +290,68 @@ function ModalUI({ hideModal, data }) {
       }));
     };
     fetchData();
+
+    if (employee.birthDate) var birthDate = dayjs(employee.birthDate);
+    if (employee?.firstName) var fio = getFIO(employee);
+    if (employee?.gender) var gender = employee.gender;
+
+    setFormData({ fio, birthDate, gender });
   }, [data]);
 
+  function onFetchPINFL(data) {
+    if (!data) return;
+
+    setFormData({
+      fio: getFIO(data),
+      birthDate: dayjs(data.birth_date),
+      gender: data.gender != 1 ? 0 : 1,
+    });
+  }
   return (
     <div className="modal-content">
       <Alert className="modal-alert" severity="info">
-        "{bkutData?.eLegalEntity.name}"
+        {t("bkut1")} - {`${bkutData?.eLegalEntity.name} (${bkutData.inn})`}
       </Alert>
       <Group title={t("main-info")}>
         <div datatype="list">
-          <RadioGroup
-            defaultValue={1}
-            contained
-            name="orgType"
-            onChange={(e) => {
-              setMode(e.target.value);
-            }}
-            data={[
-              {
-                value: "1",
-                label: t("orgType1"),
-              },
-              {
-                value: "0",
-                label: t("orgType2"),
-              },
-            ]}
+          <FinderSTIR
+            label={t(getLocal("stir"))}
+            stirValue={tin}
+            onFetch={onFetchSTIR}
           />
-          {mode == 1 && <FinderSTIR stirValue={tin} onFetch={onFetchSTIR} />}
           <FormInput
             name="name"
             required
             value={values.name}
-            label={t("industrial-organizations.name")}
+            label={t(getLocal("name"))}
           />
+          <div className="modal-row">
+            <RadioGroup
+              defaultValue={1}
+              label={t("bkutType1")}
+              left
+              name="orgType"
+              onChange={(e) => {
+                setMode(e.target.value);
+              }}
+              data={[
+                {
+                  value: "1",
+                  label: t("yes"),
+                },
+                {
+                  value: "0",
+                  label: t("no"),
+                },
+              ]}
+            />
+            {mode == 1 && (
+              <FormInput name="tinSenior" required label={t("stir")} />
+            )}
+          </div>
         </div>
       </Group>
-      <Group title={t("industrial-organizations.direktor")}>
-        <FormInput
-          name="director"
-          value={getFIO(employee)}
-          required
-          label={t("fio")}
-        />
-        <FormInput
-          name="birthDate"
-          date
-          label={t("birth-date")}
-          required
-          value={employee.birthDate ? dayjs(employee.birthDate) : null}
-        />
-      </Group>
-      <Group title={t("industrial-organizations.adr")}>
+      <Group title={t(getLocal("adr"))}>
         <div datatype="list">
           <FormInput
             label={t("address")}
@@ -355,20 +383,77 @@ function ModalUI({ hideModal, data }) {
           <div className="modal-row">
             <FormInput
               value={phone}
-              label={t("industrial-organizations.phone")}
+              label={t(getLocal("phone"))}
               name="phoneNumber"
             />
             <FormInput label={t("email")} value={email} name="email" />
           </div>
         </div>
       </Group>
-      <Group title={t("industrial-organizations.files")}>
+      <Group title={t(getLocal("direktor"))}>
+        <div datatype="list">
+          <FinderPINFL
+            disablePINFL
+            pinflValue={employee.pinfl}
+            onFetch={onFetchPINFL}
+          />
+          <div className="modal-row">
+            <FormInput
+              name="director"
+              required
+              disabled
+              label={t("fio")}
+              value={formData.fio}
+            />
+            <FormInput
+              name="birthDate"
+              disabled
+              date
+              label={t("birth-date")}
+              required
+              value={formData.birthDate}
+            />
+          </div>
+          <div className="modal-row">
+            <FormInput
+              select
+              required
+              value={formData.gender}
+              disabled
+              name="gender"
+              dataSelect={[
+                { value: 1, label: t("man") },
+                { value: 0, label: t("woman") },
+              ]}
+              label={t("gender")}
+            />
+            <FormInput
+              value={employee.phone}
+              label={t("phone-number")}
+              name="directorPhone"
+            />
+            <FormInput
+              value={employee.email}
+              label={t("employees.email")}
+              name="directorEmail"
+            />
+          </div>
+        </div>
+      </Group>
+      <Group title={t(getLocal("files"))}>
         <div datatype="list">
           <div className="modal-row">
-            <FormInput label={t("decision-or-application-title")} name="decisionNumber" />
+            <FormInput
+              label={t("decision-or-application-title")}
+              name="decisionNumber"
+            />
             <FormInput name="decisionDate" date label={t("date")} />
           </div>
-          <FormInput name="decisionFile" fileInput label={t("decision-or-application-file")} />
+          <FormInput
+            name="decisionFile"
+            fileInput
+            label={t("decision-or-application-file")}
+          />
         </div>
       </Group>
     </div>

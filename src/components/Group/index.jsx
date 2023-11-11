@@ -5,7 +5,7 @@ export default function Group({ children, title }) {
   return (
     <fieldset className={styles.container}>
       {title && <legend className={styles.title}>{title}</legend>}
-      {children}
+      <div className={styles.content}>{children}</div>
     </fieldset>
   );
 }

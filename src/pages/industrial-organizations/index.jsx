@@ -14,7 +14,7 @@ export default function IndustrialOrganizations() {
 IndustrialOrganizations.layout = function (Component, t) {
   return (
     <HomeWrapper
-      title={t("industrial-organizations.title")}
+      title={t("industrialOrganizations")}
       desc={t("profile-page.desc")}
     >
       {Component}

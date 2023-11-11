@@ -68,29 +68,34 @@ export default {
       firstOrganizationH: "Hisob raqami:",
     },
     "industrial-organizations": {
-      title: "Seh tashkiloti",
-      name: "Seh tashkilot nomi",
+      stir: "Tsex tashkilot STIR",
+      title: "Tsex tashkiloti",
+      name: "Tsex tashkilot nomi",
       worker: "Ish beruvchi",
       statistic: "Statistika",
-      direktor: "Seh tashkilot tashkilotchisi",
+      direktor: "Tsex tashkilot tashkilotchisi",
+      direktor1: "Tashkilotchi",
       firstorg: "Yuqori tashkilot",
       tel: "Telefon",
       soato: "MXOBT (SOATO) kodi",
-      adr: "Seh tashkiloti manzili",
+      adr: "Tsex tashkilot manzili",
       okpo: "OKPO",
       type: "Tarmoq",
-      phone: "Seh tashkilot telefon raqami",
-      files: "Ro'yhatga olish",
+      phone: "Tsex tashkilot telefon raqami",
+      files: "Tsex tashkiloti ta'sis qilinganligi haqidagi qaror ma'lumotlari",
 
-      tab1: "Seh tashkiloti pasporti",
+      tab1: "Tsex tashkiloti pasporti",
     },
     "group-organizations": {
-      title: "Guruh tashkilotlari",
+      stir: "Guruh tashkilot STIR",
+      title: "Guruh tashkiloti",
       name: "Guruh tashkilot nomi",
-      adr: "Guruh tashkilotxw manzili",
+      direktor1: "Tashkilotchi",
+      adr: "Guruh tashkilot manzili",
       direktor: "Guruh tashkilot tashkilotchisi",
       phone: "Guruh tashkilot telefon raqami",
       tab1: "Guruh tashkiloti pasporti",
+      files: "Guruh tashkiloti ta'sis qilinganligi haqidagi qaror ma'lumotlari",
     },
     "statistical-information": {
       title: "Statistik ma’lumotlar",
@@ -168,7 +173,7 @@ export default {
     employees: {
       title: "Kasaba uyushmasi qo'mitasi xodimi",
       title1: "Kasaba uyushmasi qo'mitasi xodimlari",
-      fio: "FIO",
+      fio: "F.I.O.",
       position: "Lavozimi",
       tel: "Telefon raqami",
       dateSign: "Kasaba uyushmasiga a’zo bo’lgan sanasi",
@@ -180,6 +185,7 @@ export default {
       accountant: "Hisobchi",
     },
     memberTitle: "Kasaba uyushmasi a'zosi",
+    "join-date": "A'zo bo'lgan sanasi",
     organization: {
       stir: "Tashkilot STIR (INN) raqami",
       network: "Tashkilot qarashli tarmoq",
@@ -224,7 +230,7 @@ export default {
     isFired: "Xodim asosiy ishidan ozod etilganmi?",
     "senior-organization": "Yuqori turuvchi tashkilot",
     all: "Barchasi",
-    "bkutEmployee": "Boshlang'ich tashkilot xodimi",
+    bkutEmployee: "Boshlang'ich tashkilot xodimi",
 
     createDoc: "Guvohnoma yaratish",
     certificate: "Guvohnoma",
@@ -271,8 +277,8 @@ export default {
 
     //second menu
     passortPrimaryOrganization: "Boshlang’ich tashkilot pasporti",
-    industrialOrganizations: "Seh tashkilotlari",
-    groupOrganizations: "Guruh tashkilotlar",
+    industrialOrganizations: "Tsex tashkilotlari",
+    groupOrganizations: "Guruh tashkilotlari",
     statisticalInformation: "Statistik ma’lumotlar",
     teamContracts: "Jamoa shartnomasi",
     reports: "Hisobotlar",
@@ -295,7 +301,7 @@ export default {
     soato: "SOATO",
 
     add: "Qo'shish",
-    fio: "FIO",
+    fio: "F.I.O.",
     isMember: "Kasaba uyushmasiga a'zomi?",
     employment: "Bandligi",
     gender: "Jinsi",
@@ -327,8 +333,7 @@ export default {
     "fetch-error":
       "Ma'lumotlarni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "stir-not-found": "Kiritilgan STIR tizimdan topilmadi.",
-    "pinfl-not-found":
-      "Kiritilgan PINFL yoki pasport berilgan sana topilmadi.",
+    "pinfl-not-found": "Kiritilgan PINFL yoki pasport berilgan sana topilmadi.",
     "upload-file-error":
       "Faylni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "error-send-bkut":
@@ -400,7 +405,7 @@ export default {
 
     "active-employees": "Faollar",
     "member-employees": "Kasaba uyushmasi a'zolari",
-    "not-member-employees": "Ishchi xodimlar",
+    "not-member-employees": "Barcha ishchi xodimlar",
     "all-employees": "Barcha xodimlar",
 
     dTable: {

@@ -11,6 +11,7 @@ function RadioGroups({
   name,
   required,
   left,
+  flex,
   value: propValue,
   label,
   contained,
@@ -48,13 +49,15 @@ function RadioGroups({
   }, [propValue]);
 
   return (
-    <div className={styles.wrapper}>
+    <div className={[styles.wrapper, flex ? styles.flex : ""].join(" ")}>
       {!contained && label && <label className={styles.label}>{label}</label>}
       <RadioGroup
         style={
           contained
             ? { gap: 15, flexWrap: "nowrap" }
-            : { justifyContent: left ? "left" : "center", gap: 30 }
+            : left
+            ? { justifyContent: "left", gap: 30, marginLeft: 10 }
+            : { justifyContent: "center", gap: 30 }
         }
         defaultValue={defaultValue}
         value={field.value ?? ""}

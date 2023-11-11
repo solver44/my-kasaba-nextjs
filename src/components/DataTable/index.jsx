@@ -57,6 +57,7 @@ function DataTable({
   onImportRow,
   onImportFinished,
   hideExportImport,
+  hideFirstButton,
   hideImport,
   bkutData,
   rows = [],
@@ -254,9 +255,9 @@ function DataTable({
               </Box>
               <Box sx={{ display: "flex", gap: "10px" }}>
                 {topButtons && topButtons(selectedRows)}
-                <BigButton onClick={() => toggleModal()} Icon={AddIcon}>
+                {!hideFirstButton && <BigButton onClick={() => toggleModal()} Icon={AddIcon}>
                   {t("add")}
-                </BigButton>
+                </BigButton>}
               </Box>
             </React.Fragment>
           )}

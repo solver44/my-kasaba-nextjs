@@ -35,7 +35,7 @@ export default function InDataTable() {
 
   const columns = [
     { field: "fio", headerName: "employees.fio", size: 280 },
-    { field: "signDate", headerName: "employees.dateSign" },
+    { field: "signDate", headerName: "join-date" },
     {
       field: "employment",
       type: "chip",
@@ -233,6 +233,7 @@ export default function InDataTable() {
         onImportRow={onImportRow}
         onSubmitModal={onSubmitModal}
         isFormModal
+        hideFirstButton
         title={t("memberTitle")}
         loading={ticketLoading}
         modalWidth="80vw"

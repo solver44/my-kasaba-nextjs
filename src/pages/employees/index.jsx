@@ -25,8 +25,8 @@ export default function Employees() {
         value={(searchParams.get("tab") ?? 1) - 1}
         tabs={[
           { label: "not-member-employees", children: <AllEmployeesDT /> },
-          { label: "employees.title1", children: <ActiveEmployeeDT /> },
           { label: "member-employees", children: <MembersDT /> },
+          { label: "employees.title1", children: <ActiveEmployeeDT /> },
         ]}
       />
     </div>
@@ -52,7 +52,7 @@ export function useEmployees() {
 
 Employees.layout = function (Component, t, bkutData = {}) {
   return (
-    <HomeWrapper noHeader title={bkutData.name} desc={t("profile-page.desc")}>
+    <HomeWrapper title={bkutData.name} desc={t("profile-page.desc")}>
       {Component}
     </HomeWrapper>
   );
