@@ -1,5 +1,5 @@
 import axios from "axios";
-import { $axios } from ".";
+import { $axios, BASE_URL } from ".";
 
 export async function findPINFL(pinfl, givenDate) {
   try {
@@ -17,8 +17,8 @@ export async function refreshToken(
   password = "6yvqwfzPVU7mUvw"
 ) {
   try {
-    const { data } = await axios.post(
-      "http://test.kasaba.uz:8000/oauth/token",
+    const { data } = await axios({ baseURL: BASE_URL }).post(
+      "/oauth/token",
       {
         grant_type: "password",
         username,

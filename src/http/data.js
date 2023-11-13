@@ -19,7 +19,7 @@ export async function getBKUTData(id) {
     const { data: data2 } = await $axios.get(`/rest/entities/EBKUT/${bkutId}`, {
       params: { fetchPlan: "bkut-cabinet" },
     });
-    return { ...data2, ...data };
+    return { ...data, ...data2};
   } catch (error) {
     return error;
   }

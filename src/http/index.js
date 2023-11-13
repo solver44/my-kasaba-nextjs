@@ -1,6 +1,7 @@
 import TOKENS from "@/utils/config";
 import { readJSONFile } from "@/utils/jsonUtils";
 import axios from "axios";
+export const BASE_URL = "http://test.kasaba.uz:8000";
 
 const config = {
   headers: {
@@ -8,7 +9,8 @@ const config = {
   },
 };
 export const $axios = axios.create({
-  baseURL: "http://test.kasaba.uz:8000",
+  // baseURL: "http://test.kasaba.uz:8000",
+  baseURL: BASE_URL,
   ...config,
 });
 

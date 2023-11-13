@@ -218,12 +218,8 @@ export default function PassortPrimaryOrganization() {
               <span style={{ textAlign: "left" }}>
                 {showOrNot(
                   `${getLocalizationNames(
-                    bkutData.eLegalEntity?.soatoRegion,
-                    i18n
-                  )}, ${getLocalizationNames(
-                    bkutData.eLegalEntity?.soatoDistrict,
-                    i18n
-                  )}`
+                    bkutData?.soato?.parent
+                  )}, ${getLocalizationNames(bkutData?.soato)}`
                 )}
               </span>
             </div>

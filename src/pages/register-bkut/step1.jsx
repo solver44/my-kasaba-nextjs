@@ -18,11 +18,11 @@ export default function Step1({ bkutData = {}, canChange }) {
     districtId: "",
     branchId: "",
   });
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const soato = bkutData.eLegalEntity?.soatoDistrict?.id;
+    let soato = bkutData?.soato?.id;
     if (!soato) return;
+    soato += "";
     const provinceId = soato.slice(0, 4);
     const districtId = soato;
     handleProvince({ target: { value: provinceId } });
