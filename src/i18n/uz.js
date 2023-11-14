@@ -364,6 +364,8 @@ export default {
     "are-you-sure-close":
       "Kiritilgan ma'lumotlar saqlab qolinmaydi. Oynani yopish uchun tasdiqlang.",
     leave: "Qoldirish",
+    registered: "Ro'yhatdan o'tgan",
+    rejected: "Qaytarilgan",
     "rewrite-pinfl":
       "Ushbu JShShIR bilan xodim qo'shilgan. O'zgartirishni istaysizmi?",
     "rewrite-pinfl-member":

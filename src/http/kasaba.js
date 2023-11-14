@@ -17,8 +17,8 @@ export async function refreshToken(
   password = "6yvqwfzPVU7mUvw"
 ) {
   try {
-    const { data } = await axios({ baseURL: BASE_URL }).post(
-      "/oauth/token",
+    const { data } = await axios.post(
+      BASE_URL + "/oauth/token",
       {
         grant_type: "password",
         username,

@@ -13,6 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { Alert, AlertTitle } from "@mui/material";
 
 export default function Home() {
   const { bkutData = {} } = useSelector((states) => states);
@@ -42,6 +43,12 @@ export default function Home() {
 
   return (
     <React.Fragment>
+      {bkutData?.status == 4 && bkutData?.rejectReason && (
+        <Alert style={{ width: "100%" }} severity="error">
+          <AlertTitle>Qaytarildi</AlertTitle>
+          {bkutData.rejectReason}
+        </Alert>
+      )}
       <h1 className={styles.titleHome}>{bkutData.name}</h1>
       <div className={styles.grid}>
         <Card

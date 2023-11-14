@@ -41,11 +41,20 @@ export default function Profile({ img, collapsed, imgOnly, mini }) {
           {getFIO(bkutData?.application?.passport)}
         </p>
         <p
-          className={[styles.description, !isMember ? styles.red : ""].join(
-            " "
-          )}
+          className={[
+            styles.description,
+            bkutData?.status == 4 ? styles.red : "",
+            bkutData?.status == 3 ? styles.yellow : "",
+            bkutData?.status == 1 ? styles.primary : "",
+          ].join(" ")}
         >
-          {isMember ? t("data-full") : t("data-not-full")}
+          {bkutData.status == 1
+            ? t("registered")
+            : bkutData.status == 2
+            ? t("data-full")
+            : bkutData.status == 3
+            ? t("data-not-full")
+            : t("rejected")}
         </p>
       </div>
     </div>

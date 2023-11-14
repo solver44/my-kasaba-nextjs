@@ -51,7 +51,7 @@ $axios.interceptors.response.use(
 
         // Retry the original request with the updated token
         // return $axios.request(error.config); // Use $axios to make the request
-        window.location.reload();
+        // window.location.reload();
       } catch (refreshError) {
         throw refreshError;
       }
