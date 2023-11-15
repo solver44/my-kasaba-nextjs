@@ -391,7 +391,7 @@ export default function RequestPage({ router }) {
               titleText={t("first-name")}
             />
             <Input
-              name="lastName"
+              name="secondName"
               fullWidth
               value={formData.secondName}
               invalid={!inputValidation.secondName}
@@ -399,7 +399,7 @@ export default function RequestPage({ router }) {
               titleText={t("second-name")}
             />
             <Input
-              name="middleName"
+              name="thirdName"
               fullWidth
               value={formData.thirdName}
               invalid={!inputValidation.thirdName}
