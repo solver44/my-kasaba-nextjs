@@ -1,5 +1,6 @@
 .wrapper {
   display: flex;
+  flex-wrap: wrap;
 }
 .top {
   margin-bottom: 50px;
@@ -30,6 +31,7 @@
 }
 .bg {
   position: absolute;
+  width: 30%;
   bottom: 30px;
   left: 30px;
 }
@@ -37,6 +39,7 @@
   font-size: 16px;
   font-weight: 300;
   color: white;
+  text-align: center;
   padding: 0;
   margin: 0;
   letter-spacing: 4px;
@@ -45,6 +48,7 @@
   font-size: 32px;
   font-weight: 700;
   color: white;
+  text-align: center;
   padding: 0;
   text-transform: uppercase;
   margin: 5px 0 0 0;
@@ -74,5 +78,20 @@
   letter-spacing: 2px;
   &:active{
     filter: brightness(1.2);
+  }
+}
+$breakpoint-tablet: 900px;
+@media (max-width: $breakpoint-tablet) {
+  
+  .bg{
+   display: none;
+  }
+  .left{
+    padding: 50px;
+    width: 100%;
+  }
+  .right{
+    width: 100%;
+    border-radius: 0;
   }
 }
