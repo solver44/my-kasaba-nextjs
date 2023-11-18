@@ -88,8 +88,8 @@ export default function CheckStatus() {
   return (
     <WrapperRequest noReglament>
       <div className={styles.wrapper}>
-        <div className="card full">
-          <p style={{ paddingBottom: 30 }} className="title bold start">
+        <div className="card full" style={{boxShadow:"18px 7px 24px 24px rgb(0 0 0 / 4%)"}}>
+          <p style={{ paddingBottom: 30, color:"#197bbd" }} className="title bold start">
             {t("check-status.title")}
           </p>
           <Input
@@ -112,12 +112,14 @@ export default function CheckStatus() {
             topComponent={
               <div className={styles.top}>
                 <div className="row g-4 a-center">
-                  <p className="title bold start">{t("check-status.title1")}</p>
-                  <p className="unselected">ID: {state.id}</p>
-                </div>
-                <div className={"status " + state.status}>
+                  <p className="title bold start" style={{color:"#197bbd"}}>{t("check-status.title1")}</p>
+                  <div className={"status " + state.status}>
                   {state.statusText || t("inspection")}
                 </div>
+                </div>
+               
+                <p className="unselected" style={{color:"#197bbd"}}>ID: {state.id}</p>
+                
               </div>
             }
             data={state.data}

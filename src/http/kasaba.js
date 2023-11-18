@@ -63,7 +63,8 @@ export async function findSTIR(tin) {
   try {
     const { data } = await $axios.get("/integration/legal-entity", {
       params: { tin },
-    });
+      headers: {"Content-Type": "application/json"}
+    },);
     return data;
   } catch (error) {
     return { status: error?.status, message: error?.message };
