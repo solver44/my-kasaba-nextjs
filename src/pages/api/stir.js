@@ -5,7 +5,9 @@ export default async function handler(req, res) {
     try {
       const { tin } = req.body;
       const data = await findSTIR(tin);
-      res.status(200).json(data);
+      const cleanedString = data.replace(/\\"/g, '"');
+      const jsonObject = JSON.parse(cleanedString);
+      res.status(200).json(jsonObject);
     } catch (error) {
       res.status(500).json({ error: "An error occurred", message: error });
     }

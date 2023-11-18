@@ -263,10 +263,10 @@ export default function RequestPage({ router }) {
 
     setFormData((formData) => ({
       ...formData,
-      firstName: data.first_name,
-      secondName: data.last_name,
-      thirdName: data.middle_name,
-      birthDate: dayjs(data.birth_date ?? ""),
+      firstName: data?.profile?.person_name,
+      secondName: data?.profile?.person_surname,
+      thirdName: data?.profile?.person_patronymic,
+      birthDate: dayjs(data?.profile?.birth_date ?? ""),
     }));
   }
 
@@ -289,7 +289,7 @@ export default function RequestPage({ router }) {
         return;
       }
 
-      let soato = data?.companyBillingAddress?.soato;
+      let soato = data?.city_soato;
       if (soato) {
         soato = soato + "";
         const provinceId = soato.slice(0, 4);
@@ -308,8 +308,8 @@ export default function RequestPage({ router }) {
 
       setFormData((formData) => ({
         ...formData,
-        name: data.company.name,
-        address: data.companyBillingAddress.streetName,
+        name: data.company_name,
+        // address: data.companyBillingAddress.streetName,
       }));
     } catch (error) {
       console.log(error);
@@ -341,9 +341,9 @@ export default function RequestPage({ router }) {
         <RequestHasBeenSent />
       ) : (
         <React.Fragment>
-          <p className="title bold mb-1">{t("request-page.subtitle")}</p>
+          <p className="title bold mb-1" style={{textAlign:"center", textTransform:"uppercase", fontSize:20, color:"#197bbd"}}>{t("request-page.subtitle")}</p>
           <div className={styles.content}>
-            <p style={{ marginTop: 30 }} className={styles.title}>
+            <p style={{ marginTop: 30, color:"#197bbd" }} className={styles.title}>
               {t("request-page.form1-title")}
             </p>
             <InputButton
@@ -432,7 +432,7 @@ export default function RequestPage({ router }) {
               onChange={handleInputChange}
               titleText={t("email")}
             />
-            <p style={{ marginTop: 20 }} className={styles.title}>
+            <p style={{ marginTop: 20, color:"#197bbd" }} className={styles.title}>
               {t("request-page.form2-title")}
             </p>
             <InputButton
@@ -482,8 +482,7 @@ export default function RequestPage({ router }) {
               onChange={handleInputChange}
               titleText={t("address")}
             />
-            <div style={{ padding: "5px 0" }}></div>
-            <span>
+            <span style={{ margin: "0 40px 0 40px" }}>
               <DropDown
                 name="form3"
                 fullWidth
@@ -494,7 +493,7 @@ export default function RequestPage({ router }) {
                 titleText={t("request-page.form3-title")}
               />
             </span>
-            <span>
+            <span style={{ margin: "0 40px 0 40px" }}>
               <Input
                 name="form4"
                 fullWidth
@@ -503,7 +502,7 @@ export default function RequestPage({ router }) {
                 textarea
                 titleText={t("request-page.form4-title")}
               />
-            </span>
+            </span >
             <div className={styles.bottom}>
               <div id="recaptcha-container"></div>
               <button onClick={handleSubmit} className="primary-btn">
@@ -543,7 +542,7 @@ export const WrapperRequest = ({
   const navigate = useRouter();
   const onBackFunc = () => {
     if (onBack) onBack();
-    else navigate.replace("/request");
+    else navigate.replace("/auth");
   };
   return (
     <div ref={parentAnimation} className={"wrapper " + styles.wrapper}>
@@ -564,11 +563,11 @@ export const WrapperRequest = ({
           </Link>
         </div>
       </div>
-      {toBack && (
+      {/* {toBack && (
         <div onClick={onBackFunc} className={styles.back}>
           {t("back")}
         </div>
-      )}
+      )} */}
       {children}
     </div>
   );
