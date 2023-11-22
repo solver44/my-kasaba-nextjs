@@ -108,7 +108,7 @@ export default function Step1({ bkutData = {}, canChange }) {
           disabled={!canChange}
           name="seniorOrganization"
           label={t("seniorOrganization")}
-          value={getLocalizationNames(bkutData?.parent, i18n)}
+          value={bkutData?.parent?._instanceName}
         />
         <FormInput
           required
