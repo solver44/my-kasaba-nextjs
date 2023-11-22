@@ -57,7 +57,7 @@ export default function InDataTable({ onUpload, min }) {
     setRows(
       bkutData?.employees.map((e) => {
         return {
-          id: e.employee.id,
+          id: e?.employee?.id,
           employeeId: e.id,
           fio: getFIO(e.employee),
           position: getLocalizationNames(e.position, i18n),
@@ -65,7 +65,7 @@ export default function InDataTable({ onUpload, min }) {
           //   label: getLocalizationNames(e.position, i18n),
           //   value: e.position.id,
           // },
-          birthDate: convertStringToFormatted(e.employee.birthDate),
+          birthDate: convertStringToFormatted(e.employee?.birthDate),
           phoneNumber: e.phone,
           email: e.email,
         };
@@ -261,9 +261,9 @@ function ModalUI({ hideModal, positions, data = {} }) {
     if (!data) return;
 
     setFormData({
-      fio: getFIO(data),
-      birthDate: dayjs(data.birth_date),
-      gender: data.gender != 1 ? 0 : 1,
+      fio: getFIO(data.profile),
+      birthDate: dayjs(data.profile.birth_date),
+      gender: data.profile.gender != 1 ? 0 : 1,
     });
   }
 

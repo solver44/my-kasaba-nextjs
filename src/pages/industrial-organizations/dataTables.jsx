@@ -66,10 +66,10 @@ export default function InDataTable({ isGroup }) {
   ];
 
   useEffect(() => {
-    if (!bkutData?.departments?.length) return;
+    if (!bkutData?.organizations?.length) return;
     setRows(
-      bkutData.departments
-        .filter((d) => d.departmentType == (isGroup ? "GURUH" : "SEH"))
+      bkutData.organizations
+        .filter((d) => d.organizationType == (isGroup ? "GURUH" : "SEH"))
         .map((e) => {
           return {
             id: e.id,
@@ -86,11 +86,11 @@ export default function InDataTable({ isGroup }) {
   }, [bkutData]);
 
   async function onSubmitModal(forms, hideModal, isView) {
-    const duplicate = (bkutData?.departments ?? []).find(
+    const duplicate = (bkutData?.organizations ?? []).find(
       (e) => e.tin == forms.tin
     );
     if (!isView && duplicate) {
-      const isAnother = duplicate.departmentType == (isGroup ? "SEH" : "GURUH");
+      const isAnother = duplicate.organizationType == (isGroup ? "SEH" : "GURUH");
       showYesNoDialog(
         t(
           isAnother
@@ -114,7 +114,7 @@ export default function InDataTable({ isGroup }) {
       bkut: {
         id: bkutData.id,
       },
-      departmentType: isGroup ? "GURUH" : "SEH",
+      organizationType: isGroup ? "GURUH" : "SEH",
       tin: forms.tin,
       name: forms.name,
       phone: forms.phone,
@@ -127,7 +127,7 @@ export default function InDataTable({ isGroup }) {
         firstName: fio[0],
         lastName: fio[1],
         middleName: fio[2],
-        birthDate: forms.birthDate,
+        birthDate: forms.birth_date,
       },
       employee: {
         id: "?",
@@ -152,9 +152,9 @@ export default function InDataTable({ isGroup }) {
     }
     if (hideModal) hideModal();
   }
-
+  
   async function fetchData(id) {
-    const data = (bkutData.departments ?? []).find((ok) => ok.id == id);
+    const data = (bkutData.organizations ?? []).find((ok) => ok.id == id);
     return data;
   }
   async function deleteRow(id, row) {
@@ -167,7 +167,7 @@ export default function InDataTable({ isGroup }) {
   }
 
   function toggleViewModal(row) {
-    setViewModal((bkutData?.departments ?? []).find((e) => e.id == row.id));
+    setViewModal((bkutData?.organizations ?? []).find((e) => e.id == row.id));
   }
 
   return (
@@ -237,7 +237,7 @@ function ModalUI({ hideModal, data, isGroup }) {
     };
     fetchData();
   }, []);
-
+  
   const handleProvince = async (e) => {
     const regionId = e.target.value;
     if (!regionId) return;
@@ -302,15 +302,15 @@ function ModalUI({ hideModal, data, isGroup }) {
     if (!data) return;
 
     setFormData({
-      fio: getFIO(data),
-      birthDate: dayjs(data.birth_date),
-      gender: data.gender != 1 ? 0 : 1,
+      fio: getFIO(data.profile),
+      birthDate: dayjs(data.profile.birth_date),
+      gender: data.profile.gender != 1 ? 0 : 1,
     });
   }
   return (
     <div className="modal-content">
       <Alert className="modal-alert" severity="info">
-        {t("bkut1")} - {`${bkutData?.eLegalEntity.name} (${bkutData.inn})`}
+        {t("bkut1")} - {`${bkutData?.eLegalEntity.name} (${bkutData.tin ?? t("no")})`}
       </Alert>
       <Group title={t("main-info")}>
         <div datatype="list">

@@ -63,7 +63,7 @@ export default function Step1({ bkutData = {}, canChange }) {
       }))
     );
   };
-
+  console.log(bkutData?.parent?._instanceName)
   return (
     <div className={styles.grid}>
       <div className={styles.grid_column}>
@@ -108,8 +108,9 @@ export default function Step1({ bkutData = {}, canChange }) {
           disabled={!canChange}
           name="seniorOrganization"
           label={t("seniorOrganization")}
-          value={getLocalizationNames(bkutData?.parent, i18n)}
+          value={bkutData?.parent?._instanceName}
         />
+        
         <FormInput
           required
           disabled={!canChange}

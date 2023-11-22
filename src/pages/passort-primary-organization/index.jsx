@@ -96,7 +96,7 @@ export default function PassortPrimaryOrganization() {
         soato: {
           id: data.district,
         },
-        adress: data.address,
+        address: data.address,
         branch: {
           id: data.network,
         },
@@ -111,7 +111,7 @@ export default function PassortPrimaryOrganization() {
         bkutType: data.bkutType,
         email: data.email,
         protocolFile: protocolFileRef,
-        inn: data.bkutSTIR || bkutData.application.tin,
+        tin: data.bkutSTIR || bkutData.application.tin,
         phone: data.phoneNumber,
         protocolDate: data.foundingDocDate,
         name: data.bkutName,
@@ -194,7 +194,7 @@ export default function PassortPrimaryOrganization() {
                 {t("passort-primary-organization.firstOrganizationSTIR")}
               </label>
               <span style={{ textAlign: "left" }}>
-                {showOrNot(bkutData.inn)}
+                {showOrNot(bkutData?.eLegalEntity?.tin)}
               </span>
             </div>
             <div className={styles.flex}>
@@ -236,7 +236,7 @@ export default function PassortPrimaryOrganization() {
                 {t("passort-primary-organization.firstOrganizationAdr")}
               </label>
               <span style={{ textAlign: "left" }}>
-                {showOrNot(bkutData.adress)}
+                {showOrNot(bkutData.address)}
               </span>
             </div>
             <div className={styles.flex}>

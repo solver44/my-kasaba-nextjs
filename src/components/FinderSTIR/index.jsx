@@ -53,7 +53,13 @@ export default function FinderSTIR({
     setInputValidation({
       tin: false,
     });
-    onFetch(data?.data);
+
+    const d = data?.data;
+    onFetch({
+      ...d,
+      companyBillingAddress: { streetName: d?.address, soato: d.city_soato },
+      company: { name: d.company_name },
+    });
   }
 
   return (

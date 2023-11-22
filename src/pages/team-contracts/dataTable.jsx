@@ -32,11 +32,11 @@ export default function InDataTable() {
   ];
 
   async function onSubmitModal(forms, hideModal, isView) {
-    // const duplicate = (bkutData?.departments ?? []).find(
+    // const duplicate = (bkutData?.organizations ?? []).find(
     //   (e) => e.tin == forms.tin
     // );
     // if (!isView && duplicate) {
-    //   const isAnother = duplicate.departmentType == "SEH";
+    //   const isAnother = duplicate.organizationType == "SEH";
     //   showYesNoDialog(
     //     t(isAnother ? "found-on-industrion" : "rewrite-stir"),
     //     isAnother ? null : () => sendData(forms, hideModal),
@@ -53,7 +53,7 @@ export default function InDataTable() {
       bkut: {
         id: bkutData.id,
       },
-      departmentType: "GURUH",
+      organizationType: "GURUH",
       tin: forms.tin,
       name: forms.name,
       phone: forms.phone,
@@ -85,7 +85,7 @@ export default function InDataTable() {
   }
 
   async function fetchData(id) {
-    // const data = (bkutData.departments ?? []).find((ok) => ok.id == id);
+    // const data = (bkutData.organizations ?? []).find((ok) => ok.id == id);
     // return data;
   }
   function deleteRow(id) {

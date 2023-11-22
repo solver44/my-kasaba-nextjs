@@ -55,10 +55,10 @@ export default function InDataTable() {
   ];
 
   useEffect(() => {
-    // if (!bkutData?.departments?.length) return;
+    // if (!bkutData?.organizations?.length) return;
     // setRows(
-    //   bkutData.departments
-    //     .filter((d) => d.departmentType == "SEH")
+    //   bkutData.organizations
+    //     .filter((d) => d.organizationType == "SEH")
     //     .map((e) => {
     //       return {
     //         id: e.id,
@@ -78,7 +78,7 @@ export default function InDataTable() {
       bkut: {
         id: bkutData.id,
       },
-      departmentType: "SEH",
+      organizationType: "SEH",
       tin: forms.tin,
       name: forms.name,
       phone: forms.phone,
@@ -110,7 +110,7 @@ export default function InDataTable() {
   }
 
   async function fetchData(id) {
-    const data = (bkutData.departments ?? []).find((ok) => ok.id == id);
+    const data = (bkutData.organizations ?? []).find((ok) => ok.id == id);
     return data;
   }
   function deleteRow(id) {

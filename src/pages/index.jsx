@@ -58,16 +58,16 @@ export default function Home() {
         <Card value={bkutData.members?.length ?? 0} label={t("members")} />
         <Card
           value={
-            (bkutData.departments ?? []).filter(
-              (d) => d.departmentType == "SEH"
+            (bkutData.organizations ?? []).filter(
+              (d) => d.organizationType == "SEH"
             )?.length
           }
           label={t("industrialOrganizations")}
         />
         <Card
           value={
-            (bkutData.departments ?? []).filter(
-              (d) => d.departmentType == "GURUH"
+            (bkutData.organizations ?? []).filter(
+              (d) => d.organizationType == "GURUH"
             )?.length
           }
           label={t("groupOrganizations")}

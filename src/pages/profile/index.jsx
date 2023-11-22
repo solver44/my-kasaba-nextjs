@@ -37,7 +37,7 @@ export default function ProfilePage() {
           <ChangableInput label={t("nationality")} value="O'zbek" />
         </div>
         <div className={styles.grid_column}>
-          <ChangableInput label={t("birth-date")} />
+          <ChangableInput label={t("birth-date")} value={application.passport?.birthDate } />
           <ChangableInput label={t("stir")} value={application.tin} />
           <ChangableInput label={t("birth-place")} value="O'zbekiston" />
         </div>
