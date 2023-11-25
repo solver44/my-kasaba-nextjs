@@ -58,13 +58,9 @@ export default function InDataTable({ onUpload, min }) {
       bkutData?.employees.map((e) => {
         return {
           id: e?.employee?.id,
-          employeeId: e.id,
+          employeeID: e.id,
           fio: getFIO(e.employee),
           position: getLocalizationNames(e.position, i18n),
-          // position: {
-          //   label: getLocalizationNames(e.position, i18n),
-          //   value: e.position.id,
-          // },
           birthDate: convertStringToFormatted(e.employee?.birthDate),
           phoneNumber: e.phone,
           email: e.email,

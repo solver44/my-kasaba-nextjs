@@ -210,7 +210,7 @@ export default function PassortPrimaryOrganization() {
                 {t("passort-primary-organization.firstOrganizationOrg")}
               </label>
               <span style={{ textAlign: "left" }}>
-                {showOrNot(getLocalizationNames(bkutData.parent, i18n))}
+                {showOrNot(bkutData?.parent?._instanceName)}
               </span>
             </div>
             <div className={styles.flex}>

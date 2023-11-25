@@ -32,61 +32,20 @@ export default function InDataTable() {
   ];
 
   async function onSubmitModal(forms, hideModal, isView) {
-    // const duplicate = (bkutData?.organizations ?? []).find(
-    //   (e) => e.tin == forms.tin
-    // );
-    // if (!isView && duplicate) {
-    //   const isAnother = duplicate.organizationType == "SEH";
-    //   showYesNoDialog(
-    //     t(isAnother ? "found-on-industrion" : "rewrite-stir"),
-    //     isAnother ? null : () => sendData(forms, hideModal),
-    //     () => {},
-    //     t
-    //   );
-    //   return;
-    // }
-    // sendData(forms, hideModal);
+
   }
 
   async function sendData(forms, hideModal) {
-    const requestData = {
-      bkut: {
-        id: bkutData.id,
-      },
-      organizationType: "GURUH",
-      tin: forms.tin,
-      name: forms.name,
-      phone: forms.phone,
-      email: forms.email,
-      soato: {
-        id: forms.district,
-      },
-      address: forms.address,
-      employee: {
-        id: forms.director,
-      },
-      legalEntity: {
-        id: bkutData.eLegalEntity.id,
-      },
-    };
-    const response = await sendDepartment(requestData);
-    if (response?.success) {
-      const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
-      setRows((rows) => [
-        ...rows.filter((r) => r.id != newId),
-        { id: newId, ...forms },
-      ]);
-      enqueueSnackbar(t("successfully-saved"), { variant: "success" });
-      actions.updateData();
-    } else {
-      enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
-    }
-    hideModal();
+   
   }
-
+  function updateRows(formData) {
+    const newId = rows.length + 1;
+    const newRow = { id: newId, ...formData };
+    setRows((prevRows) => [...prevRows, newRow]);
+  }
   async function fetchData(id) {
-    // const data = (bkutData.organizations ?? []).find((ok) => ok.id == id);
-    // return data;
+    const data = (bkutData.organizations ?? []).find((ok) => ok.id == id);
+    return data;
   }
   function deleteRow(id) {
     setRows((rows) => rows.filter((row) => row?.id != id));
@@ -113,15 +72,19 @@ export default function InDataTable() {
 function ModalUI({ hideModal, data }) {
   const { t } = useTranslation();
   const [employees, bkutData] = useEmployees();
-  const [values, setValues] = useState({
+  const [formData, setFormData] = useState({
     name: "",
-    address: "",
+    age: "",
+    // Add other form input state values here
   });
-
-  useEffect(() => {
-    const fetchData = async () => {};
-    fetchData();
-  }, []);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  const handleSubmit = () => {
+    updateRows(formData); // Call the updateRows function from props
+    hideModal(); // Hide the modal after form submission
+  };
 
   return (
     <div className="modal-content">
@@ -136,21 +99,48 @@ function ModalUI({ hideModal, data }) {
           label={t("team-contracts.contractDate")}
         />
       </div>
+      <div className="modal-row">
+        <FormInput
+            name="bkutPpo"
+            required
+            label={t("team-contracts.bkutPpo")}
+          />
+        <FormInput
+          name="applicationNumber"
+          required
+          label={t("team-contracts.applicationNumber")}
+        />
+      </div>
       <FormInput
-        name="applicationNumber"
+        name="companyName"
         required
-        label={t("team-contracts.applicationNumber")}
+        label={t("team-contracts.companyName")}
       />
-      <FormInput
-        name="employer"
-        required
-        label={t("team-contracts.employer")}
-      />
-      <FormInput
-        name="director"
-        required
-        label={t("team-contracts.director")}
-      />
+      <div className="modal-row">
+        <FormInput
+          name="employer"
+          required
+          label={t("team-contracts.employer")}
+        />
+        <FormInput
+          name="signDate"
+          date
+          label={t("team-contracts.signDate")}
+        />
+      </div>
+      <div className="modal-row">
+        <FormInput
+          name="director"
+          required
+          label={t("team-contracts.director")}
+        />
+         <FormInput
+          name="signDate1"
+          date
+          label={t("team-contracts.signDate")}
+        />
+      </div>
+     
       <FormInput
         name="application"
         required

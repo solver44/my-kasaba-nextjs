@@ -4,10 +4,12 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const { tin } = req.body;
-      const data = await findSTIR(tin);
-      const cleanedString = data.replace(/\\"/g, '"');
-      const jsonObject = JSON.parse(cleanedString);
-      res.status(200).json(jsonObject);
+      let data = await findSTIR(tin);
+      if (data && typeof data == "string") {
+        const cleanedString = data.replace(/\\"/g, '"');
+        data = JSON.parse(cleanedString);
+      }
+      res.status(200).json(data);
     } catch (error) {
       res.status(500).json({ error: "An error occurred", message: error });
     }
