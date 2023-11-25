@@ -354,6 +354,7 @@ export default {
     "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang.",
     "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang.",
     "bkut-exists": "Ushbu STIR orqali avval tashkilot ro'yhatdan o'tkazilgan.",
+    "application-exists": "Ushbu STIR orqali allaqachon murojaat yuborilgan.",
     "pinfl-fetch-error":
       "Ma'lumotlarni yuklashda xatolik mavjud. Iltimos qayta urinib ko'ring.",
     isStudent: "Talaba",

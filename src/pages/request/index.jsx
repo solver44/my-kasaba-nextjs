@@ -196,13 +196,21 @@ export default function RequestPage({ router }) {
         fio: getFIO(formData),
         id: data.statusCheckCode,
       });
-    } else if (data?.error == "bkut is already exists") {
+    } else if (data?.message == "the same bkut has already been created") {
       reloadCaptcha();
       enqueueSnackbar(t("bkut-exists"), { variant: "error" });
       setInputValidation((inputValidation) => ({
         ...inputValidation,
         inn: false,
         innInvalid: "bkut-exists",
+      }));
+    } else if (data?.message == "the application has already been sent") {
+      reloadCaptcha();
+      enqueueSnackbar(t("application-exists"), { variant: "error" });
+      setInputValidation((inputValidation) => ({
+        ...inputValidation,
+        inn: false,
+        innInvalid: "application-exists",
       }));
     } else if (data?.error == "reCAPTCHA verification failed") {
       reloadCaptcha();
@@ -341,9 +349,22 @@ export default function RequestPage({ router }) {
         <RequestHasBeenSent />
       ) : (
         <React.Fragment>
-          <p className="title bold mb-1" style={{textAlign:"center", textTransform:"uppercase", fontSize:20, color:"#197bbd"}}>{t("request-page.subtitle")}</p>
+          <p
+            className="title bold mb-1"
+            style={{
+              textAlign: "center",
+              textTransform: "uppercase",
+              fontSize: 20,
+              color: "#197bbd",
+            }}
+          >
+            {t("request-page.subtitle")}
+          </p>
           <div className={styles.content}>
-            <p style={{ marginTop: 30, color:"#197bbd" }} className={styles.title}>
+            <p
+              style={{ marginTop: 30, color: "#197bbd" }}
+              className={styles.title}
+            >
               {t("request-page.form1-title")}
             </p>
             <InputButton
@@ -432,7 +453,10 @@ export default function RequestPage({ router }) {
               onChange={handleInputChange}
               titleText={t("email")}
             />
-            <p style={{ marginTop: 20, color:"#197bbd" }} className={styles.title}>
+            <p
+              style={{ marginTop: 20, color: "#197bbd" }}
+              className={styles.title}
+            >
               {t("request-page.form2-title")}
             </p>
             <InputButton
@@ -502,7 +526,7 @@ export default function RequestPage({ router }) {
                 textarea
                 titleText={t("request-page.form4-title")}
               />
-            </span >
+            </span>
             <div className={styles.bottom}>
               <div id="recaptcha-container"></div>
               <button onClick={handleSubmit} className="primary-btn">
@@ -563,12 +587,12 @@ export const WrapperRequest = ({
           </Link>
         </div>
       </div>
-      
+
       {toBack ? (
-    <div onClick={onBackFunc} className={styles.back}>
-      {t("sendBack")}
-    </div>
-  ) : null}
+        <div onClick={onBackFunc} className={styles.back}>
+          {t("sendBack")}
+        </div>
+      ) : null}
       {children}
     </div>
   );
