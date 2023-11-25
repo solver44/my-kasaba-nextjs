@@ -322,8 +322,9 @@ function ModalUI({ hideModal, data = {} }) {
     if (!data) return;
 
     setFormData({
-      fio: getFIO(data),
-      birthDate: dayjs(data.birth_date),
+      fio: getFIO(data.profile),
+      birthDate: dayjs(data.profile.birth_date),
+      gender: data.profile.gender != 1 ? 0 : 1,
     });
   }
   return (

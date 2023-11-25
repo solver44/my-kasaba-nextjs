@@ -8,7 +8,7 @@ import { getDistricts, getRegions } from "@/http/public";
 import FinderSTIR from "@/components/FinderSTIR";
 import { useEmployees } from "../employees";
 import { useSelector } from "react-redux";
-import { deleteDepartment, sendDepartment } from "@/http/data";
+import { deleteDepartment, sendDepartment, initFile } from "@/http/data";
 import useActions from "@/hooks/useActions";
 import { getFIO, splitFIO } from "@/utils/data";
 import { showYesNoDialog } from "@/utils/dialog";
@@ -31,7 +31,6 @@ export default function InDataTable({ isGroup }) {
   const { enqueueSnackbar } = useSnackbar();
   const actions = useActions();
   const getLocal = getTranslation(isGroup);
-
   const columns = [
     {
       field: "name",
@@ -39,7 +38,7 @@ export default function InDataTable({ isGroup }) {
       size: 300,
     },
     {
-      field: "director",
+      field: "employees",
       headerName: getLocal("direktor1"),
       hidden: false,
     },
@@ -59,7 +58,7 @@ export default function InDataTable({ isGroup }) {
       hidden: true,
     },
     {
-      field: "phoneNumber",
+      field: "phone",
       headerName: getLocal("phone"),
       hidden: true,
     },
@@ -76,10 +75,10 @@ export default function InDataTable({ isGroup }) {
             name: e.name,
             bkut: bkutData.name,
             address: e.address,
-            director: getFIO(e.employee),
+            employees: getFIO(e.employee),
             soato: e.soato._instanceName,
             email: e.email,
-            phoneNumber: e.phoneNumber,
+            phone: e.phone,
           };
         })
     );
@@ -109,7 +108,16 @@ export default function InDataTable({ isGroup }) {
   }
 
   async function sendData(forms, hideModal, duplicate) {
-    const fio = splitFIO(forms.director);
+    let protocolFileRef;
+    
+    let responseFile = await initFile(forms.decisionFile);
+      if (!responseFile?.fileRef) {
+        enqueueSnackbar(t("upload-file-error"), { variant: "error" });
+        return;
+      }
+
+    protocolFileRef = responseFile.fileRef;
+    console.log(protocolFileRef)
     const requestData = {
       bkut: {
         id: bkutData.id,
@@ -123,19 +131,30 @@ export default function InDataTable({ isGroup }) {
         id: forms.district,
       },
       address: forms.address,
-      director: {
-        firstName: fio[0],
-        lastName: fio[1],
-        middleName: fio[2],
-        birthDate: forms.birthDate,
-      },
-      employee: {
-        id: "?",
-      },
+      employee: [
+        {
+          individual: {
+            id: "?", // Change the individual ID here
+          },
+          isHomemaker: false,
+          isKasabaActive: 1,
+          isMember: false,
+          isInvalid: false,
+          isPensioner: false,
+          isStudent: false,
+          position: {
+            id: "", // Replace with the appropriate position ID
+          },
+        },
+      ],
       legalEntity: {
         id: bkutData.eLegalEntity.id,
       },
+      decisionNumber: forms.decisionNumber,
+      decisionDate: forms.decisionDate,
+      decisionFile: protocolFileRef,
     };
+    
     if (duplicate) requestData.id = duplicate.id;
     const response = await sendDepartment(requestData);
     if (response?.success) {
@@ -205,7 +224,7 @@ export default function InDataTable({ isGroup }) {
     </React.Fragment>
   );
 }
-function ModalUI({ hideModal, data, isGroup }) {
+function ModalUI({ hideModal, data, isGroup}) {
   const getLocal = getTranslation(isGroup);
   const { t } = useTranslation();
   const [employees, bkutData] = useEmployees();
@@ -213,8 +232,9 @@ function ModalUI({ hideModal, data, isGroup }) {
     fio: "",
     birthDate: "",
     gender: 1,
+    
   });
-  const [mode, setMode] = useState(1);
+  const [mode, setMode] = useState(0);
   const [provinces, setProvinces] = useState();
   const [districts, setDistricts] = useState();
   const [values, setValues] = useState({
@@ -222,8 +242,11 @@ function ModalUI({ hideModal, data, isGroup }) {
     districtId: "",
     name: "",
     address: "",
+    phone: "",
+    email: "",
+    decisionNumber: "",
+    decisionDate: "",
   });
-
   useEffect(() => {
     const fetchData = async () => {
       let dataProvinces = await getRegions();
@@ -253,7 +276,7 @@ function ModalUI({ hideModal, data, isGroup }) {
 
   async function onFetchSTIR(entityData) {
     if (!entityData) return;
-
+    console.log(entityData)
     let soato = entityData.companyBillingAddress.soato;
     if (soato) {
       soato = soato + "";
@@ -273,11 +296,11 @@ function ModalUI({ hideModal, data, isGroup }) {
     }));
   }
 
-  const { phone, tin, email, soato = {}, employee = {} } = data;
+  const {  tin, email, soato = {}, employee = {} } = data;
   useEffect(() => {
     const fetchData = async () => {
       if (!data?.id) return;
-      let soatoId = soato.id ?? "";
+      const soatoId = (soato?.id ?? "").toString();
       const provinceId = soatoId.slice(0, 4);
       const districtId = soatoId;
       await handleProvince({ target: { value: provinceId } });
@@ -285,6 +308,10 @@ function ModalUI({ hideModal, data, isGroup }) {
         ...values,
         name: data.name,
         address: data.address,
+        phone: data.phone,
+        email: data.email,
+        decisionNumber: data.decisionNumber,
+        decisionDate: data.decisionNumber,
         provinceId,
         districtId,
       }));
@@ -300,11 +327,10 @@ function ModalUI({ hideModal, data, isGroup }) {
 
   function onFetchPINFL(data) {
     if (!data) return;
-
     setFormData({
-      fio: getFIO(data),
-      birthDate: dayjs(data.birth_date),
-      gender: data.gender != 1 ? 0 : 1,
+      fio: getFIO(data.profile),
+      birthDate: dayjs(data.profile.birth_date),
+      gender: data.profile.gender != 1 ? 0 : 1,
     });
   }
   return (
@@ -382,9 +408,9 @@ function ModalUI({ hideModal, data, isGroup }) {
           </div>
           <div className="modal-row">
             <FormInput
-              value={phone}
+              value={values.phone}
               label={t(getLocal("phone"))}
-              name="phoneNumber"
+              name="phone"
             />
             <FormInput label={t("email")} value={email} name="email" />
           </div>
@@ -399,7 +425,7 @@ function ModalUI({ hideModal, data, isGroup }) {
           />
           <div className="modal-row">
             <FormInput
-              name="director"
+              name="employees"
               required
               disabled
               label={t("fio")}
@@ -427,16 +453,6 @@ function ModalUI({ hideModal, data, isGroup }) {
               ]}
               label={t("gender")}
             />
-            <FormInput
-              value={employee.phone}
-              label={t("phone-number")}
-              name="directorPhone"
-            />
-            <FormInput
-              value={employee.email}
-              label={t("employees.email")}
-              name="directorEmail"
-            />
           </div>
         </div>
       </Group>
@@ -446,8 +462,9 @@ function ModalUI({ hideModal, data, isGroup }) {
             <FormInput
               label={t("decision-or-application-title")}
               name="decisionNumber"
+              value={values.decisionNumber}
             />
-            <FormInput name="decisionDate" date label={t("date")} />
+            <FormInput name="decisionDate" date label={t("date")} value={values.decisionDate} />
           </div>
           <FormInput
             name="decisionFile"

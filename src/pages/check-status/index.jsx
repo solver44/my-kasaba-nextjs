@@ -40,7 +40,7 @@ export default function CheckStatus() {
     data = data.application;
     let dataTable = {
       id: currentID,
-      status: "wait",
+      status: data.status.id,
       statusText: data.status[i18n.language === "uz" ? "nameUz" : "nameRu"],
       data: [
         {
@@ -81,12 +81,14 @@ export default function CheckStatus() {
         },
       ],
     };
+    console.log(data.status.id)
     actions.caches(dataTable);
 
     actions.showLoading(false);
   };
   return (
-    <WrapperRequest noReglament>
+    <WrapperRequest noReglament toBack="true" >
+      
       <div className={styles.wrapper}>
         <div className="card full" style={{boxShadow:"18px 7px 24px 24px rgb(0 0 0 / 4%)"}}>
           <p style={{ paddingBottom: 30, color:"#197bbd" }} className="title bold start">
@@ -113,7 +115,7 @@ export default function CheckStatus() {
               <div className={styles.top}>
                 <div className="row g-4 a-center">
                   <p className="title bold start" style={{color:"#197bbd"}}>{t("check-status.title1")}</p>
-                  <div className={"status " + state.status}>
+                  <div className={"status wait"} style={{ background: state.status === 2 ? '#f7bbc7' : '' }}>
                   {state.statusText || t("inspection")}
                 </div>
                 </div>

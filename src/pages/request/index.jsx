@@ -534,7 +534,7 @@ export const WrapperRequest = ({
   isReglament,
   noReglament,
   onClickLink,
-  toBack,
+  toBack = false,
   onBack,
 }) => {
   const [parentAnimation] = useAutoAnimate();
@@ -542,7 +542,7 @@ export const WrapperRequest = ({
   const navigate = useRouter();
   const onBackFunc = () => {
     if (onBack) onBack();
-    else navigate.replace("/auth");
+    else navigate.replace("/request");
   };
   return (
     <div ref={parentAnimation} className={"wrapper " + styles.wrapper}>
@@ -563,11 +563,12 @@ export const WrapperRequest = ({
           </Link>
         </div>
       </div>
-      {/* {toBack && (
-        <div onClick={onBackFunc} className={styles.back}>
-          {t("back")}
-        </div>
-      )} */}
+      
+      {toBack ? (
+    <div onClick={onBackFunc} className={styles.back}>
+      {t("sendBack")}
+    </div>
+  ) : null}
       {children}
     </div>
   );

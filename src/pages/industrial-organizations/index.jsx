@@ -9,7 +9,7 @@ export default function IndustrialOrganizations() {
       <DataTables />
     </div>
   );
-}
+} 
 
 IndustrialOrganizations.layout = function (Component, t) {
   return (

@@ -58,9 +58,9 @@ export const POSITIONS = (t) => [
 ];
 
 export function getFIO(obj = {}, isNotEmpty) {
-  const firstName = obj.firstName ?? obj.first_name ?? "";
-  const lastName = obj.lastName ?? obj.last_name ?? "";
-  const middleName = obj.middleName ?? obj.middle_name ?? "";
+  const firstName = obj.firstName ?? obj.first_name ?? obj.person_name ?? "";
+  const lastName = obj.lastName ?? obj.last_name ?? obj.person_surname ?? "";
+  const middleName = obj.middleName ?? obj.middle_name ?? obj.person_patronymic ?? "";
   return (
     `${lastName} ${firstName} ${middleName}`.trim() || (isNotEmpty ? "-" : "")
   );

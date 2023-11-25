@@ -7,6 +7,7 @@ export default {
     login: {
       title: "Kasaba uyushmasi portaliga",
     },
+    sendBack:"Murojaatga qaytish",
     back: "Ortga qaytish",
     check: "Tekshirish",
     homePage: {
@@ -142,13 +143,16 @@ export default {
       input15: "Kasaba uyushmasi qoʼmitasi haq toʼlanadigan apparatiga egami?",
     },
     "team-contracts": {
-      title: "Jamoa shartnomalari",
+      title: "Jamoa shartnomalari yaratish",
       contractDate: "Shartnoma sanasi",
       applicationNumber: "Bayon №",
+      bkutPpo:"BKUT (PPO)",
       employer: "Ish beruvchining F.I.O.",
       director: "Kasaba uyushmasi qo'mitasi rasinining F.I.O.",
+      companyName:"Tashkilot, muasssasa nomlanishi",
       application: "Shartnoma fayli",
-
+      selectDate:"Maqullangan sanasi",
+      signDate:"Imzolangan sana",
       contractNumber: "Shartnoma raqami",
       agreeDate: "Qabul qilish sanasi",
       sign: "Tashkilotdan imzoladi",
