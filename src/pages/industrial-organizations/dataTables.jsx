@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import DataTable from "@/components/DataTable";
 import FormInput from "@/components/FormInput";
@@ -8,7 +8,7 @@ import { getDistricts, getRegions } from "@/http/public";
 import FinderSTIR from "@/components/FinderSTIR";
 import { useEmployees } from "../employees";
 import { useSelector } from "react-redux";
-import { deleteDepartment, sendDepartment, initFile } from "@/http/data";
+import { deleteDepartment, sendDepartment, initFile, getFile } from "@/http/data";
 import useActions from "@/hooks/useActions";
 import { getFIO, splitFIO } from "@/utils/data";
 import { showYesNoDialog } from "@/utils/dialog";
@@ -26,6 +26,7 @@ function getTranslation(isGroup) {
 export default function InDataTable({ isGroup }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
+  const employees = useRef({});
   const [viewModal, setViewModal] = useState(false);
   const { bkutData = {} } = useSelector((states) => states);
   const { enqueueSnackbar } = useSnackbar();
@@ -38,7 +39,7 @@ export default function InDataTable({ isGroup }) {
       size: 300,
     },
     {
-      field: "employees",
+      field: "director",
       headerName: getLocal("direktor1"),
       hidden: false,
     },
@@ -65,6 +66,7 @@ export default function InDataTable({ isGroup }) {
   ];
 
   useEffect(() => {
+    console.log(bkutData.organizations)
     if (!bkutData?.organizations?.length) return;
     setRows(
       bkutData.organizations
@@ -75,13 +77,14 @@ export default function InDataTable({ isGroup }) {
             name: e.name,
             bkut: bkutData.name,
             address: e.address,
-            employees: getFIO(e.employee),
+            director: bkutData?.employees[0]?._instanceName,
             soato: e.soato._instanceName,
             email: e.email,
             phone: e.phone,
           };
         })
     );
+
   }, [bkutData]);
 
   async function onSubmitModal(forms, hideModal, isView) {
@@ -99,7 +102,7 @@ export default function InDataTable({ isGroup }) {
             : "rewrite-stir"
         ),
         isAnother ? null : () => sendData(forms, hideModal, duplicate),
-        () => {},
+        () => {}, 
         t
       );
       return;
@@ -108,68 +111,98 @@ export default function InDataTable({ isGroup }) {
   }
 
   async function sendData(forms, hideModal, duplicate) {
-    let protocolFileRef;
-    
-    let responseFile = await initFile(forms.decisionFile);
-      if (!responseFile?.fileRef) {
-        enqueueSnackbar(t("upload-file-error"), { variant: "error" });
-        return;
+    try {
+      let protocolFileRef = null;
+      
+      if (forms.decisionFile) {
+        // Initiate file upload and retrieve file reference
+        let responseFile = await initFile(forms.decisionFile);
+        if (!responseFile?.fileRef) {
+          enqueueSnackbar(t("upload-file-error"), { variant: "error" });
+          return;
+        }
+        // File upload successful, assign file reference
+        protocolFileRef = responseFile.fileRef;
       }
-
-    protocolFileRef = responseFile.fileRef;
-    console.log(protocolFileRef)
-    const requestData = {
-      bkut: {
-        id: bkutData.id,
-      },
-      organizationType: isGroup ? "GURUH" : "SEH",
-      tin: forms.tin,
-      name: forms.name,
-      phone: forms.phone,
-      email: forms.email,
-      soato: {
-        id: forms.district,
-      },
-      address: forms.address,
-      employee: [
-        {
-          individual: {
-            id: "?", // Change the individual ID here
-          },
-          isHomemaker: false,
-          isKasabaActive: 1,
-          isMember: false,
-          isInvalid: false,
-          isPensioner: false,
-          isStudent: false,
-          position: {
-            id: "", // Replace with the appropriate position ID
-          },
+      const members = (bkutData.employees ?? [])
+      .filter((e) => e.individual.pinfl != forms.pinfl)
+      .map((e) => ({
+        ...e,
+        individual: {
+          id: e.pinfl,
         },
-      ],
-      legalEntity: {
-        id: bkutData.eLegalEntity.id,
-      },
-      decisionNumber: forms.decisionNumber,
-      decisionDate: forms.decisionDate,
-      decisionFile: protocolFileRef,
-    };
-    
-    if (duplicate) requestData.id = duplicate.id;
-    const response = await sendDepartment(requestData);
-    if (response?.success) {
-      const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
-      setRows((rows) => [
-        ...rows.filter((r) => r.id != newId),
-        { id: newId, ...forms },
-      ]);
-
-      enqueueSnackbar(t("successfully-saved"), { variant: "success" });
-      actions.updateData();
-    } else {
-      enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
+        isKasabaActive: false, // Example values, replace with your logic
+        isHomemaker: e.isHomemaker || false,
+        isMember: e.isMember || false,
+        isInvalid: e.isInvalid || false,
+        isPensioner: false, // Example value, replace with your logic
+        isStudent: e.isStudent || false,
+        position: {
+          id: e.position, // Use the lavozim id
+        },
+        memberJoinDate: e.signDate, // Use the join date
+      }));
+      // Prepare request data excluding the decisionFile if it's not present or uploaded
+      const requestData = {
+        bkut: { 
+          id: 
+          bkutData.id 
+        },
+        organizationType: isGroup ? "GURUH" : "SEH",
+        tin: forms.tin,
+        name: forms.name,
+        phone: forms.phone,
+        email: forms.email,
+        soato: { 
+          id: forms.district 
+        },
+        address: forms.address,
+        employees: [{
+          individual:{
+            id: forms.individual
+          },
+        }
+        ],
+        legalEntity: { 
+          id: bkutData.eLegalEntity.id 
+        },
+        isLegalEntity: forms.isLegalEntity,
+        decisionNumber: forms.decisionNumber,
+        decisionDate: forms.decisionDate,
+        tinSenior: forms.tinSenior || bkutData.application.tin,
+      };
+      // Include decisionFile reference in the request data if available
+      if (protocolFileRef) {
+        requestData.decisionFile = protocolFileRef;
+      }
+  
+      // Include ID for an existing entry
+      if (duplicate) {
+        requestData.id = duplicate.id;
+      }
+      const response = await sendDepartment(requestData);
+      console.log(forms)
+      if (response?.success) {
+        const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
+        setRows((rows) => [
+          ...rows.filter((r) => r.id !== newId),
+          { id: newId, ...forms },
+        ]);
+  
+        enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+        actions.updateData();
+      } else {
+        enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
+      }
+  
+      if (hideModal) {
+        hideModal();
+      }
+    }  catch (error) {
+      console.error("Error sending data:", error); // Log the specific error
+      enqueueSnackbar(t("send-data-error"), { variant: "error" });
+      return;
     }
-    if (hideModal) hideModal();
   }
 
   async function fetchData(id) {
@@ -177,7 +210,6 @@ export default function InDataTable({ isGroup }) {
     return data;
   }
   async function deleteRow(id, row) {
-    console.log(id, row);
     const res = await deleteDepartment(id);
     if (res) {
       setRows((rows) => rows.filter((row) => row?.id != id));
@@ -227,7 +259,7 @@ export default function InDataTable({ isGroup }) {
 function ModalUI({ hideModal, data, isGroup}) {
   const getLocal = getTranslation(isGroup);
   const { t } = useTranslation();
-  const [employees, bkutData] = useEmployees();
+  const [employeess, bkutData] = useEmployees();
   const [formData, setFormData] = useState({
     fio: "",
     birthDate: "",
@@ -237,6 +269,9 @@ function ModalUI({ hideModal, data, isGroup}) {
   const [mode, setMode] = useState(0);
   const [provinces, setProvinces] = useState();
   const [districts, setDistricts] = useState();
+  const [files, setFiles] = useState({
+    decisionFile: { loading: true },
+  });
   const [values, setValues] = useState({
     provinceId: "",
     districtId: "",
@@ -246,7 +281,22 @@ function ModalUI({ hideModal, data, isGroup}) {
     email: "",
     decisionNumber: "",
     decisionDate: "",
+    decisionFile:"",
   });
+  async function parseFile(file) {
+    if (!file) return [null, null];
+    const res = await getFile(file);
+    return [res, decodeURIComponent(file.split("=")[1]).replace(/\+/g, " ")];
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      let res3 = await parseFile(data.decisionFile);
+      setFiles({
+        decisionFile: { name: res3[1], data: res3[0] },
+      });
+    };
+    fetchData();
+  }, [data]);
   useEffect(() => {
     const fetchData = async () => {
       let dataProvinces = await getRegions();
@@ -276,7 +326,6 @@ function ModalUI({ hideModal, data, isGroup}) {
 
   async function onFetchSTIR(entityData) {
     if (!entityData) return;
-    console.log(entityData)
     let soato = entityData.companyBillingAddress.soato;
     if (soato) {
       soato = soato + "";
@@ -296,13 +345,14 @@ function ModalUI({ hideModal, data, isGroup}) {
     }));
   }
 
-  const {  tin, email, soato = {}, employee = {} } = data;
+  const {  tin, email, soato = {}, individual={}, isLegalEntity=false, } = data;
   useEffect(() => {
     const fetchData = async () => {
       if (!data?.id) return;
       const soatoId = (soato?.id ?? "").toString();
       const provinceId = soatoId.slice(0, 4);
       const districtId = soatoId;
+      console.log(data)
       await handleProvince({ target: { value: provinceId } });
       setValues((values) => ({
         ...values,
@@ -312,20 +362,16 @@ function ModalUI({ hideModal, data, isGroup}) {
         email: data.email,
         decisionNumber: data.decisionNumber,
         decisionDate: data.decisionNumber,
+        decisionFile: data.decisionFile,
         provinceId,
         districtId,
       }));
     };
     fetchData();
-
-    if (employee.birthDate) var birthDate = dayjs(employee.birthDate);
-    if (employee?.firstName) var fio = getFIO(employee);
-    if (employee?.gender) var gender = employee.gender;
-
-    setFormData({ fio, birthDate, gender });
   }, [data]);
-
+  
   function onFetchPINFL(data) {
+   
     if (!data) return;
     setFormData({
       fio: getFIO(data.profile),
@@ -333,6 +379,15 @@ function ModalUI({ hideModal, data, isGroup}) {
       gender: data.profile.gender != 1 ? 0 : 1,
     });
   }
+  useEffect(() => {
+    const FIO = getFIO(individual);
+    if (!FIO) return;
+    setFormData({
+      fio: FIO,
+      birthDate: individual.birthDate ? dayjs(individual.birthDate) : "",
+      gender: individual.gender ?? formData.gender,
+    });
+  }, [data]);
   return (
     <div className="modal-content">
       <Alert className="modal-alert" severity="info">
@@ -352,27 +407,28 @@ function ModalUI({ hideModal, data, isGroup}) {
             label={t(getLocal("name"))}
           />
           <div className="modal-row">
-            <RadioGroup
-              defaultValue={1}
-              label={t("bkutType1")}
-              left
-              name="orgType"
-              onChange={(e) => {
-                setMode(e.target.value);
-              }}
-              data={[
-                {
-                  value: "1",
-                  label: t("yes"),
-                },
-                {
-                  value: "0",
-                  label: t("no"),
-                },
-              ]}
-            />
-            {mode == 1 && (
-              <FormInput name="tinSenior" required label={t("stir")} />
+          <RadioGroup
+                defaultValue={false}
+                label={t("bkutType1")}
+                left
+                name="isLegalEntity"
+                value={isLegalEntity ?? false}
+                onChange={(e) => {
+                  setMode(e.target.value);
+                }}
+                data={[
+                  {
+                    value: true,
+                    label: t("yes"),
+                  },
+                  {
+                    value: false,
+                    label: t("no"),
+                  },
+                ]}
+              />
+            {mode && (
+              <FormInput name="tinSenior" required label={t("stir")} value={bkutData?.application?.tin}/>
             )}
           </div>
         </div>
@@ -420,12 +476,12 @@ function ModalUI({ hideModal, data, isGroup}) {
         <div datatype="list">
           <FinderPINFL
             disablePINFL
-            pinflValue={employee.pinfl}
+            pinflValue={individual.pinfl}
             onFetch={onFetchPINFL}
           />
           <div className="modal-row">
             <FormInput
-              name="employees"
+              name="director"
               required
               disabled
               label={t("fio")}
@@ -470,6 +526,8 @@ function ModalUI({ hideModal, data, isGroup}) {
             name="decisionFile"
             fileInput
             label={t("decision-or-application-file")}
+            value={files.decisionFile?.url}
+            nameOfFile={files.decisionFile.name}
           />
         </div>
       </Group>

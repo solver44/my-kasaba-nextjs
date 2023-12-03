@@ -58,7 +58,10 @@ function DataTable({
   onImportFinished,
   hideExportImport,
   hideFirstButton,
+  showGreenBtn,
   hideImport,
+  hideDelete,
+  hides,
   bkutData,
   rows = [],
   modal = () => "",
@@ -258,6 +261,9 @@ function DataTable({
                 {!hideFirstButton && <BigButton onClick={() => toggleModal()} Icon={AddIcon}>
                   {t("add")}
                 </BigButton>}
+                {showGreenBtn && <BigButton green={'success'} onClick={() => toggleModal()} Icon={AddIcon}>
+                  {t("projectAdd")}
+                </BigButton>}
               </Box>
             </React.Fragment>
           )}
@@ -270,13 +276,22 @@ function DataTable({
           enablePinning
           enableRowNumbers
           enableStickyHeader
+          
           // enableMultiRowSelection={false}
           // enableRowSelection
           onRowSelectionChange={setRowSelection}
           muiTableBodyRowProps={({ row }) => {
-            const sx = { cursor: "pointer" };
-            if (rowSelection[row.index])
-              sx.backgroundColor = "var(--row-selected-color) !important";
+            const isConfirmed = row.original.status === 'CONFIRMED';
+            const isSelected = rowSelection[row.id];
+          
+            let rowStyles = { cursor: "pointer" };
+          
+            if (isSelected) {
+              rowStyles = { ...rowStyles, backgroundColor: "var(--row-selected-color) !important" };
+            } else if (isConfirmed) {
+              rowStyles = { ...rowStyles, backgroundColor: "green" };
+            }
+          
             return {
               onClick: () => {
                 let isSelected = false;
@@ -289,8 +304,8 @@ function DataTable({
                 });
                 setSelectedRows(isSelected ? [row.original] : []);
               },
-              selected: rowSelection[row.id],
-              sx,
+              selected: isSelected,
+              sx: rowStyles,
             };
           }}
           rowNumberMode="static"
@@ -360,9 +375,9 @@ function DataTable({
                 <IconButton onClick={() => handleViewClick(row.original)}>
                   <VisibilityIcon />
                 </IconButton>
-                <IconButton onClick={() => handleDeleteClick(row.original)}>
+                {!hideDelete &&<IconButton onClick={() => handleDeleteClick(row.original)}>
                   <DeleteIcon />
-                </IconButton>
+                </IconButton>}
               </Box>
             );
           }}
@@ -384,6 +399,7 @@ function DataTable({
         isView={!!dataModal}
         bottomModal={bottomModal}
         handleClose={closeModal}
+        hideBtn={hides}
       >
         {modal(closeModal, dataModal ?? {})}
       </ModalUI>

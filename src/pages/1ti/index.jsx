@@ -3,9 +3,18 @@ import HomeWrapper from "../home/wrapper";
 import styles from "./1ti.module.scss";
 import { Button } from "@mui/material";
 import { getImportViewer } from "@/utils/animation";
+import Group from "@/components/Group";
+import { t } from "i18next";
+import FormInput from "@/components/FormInput";
+import { useSelector } from "react-redux";
+import RadioGroup from "@/components/RadioGroup";
+import InDataTable from "../statistical-information/dataTable";
 
 export default function OneTI() {
   const viewer = useRef(null);
+  const { bkutData = {} } = useSelector((states) => states);
+  console.log(bkutData)
+  const [isKasabaActive, setIsKasabaActive] = useState(false);
   const jsonData = {
     COMPANYNAME: "PDFTron",
     CUSTOMERNAME: "Andrey Safonov",
@@ -26,54 +35,9 @@ export default function OneTI() {
     days: "30",
     total: "$25.00",
   };
-  useEffect(() => {
-    async function initData() {
-      const WebViewer = await getImportViewer();
-      WebViewer(
-        {
-          path: "/webviewer/lib",
-          initialDoc: "/report1ti.docx",
-        },
-        viewer.current
-      ).then(async (instance) => {
-        const { documentViewer } = instance.Core;
-
-        documentViewer.addEventListener("documentLoaded", async () => {
-          await documentViewer.getDocument().documentCompletePromise();
-          documentViewer.updateView();
-
-          // const doc = documentViewer.getDocument();
-          // const keys = doc.getTemplateKeys();
-          // console.log(keys);
-
-          await documentViewer.getDocument().applyTemplateValues(jsonData);
-
-          setTimeout(() => {
-            const removeCanvasElements = () => {
-              document.querySelectorAll("iframe").forEach((item) => {
-                // const canvasElements =
-                item.contentWindow.document;
-                //   .body.querySelectorAll(
-                //     "canvas.hacc"
-                //   );
-                // canvasElements.forEach((canvas) => {
-                //   console.log(canvas);
-                //   canvas.style.display = "none !important";
-                // });
-              });
-            };
-
-            // Call the function to remove canvas elements when the component mounts
-            removeCanvasElements();
-          }, 0);
-        });
-      });
-    }
-    initData();
-  }, []);
   return (
     <div className={styles.container}>
-      <div className={styles.webviewer} ref={viewer}></div>
+      <InDataTable/>
     </div>
   );
 }

@@ -68,23 +68,22 @@ export default function InDataTable() {
   }
 
   useEffect(() => {
-    bkutDataRef.current = bkutData;
-    if (!bkutData?.members?.length) return;
-    setRows(
-      bkutData?.members.map((e) => {
-        return {
-          id: e.id,
-          fio: getFIO(e.member),
-          signDate: e.joinDate,
-          employment: getEmployeement(e),
-          birthDate: e.member?.birthDate ?? "",
-          position: e.position,
-          phone: e.phone,
-          email: e.email,
-          pinfl: e.member?.pinfl,
-        };
-      })
-    );
+    const filteredRows = bkutData?.employees
+    .filter((e) => e.isKasabaActive !== false) // Filter out rows where isKasabaActive is false
+    .map((e) => {
+      return {
+        id: e.id,
+        fio: getFIO(e.individual),
+        signDate: e.joinDate,
+        employment: getEmployeement(e),
+        birthDate: e.individual?.birthDate ?? "",
+        position: e.position,
+        phone: e.individual.phone,
+        email: e.individual.email,
+        pinfl: e.individual?.pinfl,
+      };
+    });
+    setRows(filteredRows);
   }, [bkutData]);
 
   async function onSubmitModal(forms, hideModal, isView) {
@@ -105,38 +104,48 @@ export default function InDataTable() {
 
   async function sendData(forms, hideModal, isView, noAlert = false) {
     const bkutData = bkutDataRef.current;
-    const members = (bkutData.members ?? [])
-      .filter((e) => (isView ? e.member.pinfl != forms.pinfl : true))
-      .map((e) => ({
-        ...e,
-        bkut: {
-          id: bkutData.id,
-        },
-        member: {
-          id: e.member.id,
-        },
-        joinDate: e.joinDate,
-        position: e.position,
-        phone: e.phoneNumber,
+    const members = (bkutData.employees ?? [])
+    .filter((e) => e.individual.pinfl != forms.pinfl)
+    .map((e) => ({
+      ...e,
+      bkut: {
+        id: bkutData.id,
+      },
+      individual: {
+        id: e.pinfl, // Use the pinfl when searching
+        phone: e.phone,
         email: e.email,
-      }));
+      },
+      isKasabaActive: false, // Example values, replace with your logic
+      isHomemaker: e.isHomemaker || false,
+      isMember: e.isMember || false,
+      isInvalid: e.isInvalid || false,
+      isPensioner: false, // Example value, replace with your logic
+      isStudent: e.isStudent || false,
+      position: {
+        id: e.position, // Use the lavozim id
+      },
+      memberJoinDate: e.signDate, // Use the join date
+    }));
     const requestData = {
-      id: bkutData.id,
-      members: [
-        {
-          ...forms.personInfo,
-          bkut: {
-            id: bkutData.id,
-          },
-          member: {
-            id: "?",
-          },
-          joinDate: forms.signDate,
-          position: forms.position,
-          phone: forms.phoneNumber,
-          email: forms.email,
-        },
-      ],
+      bkut: {
+        id: bkutData.id,
+      },
+      individual: {
+        id: forms.pinfl, // Use the pinfl when searching
+        phone: forms.phone,
+        email: forms.email,
+      },
+      isKasabaActive: forms.isKasabaActive || false, // Example values, replace with your logic
+      isHomemaker: forms.isHomemaker || false,
+      isMember: forms.isMember || false,
+      isInvalid: forms.isInvalid || false,
+      isPensioner: false, // Example value, replace with your logic
+      isStudent: forms.isStudent || false,
+      position: {
+        id: forms.position, // Use the lavozim id
+      },
+      memberJoinDate: forms.signDate, // Use the join date
     };
     const fio = splitFIO(forms.fio);
     const data = {
@@ -196,7 +205,7 @@ export default function InDataTable() {
     }
   }
   async function fetchData(id) {
-    const data = (bkutData.members ?? []).find((member) => member.id == id);
+    const data = (bkutData.employees ?? []).find((member) => member.id == id);
     return data;
   }
   async function deleteRow(id) {

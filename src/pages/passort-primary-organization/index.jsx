@@ -228,7 +228,7 @@ export default function PassortPrimaryOrganization() {
                 {t("passort-primary-organization.firstOrganizationDirektor")}
               </label>
               <span style={{ textAlign: "left" }}>
-                {showOrNot(getFIO(director))}
+                {showOrNot(bkutData?.employees[0]?._instanceName)}
               </span>
             </div>
             <div className={styles.flex}>

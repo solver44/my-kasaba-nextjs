@@ -36,13 +36,12 @@ export default function Employees() {
 export function useEmployees() {
   const { bkutData = {} } = useSelector((state) => state);
   const [data, setData] = useState([]);
-
   useEffect(() => {
     if (!bkutData?.employees?.length) return;
     setData(
       bkutData.employees.map((e) => ({
-        label: getFIO(e.employee),
-        value: e.employee.id,
+        label: getFIO(e.individual),
+        value: e.individual.id,
       }))
     );
   }, [bkutData]);
