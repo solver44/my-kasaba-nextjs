@@ -50,7 +50,9 @@ export async function getFile(fileRef) {
 export async function getPositions() {
   try {
     const { data } = await $axios.get(`/rest/entities/HEmployeePosition`);
+
     return data;
+    
   } catch (error) {
     return error;
   }
@@ -68,7 +70,7 @@ export async function sendDepartment(_data) {
   try {
     const { director, ...data } = _data;
     let resDirector = await getEmployee(director, true);
-    data.employee.id = resDirector.id;
+    console.log(resDirector)
     const { data: response } = await $axios.post(
       "/rest/entities/EBkutOrganizations",
       data,
@@ -99,6 +101,7 @@ export async function sendEBKUT(data) {
 export async function getEmployee(data, isPost) {
   try {
     let response1;
+    console.log(data.pinfl)
     if (data.pinfl) {
       const { data: _data } = await $axios.post(
         "/rest/entities/HIndividual/search",
@@ -144,8 +147,8 @@ export async function getEmployee(data, isPost) {
 
 export async function deleteEmployee(id) {
   try {
-    const data = await $axios.delete("/rest/entities/EBkutEmployees/" + id);
-
+    const data = await $axios.delete("/rest/entities/EOrganizationEmployees/" + id);
+    console.log(data)
     return getDeleteResponse(data);
   } catch (error) {
     return false;
@@ -161,47 +164,67 @@ export async function sendEmployee(_data, employees = []) {
       bkutId,
       lastName,
       middleName,
-      phone,
+      phon,
       email,
       position,
       pinfl,
       birthDate,
+      isKasabaActive,
+      isHomemaker,
+      isMember,
+      isInvalid,
+      isPensioner,
+      isStudent,
       ...data
     } = _data;
-
+    console.log(data)
     const requestData = {
       id: bkutId,
-      ...data,
       employees: [
         ...employees.map((e) => ({
           position: {
             id: e.position.id,
           },
-          employee: {
-            id: e.employee.id,
+          individual: {
+            id: e.individual.id,
+            phone: e.phoneNumber,
+            email: e.email,
           },
           bkut: {
             id: bkutId,
           },
-          phone: e.phone,
-          email: e.email,
+          memberJoinDate: e.memberJoinDate,
+          isKasabaActive: e.isKasabaActive || false, // Example values, replace with your logic
+          isHomemaker: e.isHomemaker || false,
+          isMember: e.isMember || false,
+          isInvalid: e.isInvalid || false,
+          isPensioner: e.isPensioner || false, // Example value, replace with your logic
+          isStudent: e.isStudent || false,
         })),
         {
           position: {
             id: position,
           },
-          employee: {
+          individual: {
             id: response1.id,
+            phone: data.phone,
+            email: email,
           },
           bkut: {
             id: bkutId,
           },
-          phone,
-          email,
+          memberJoinDate: data.memberJoinDate,
+          isKasabaActive: isKasabaActive || false, // Example values, replace with your logic
+          isHomemaker: isHomemaker || false,
+          isMember: isMember || false,
+          isInvalid: isInvalid || false,
+          isPensioner: isPensioner || false, // Example value, replace with your logic
+          isStudent: isStudent || false,
         },
       ],
     };
     result = await sendEBKUT(requestData);
+    console.log(requestData)
 
     return result;
   } catch (error) {
@@ -215,8 +238,8 @@ export async function sendMember(requestData, data, oldMembers = []) {
     let response1 = await getEmployee(data, true);
 
     const memberId = response1.id;
-    requestData.members[0].member.id = memberId;
-    requestData.members.unshift(...oldMembers);
+    requestData.employees[0].individual.id = memberId;
+    requestData.employees.unshift(...oldMembers);
     result = await sendEBKUT(requestData);
 
     return result;
@@ -229,14 +252,33 @@ export async function deleteMember(id) {
 }
 export async function fetchMember(id) {
   try {
-    const { data } = await $axios.get("/rest/entities/EBkutEmployees/" + id);
+    const { data } = await $axios.get("/rest/entities/EOrganizationEmployees/" + id);
 
     return data;
   } catch (error) {
     return error;
   }
 }
+export async function sendContracts(_data) {
+  try {
+    const { ...data } = _data;
+    const response = await $axios.post(
+      "/rest/services/application/applyCollectiveAgreements",
+      data,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
-function getDeleteResponse(data) {
-  return data.status === 204 ? true : false;
+    if (response.data && response.data.id) {
+      return { ...response.data, success: true };
+    } else {
+      return { ...response.data, success: false };
+    }
+  } catch (error) {
+    // Handle errors here
+    console.error('Error sending contracts:', error);
+    throw error; // Re-throw the error to handle it in the caller function
+  }
 }
+

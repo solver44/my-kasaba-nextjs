@@ -143,20 +143,27 @@ export default {
       input15: "Kasaba uyushmasi qoʼmitasi haq toʼlanadigan apparatiga egami?",
     },
     "team-contracts": {
-      title: "Jamoa shartnomalari yaratish",
+      title: "Jamoa shartnomasi",
       contractDate: "Shartnoma sanasi",
       applicationNumber: "Bayon №",
       bkutPpo:"BKUT (PPO)",
       employer: "Ish beruvchining F.I.O.",
-      director: "Kasaba uyushmasi qo'mitasi rasinining F.I.O.",
+      director: "BKUT raisi",
       companyName:"Tashkilot, muasssasa nomlanishi",
-      application: "Shartnoma fayli",
-      selectDate:"Maqullangan sanasi",
+      application: "Jamoa shartnomasi ilovalari",
+      selectDate:"Yuborilgan sanasi",
       signDate:"Imzolangan sana",
       contractNumber: "Shartnoma raqami",
+      idNumber:"ID raqami",
       agreeDate: "Qabul qilish sanasi",
+      status:"Holati",
       sign: "Tashkilotdan imzoladi",
       signK: "Kasaba uyushmasidan imzoladi",
+    },
+    "oneTI":{
+      title:"KАSАBА UYuShMАSI QOʼMITАSI (KАSАBА UYuShMАSI TАShKILOTChISI)NING 2023 YIL UChUN STАTISTIK HISOBOTI",
+      common:"Umumiy maʼlumotlar",
+      report:"Hisobot davrining oxiriga kelib ishlovchilar (talabalar, oʼquvchilar) va kasaba uyushmasi aʼzolari soni toʼgʼrisida maʼlumot",
     },
     reportss: {
       title: "Hisobotlar",
@@ -292,7 +299,7 @@ export default {
     members: "A’zolar",
     settings: "Sozlamalar",
 
-    save: "Saqlash",
+    save: "Yaratish",
     close: "Yopish",
     search: "Qidirish",
     open: "Ochish",
@@ -305,6 +312,7 @@ export default {
     soato: "SOATO",
 
     add: "Qo'shish",
+    projectAdd:"Loyiha kiritish",
     fio: "F.I.O.",
     isMember: "Kasaba uyushmasiga a'zomi?",
     employment: "Bandligi",
@@ -342,15 +350,16 @@ export default {
       "Faylni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "error-send-bkut":
       "Ma'lumotlarni yuborishda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
+    "error-send-bkuts": "Bunday ma'lumot foydalanilgan",
     "error-send-application":
       "Murojaatni yuborishda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
     "error-form-application": "Murojaat shakli noto'g'ri kiritilgan!",
     "delete-error":
       "O'chirishda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "not-found": "Yo'q",
-
+    "application-exists": "Ushbu STIR orqali allaqachon murojaat yuborilgan.",
     "main-info": "Asosiy ma'lumotlar",
-
+    "send-data-error": "Ma'lumot yuborishda xatolik",
     "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang.",
     "recaptcha-try": "Iltimos, reCAPTCHA ni qaytadan yakunlang.",
     "bkut-exists": "Ushbu STIR orqali avval tashkilot ro'yhatdan o'tkazilgan.",
@@ -414,7 +423,11 @@ export default {
     "member-employees": "Kasaba uyushmasi a'zolari",
     "not-member-employees": "Barcha ishchi xodimlar",
     "all-employees": "Barcha xodimlar",
-
+    "all-team":"Barchasi",
+    "show-team":"Ko'rib chiqilmoqda",
+    "return-team":"Qaytarilgan",
+    "accept-team":"Tasdiqlangan",
+    "onejshTeam":"1JSH hisoboti",
     dTable: {
       toolbarDensity: "O'lcham",
       toolbarDensityLabel: "O'lcham",

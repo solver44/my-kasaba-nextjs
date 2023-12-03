@@ -28,6 +28,7 @@ import useDynamicData from "@/hooks/useDynamicData";
 import RadioGroup from "@/components/RadioGroup";
 import useAnimation from "@/hooks/useAnimation";
 import CheckBoxGroup from "@/components/CheckBoxGroup";
+import { BKUT_DATA } from "@/store/actions";
 
 export default function InDataTable({ onUpload, min }) {
   const { t, i18n } = useTranslation();
@@ -51,22 +52,22 @@ export default function InDataTable({ onUpload, min }) {
     { field: "phoneNumber", headerName: "phone-number" },
     { field: "email", headerName: "email" },
   ];
-
   useEffect(() => {
     if (!bkutData?.employees?.length) return;
     setRows(
       bkutData?.employees.map((e) => {
         return {
-          id: e?.employee?.id,
+          id: e?.individual?.id,
           employeeID: e.id,
-          fio: getFIO(e.employee),
+          fio: getFIO(e.individual),
           position: getLocalizationNames(e.position, i18n),
-          birthDate: convertStringToFormatted(e.employee?.birthDate),
-          phoneNumber: e.phone,
-          email: e.email,
+          birthDate: convertStringToFormatted(e.individual?.birthDate),
+          phoneNumber: e.individual.phone,
+          email: e.individual.email,
         };
       })
     );
+    
   }, [bkutData]);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export default function InDataTable({ onUpload, min }) {
   async function onSubmitModal(forms, hideModal, isView) {
     if (
       !isView &&
-      (bkutData?.employees ?? []).find((e) => e.employee.pinfl == forms.pinfl)
+      (bkutData?.employees ?? []).find((e) => e.individual.pinfl == forms.pinfl)
     ) {
       showYesNoDialog(
         t("rewrite-pinfl"),
@@ -90,48 +91,74 @@ export default function InDataTable({ onUpload, min }) {
   }
 
   async function sendMemberData(forms) {
-    const members = (bkutData.members ?? [])
-      .filter((e) => e.member.pinfl != forms.pinfl)
+    console.log(bkutData)
+    const isMemberValue = forms.isMember === "true";
+    const isKasabaActives = forms.isKasabaActive === "true";
+    const members = (bkutData.employees ?? [])
+      .filter((e) => e.individual.pinfl != forms.pinfl)
       .map((e) => ({
         ...e,
         bkut: {
           id: bkutData.id,
         },
-        member: {
-          id: e.member.id,
+        individual: {
+          id: e.pinfl, // Use the pinfl when searching
+          phone: e.phoneNumber,
+          email: e.email,
         },
-        joinDate: e.joinDate,
-        position: e.position,
-        phone: e.phoneNumber,
-        email: e.email,
+        isKasabaActive: true, // Example values, replace with your logic
+        isHomemaker: e.isHomemaker || false,
+        isMember: e.isMember || false,
+        isInvalid: e.isInvalid || false,
+        isPensioner: false, // Example value, replace with your logic
+        isStudent: e.isStudent || false,
+        position: {
+          id: e.position, // Use the lavozim id
+        },
+        memberJoinDate: e.signDate, // Use the join date
       }));
-    const requestData = {
-      id: bkutData.id,
-      members: [
-        {
-          ...forms.employment,
-          bkut: {
-            id: bkutData.id,
-          },
-          member: {
-            id: "?",
-          },
-          joinDate: forms.signDate,
-          position: positions.find((p) => p.value == forms.position).label,
+      const requestData = {
+        bkut: {
+          id: bkutData.id,
+        },
+        individual: {
+          id: forms.pinfl, // Use the pinfl when searching
           phone: forms.phoneNumber,
           email: forms.email,
         },
-      ],
-    };
+        isKasabaActive: isKasabaActives, // Example values, replace with your logic
+        isHomemaker: forms.isHomemaker || false,
+        isMember: isMemberValue || false,
+        isInvalid: forms.isInvalid || false,
+        isPensioner: false, // Example value, replace with your logic
+        isStudent: forms.isStudent || false,
+        position: {
+          id: forms.position, // Use the lavozim id
+        },
+        memberJoinDate: forms.signDate, // Use the join date
+      };
     const fio = splitFIO(forms.fio);
+    
     const data = {
-      bkutId: requestData.id,
+      bkutId: bkutData.id,
       pinfl: forms.pinfl,
+      fio: forms.fio,
       firstName: fio[0],
       lastName: fio[1],
       middleName: fio[2],
+      phone: forms.phoneNumber,
+      email: forms.email,
       birthDate: forms.birthDate,
+      position: forms.position,
+      isStudent: forms.employment.isStudent,
+      isHomemaker: forms.employment.isHomemaker,
+      isPensioner: forms.employment.isPensioner,
+      isInvalid: forms.employment.isInvalid,
+      isMember: isMemberValue,
+      isKasabaActive: isKasabaActives,
+      memberJoinDate: forms.signDate,
     };
+    console.log(data)
     await sendMember(requestData, data, members);
   }
   async function deleteMemberData(forms) {
@@ -144,6 +171,8 @@ export default function InDataTable({ onUpload, min }) {
 
   async function sendData(forms, hideModal, isView, noAlert) {
     const fio = splitFIO(forms.fio);
+    const isMemberValue = forms.isMember === "true";
+    const isKasabaActives = forms.isKasabaActive === "true";
     const requestData = {
       bkutId: bkutData.id,
       pinfl: forms.pinfl,
@@ -155,9 +184,17 @@ export default function InDataTable({ onUpload, min }) {
       email: forms.email,
       birthDate: forms.birthDate,
       position: forms.position,
+      isStudent: forms.employment.isStudent,
+      isHomemaker: forms.employment.isHomemaker,
+      isPensioner: forms.employment.isPensioner,
+      isInvalid: forms.employment.isInvalid,
+      isMember: isMemberValue,
+      isKasabaActive: isKasabaActives,
+      memberJoinDate: forms.signDate,
     };
+    
     const employees = (bkutData.employees ?? []).filter((e) =>
-      isView ? e.employee.pinfl != forms.pinfl : true
+      isView ? e.individual.pinfl != forms.pinfl : true
     );
     const response = await sendEmployee(requestData, employees);
     if (response?.success) {
@@ -181,16 +218,15 @@ export default function InDataTable({ onUpload, min }) {
   }
 
   async function fetchData(id) {
-    const employee = (bkutData.employees ?? []).find(
-      (e) => e.employee.id == id
+    const individual = (bkutData.employees ?? []).find(
+      (e) => e.individual.id == id
     );
-    const currentMember = (bkutData.members ?? []).find(
-      (e) => e.member.pinfl == employee.employee.pinfl
+    const currentMember = (bkutData.employees ?? []).find(
+      (e) => e.individual.pinfl == individual.pinfl
     );
     const data = {
       ...(currentMember ?? {}),
-      ...employee,
-      isFired: !!!currentMember,
+      ...individual,
     };
     data.employment = {
       isHomemaker: !!data.isHomemaker,
@@ -201,11 +237,26 @@ export default function InDataTable({ onUpload, min }) {
     return data;
   }
   async function deleteRow(id, row) {
-    const res = await deleteEmployee(row.employeeId);
-    if (res) {
-      setRows((rows) => rows.filter((row) => row?.id != id));
-      actions.updateData();
-    } else enqueueSnackbar(t("delete-error"), { variant: "error" });
+    const employeeId = row.employeeID; // Retrieve employee ID from the 'row' object
+  
+    if (!employeeId) {
+      console.error('Invalid or missing employee ID:', employeeId);
+      // Handle the scenario where the ID is missing or undefined
+      return;
+    }
+  
+    try {
+      const res = await deleteEmployee(employeeId);
+      if (res) {
+        setRows((rows) => rows.filter((r) => r?.id !== id));
+        actions.updateData();
+      } else {
+        enqueueSnackbar(t("delete-error"), { variant: "error" });
+      }
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+      enqueueSnackbar(t("delete-error"), { variant: "error" });
+    }
   }
   async function onImportRow(rowData) {
     const forms = {
@@ -223,6 +274,7 @@ export default function InDataTable({ onUpload, min }) {
       rows={rows}
       bkutData={bkutData}
       min={min}
+      hideFirstButton
       modalWidth="80vw"
       title={t("employees.title")}
       onSubmitModal={onSubmitModal}
@@ -236,23 +288,23 @@ export default function InDataTable({ onUpload, min }) {
 
 function ModalUI({ hideModal, positions, data = {} }) {
   const { t } = useTranslation();
-  const [isMember, setIsMember] = useState(true);
+  const [mode, setMode] = useState(0);
   const [formData, setFormData] = useState({
     fio: "",
     birthDate: "",
     gender: 1,
+    phoneNumber: "",
+    email: "",
+    signDate: "",
   });
   const {
-    employee = {},
+    individual = {},
     position = {},
     employment = {},
-    joinDate,
-    phone,
-    isFired = false,
-    email,
+    isMember,
   } = data;
   const animRef = useAnimation();
-
+  console.log(isMember)
   function onFetchPINFL(data) {
     if (!data) return;
 
@@ -262,21 +314,23 @@ function ModalUI({ hideModal, positions, data = {} }) {
       gender: data.profile.gender != 1 ? 0 : 1,
     });
   }
-
   useEffect(() => {
-    const FIO = getFIO(employee);
+    const FIO = getFIO(individual);
     if (!FIO) return;
     setFormData({
       fio: FIO,
-      birthDate: employee.birthDate ? dayjs(employee.birthDate) : "",
-      gender: employee.gender ?? formData.gender,
+      birthDate: individual.birthDate ? dayjs(individual.birthDate) : "",
+      gender: individual.gender ?? formData.gender,
+      phoneNumber: individual.phone,
+      email: individual.email,
+      signDate: data.memberJoinDate,
     });
   }, [data]);
 
   return (
     <div ref={animRef} className="modal-content">
       <FinderPINFL
-        pinflValue={employee.pinfl}
+        pinflValue={individual.pinfl}
         disablePINFL
         onFetch={onFetchPINFL}
       />
@@ -321,14 +375,13 @@ function ModalUI({ hideModal, positions, data = {} }) {
         <FormInput
           date
           label={t("employees.dateSign")}
-          value={joinDate ? dayjs(joinDate) : null}
+          value={formData.signDate ? dayjs(formData.signDate) : null}
           name="signDate"
-          // value={formData.signDate}
         />
       </div>
       <div className="modal-row">
-        <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
-        <FormInput value={email} label={t("email")} name="email" />
+        <FormInput value={formData.phoneNumber} label={t("phone-number")} name="phoneNumber" />
+        <FormInput value={formData.email} label={t("email")} name="email" />
       </div>
       <div className="modal-row">
         <CheckBoxGroup
@@ -349,26 +402,26 @@ function ModalUI({ hideModal, positions, data = {} }) {
             },
           ]}
         />
-        <RadioGroup
-          left
-          defaultValue={1}
-          value={isFired ? 0 : 1}
-          name="isMember"
-          label={t("isFired")}
-          onChange={(e) => {
-            setIsMember(e.target.value);
-          }}
-          data={[
-            {
-              value: "0",
-              label: t("yes"),
-            },
-            {
-              value: "1",
-              label: t("no"),
-            },
-          ]}
-        />
+      <RadioGroup
+        defaultValue={false}
+        label={t("isFired")}
+        left
+        name="isMember"
+        value={isMember ?? false}
+        onChange={(e) => {
+          setMode(e.target.value);
+        }}
+        data={[
+          {
+            value: true,
+            label: t("yes"),
+          },
+          {
+            value: false,
+            label: t("no"),
+          },
+        ]}
+      />
       </div>
     </div>
   );

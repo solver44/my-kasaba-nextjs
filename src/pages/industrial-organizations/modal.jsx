@@ -1,7 +1,8 @@
 import ModalUI from "@/components/ModalUI";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Tab } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getFile } from "@/http/data";
 import EmployeeDataTable from "../employees/dataTable";
 import MembersDataTable from "../members/dataTable";
 import { getFIO, getLocalizationNames, showOrNot } from "@/utils/data";
@@ -12,6 +13,7 @@ import Tabs from "@/components/Tabs";
 import { convertStringToFormatted } from "@/utils/date";
 import DownloadLink from "@/components/DownloadLink";
 import AllEmployeesDT from "../members/allEmployeesDataTable";
+import InDataTable from "../team-contracts/allTeam";
 
 export default function ViewModal({ isOpen, handleClose }) {
   const { t } = useTranslation();
@@ -19,10 +21,23 @@ export default function ViewModal({ isOpen, handleClose }) {
   const [files, setFiles] = useState({
     decisionFile: { loading: false },
   });
+  async function parseFile(file) {
+    if (!file) return [null, null];
+    const res = await getFile(file);
+    return [res, decodeURIComponent(file.split("=")[1]).replace(/\+/g, " ")];
+  }
   const data = isOpen ?? {};
-
+  console.log(data)
+  useEffect(() => {
+    const fetchData = async () => {
+      let res3 = await parseFile(data.decisionFile);
+      setFiles({
+        decisionFile: { name: res3[1], data: res3[0] },
+      });
+    };
+    fetchData();
+  }, [data]);
   function onUpload() {}
-  //   console.log(data);
 
   return (
     <ModalUI
@@ -64,7 +79,7 @@ export default function ViewModal({ isOpen, handleClose }) {
                   <div className="flex">
                     <label>{t("senior-organization")}</label>
                     <span style={{ textAlign: "left" }}>
-                      {showOrNot(getLocalizationNames(bkutData.parent))}
+                      {showOrNot(bkutData?.parent?._instanceName)}
                     </span>
                   </div>
                   <div className="flex">
@@ -76,7 +91,7 @@ export default function ViewModal({ isOpen, handleClose }) {
                   <div className="flex">
                     <label>{t("industrial-organizations.direktor")}</label>
                     <span style={{ textAlign: "left" }}>
-                      {showOrNot(getFIO(data?.employee))}
+                      {showOrNot(bkutData?.employees[0]?._instanceName)}
                     </span>
                   </div>
                   <div className="flex">
@@ -100,13 +115,13 @@ export default function ViewModal({ isOpen, handleClose }) {
                   <div className="flex">
                     <label>{t("decision-or-application-title")}</label>
                     <span style={{ textAlign: "left" }}>
-                      {showOrNot(bkutData.decisionNumber)}
+                      {showOrNot(data.decisionNumber)}
                     </span>
                   </div>
                   <div className="flex">
                     <label>{t("decision-date")}</label>
                     <span style={{ textAlign: "left" }}>
-                      {convertStringToFormatted(bkutData.decisionDate)}
+                      {convertStringToFormatted(data.decisionDate)}
                     </span>
                   </div>
                   <div className="flex">
@@ -144,7 +159,7 @@ export default function ViewModal({ isOpen, handleClose }) {
               ),
             },
             { label: "organization.statistic", children: <StatDataTable /> },
-            { label: "teamContracts", children: "No content" },
+            { label: "teamContracts", children: <InDataTable/> },
           ]}
         />
       </div>

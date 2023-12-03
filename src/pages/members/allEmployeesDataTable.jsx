@@ -7,9 +7,9 @@ import dayjs from "dayjs";
 import styles from "./members.module.scss";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
-import { getFIO, splitEmployement, splitFIO } from "@/utils/data";
+import { getFIO, getLocLabel, getLocalizationNames, splitEmployement, splitFIO } from "@/utils/data";
 import { useSelector } from "react-redux";
-import { deleteMember, sendMember } from "@/http/data";
+import { deleteEmployee, sendEmployee } from "@/http/data";
 import CheckBoxGroup from "@/components/CheckBoxGroup";
 import useActions from "@/hooks/useActions";
 import { showYesNoDialog } from "@/utils/dialog";
@@ -21,15 +21,16 @@ import { generateTicketData } from "@/utils/encryptdecrypt";
 import { getUrlWithQuery, openBlankURL } from "@/utils/window";
 import QRCode from "react-qr-code";
 import SimpleDialog from "@/components/SimpleDialog";
+import useAnimation from "@/hooks/useAnimation";
+import { convertStringToFormatted } from "@/utils/date";
 
 export default function AllEmployeesDT() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [rows, setRows] = useState([]);
   const [qrURL, setQRURL] = useState("");
   const [isZoomQR, setIsZoomQR] = useState(false);
-  const [ticketCreated, setTickedCreated] = useState(false);
-  const [ticketLoading, setTicketLoading] = useState(false);
   const { bkutData = {} } = useSelector((states) => states);
+  const [positions] = useDynamicData({ positions: true });
   const bkutDataRef = useRef(bkutData);
   const { enqueueSnackbar } = useSnackbar();
   const actions = useActions();
@@ -49,7 +50,14 @@ export default function AllEmployeesDT() {
       ].join(", "),
     },
     { field: "pinfl", headerName: "pinfl", hidden: true },
-    { field: "position", headerName: "job-position", hidden: true },
+    {
+      field: "position",
+      headerName: "job-position",
+      tooltip: (positions || []).reduce((data, current) => {
+        const result = `${current.value} - ${getLocLabel(current)}\n`;
+        return data + result;
+      }, ""),
+    },
     { field: "birthDate", headerName: "birth-date", hidden: true },
     { field: "phoneNumber", headerName: "phone-number" },
     {
@@ -69,32 +77,29 @@ export default function AllEmployeesDT() {
   }
 
   useEffect(() => {
-    bkutDataRef.current = bkutData;
-    if (!bkutData?.members?.length) return;
+    if (!bkutData?.employees?.length) return;
     setRows(
-      bkutData?.members.map((e) => {
+      bkutData?.employees.map((e) => {
         return {
-          id: e.id,
-          fio: getFIO(e.member),
-          signDate: e.joinDate,
+          id: e?.individual?.id,
+          fio: getFIO(e.individual),
+          signDate: e.memberJoinDate,
           employment: getEmployeement(e),
-          birthDate: e.member?.birthDate ?? "",
-          position: e.position,
-          phone: e.phone,
-          email: e.email,
-          pinfl: e.member?.pinfl,
+          birthDate: convertStringToFormatted(e.individual?.birthDate),
+          position: getLocalizationNames(e.position, i18n),
+          phoneNumber: e.individual.phone,
+          email: e.individual.email,
         };
       })
     );
   }, [bkutData]);
-
   async function onSubmitModal(forms, hideModal, isView) {
     if (
       !isView &&
-      (bkutData?.members ?? []).find((e) => e.member.pinfl == forms.pinfl)
+      (bkutData?.employees ?? []).find((e) => e.individual.pinfl == forms.pinfl)
     ) {
       showYesNoDialog(
-        t("rewrite-pinfl-member"),
+        t("rewrite-pinfl"),
         () => sendData(forms, hideModal, true),
         () => {},
         t
@@ -103,53 +108,35 @@ export default function AllEmployeesDT() {
     }
     sendData(forms, hideModal, isView);
   }
-
-  async function sendData(forms, hideModal, isView, noAlert = false) {
-    const bkutData = bkutDataRef.current;
-    const members = (bkutData.members ?? [])
-      .filter((e) => (isView ? e.member.pinfl != forms.pinfl : true))
-      .map((e) => ({
-        ...e,
-        bkut: {
-          id: bkutData.id,
-        },
-        member: {
-          id: e.member.id,
-        },
-        joinDate: e.joinDate,
-        position: e.position,
-        phone: e.phoneNumber,
-        email: e.email,
-      }));
-    const requestData = {
-      id: bkutData.id,
-      members: [
-        {
-          ...forms.personInfo,
-          bkut: {
-            id: bkutData.id,
-          },
-          member: {
-            id: "?",
-          },
-          isMember: forms.isMember,
-          joinDate: forms.signDate,
-          position: forms.position,
-          phone: forms.phoneNumber,
-          email: forms.email,
-        },
-      ],
-    };
+  
+  async function sendData(forms, hideModal, isView, noAlert) {
     const fio = splitFIO(forms.fio);
-    const data = {
-      bkutId: requestData.id,
+    const isMemberValue = forms.isMember === "true";
+    const isKasabaActives = forms.isKasabaActive === "true";
+    const requestData = {
+      bkutId: bkutData.id,
       pinfl: forms.pinfl,
+      fio: forms.fio,
       firstName: fio[0],
       lastName: fio[1],
       middleName: fio[2],
+      phone: forms.phoneNumber,
+      email: forms.email,
       birthDate: forms.birthDate,
+      position: forms.position,
+      isStudent: forms.employment.isStudent,
+      isHomemaker: forms.employment.isHomemaker,
+      isPensioner: forms.employment.isPensioner,
+      isInvalid: forms.employment.isInvalid,
+      isMember: isMemberValue,
+      isKasabaActive: isKasabaActives,
+      memberJoinDate: forms.signDate,
     };
-    const response = await sendMember(requestData, data, members);
+    
+    const employees = (bkutData.employees ?? []).filter((e) =>
+      isView ? e.individual.pinfl != forms.pinfl : true
+    );
+    const response = await sendEmployee(requestData, employees);
     if (response?.success) {
       const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
       setRows((rows) => [
@@ -157,10 +144,11 @@ export default function AllEmployeesDT() {
         { id: newId, ...forms },
       ]);
       if (!noAlert) {
+        if (forms.isMember == 1) await sendData(forms);
+        else await deleteEmployee(forms);
         enqueueSnackbar(t("successfully-saved"), { variant: "success" });
-      } else {
-        return true;
-      }
+      } else return true;
+
       actions.updateData();
     } else {
       enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
@@ -169,53 +157,54 @@ export default function AllEmployeesDT() {
     if (hideModal) hideModal();
   }
 
-  async function generateDoc(_data) {
-    if (ticketCreated) {
-      openBlankURL(qrURL);
-      return;
-    }
-    setTicketLoading(true);
-    try {
-      const data = bkutData.members.find((m) => m.member.pinfl == _data.pinfl);
-      const director = getFIO(
-        bkutData.employees.find((e) => e.position.id == 1).employee
-      );
-      const query = generateTicketData({
-        ...data,
-        id: "173T112211B-00000",
-        bkutName: bkutData.name,
-        director,
-      });
-      const url = getUrlWithQuery("/ticket/0", { d: query });
-      setQRURL(url);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setTickedCreated(true);
-    } catch (error) {
-      console.log(error);
-      enqueueSnackbar(t("doc-create-error"), { variant: "error" });
-    } finally {
-      setTicketLoading(false);
-    }
-  }
+ 
   async function fetchData(id) {
-    const data = (bkutData.members ?? []).find((member) => member.id == id);
+    const individual = (bkutData.employees ?? []).find(
+      (e) => e.individual.id == id
+    );
+    const currentMember = (bkutData.employees ?? []).find(
+      (e) => e.individual.pinfl == individual.pinfl
+    );
+    const data = {
+      ...(currentMember ?? {}),
+      ...individual,
+    };
+    data.employment = {
+      isHomemaker: !!data.isHomemaker,
+      isInvalid: !!data.isInvalid,
+      isPensioner: !!data.isPensioner,
+      isStudent: !!data.isStudent,
+    };
     return data;
   }
-  async function deleteRow(id) {
-    const res = await deleteMember(id);
-    if (res) {
-      setRows((rows) => rows.filter((row) => row?.id != id));
-      actions.updateData();
-    } else enqueueSnackbar(t("delete-error"), { variant: "error" });
+  async function deleteRow(id, row) {
+    const employeeId = row.employeeID; // Retrieve employee ID from the 'row' object
+  
+    if (!employeeId) {
+      console.error('Invalid or missing employee ID:', employeeId);
+      // Handle the scenario where the ID is missing or undefined
+      return;
+    }
+  
+    try {
+      const res = await deleteEmployee(employeeId);
+      if (res) {
+        setRows((rows) => rows.filter((r) => r?.id !== id));
+        actions.updateData();
+      } else {
+        enqueueSnackbar(t("delete-error"), { variant: "error" });
+      }
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+      enqueueSnackbar(t("delete-error"), { variant: "error" });
+    }
   }
   async function onImportRow(rowData) {
     const forms = {
       ...rowData,
-      personInfo: splitEmployement(rowData.employment),
     };
     return await sendData(forms, null, false, true);
   }
-
   return (
     <React.Fragment>
       <SimpleDialog open={isZoomQR} onClose={() => setIsZoomQR(false)}>
@@ -236,85 +225,55 @@ export default function AllEmployeesDT() {
         onSubmitModal={onSubmitModal}
         isFormModal
         title={t("bkutEmployee")}
-        loading={ticketLoading}
         modalWidth="80vw"
-        bottomModal={(handleSubmit, handleClose, isView, _, data) => {
-          return (
-            <div className={styles.bottom} style={{ position: "relative" }}>
-              <div className={styles.row}>
-                <Button onClick={handleSubmit} variant="contained">
-                  {t("save")}
-                </Button>
-                <Button onClick={handleClose}>{t("close")}</Button>
-              </div>
-              {isView && (
-                <LoadingButton
-                  style={ticketCreated ? { marginRight: 130 } : {}}
-                  onClick={() => generateDoc(data)}
-                  loading={ticketLoading}
-                  variant="contained"
-                  color="success"
-                >
-                  {ticketCreated && (
-                    <VisibilityIcon style={{ marginRight: 5 }} />
-                  )}
-                  {ticketCreated ? t("showTicket") : t("createDoc")}
-                </LoadingButton>
-              )}
-              {ticketCreated && qrURL && (
-                <React.Fragment>
-                  <QRCode
-                    onClick={() => setIsZoomQR(true)}
-                    size={100}
-                    style={{
-                      cursor: "pointer",
-                      position: "absolute",
-                      bottom: 0,
-                      right: 0,
-                      height: "auto",
-                    }}
-                    value={qrURL}
-                    viewBox={`0 0 100 100`}
-                  />
-                </React.Fragment>
-              )}
-            </div>
-          );
-        }}
         modal={(hideModal, dataModal) => (
-          <ModalUI data={dataModal} hideModal={hideModal} />
+          <ModalUI positions={positions} data={dataModal} hideModal={hideModal} />
         )}
       />
     </React.Fragment>
   );
 }
 
-function ModalUI({ hideModal, data = {} }) {
+function ModalUI({ hideModal, positions, data = {} }) {
   const { t } = useTranslation();
-  const [isMember, setIsMember] = useState(0);
+  const [mode, setMode] = useState(0);
+  const [isKasabaActive, setIsKasabaActive] = useState(0);
   const [formData, setFormData] = useState({
     fio: "",
     birthDate: "",
-  });
-  const [positions] = useDynamicData({ positions: true });
-  const {
-    id,
-    position,
-    phone,
-    email,
-    member = {},
-    joinDate,
-    _entityName,
-    _instanceName,
-    ...inData
-  } = data;
+    gender: 1,
+    phoneNumber: "",
+    email: "",
+    signDate: "",
 
+  });
+  const {
+    individual = {},
+    position = {},
+    employment = {},
+    isMember,
+  } = data;
+  console.log(isKasabaActive)
+  const animRef = useAnimation();
+  function onFetchPINFL(data) {
+    if (!data) return;
+
+    setFormData({
+      fio: getFIO(data.profile),
+      birthDate: dayjs(data.profile.birth_date),
+      gender: data.profile.gender != 1 ? 0 : 1,
+    });
+  }
   useEffect(() => {
-    const FIO = getFIO(data.member);
+    const FIO = getFIO(individual);
     if (!FIO) return;
     setFormData({
       fio: FIO,
-      birthDate: member.birthDate ? dayjs(member.birthDate) : "",
+      birthDate: individual.birthDate ? dayjs(individual.birthDate) : "",
+      gender: individual.gender ?? formData.gender,
+      phoneNumber: individual.phone,
+      email: individual.email,
+      signDate: data.memberJoinDate,
     });
   }, [data]);
 
@@ -328,10 +287,10 @@ function ModalUI({ hideModal, data = {} }) {
     });
   }
   return (
-    <div className="modal-content">
+    <div ref={animRef} className="modal-content">
       <FinderPINFL
         disablePINFL
-        pinflValue={member.pinfl}
+        pinflValue={individual.pinfl}
         onFetch={onFetchPINFL}
       />
       <div className="modal-row">
@@ -365,29 +324,21 @@ function ModalUI({ hideModal, data = {} }) {
           value={formData.birthDate}
         />
         <FormInput
-          value={position}
+          select
+          value={position.id}
           name="position"
-          autocomplete
-          options={positions}
-          label={t("employees.position")}
+          dataSelect={positions}
+          label={t("job-position")}
         />
-        {isMember == 1 && (
-          <FormInput
-            date
-            label={t("employees.dateSign")}
-            value={joinDate ? dayjs(joinDate) : null}
-            name="signDate"
-          />
-        )}
       </div>
       <div className="modal-row">
-        <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
-        <FormInput value={email} label={t("employees.email")} name="email" />
+        <FormInput value={formData.phoneNumber} label={t("phone-number")} name="phoneNumber" />
+        <FormInput value={formData.email} label={t("employees.email")} name="email" />
       </div>
       <div className="modal-row">
         <CheckBoxGroup
-          name="personInfo"
-          value={inData}
+          name="employment"
+          value={employment}
           data={[
             {
               value: "isStudent",
@@ -403,25 +354,57 @@ function ModalUI({ hideModal, data = {} }) {
             },
           ]}
         />
+       <RadioGroup
+        defaultValue={false}
+        label={t("isFired")}
+        left
+        name="isMember"
+        value={isMember ?? false}
+        onChange={(e) => {
+          setMode(e.target.value);
+        }}
+        data={[
+          {
+            value: true,
+            label: t("yes"),
+          },
+          {
+            value: false,
+            label: t("no"),
+          },
+        ]}
+      />
+      </div>
+      <div className="modal-row">
         <RadioGroup
-          left
-          defaultValue={1}
-          name="isMember"
+          defaultValue={'false'}
           label={t("isMember")}
+          left
+          name="isKasabaActive"
+          value={isKasabaActive}
           onChange={(e) => {
-            setIsMember(e.target.value);
+            setIsKasabaActive(e.target.value);
           }}
           data={[
             {
-              value: "1",
+              value: 'true',
               label: t("yes"),
             },
             {
-              value: "0",
+              value: 'false',
               label: t("no"),
             },
           ]}
         />
+
+        {isKasabaActive === 'true' && (
+          <FormInput
+            date
+            label={t("employees.dateSign")}
+            value={formData.signDate ? dayjs(formData.signDate) : null}
+            name="signDate"
+          />
+        )}
       </div>
     </div>
   );

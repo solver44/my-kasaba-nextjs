@@ -134,6 +134,8 @@ export default function InDataTable() {
   );
 }
 function ModalUI({ hideModal, data }) {
+  const { bkutData = {} } = useSelector((states) => states);
+  const [isKasabaActive, setIsKasabaActive] = useState(false);
   const { t } = useTranslation();
   const { tin } = data;
 
@@ -156,6 +158,50 @@ function ModalUI({ hideModal, data }) {
         date
         label={t("statistical-information.signDate")}
       />
+          <Group title={t("oneTI.common")}>
+            <div datatype="list">
+              <FormInput
+                  name="name"
+                  required
+                  value={bkutData.name}
+                  label={t("bkutName")}
+                />
+                <FormInput
+                  name="director"
+                  required
+                  value={bkutData?.employees[0]?._instanceName}
+                  label={t("team-contracts.director")}
+                /> 
+              </div>
+              <div datatype="list">
+                <FormInput
+                    name="group8-2"
+                    required
+                    value={bkutData.phone}
+                    label={t("phone-number")}
+                  />
+                  <RadioGroup
+                      defaultValue={'false'}
+                      label={t("isFired")}
+                      left
+                      name="isMember"
+                      value={bkutData?.employees[0]?.isMember}
+                      onChange={(e) => {
+                        setIsKasabaActive(e.target.value);
+                      }}
+                      data={[
+                        {
+                          value: 'true',
+                          label: t("yes"),
+                        },
+                        {
+                          value: 'false',
+                          label: t("no"),
+                        },
+                      ]}
+                    /> 
+              </div>
+        </Group>
       <div className="modal-row">
         <Group title={t("statistical-information.group1")}>
           <div datatype="list">
@@ -182,6 +228,7 @@ function ModalUI({ hideModal, data }) {
             />
           </div>
         </Group>
+        
         <Group title={t("statistical-information.group2")}>
           <div datatype="list">
             <FormInput

@@ -19,6 +19,7 @@ function ModalUI({
   title,
   full,
   children,
+  hideBtn = false,
   isView,
   bottomModal,
   wrapperClass = "",
@@ -96,7 +97,8 @@ function ModalUI({
                   )}
                 </div>
               ) : (
-                <div className={[styles.bottom, styles.row].join(" ")}>
+                 <div className={[styles.bottom, styles.row].join(" ")}>
+                  {hideBtn === false ? (
                   <Button
                     onClick={isForm ? handleSubmit : onSubmit}
                     variant="contained"
@@ -104,6 +106,7 @@ function ModalUI({
                   >
                     {t("save")}
                   </Button>
+                ) : null}
                   <Button onClick={onClose}>{t("close")}</Button>
                 </div>
               )}

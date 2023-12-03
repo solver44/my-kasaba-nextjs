@@ -18,13 +18,13 @@ import { Alert, AlertTitle } from "@mui/material";
 export default function Home() {
   const { bkutData = {} } = useSelector((states) => states);
   const { t } = useTranslation();
-  const { members = [] } = bkutData;
+  const { employees = [] } = bkutData;
   console.log(bkutData);
 
-  const studentCount = members.filter((m) => m.isStudent).length;
-  const pensionerCount = members.filter((m) => m.isPensioner).length;
-  const homemakerCount = members.filter((m) => m.isHomemaker).length;
-  const invalidCount = members.filter((m) => m.isInvalid).length;
+  const studentCount = employees.filter((m) => m.isStudent).length;
+  const pensionerCount = employees.filter((m) => m.isPensioner).length;
+  const homemakerCount = employees.filter((m) => m.isHomemaker).length;
+  const invalidCount = employees.filter((m) => m.isInvalid).length;
 
   const data = [
     {
