@@ -6,7 +6,7 @@ import { useSnackbar } from "notistack";
 import { Alert, Box } from "@mui/material";
 import FinderSTIR from "@/components/FinderSTIR";
 import { useSelector } from "react-redux";
-import { sendDepartment } from "@/http/data";
+import { sendStatistics } from "@/http/data";
 import useActions from "@/hooks/useActions";
 import Group from "@/components/Group";
 import RadioGroup from "@/components/RadioGroup";
@@ -54,47 +54,62 @@ export default function InDataTable() {
     },
   ];
 
-  useEffect(() => {
-    // if (!bkutData?.organizations?.length) return;
-    // setRows(
-    //   bkutData.organizations
-    //     .filter((d) => d.organizationType == "SEH")
-    //     .map((e) => {
-    //       return {
-    //         id: e.id,
-    //         name: e.name,
-    //         address: e.address,
-    //       };
-    //     })
-    // );
-  }, [bkutData]);
+  // useEffect(() => {
+  //   if (!bkutData?.statistics?.length) return;
+  //   setRows(
+  //     bkutData.statistics
+  //       .map((e) => {
+  //         return {
+  //           id: e.id,
+  //           total: e.name,
+  //           address: e.address,
+  //         };
+  //       })
+  //   );
+  // }, [bkutData]);
 
   async function onSubmitModal(forms, hideModal, isView) {
-    // sendData(forms, hideModal);
+     sendData(forms, hideModal);
   }
 
   async function sendData(forms, hideModal) {
     const requestData = {
       bkut: {
-        id: bkutData.id,
+        id: "",
       },
-      organizationType: "SEH",
-      tin: forms.tin,
-      name: forms.name,
-      phone: forms.phone,
-      email: forms.email,
-      soato: {
-        id: forms.district,
-      },
-      address: forms.address,
-      employee: {
-        id: forms.director,
-      },
-      legalEntity: {
-        id: bkutData.eLegalEntity.id,
-      },
+      workersAdults: forms.workersAdults,
+      workersFemale: forms.workersFemale,
+      firedMembersAmount: forms.firedMembersAmount,
+      staffingResponsibleWorkers: forms.staffingResponsibleWorkers,
+      homemakerAmount: forms.homemakerAmount,
+      isProvidedPC: forms.isProvidedPC,
+      staffingTechnicalWorkers: forms.staffingTechnicalWorkers,
+      isProvidedInternet: forms.isProvidedInternet,
+      newMemebersAmount: forms.newMemebersAmount,
+      pensionerAmount: forms.pensionerAmount,
+      isProvidedPaidApparatus: forms.isProvidedPaidApparatus,
+      studentsFemale: forms.studentsFemale,
+      workersMembers: forms.workersMembers,
+      isFiredFromMainJob: forms.isFiredFromMainJob,
+      staffingWorkersAmount: forms.staffingWorkersAmount,
+      isCollegialPresident: forms.isCollegialPresident,
+      workersAmount: forms.workersAmount,
+      membersProvidedTicket: forms.membersProvidedTicket,
+      studentsAdultsMembers: forms.studentsAdultsMembers,
+      studentsAmount: forms.studentsAmount,
+      studentsAdults: forms.studentsAdults,
+      studentsMembers: forms.studentsMembers,
+      createdDate: forms.createdDate,
+      studentsFemaleMembers: forms.studentsFemaleMembers,
+      invalidAmount: forms.invalidAmount,
+      salaryByAgreements: forms.salaryByAgreements,
+      spentAmount: forms.spentAmount,
+      workersFemaleMembers: forms.workersFemaleMembers,
+      workersAdultsMembers: forms.workersAdultsMembers,
+      staffingAmount: forms.staffingAmount,
+      isProvidedPrivateRoom: forms.isProvidedPrivateRoom
     };
-    const response = await sendDepartment(requestData);
+    const response = await sendStatistics(requestData);
     if (response?.success) {
       const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
       setRows((rows) => [
@@ -135,7 +150,32 @@ export default function InDataTable() {
 }
 function ModalUI({ hideModal, data }) {
   const { bkutData = {} } = useSelector((states) => states);
-  const [isKasabaActive, setIsKasabaActive] = useState(false);
+  const [values, setValues] = useState({
+    workersAdults: "",
+    workersFemale: "",
+    firedMembersAmount: "",
+    staffingResponsibleWorkers: "",
+    homemakerAmount: "",
+    staffingTechnicalWorkers: "",
+    newMemebersAmount: "",
+    pensionerAmount: "",
+    studentsFemale:"",
+    workersMembers: "",
+    staffingWorkersAmount: "",
+    workersAmount: "",
+    membersProvidedTicket:"",
+    studentsAdultsMembers: "",
+    studentsAmount:"",
+    studentsAdults: "",
+    studentsMembers: "",
+    studentsFemaleMembers: "", 
+    invalidAmount:"",
+    salaryByAgreements:"",
+    spentAmount: "",
+    workersFemaleMembers: "",
+    workersAdultsMembers: "",
+    staffingAmount:"",
+  });
   const { t } = useTranslation();
   const { tin } = data;
 
@@ -149,7 +189,38 @@ function ModalUI({ hideModal, data }) {
       label: t("no"),
     },
   ];
-
+  useEffect(() => {
+    const fetchData = async () => {
+      setValues((values) => ({
+        ...values,
+        workersAdults: data.workersAdults,
+        workersFemale: data.workersFemale,
+        firedMembersAmount: data.firedMembersAmount,
+        staffingResponsibleWorkers: data.staffingResponsibleWorkers,
+        homemakerAmount: data.homemakerAmount,
+        staffingTechnicalWorkers: data.staffingTechnicalWorkers,
+        newMemebersAmount: data.newMemebersAmount,
+        pensionerAmount: data.pensionerAmount,
+        studentsFemale:data.studentsFemale,
+        workersMembers: data.workersMembers,
+        staffingWorkersAmount: data.staffingWorkersAmount,
+        workersAmount: data.workersAmount,
+        membersProvidedTicket:data.membersProvidedTicket,
+        studentsAdultsMembers: data.studentsAdultsMembers,
+        studentsAmount:data.studentsAmount,
+        studentsAdults: data.studentsAdults,
+        studentsMembers: data.studentsMembers,
+        studentsFemaleMembers: data.studentsFemaleMembers, 
+        invalidAmount:data.invalidAmount,
+        salaryByAgreements:data.salaryByAgreements,
+        spentAmount: data.spentAmount,
+        workersFemaleMembers: data.workersFemaleMembers,
+        workersAdultsMembers: data.workersAdultsMembers,
+        staffingAmount:data.staffingAmount,
+      }));
+    };
+    fetchData();
+  }, [data]);
   return (
     <div className="modal-content">
       <FormInput
@@ -158,71 +229,28 @@ function ModalUI({ hideModal, data }) {
         date
         label={t("statistical-information.signDate")}
       />
-          <Group title={t("oneTI.common")}>
-            <div datatype="list">
-              <FormInput
-                  name="name"
-                  required
-                  value={bkutData.name}
-                  label={t("bkutName")}
-                />
-                <FormInput
-                  name="director"
-                  required
-                  value={bkutData?.employees[0]?._instanceName}
-                  label={t("team-contracts.director")}
-                /> 
-              </div>
-              <div datatype="list">
-                <FormInput
-                    name="group8-2"
-                    required
-                    value={bkutData.phone}
-                    label={t("phone-number")}
-                  />
-                  <RadioGroup
-                      defaultValue={'false'}
-                      label={t("isFired")}
-                      left
-                      name="isMember"
-                      value={bkutData?.employees[0]?.isMember}
-                      onChange={(e) => {
-                        setIsKasabaActive(e.target.value);
-                      }}
-                      data={[
-                        {
-                          value: 'true',
-                          label: t("yes"),
-                        },
-                        {
-                          value: 'false',
-                          label: t("no"),
-                        },
-                      ]}
-                    /> 
-              </div>
-        </Group>
       <div className="modal-row">
         <Group title={t("statistical-information.group1")}>
           <div datatype="list">
             <FormInput
-              name="group1-all"
+              name="workersAmount"
+              
               required
-              value="0"
+              value={values.workersAmount}
               type="number"
               label={t("statistical-information.all")}
             />
             <FormInput
-              name="group1-women"
+              name="workersFemale"
               required
-              value="0"
+              value={values.workersFemale}
               type="number"
               label={t("statistical-information.women")}
             />
             <FormInput
-              name="group1-adults"
+              name="workersAdults"
               required
-              value="0"
+              value={values.workersAdults}
               type="number"
               label={t("statistical-information.adults")}
             />
@@ -232,23 +260,23 @@ function ModalUI({ hideModal, data }) {
         <Group title={t("statistical-information.group2")}>
           <div datatype="list">
             <FormInput
-              name="group1-sub-all"
+              name="workersMembers"
               required
-              value="0"
+              value={values.workersMembers}
               type="number"
               label={t("statistical-information.all")}
             />
             <FormInput
-              name="group1-sub-women"
+              name="workersFemaleMembers"
               required
-              value="0"
+              value={values.workersFemaleMembers}
               type="number"
               label={t("statistical-information.women")}
             />
             <FormInput
-              name="group1-sub-adults"
+              name="workersAdultsMembers"
               required
-              value="0"
+              value={values.workersAdultsMembers}
               type="number"
               label={t("statistical-information.adults")}
             />
@@ -259,23 +287,23 @@ function ModalUI({ hideModal, data }) {
         <Group title={t("statistical-information.group3")}>
           <div datatype="list">
             <FormInput
-              name="group3-all"
+              name="studentsAmount"
               required
-              value="0"
+              value={values.studentsAmount}
               type="number"
               label={t("statistical-information.all")}
             />
             <FormInput
-              name="group3-women"
+              name="studentsFemale"
               required
-              value="0"
+              value={values.studentsFemale}
               type="number"
               label={t("statistical-information.women")}
             />
             <FormInput
-              name="group3-adults"
+              name="studentsAdults"
               required
-              value="0"
+              value={values.studentsAdults}
               type="number"
               label={t("statistical-information.adults")}
             />
@@ -284,23 +312,23 @@ function ModalUI({ hideModal, data }) {
         <Group title={t("statistical-information.group2")}>
           <div datatype="list">
             <FormInput
-              name="group3-sub-all"
+              name="studentsMembers"
               required
-              value="0"
+              value={values.studentsMembers}
               type="number"
               label={t("statistical-information.all")}
             />
             <FormInput
-              name="group3-sub-women"
+              name="studentsFemaleMembers"
               required
-              value="0"
+              value={values.studentsFemaleMembers}
               type="number"
               label={t("statistical-information.women")}
             />
             <FormInput
-              name="group3-sub-adults"
+              name="studentsAdultsMembers"
               required
-              value="0"
+              value={values.studentsAdultsMembers}
               type="number"
               label={t("statistical-information.adults")}
             />
@@ -311,9 +339,9 @@ function ModalUI({ hideModal, data }) {
       <Group title={t("statistical-information.group4")}>
         <div datatype="list">
           <FormInput
-            name="group4-all"
+            name="pensionerAmount"
             required
-            value="0"
+            value={values.pensionerAmount}
             type="number"
             label={t("statistical-information.all")}
           />
@@ -323,9 +351,9 @@ function ModalUI({ hideModal, data }) {
         <Group title={t("statistical-information.group5")}>
           <div datatype="list">
             <FormInput
-              name="group5-all"
+              name="homemakerAmount"
               required
-              value="0"
+              value={values.homemakerAmount}
               type="number"
               label={t("statistical-information.all")}
             />
@@ -334,9 +362,9 @@ function ModalUI({ hideModal, data }) {
         <Group title={t("statistical-information.group6")}>
           <div datatype="list">
             <FormInput
-              name="group6-all"
+              name="invalidAmount"
               required
-              value="0"
+              value={values.invalidAmount}
               type="number"
               label={t("statistical-information.all")}
             />
@@ -346,16 +374,16 @@ function ModalUI({ hideModal, data }) {
       <Group title={t("statistical-information.group7")}>
         <div datatype="list">
           <FormInput
-            name="group7-1"
+            name="staffingAmount"
             required
-            value="0"
+            value={values.staffingAmount}
             type="number"
             label={t("statistical-information.input1")}
           />
           <FormInput
-            name="group7-2"
+            name="staffingResponsibleWorkers"
             required
-            value="0"
+            value={values.staffingResponsibleWorkers}
             type="number"
             label={t("statistical-information.input2")}
           />

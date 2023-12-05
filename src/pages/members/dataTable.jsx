@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import styles from "./members.module.scss";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
-import { getFIO, splitEmployement, splitFIO } from "@/utils/data";
+import { getFIO, getLocalizationNames, splitEmployement, splitFIO } from "@/utils/data";
 import { useSelector } from "react-redux";
 import { deleteMember, sendMember } from "@/http/data";
 import CheckBoxGroup from "@/components/CheckBoxGroup";
@@ -20,6 +20,8 @@ import { generateTicketData } from "@/utils/encryptdecrypt";
 import { getUrlWithQuery, openBlankURL } from "@/utils/window";
 import SimpleDialog from "@/components/SimpleDialog";
 import QRCode from "react-qr-code";
+import { convertStringToFormatted } from "@/utils/date";
+import { i18n } from "../../../next.config";
 
 export default function InDataTable() {
   const { t } = useTranslation();
@@ -68,24 +70,22 @@ export default function InDataTable() {
   }
 
   useEffect(() => {
-    const filteredRows = bkutData?.employees
-    .filter((e) => e.isKasabaActive !== false) // Filter out rows where isKasabaActive is false
-    .map((e) => {
-      return {
-        id: e.id,
-        fio: getFIO(e.individual),
-        signDate: e.joinDate,
-        employment: getEmployeement(e),
-        birthDate: e.individual?.birthDate ?? "",
-        position: e.position,
-        phone: e.individual.phone,
-        email: e.individual.email,
-        pinfl: e.individual?.pinfl,
-      };
-    });
-    setRows(filteredRows);
+    if (!bkutData?.employees?.length) return;
+    setRows(
+      bkutData?.employees.map((e) => {
+        return {
+          id: e?.individual?.id,
+          fio: getFIO(e.individual),
+          signDate: e.memberJoinDate,
+          employment: getEmployeement(e),
+          birthDate: convertStringToFormatted(e.individual?.birthDate),
+          position: getLocalizationNames(e.position, i18n),
+          phoneNumber: e.individual.phone,
+          email: e.individual.email,
+        };
+      })
+    );
   }, [bkutData]);
-
   async function onSubmitModal(forms, hideModal, isView) {
     if (
       !isView &&

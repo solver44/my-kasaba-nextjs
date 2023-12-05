@@ -12,6 +12,7 @@ export default function InDataTable() {
   const [rows, setRows] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const { bkutData = {} } = useSelector((states) => states);
+  
   const columns = [
     {
       field: "id",
@@ -34,6 +35,7 @@ export default function InDataTable() {
   ];
   useEffect(() => {
     if (!bkutData?.agreements?.length) return;
+    
     setRows(
       bkutData.agreements.map((e) => {
         const translatedStatus = e.status === 'INANALYSIS' ? `Ko'rib chiqilmoqda` : e.status === 'CONFIRMED' ? 'Tasdiqlangan' : e.status;
@@ -41,7 +43,7 @@ export default function InDataTable() {
           id: e.id.slice(0, 8),
           bkut: bkutData.name,
           contractNumber: e.contractNo,
-          director: bkutData?.employees[0]?._instanceName,
+          // director: filteredEmployees,
           status: translatedStatus,
           createdDate: e.approvedDate,
         };
@@ -102,23 +104,25 @@ export default function InDataTable() {
       }
   
       const response = await sendContracts(requestData);
-      console.log(response)
-      if (response && response.success) {
-        const newId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 1;
-        setRows((prevRows) => [
-          ...prevRows,
-          { id: newId, ...forms },
-        ]);
-      
-        enqueueSnackbar(t("successfully-saved"), { variant: "success" });
-        actions.updateData();
-      } else {
-        enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
-      }
-      
+    console.log(response);
+
+    if (response && response.success) {
+      const newId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 1;
+      setRows((prevRows) => [
+        ...prevRows,
+        { id: newId, ...forms },
+      ]);
+
+      enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+      actions.updateData();
+    } else if (response && !response.success) {
+      enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
       if (hideModal) {
         hideModal();
       }
+    } else {
+      enqueueSnackbar(t("error-send-bkuts"), { variant: "error" });
+    }
     } catch (error) {
       console.error("Error sending data:", error); // Log the specific error
       enqueueSnackbar(t("send-data-error"), { variant: "error" });
@@ -152,6 +156,11 @@ export default function InDataTable() {
 function ModalUI({ hideModal, data }) {
   const { t } = useTranslation();
   const [employees, bkutData] = useEmployees();
+  const filteredEmployees = bkutData.employees
+  .filter((employee) => employee.position?.id === 1)
+  .map((employee) => employee._instanceName);
+
+console.log(filteredEmployees);
   const [formData, setFormData] = useState({
     director: "",
     // Add other form input state values here
@@ -224,22 +233,10 @@ function ModalUI({ hideModal, data }) {
       <div className="modal-row">
       <FormInput
         name="director"
-        value={bkutData?.employees[0]?._instanceName}
+        value={filteredEmployees}
         disabled
         onChange={() => {
-          if (bkutData && bkutData.employees && Array.isArray(bkutData.employees)) {
-            const employeePositionOne = bkutData.employees.find(employee => employee.position === 1);
           
-            if (employeePositionOne) {
-              const directorValueFromEmployees = employeePositionOne.individual?._instanceName || '';
-              console.log(directorValueFromEmployees); // Log the director's name
-          
-              // Further processing or usage of directorValueFromEmployees
-            }
-          } else {
-            // Handle cases where bkutData or its employees property are missing or not properly structured
-            console.log('Invalid data structure or missing employees data');
-          }
         }}
         label={t("team-contracts.director")}
       />

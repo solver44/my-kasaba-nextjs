@@ -259,9 +259,20 @@ export async function fetchMember(id) {
     return error;
   }
 }
+function shouldSendData(success) {
+  return success !== 'false';
+}
+
+// Function to send contracts
 export async function sendContracts(_data) {
   try {
     const { ...data } = _data;
+
+    // Check if data should be sent based on the success flag
+    if (!shouldSendData(data.success)) {
+      return { success: false, message: 'Data not sent as success flag is false' };
+    }
+
     const response = await $axios.post(
       "/rest/services/application/applyCollectiveAgreements",
       data,
@@ -270,15 +281,28 @@ export async function sendContracts(_data) {
       }
     );
 
-    if (response.data && response.data.id) {
-      return { ...response.data, success: true };
-    } else {
-      return { ...response.data, success: false };
+    return response?.id
+      ? { ...response, success: true }
+      : { ...response, success: false };
+    } catch (error) {
+      return error;
     }
+}
+export async function sendStatistics(_data) {
+  try {
+    const { ...data } = _data;
+    const { data: response } = await $axios.post(
+      "/rest/entities/EReports",
+      data,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response?.id
+      ? { ...response, success: true }
+      : { ...response, success: false };
   } catch (error) {
-    // Handle errors here
-    console.error('Error sending contracts:', error);
-    throw error; // Re-throw the error to handle it in the caller function
+    return error;
   }
 }
 

@@ -55,7 +55,8 @@ export default function InDataTable({ onUpload, min }) {
   useEffect(() => {
     if (!bkutData?.employees?.length) return;
     setRows(
-      bkutData?.employees.map((e) => {
+      bkutData?.employees.filter((e) => e.isKasabaActive !== false) // Filter out rows where isKasabaActive is false
+      .map((e) => {
         return {
           id: e?.individual?.id,
           employeeID: e.id,
