@@ -281,7 +281,8 @@ function DataTable({
           // enableRowSelection
           onRowSelectionChange={setRowSelection}
           muiTableBodyRowProps={({ row }) => {
-            const isConfirmed = row.original.status === 'CONFIRMED';
+            const isConfirmed = row.original.status === 'Tasdiqlangan';
+            const isInalasys = row.original.status === `Ko'rib chiqilmoqda`;
             const isSelected = rowSelection[row.id];
           
             let rowStyles = { cursor: "pointer" };
@@ -289,7 +290,10 @@ function DataTable({
             if (isSelected) {
               rowStyles = { ...rowStyles, backgroundColor: "var(--row-selected-color) !important" };
             } else if (isConfirmed) {
-              rowStyles = { ...rowStyles, backgroundColor: "green" };
+              rowStyles = { ...rowStyles, backgroundColor: '#C3E6CB', };
+            }
+            else if(isInalasys){
+              rowStyles = { ...rowStyles, backgroundColor: "#FFEEBA", };
             }
           
             return {
@@ -349,9 +353,9 @@ function DataTable({
           muiTableBodyProps={{
             sx: () => ({
               height: "100%",
-              "& tr:nth-of-type(odd)": {
-                backgroundColor: "var(--row-color)",
-              },
+              // "& tr:nth-of-type(odd)": {
+              //   backgroundColor: "var(--row-color)",
+              // },
             }),
           }}
           muiTableHeadCellProps={{

@@ -45,7 +45,6 @@ export default function AllEmployeesDT() {
       default: [
         t("isHomemaker"),
         t("isInvalid"),
-        t("isPensioner"),
         t("isStudent"),
       ].join(", "),
     },
@@ -70,7 +69,6 @@ export default function AllEmployeesDT() {
     let result = [];
     if (member.isHomemaker) result.push(t("isHomemaker"));
     if (member.isInvalid) result.push(t("isInvalid"));
-    if (member.isPensioner) result.push(t("isPensioner"));
     if (member.isStudent) result.push(t("isStudent"));
 
     return result;
@@ -113,6 +111,7 @@ export default function AllEmployeesDT() {
     const fio = splitFIO(forms.fio);
     const isMemberValue = forms.isMember === "true";
     const isKasabaActives = forms.isKasabaActive === "true";
+    const isFired = forms.isPensioner === "true";
     const requestData = {
       bkutId: bkutData.id,
       pinfl: forms.pinfl,
@@ -126,7 +125,7 @@ export default function AllEmployeesDT() {
       position: forms.position,
       isStudent: forms.employment.isStudent,
       isHomemaker: forms.employment.isHomemaker,
-      isPensioner: forms.employment.isPensioner,
+      isPensioner: isFired,
       isInvalid: forms.employment.isInvalid,
       isMember: isMemberValue,
       isKasabaActive: isKasabaActives,
@@ -172,7 +171,6 @@ export default function AllEmployeesDT() {
     data.employment = {
       isHomemaker: !!data.isHomemaker,
       isInvalid: !!data.isInvalid,
-      isPensioner: !!data.isPensioner,
       isStudent: !!data.isStudent,
     };
     return data;
@@ -236,8 +234,26 @@ export default function AllEmployeesDT() {
 
 function ModalUI({ hideModal, positions, data = {} }) {
   const { t } = useTranslation();
-  const [mode, setMode] = useState(0);
-  const [isKasabaActive, setIsKasabaActive] = useState(0);
+  const [isMember, setIsMember] =  useState(
+    localStorage.getItem('isMember') === 'true' ? 'true' : 'false'
+  );
+  const [isKasabaActive, setIsKasabaActive] = useState(
+    localStorage.getItem('isKasabaActive') === 'true' ? 'true' : 'false'
+  );
+  const [isPensioner, setIsPensioner] = useState(
+    localStorage.getItem('isPensioner') === 'true' ? 'true' : 'false'
+  );
+
+  // Save isKasabaActives state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('isKasabaActive', isKasabaActive);
+  }, [isKasabaActive]);
+  useEffect(() => {
+    localStorage.setItem('isMember', isMember);
+  }, [isMember]);
+  useEffect(() => {
+    localStorage.setItem('isPensioner', isPensioner);
+  }, [isPensioner]);
   const [formData, setFormData] = useState({
     fio: "",
     birthDate: "",
@@ -251,7 +267,6 @@ function ModalUI({ hideModal, positions, data = {} }) {
     individual = {},
     position = {},
     employment = {},
-    isMember,
   } = data;
   console.log(isKasabaActive)
   const animRef = useAnimation();
@@ -336,6 +351,83 @@ function ModalUI({ hideModal, positions, data = {} }) {
         <FormInput value={formData.email} label={t("employees.email")} name="email" />
       </div>
       <div className="modal-row">
+       <RadioGroup
+        defaultValue={false}
+        label={t("isMember")}
+        left
+        name="isMember"
+        value={isMember ?? false}
+        onChange={(e) => {
+          setIsMember(e.target.value);
+        }}
+        data={[
+          {
+            value: 'true',
+            label: t("yes"),
+          },
+          {
+            value: 'false',
+            label: t("no"),
+          },
+        ]}
+      />
+       {isMember === 'true' && (
+          <FormInput
+            date
+            label={t("employees.dateSign")}
+            value={formData.signDate ? dayjs(formData.signDate) : null}
+            name="signDate"
+          />
+        )}
+      </div>
+      <div className="modal-row">
+        <RadioGroup
+          defaultValue={false}
+          label={t("isKasabaActive")}
+          left
+          name="isKasabaActive"
+          value={isKasabaActive ?? false}
+          onChange={(e) => {
+            setIsKasabaActive(e.target.value);
+          }}
+          data={[
+            {
+              value: 'true',
+              label: t("yes"),
+            },
+            {
+              value: 'false',
+              label: t("no"),
+            },
+          ]}
+        />
+
+        {isKasabaActive === 'true' && (
+          <RadioGroup
+          defaultValue={false}
+          label={t("isFired")}
+          left
+          name="isPensioner"
+          value={isPensioner ?? false}
+          onChange={(e) => {
+            setIsPensioner(e.target.value);
+          }}
+          data={[
+            {
+              value: 'true',
+              label: t("yes"),
+            },
+            {
+              value: 'false',
+              label: t("no"),
+            },
+          ]}
+        />
+        
+        )}
+      </div>
+      
+        <div className="modal-row">
         <CheckBoxGroup
           name="employment"
           value={employment}
@@ -354,58 +446,7 @@ function ModalUI({ hideModal, positions, data = {} }) {
             },
           ]}
         />
-       <RadioGroup
-        defaultValue={false}
-        label={t("isFired")}
-        left
-        name="isMember"
-        value={isMember ?? false}
-        onChange={(e) => {
-          setMode(e.target.value);
-        }}
-        data={[
-          {
-            value: true,
-            label: t("yes"),
-          },
-          {
-            value: false,
-            label: t("no"),
-          },
-        ]}
-      />
-      </div>
-      <div className="modal-row">
-        <RadioGroup
-          defaultValue={'false'}
-          label={t("isMember")}
-          left
-          name="isKasabaActive"
-          value={isKasabaActive}
-          onChange={(e) => {
-            setIsKasabaActive(e.target.value);
-          }}
-          data={[
-            {
-              value: 'true',
-              label: t("yes"),
-            },
-            {
-              value: 'false',
-              label: t("no"),
-            },
-          ]}
-        />
-
-        {isKasabaActive === 'true' && (
-          <FormInput
-            date
-            label={t("employees.dateSign")}
-            value={formData.signDate ? dayjs(formData.signDate) : null}
-            name="signDate"
-          />
-        )}
-      </div>
+        </div>
     </div>
   );
 }

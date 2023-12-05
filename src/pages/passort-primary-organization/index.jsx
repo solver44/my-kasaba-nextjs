@@ -36,15 +36,18 @@ export default function PassortPrimaryOrganization() {
   const { enqueueSnackbar } = useSnackbar();
   const [animRef] = useAutoAnimate();
   const actions = useActions();
+
   const [files, setFiles] = useState({
     applicationFile: { loading: true },
     protocolFile: { loading: true },
     decisionFile: { loading: true },
   });
 
-  const director = (bkutData.employees ?? []).find(
-    (e) => e?.position?.id == 1
-  )?.employee;
+  const filteredEmployees = bkutData?.employees
+  ? bkutData.employees
+      .filter((employee) => employee.position?.id === 1)
+      .map((employee) => employee._instanceName)
+  : [];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -228,7 +231,7 @@ export default function PassortPrimaryOrganization() {
                 {t("passort-primary-organization.firstOrganizationDirektor")}
               </label>
               <span style={{ textAlign: "left" }}>
-                {showOrNot(bkutData?.employees[0]?._instanceName)}
+                {showOrNot(filteredEmployees.join(", "))}
               </span>
             </div>
             <div className={styles.flex}>

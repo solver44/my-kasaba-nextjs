@@ -18,21 +18,81 @@ import BarCharts from "@/components/Charts/Bar";
 import PieCharts from "@/components/Charts/Pie";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import InDataTable from "./dataTable";
+import { sendStatistics } from "@/http/data";
+import { useSelector } from "react-redux";
 
 export default function StatisticalInformation() {
   const { t } = useTranslation();
   const [editMode, setEditMode] = useState(false);
+  const { bkutData = {} } = useSelector((states) => states);
   const [loadingEditMode, setLoadingEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const animRef = useAnimation();
-
+  console.log(bkutData)
   const allText = t("statistical-information.all");
   // const employeesText = t("statistical-information.employees");
   const womenText = t("statistical-information.women");
   const adultsText = t("statistical-information.adults");
+  
+  const saveStatistics = async (forms) => {
+    try {
+      const requestData = {
+        bkut: {
+          id: "",
+        },
+        workersAdults: forms.workersAdults,
+        workersFemale: forms.workersFemale,
+        firedMembersAmount: forms.firedMembersAmount,
+        staffingResponsibleWorkers: forms.staffingResponsibleWorkers,
+        homemakerAmount: forms.homemakerAmount,
+        isProvidedPC: forms.isProvidedPC,
+        staffingTechnicalWorkers: forms.staffingTechnicalWorkers,
+        isProvidedInternet: forms.isProvidedInternet,
+        newMemebersAmount: forms.newMemebersAmount,
+        pensionerAmount: forms.pensionerAmount,
+        isProvidedPaidApparatus: forms.isProvidedPaidApparatus,
+        studentsFemale: forms.studentsFemale,
+        workersMembers: forms.workersMembers,
+        isFiredFromMainJob: forms.isFiredFromMainJob,
+        staffingWorkersAmount: forms.staffingWorkersAmount,
+        isCollegialPresident: forms.isCollegialPresident,
+        workersAmount: forms.workersAmount,
+        membersProvidedTicket: forms.membersProvidedTicket,
+        studentsAdultsMembers: forms.studentsAdultsMembers,
+        studentsAmount: forms.studentsAmount,
+        studentsAdults: forms.studentsAdults,
+        studentsMembers: forms.studentsMembers,
+        createdDate: dayjs().format("YYYY-MM-DD"),
+        studentsFemaleMembers: forms.studentsFemaleMembers,
+        invalidAmount: forms.invalidAmount,
+        salaryByAgreements: forms.salaryByAgreements,
+        spentAmount: forms.spentAmount,
+        workersFemaleMembers: forms.workersFemaleMembers,
+        workersAdultsMembers: forms.workersAdultsMembers,
+        staffingAmount: forms.staffingAmount,
+        staffingResponsibleWorkers: forms.staffingResponsibleWorkers,
+        isProvidedPC: true,
+        isProvidedInternet: true,
+        isProvidedPaidApparatus: true,
+        isFiredFromMainJob: true,
+        isCollegialPresident: true,
+        isProvidedPrivateRoom: true
+      };
 
-  function saveStatistics(data) {}
+      const response = await sendStatistics(requestData);
 
+      if (response?.id) {
+        setFinished(true);
+        actions.updateData();
+      } else {
+        enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
+      }
+    } catch (error) {
+    }
+  };
+  
+  
   const categories = [t("all"), t("statistical-information.group2")];
   const group1Data = [
     { name: allText, y: [100000, 50000] },
@@ -61,11 +121,20 @@ export default function StatisticalInformation() {
     { name: t("statistical-information.input8"), y: [10000] },
     { name: t("statistical-information.input9"), y: [5000] },
   ];
-
+  const handleSubmit = async (formData) => {
+    try {
+      setLoadingEditMode(true);
+      await saveStatistics(formData); // Call the saveStatistics function with form data
+      setLoadingEditMode(false);
+      setIsChanged(false);
+    } catch (error) {
+      // Handle any errors here
+    }
+  };
   return (
     <FormValidation
       className={styles.form}
-      onSubmit={saveStatistics}
+      onSubmit={handleSubmit} // Connect the onSubmit event to handleSubmit function
       onChanged={(data, oldData) => {
         if (areEqual(data, oldData)) setIsChanged(false);
         else setIsChanged(true);
@@ -93,14 +162,14 @@ export default function StatisticalInformation() {
             </Button>
           ) : (
             <LoadingButton
-              variant="contained"
-              type="submit"
-              disabled={!isChanged}
-              startIcon={<EditIcon />}
-              loading={loadingEditMode}
-            >
-              {t("save")}
-            </LoadingButton>
+            variant="contained"
+            type="submit"
+            disabled={!isChanged}
+            startIcon={<EditIcon />}
+            loading={loadingEditMode}
+          >
+            {t("save")}
+          </LoadingButton>
           )}
         </div>
         {!editMode ? (
@@ -193,6 +262,32 @@ function CheckedBox({ value }) {
 
 function EditData() {
   const { t } = useTranslation();
+  const [values, setValues] = useState({
+    workersAdults: "",
+    workersFemale: "",
+    firedMembersAmount: "",
+    staffingResponsibleWorkers: "",
+    homemakerAmount: "",
+    staffingTechnicalWorkers: "",
+    newMemebersAmount: "",
+    pensionerAmount: "",
+    studentsFemale:"",
+    workersMembers: "",
+    staffingWorkersAmount: "",
+    workersAmount: "",
+    membersProvidedTicket:"",
+    studentsAdultsMembers: "",
+    studentsAmount:"",
+    studentsAdults: "",
+    studentsMembers: "",
+    studentsFemaleMembers: "", 
+    invalidAmount:"",
+    salaryByAgreements:"",
+    spentAmount: "",
+    workersFemaleMembers: "",
+    workersAdultsMembers: "",
+    staffingAmount:"",
+  });
   const radioData = [
     {
       value: "1",
@@ -203,9 +298,16 @@ function EditData() {
       label: t("no"),
     },
   ];
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
   return (
     <div className="modal-content">
-      <FormInput
+       <FormInput
         name="enterDate"
         required
         date
@@ -215,50 +317,57 @@ function EditData() {
         <Group title={t("statistical-information.group1")}>
           <div datatype="list">
             <FormInput
-              name="group1-all"
+              name="workersAmount"
               required
-              value="0"
+              value={values.workersAmount}
               type="number"
               label={t("statistical-information.all")}
+              onChange={handleInputChange}
             />
             <FormInput
-              name="group1-women"
+              name="workersFemale"
               required
-              value="0"
+              value={values.workersFemale}
               type="number"
               label={t("statistical-information.women")}
+              onChange={handleInputChange}
             />
             <FormInput
-              name="group1-adults"
+              name="workersAdults"
               required
-              value="0"
+              value={values.workersAdults}
               type="number"
               label={t("statistical-information.adults")}
+              onChange={handleInputChange}
             />
           </div>
         </Group>
+        
         <Group title={t("statistical-information.group2")}>
           <div datatype="list">
             <FormInput
-              name="group1-sub-all"
+              name="workersMembers"
               required
-              value="0"
+              value={values.workersMembers}
               type="number"
               label={t("statistical-information.all")}
+              onChange={handleInputChange}
             />
             <FormInput
-              name="group1-sub-women"
+              name="workersFemaleMembers"
               required
-              value="0"
+              value={values.workersFemaleMembers}
               type="number"
               label={t("statistical-information.women")}
+              onChange={handleInputChange}
             />
             <FormInput
-              name="group1-sub-adults"
+              name="workersAdultsMembers"
               required
-              value="0"
+              value={values.workersAdultsMembers}
               type="number"
               label={t("statistical-information.adults")}
+              onChange={handleInputChange}
             />
           </div>
         </Group>
@@ -267,50 +376,56 @@ function EditData() {
         <Group title={t("statistical-information.group3")}>
           <div datatype="list">
             <FormInput
-              name="group3-all"
+              name="studentsAmount"
               required
-              value="0"
+              value={values.studentsAmount}
               type="number"
               label={t("statistical-information.all")}
+              onChange={handleInputChange}
             />
             <FormInput
-              name="group3-women"
+              name="studentsFemale"
               required
-              value="0"
+              value={values.studentsFemale}
               type="number"
               label={t("statistical-information.women")}
+              onChange={handleInputChange}
             />
             <FormInput
-              name="group3-adults"
+              name="studentsAdults"
               required
-              value="0"
+              value={values.studentsAdults}
               type="number"
               label={t("statistical-information.adults")}
+              onChange={handleInputChange}
             />
           </div>
         </Group>
         <Group title={t("statistical-information.group2")}>
           <div datatype="list">
             <FormInput
-              name="group3-sub-all"
+              name="studentsMembers"
               required
-              value="0"
+              value={values.studentsMembers}
               type="number"
               label={t("statistical-information.all")}
+              onChange={handleInputChange}
             />
             <FormInput
-              name="group3-sub-women"
+              name="studentsFemaleMembers"
               required
-              value="0"
+              value={values.studentsFemaleMembers}
               type="number"
-              label={t("statistical-information.women")}
+              label={t("statistical-information.women")}v
+              onChange={handleInputChange}
             />
             <FormInput
-              name="group3-sub-adults"
+              name="studentsAdultsMembers"
               required
-              value="0"
+              value={values.studentsAdultsMembers}
               type="number"
               label={t("statistical-information.adults")}
+              onChange={handleInputChange}
             />
           </div>
         </Group>
@@ -319,11 +434,12 @@ function EditData() {
       <Group title={t("statistical-information.group4")}>
         <div datatype="list">
           <FormInput
-            name="group4-all"
+            name="pensionerAmount"
             required
-            value="0"
+            value={values.pensionerAmount}
             type="number"
             label={t("statistical-information.all")}
+            onChange={handleInputChange}
           />
         </div>
       </Group>
@@ -331,22 +447,24 @@ function EditData() {
         <Group title={t("statistical-information.group5")}>
           <div datatype="list">
             <FormInput
-              name="group5-all"
+              name="homemakerAmount"
               required
-              value="0"
+              value={values.homemakerAmount}
               type="number"
               label={t("statistical-information.all")}
+              onChange={handleInputChange}
             />
           </div>
         </Group>
         <Group title={t("statistical-information.group6")}>
           <div datatype="list">
             <FormInput
-              name="group6-all"
+              name="invalidAmount"
               required
-              value="0"
+              value={values.invalidAmount}
               type="number"
               label={t("statistical-information.all")}
+              onChange={handleInputChange}
             />
           </div>
         </Group>
@@ -354,18 +472,20 @@ function EditData() {
       <Group title={t("statistical-information.group7")}>
         <div datatype="list">
           <FormInput
-            name="group7-1"
+            name="staffingAmount"
             required
-            value="0"
+            value={values.staffingAmount}
             type="number"
             label={t("statistical-information.input1")}
+            onChange={handleInputChange}
           />
           <FormInput
-            name="group7-2"
+            name="staffingResponsibleWorkers"
             required
-            value="0"
+            value={values.staffingResponsibleWorkers}
             type="number"
             label={t("statistical-information.input2")}
+            onChange={handleInputChange}
           />
         </div>
         <div datatype="list">

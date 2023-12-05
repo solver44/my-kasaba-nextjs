@@ -239,6 +239,7 @@ export default {
     district: "Tuman",
     address: "Manzil",
     isFired: "Xodim asosiy ishidan ozod etilganmi?",
+    isKasabaActive:"Kasaba uyushmasi qo'mitasi xodimimi?",
     "senior-organization": "Yuqori turuvchi tashkilot",
     all: "Barchasi",
     bkutEmployee: "Boshlang'ich tashkilot xodimi",
