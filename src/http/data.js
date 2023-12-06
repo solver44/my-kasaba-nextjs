@@ -292,7 +292,7 @@ export async function sendStatistics(_data) {
   try {
     const { ...data } = _data;
     const { data: response } = await $axios.post(
-      "/rest/entities/EReports",
+      "/rest/services/bkut/statistics",
       data,
       {
         headers: { "Content-Type": "application/json" },

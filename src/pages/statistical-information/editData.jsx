@@ -1,253 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import DataTable from "@/components/DataTable";
-import FormInput from "@/components/FormInput";
-import { useSnackbar } from "notistack";
-import { Alert, Box } from "@mui/material";
-import FinderSTIR from "@/components/FinderSTIR";
-import { useSelector } from "react-redux";
-import { sendStatistics } from "@/http/data";
-import useActions from "@/hooks/useActions";
-import Group from "@/components/Group";
+import React from 'react'
+import DataTable from "./dataTable";
 import RadioGroup from "@/components/RadioGroup";
+import Group from "@/components/Group";
+import FormInput from "@/components/FormInput";
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-export default function InDataTable() {
-  const { t } = useTranslation();
-  const [rows, setRows] = useState([]);
-  const { bkutData = {} } = useSelector((states) => states);
-  const { enqueueSnackbar } = useSnackbar();
-  const actions = useActions();
-
-  const columns = [
-    {
-      field: "date",
-      headerName: "statistical-information.date",
-    },
-    {
-      field: "total",
-      headerName: "statistical-information.total",
-    },
-    { field: "ku", headerName: "statistical-information.ku" },
-    {
-      field: "student",
-      headerName: "statistical-information.student",
-    },
-    {
-      field: "direktor",
-      headerName: "statistical-information.direktor",
-    },
-    {
-      field: "kuStudent",
-      headerName: "statistical-information.kuStudent",
-    },
-    {
-      field: "adr",
-      headerName: t("statistical-information.adr"),
-    },
-    {
-      field: "pesioners",
-      headerName: t("statistical-information.pesioners"),
-    },
-    {
-      field: "shtat",
-      headerName: t("statistical-information.shtat"),
-    },
-  ];
-
-  // useEffect(() => {
-  //   if (!bkutData?.statistics?.length) return;
-  //   setRows(
-  //     bkutData.statistics
-  //       .map((e) => {
-  //         return {
-  //           id: e.id,
-  //           total: e.name,
-  //           address: e.address,
-  //         };
-  //       })
-  //   );
-  // }, [bkutData]);
-
-  async function onSubmitModal(forms, hideModal, isView) {
-     sendData(forms, hideModal);
-  }
-
-  async function sendData(forms, hideModal) {
-    const requestData = {
-      bkut: {
-        id: bkutData.id,
+export default function EditData() {
+    const { t } = useTranslation();
+    const { bkutData = {} } = useSelector((states) => states);
+    const [values, setValues] = useState({
+      workersAdults: (bkutData.statistics?.workersAdults ?? 0).toString(),
+      workersFemale: (bkutData.statistics?.workersFemale ?? 0).toString(),
+      firedMembersAmount: (bkutData.statistics?.firedMembersAmount ?? 0).toString(),
+      staffingResponsibleWorkers: (bkutData.statistics?.staffingResponsibleWorkers ?? 0).toString(),
+      homemakerAmount: (bkutData.statistics?.homemakerAmount ?? 0).toString(),
+      staffingTechnicalWorkers: (bkutData.statistics?.staffingTechnicalWorkers ?? 0).toString(),
+      newMemebersAmount: (bkutData.statistics?.newMemebersAmount ?? 0).toString(),
+      pensionerAmount: (bkutData.statistics?.pensionerAmount ?? 0).toString(),
+      studentsFemale:(bkutData.statistics?.studentsFemale ?? 0).toString(),
+      workersMembers: (bkutData.statistics?.workersMembers ?? 0).toString(),
+      staffingWorkersAmount: (bkutData.statistics?.staffingWorkersAmount ?? 0).toString(),
+      workersAmount: (bkutData.statistics?.workersAmount ?? 0).toString(),
+      membersProvidedTicket:(bkutData.statistics?.membersProvidedTicket ?? 0).toString(),
+      studentsAdultsMembers: (bkutData.statistics?.studentsAdultsMembers ?? 0).toString(),
+      studentsAmount:(bkutData.statistics?.studentsAmount ?? 0).toString(),
+      studentsAdults: (bkutData.statistics?.studentsAdults ?? 0).toString(),
+      studentsMembers: (bkutData.statistics?.studentsMembers ?? 0).toString(),
+      studentsFemaleMembers: (bkutData.statistics?.studentsFemaleMembers ?? 0).toString(), 
+      invalidAmount:(bkutData.statistics?.invalidAmount ?? 0).toString(),
+      salaryByAgreements:(bkutData.statistics?.salaryByAgreements ?? 0).toString(),
+      spentAmount: (bkutData.statistics?.spentAmount ?? 0).toString(),
+      workersFemaleMembers: (bkutData.statistics?.workersFemaleMembers ?? 0).toString(),
+      workersAdultsMembers: (bkutData.statistics?.workersAdultsMembers ?? 0).toString(),
+      staffingAmount:(bkutData.statistics?.staffingAmount ?? 0).toString(),
+      isProvidedPC: bkutData.statistics?.isProvidedPC,
+      isProvidedInternet: bkutData.statistics?.isProvidedInternet,
+      isProvidedPaidApparatus: bkutData.statistics?.isProvidedPaidApparatus,
+      isFiredFromMainJob: bkutData.statistics?.isFiredFromMainJob,
+      isCollegialPresident: bkutData.statistics?.isCollegialPresident,
+      isProvidedPrivateRoom: bkutData.statistics?.isProvidedPrivateRoom,
+    });
+    const radioData = [
+      {
+        value: 'true',
+        label: t("yes"),
       },
-      workersAdults: forms.workersAdults,
-      workersFemale: forms.workersFemale,
-      firedMembersAmount: forms.firedMembersAmount,
-      staffingResponsibleWorkers: forms.staffingResponsibleWorkers,
-      homemakerAmount: forms.homemakerAmount,
-      isProvidedPC: forms.isProvidedPC,
-      staffingTechnicalWorkers: forms.staffingTechnicalWorkers,
-      isProvidedInternet: forms.isProvidedInternet,
-      newMemebersAmount: forms.newMemebersAmount,
-      pensionerAmount: forms.pensionerAmount,
-      isProvidedPaidApparatus: forms.isProvidedPaidApparatus,
-      studentsFemale: forms.studentsFemale,
-      workersMembers: forms.workersMembers,
-      isFiredFromMainJob: forms.isFiredFromMainJob,
-      staffingWorkersAmount: forms.staffingWorkersAmount,
-      isCollegialPresident: forms.isCollegialPresident,
-      workersAmount: forms.workersAmount,
-      membersProvidedTicket: forms.membersProvidedTicket,
-      studentsAdultsMembers: forms.studentsAdultsMembers,
-      studentsAmount: forms.studentsAmount,
-      studentsAdults: forms.studentsAdults,
-      studentsMembers: forms.studentsMembers,
-      createdDate: forms.createdDate,
-      studentsFemaleMembers: forms.studentsFemaleMembers,
-      invalidAmount: forms.invalidAmount,
-      salaryByAgreements: forms.salaryByAgreements,
-      spentAmount: forms.spentAmount,
-      workersFemaleMembers: forms.workersFemaleMembers,
-      workersAdultsMembers: forms.workersAdultsMembers,
-      staffingAmount: forms.staffingAmount,
-      isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
-      isProvidedPC: forms.isProvidedPC,
-      isProvidedInternet: forms.isProvidedInternet,
-      isProvidedPaidApparatus: forms.isProvidedPaidApparatus,
-      isFiredFromMainJob: forms.isFiredFromMainJob,
-      isCollegialPresident: forms.isCollegialPresident,
-      isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
-    };
-    const response = await sendStatistics(requestData);
-    if (response?.success) {
-      const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
-      setRows((rows) => [
-        ...rows.filter((r) => r.id != newId),
-        { id: newId, ...forms },
-      ]);
-      enqueueSnackbar(t("successfully-saved"), { variant: "success" });
-      actions.updateData();
-    } else {
-      enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
-    }
-    hideModal();
-  }
-
-  async function fetchData(id) {
-    const data = (bkutData.organizations ?? []).find((ok) => ok.id == id);
-    return data;
-  }
-  function deleteRow(id) {
-    setRows((rows) => rows.filter((row) => row?.id != id));
-  }
-
-  return (
-    <DataTable
-      fetchData={fetchData}
-      handleDeleteClick={deleteRow}
-      columns={columns}
-      title={t("statistical-information.title")}
-      rows={rows}
-      onSubmitModal={onSubmitModal}
-      isFormModal
-      fullModal
-      modal={(hideModal, dataModal) => (
-        <ModalUI hideModal={hideModal} data={dataModal} />
-      )}
-    />
-  );
-}
-function ModalUI({ hideModal, data }) {
-  const { bkutData = {} } = useSelector((states) => states);
-  const [values, setValues] = useState({
-    workersAdults: "",
-    workersFemale: "",
-    firedMembersAmount: "",
-    staffingResponsibleWorkers: "",
-    homemakerAmount: "",
-    staffingTechnicalWorkers: "",
-    newMemebersAmount: "",
-    pensionerAmount: "",
-    studentsFemale:"",
-    workersMembers: "",
-    staffingWorkersAmount: "",
-    workersAmount: "",
-    membersProvidedTicket:"",
-    studentsAdultsMembers: "",
-    studentsAmount:"",
-    studentsAdults: "",
-    studentsMembers: "",
-    studentsFemaleMembers: "", 
-    invalidAmount:"",
-    salaryByAgreements:"",
-    spentAmount: "",
-    workersFemaleMembers: "",
-    workersAdultsMembers: "",
-    staffingAmount:"",
-    isProvidedPC: false,
-    isProvidedInternet: false,
-    isProvidedPaidApparatus: false,
-    isFiredFromMainJob: false,
-    isCollegialPresident: false,
-    isProvidedPrivateRoom: false,
-  });
-  const { t } = useTranslation();
-  const { tin } = data;
-
-  const radioData = [
-    {
-      value: 'true',
-      label: t("yes"),
-    },
-    {
-      value: 'false',
-      label: t("no"),
-    },
-  ];
-  useEffect(() => {
-    const fetchData = async () => {
-      setValues((values) => ({
-        ...values,
-        workersAdults: data.workersAdults,
-        workersFemale: data.workersFemale,
-        firedMembersAmount: data.firedMembersAmount,
-        staffingResponsibleWorkers: data.staffingResponsibleWorkers,
-        homemakerAmount: data.homemakerAmount,
-        staffingTechnicalWorkers: data.staffingTechnicalWorkers,
-        newMemebersAmount: data.newMemebersAmount,
-        pensionerAmount: data.pensionerAmount,
-        studentsFemale:data.studentsFemale,
-        workersMembers: data.workersMembers,
-        staffingWorkersAmount: data.staffingWorkersAmount,
-        workersAmount: data.workersAmount,
-        membersProvidedTicket:data.membersProvidedTicket,
-        studentsAdultsMembers: data.studentsAdultsMembers,
-        studentsAmount:data.studentsAmount,
-        studentsAdults: data.studentsAdults,
-        studentsMembers: data.studentsMembers,
-        studentsFemaleMembers: data.studentsFemaleMembers, 
-        invalidAmount:data.invalidAmount,
-        salaryByAgreements:data.salaryByAgreements,
-        spentAmount: data.spentAmount,
-        workersFemaleMembers: data.workersFemaleMembers,
-        workersAdultsMembers: data.workersAdultsMembers,
-        staffingAmount:data.staffingAmount,
-        isProvidedPC: data.isProvidedPC,
-        isProvidedInternet: data.isProvidedInternet,
-        isProvidedPaidApparatus: data.isProvidedPaidApparatus,
-        isFiredFromMainJob: data.isFiredFromMainJob,
-        isCollegialPresident: data.isCollegialPresident,
-        isProvidedPrivateRoom: data.isProvidedPrivateRoom,
+      {
+        value: 'false',
+        label: t("no"),
+      },
+    ];
+    const handleInputChange = (event) => {
+      const { name, value } = event.target;
+      setValues((prevValues) => ({
+        ...prevValues,
+        [name]: value,
       }));
     };
-    fetchData();
-  }, [data]);
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-  return (
-    <div className="modal-content">
+    return (
+      <div className="modal-content">
          {/* <FormInput
           name="enterDate"
           required
@@ -541,5 +354,5 @@ function ModalUI({ hideModal, data }) {
           </div>
         </Group>
       </div>
-  );
+    );
 }

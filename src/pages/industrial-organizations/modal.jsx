@@ -21,6 +21,11 @@ export default function ViewModal({ isOpen, handleClose }) {
   const [files, setFiles] = useState({
     decisionFile: { loading: false },
   });
+  const filteredEmployees = bkutData?.employees
+  ? bkutData.employees
+      .filter((employee) => employee.position?.id === 1)
+      .map((employee) => employee._instanceName)
+  : [];
   async function parseFile(file) {
     if (!file) return [null, null];
     const res = await getFile(file);
@@ -91,7 +96,7 @@ export default function ViewModal({ isOpen, handleClose }) {
                   <div className="flex">
                     <label>{t("industrial-organizations.direktor")}</label>
                     <span style={{ textAlign: "left" }}>
-                      {showOrNot(bkutData?.employees[0]?._instanceName)}
+                      {showOrNot(filteredEmployees.join(", "))}
                     </span>
                   </div>
                   <div className="flex">
