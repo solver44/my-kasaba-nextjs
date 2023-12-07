@@ -29,13 +29,14 @@ export default function OneTI() {
 
       const filteredEmployeesString = filteredEmployeesR.join(", ");
       const result = filteredEmployeesString === 'false' ? `yo'q` : 'ha';
-
+      const apparatus = bkutData.statistics?.isProvidedPaidApparatus === 'false' ? `yo'q` : 'ha'
       const tempJsonData = {
         CURRENTYEARS: year.toString(),
         BKUTNAME: bkutData.name,
         BKUTDIRECTOR: filteredEmployees.join(", "),
         PHONE: bkutData.phone,
         ISFIRED: result,
+        ISAPPARATUS: apparatus,
         WORKERSAMOUNT: bkutData.statistics?.workersAmount?.toString(),
         WORKERSFEMALE:bkutData.statistics?.workersFemale?.toString(),
         WORKERSADULTS:bkutData.statistics?.workersAdults?.toString(),
@@ -92,5 +93,5 @@ export default function OneTI() {
 }
 
 OneTI.layout = function (Component, t) {
-  return <HomeWrapper title="1T shakli">{Component}</HomeWrapper>;
+  return <HomeWrapper title="1TI hisobot shakli">{Component}</HomeWrapper>;
 };

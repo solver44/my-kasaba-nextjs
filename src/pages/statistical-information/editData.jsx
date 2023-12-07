@@ -234,7 +234,7 @@ export default function EditData() {
               onChange={handleInputChange}
             />
             <FormInput
-              name="staffingResponsibleWorkers"
+              name="staffingWorkersAmount"
               required
               value={values.staffingWorkersAmount}
               type="number"
