@@ -42,7 +42,7 @@ export default function TicketPage(p) {
         <div className={styles.top}>
           <Image className={styles.logo} src={logo} />
           <h1 className={styles.title}>
-            A'zolik bileti raqami: 173T112211B-00000
+            A'zolik bileti raqami: {showOrNot(data.id.slice(0, 13))}
           </h1>
         </div>
         <p className={styles.row}>
