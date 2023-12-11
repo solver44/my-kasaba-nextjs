@@ -5,8 +5,7 @@ import ActiveEmployeeDT from "./dataTable";
 import { useSelector } from "react-redux";
 import { getFIO } from "@/utils/data";
 import Tabs from "@/components/Tabs";
-import MembersDT from "../members/dataTable";
-import AllEmployeesDT from "../members/allEmployeesDataTable";
+import DataTable from "./dataTable";
 import useQueryPage from "@/hooks/useQueryPage";
 
 export default function Employees() {
@@ -24,9 +23,9 @@ export default function Employees() {
         onChange={onChangeTabs}
         value={(searchParams.get("tab") ?? 1) - 1}
         tabs={[
-          { label: "not-member-employees", children: <AllEmployeesDT /> },
-          { label: "member-employees", children: <MembersDT /> },
-          { label: "employees.title1", children: <ActiveEmployeeDT /> },
+          { label: "all-employees", children: <DataTable /> },
+          { label: "member-employees", children: <DataTable /> },
+          { label: "employees.title1", children: <DataTable /> },
         ]}
       />
     </div>

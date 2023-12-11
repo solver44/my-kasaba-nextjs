@@ -11,7 +11,6 @@ import { convertStringToFormatted } from "@/utils/date";
 
 export default function OpinionsTab({ data, bkutData }) {
   const { commission = {}, experts = [], opinions = [] } = data;
-  console.log(bkutData);
   const { t } = useTranslation();
   return (
     <div className="modal-col big">

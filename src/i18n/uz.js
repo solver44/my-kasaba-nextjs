@@ -321,7 +321,7 @@ export default {
     members: "A’zolar",
     settings: "Sozlamalar",
 
-    save: "Yaratish",
+    save: "Saqlash",
     close: "Yopish",
     search: "Qidirish",
     open: "Ochish",
@@ -446,7 +446,7 @@ export default {
     "active-employees": "Faollar",
     "member-employees": "Kasaba uyushmasi a'zolari",
     "not-member-employees": "Barcha ishchi xodimlar",
-    "all-employees": "Barcha xodimlar",
+    "all-employees": "Barcha ishchi xodimlar",
     inanalysis: "Tahlilda",
     "jsh-passport": "Jamoa shartnomasi pasporti",
     "main-info": "Asosiy ma'lumotlar",
