@@ -20,6 +20,10 @@ a{
 #notistack-snackbar{
   font-size: 18px;
 }
+.MuiTabPanel-root[role="tabpanel"]{
+  height: 100%;
+  padding: 5px !important;
+}
 // .highcharts-credits{
 //   display: none;
 // }

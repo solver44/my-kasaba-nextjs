@@ -1,11 +1,12 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { AppBar, Box, Grow, Tab } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function Tabs({
   tabs = [],
   appBar,
+  reverse,
   contentPadding,
   onChange,
   value: defaultValue = "",
@@ -15,6 +16,7 @@ export default function Tabs({
   const { t } = useTranslation();
   const [value, setValue] = useState(defaultValue + "" || "0");
   const [animate, setAnimate] = useState(true);
+  const [customTabs, setCustomTabs] = useState(tabs);
   function handleChange(_, value) {
     setAnimate(false);
     setValue(value);
@@ -23,6 +25,11 @@ export default function Tabs({
       setAnimate(true);
     }, 100);
   }
+
+  useEffect(() => {
+    if (reverse) setCustomTabs(tabs.reverse());
+    else setCustomTabs(tabs);
+  }, [reverse, tabs]);
 
   const AppBarCom = appBar ? AppBar : "div";
 
@@ -38,8 +45,14 @@ export default function Tabs({
               variant={scrollable ? "scrollable" : "fullWidth"}
               className="tab-main"
             >
-              {tabs.map((tab, index) => (
-                <Tab key={index} label={t(tab.label)} value={index + ""} />
+              {customTabs.map((tab, index) => (
+                <Tab
+                  icon={tab?.icon}
+                  iconPosition="start"
+                  key={index}
+                  label={t(tab.label)}
+                  value={index + ""}
+                />
               ))}
             </TabList>
           </AppBarCom>

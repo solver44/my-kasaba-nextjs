@@ -38,9 +38,17 @@
       border-color: red;
     }
   }
+  &.disabled {
+    .fileInput {
+      background: var(--input-disabled-color) !important;
+      cursor: not-allowed !important;
+    }
+  }
 }
-.cloudIcon {
+.fileActions {
   position: absolute;
+  display: flex;
+  gap: 5px;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);

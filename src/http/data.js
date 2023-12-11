@@ -1,4 +1,5 @@
-import { $axios } from ".";
+import { saveAs } from "file-saver";
+import { $axios, BASE_URL } from ".";
 
 export async function getBKUTID(login, password) {
   try {
@@ -19,6 +20,24 @@ export async function getBKUTData(id) {
     return data;
   } catch (error) {
     return error;
+  }
+}
+
+export async function downloadFile(file, name) {
+  try {
+    const url = `/rest/files?fileRef=${encodeURIComponent(
+      file
+    )}&attachment=false`;
+    const response = await $axios.get(url);
+    console.log(response);
+    const blob = new Blob([response.data], {
+      type: response.headers["Content-Type"],
+    });
+    saveAs(blob, name);
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
 }
 
@@ -52,7 +71,6 @@ export async function getPositions() {
     const { data } = await $axios.get(`/rest/entities/HEmployeePosition`);
 
     return data;
-    
   } catch (error) {
     return error;
   }
@@ -70,7 +88,7 @@ export async function sendDepartment(_data) {
   try {
     const { director, ...data } = _data;
     let resDirector = await getEmployee(director, true);
-    console.log(resDirector)
+    console.log(resDirector);
     const { data: response } = await $axios.post(
       "/rest/entities/EBkutOrganizations",
       data,
@@ -101,7 +119,7 @@ export async function sendEBKUT(data) {
 export async function getEmployee(data, isPost) {
   try {
     let response1;
-    console.log(data.pinfl)
+    console.log(data.pinfl);
     if (data.pinfl) {
       const { data: _data } = await $axios.post(
         "/rest/entities/HIndividual/search",
@@ -147,8 +165,10 @@ export async function getEmployee(data, isPost) {
 
 export async function deleteEmployee(id) {
   try {
-    const data = await $axios.delete("/rest/entities/EOrganizationEmployees/" + id);
-    console.log(data)
+    const data = await $axios.delete(
+      "/rest/entities/EOrganizationEmployees/" + id
+    );
+    console.log(data);
     return getDeleteResponse(data);
   } catch (error) {
     return false;
@@ -177,7 +197,7 @@ export async function sendEmployee(_data, employees = []) {
       isStudent,
       ...data
     } = _data;
-    console.log(data)
+    console.log(data);
     const requestData = {
       id: bkutId,
       employees: [
@@ -224,7 +244,7 @@ export async function sendEmployee(_data, employees = []) {
       ],
     };
     result = await sendEBKUT(requestData);
-    console.log(requestData)
+    console.log(requestData);
 
     return result;
   } catch (error) {
@@ -252,41 +272,33 @@ export async function deleteMember(id) {
 }
 export async function fetchMember(id) {
   try {
-    const { data } = await $axios.get("/rest/entities/EOrganizationEmployees/" + id);
+    const { data } = await $axios.get(
+      "/rest/entities/EOrganizationEmployees/" + id
+    );
 
     return data;
   } catch (error) {
     return error;
   }
 }
-function shouldSendData(success) {
-  return success !== 'false';
-}
 
 // Function to send contracts
-export async function sendContracts(_data) {
+export async function sendContracts(data) {
   try {
-    const { ...data } = _data;
-
-    // Check if data should be sent based on the success flag
-    if (!shouldSendData(data.success)) {
-      return { success: false, message: 'Data not sent as success flag is false' };
-    }
-
     const response = await $axios.post(
-      "/rest/services/application/applyCollectiveAgreements",
+      data?.collectiveAgreements?.statementNo
+        ? "/rest/services/application/returnCollectiveAgreements"
+        : "/rest/services/application/applyCollectiveAgreements",
       data,
       {
         headers: { "Content-Type": "application/json" },
       }
     );
 
-    return response?.id
-      ? { ...response, success: true }
-      : { ...response, success: false };
-    } catch (error) {
-      return error;
-    }
+    return response.data;
+  } catch (error) {
+    return error;
+  }
 }
 export async function sendStatistics(_data) {
   try {
@@ -305,4 +317,3 @@ export async function sendStatistics(_data) {
     return error;
   }
 }
-

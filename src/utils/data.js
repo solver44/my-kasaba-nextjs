@@ -60,7 +60,8 @@ export const POSITIONS = (t) => [
 export function getFIO(obj = {}, isNotEmpty) {
   const firstName = obj.firstName ?? obj.first_name ?? obj.person_name ?? "";
   const lastName = obj.lastName ?? obj.last_name ?? obj.person_surname ?? "";
-  const middleName = obj.middleName ?? obj.middle_name ?? obj.person_patronymic ?? "";
+  const middleName =
+    obj.middleName ?? obj.middle_name ?? obj.person_patronymic ?? "";
   return (
     `${lastName} ${firstName} ${middleName}`.trim() || (isNotEmpty ? "-" : "")
   );
@@ -103,4 +104,26 @@ export function getEmptyValue(obj) {
   }
 
   return undefined;
+}
+
+export function getPresidentBKUT(obj = {}) {
+  if (!obj?.employees?.length) return "";
+  return getFIO(
+    obj.employees.find((employee) => employee.position?.id === 1).individual
+  );
+}
+
+export function getStatusColors(val) {
+  switch (val) {
+    case "INEXECUTION":
+    case "INANALYSIS":
+      return "warning";
+    case "CONFIRMED":
+      return "primary";
+    case "CONSIDERED":
+      return "success";
+    case "TO_CONFIRM":
+    default:
+      return "info";
+  }
 }

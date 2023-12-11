@@ -8,57 +8,34 @@ import { useSelector } from "react-redux";
 export default function OneTI() {
   const viewer2 = useRef(null);
   const { bkutData = {} } = useSelector((states) => states);
-  const [jsonData, setJsonData] = useState(null);
+  const dateObj = new Date();
+  const year = dateObj.getFullYear(); // Extract the year
+  const filteredEmployees = bkutData?.employees
+  ? bkutData.employees
+      .filter((employee) => employee.position?.id === 1)
+      .map((employee) => employee._instanceName)
+  : [];
+  const filteredEmployeesR = bkutData?.employees
+  ? bkutData.employees
+      .filter((employee) => employee.position?.id === 1)
+      .map((employee) => employee.isPensioner)
+  : [];
+  const filteredEmployeesString = filteredEmployeesR.join(", ");
+  const result = filteredEmployeesString === 'false' ? `yo'q` : 'ha';
+
+console.log(filteredEmployees);
+  const jsonData = {
+    CURRENTYEARS: year.toString(),
+    BKUTNAME: bkutData.name,
+    BKUTDIRECTOR: filteredEmployees.join(", "),
+    PHONE: bkutData.phone,
+    ISFIRED: result
+    
+
+  };
 
   useEffect(() => {
     async function initData() {
-      if (!bkutData || !bkutData.employees || !bkutData.statistics) {
-        // Exit early if bkutData is not yet available
-        return;
-      }
-
-      const dateObj = new Date();
-      const year = dateObj.getFullYear();
-      const filteredEmployees = bkutData.employees
-        .filter((employee) => employee.position?.id === 1)
-        .map((employee) => employee._instanceName);
-
-      const filteredEmployeesR = bkutData.employees
-        .filter((employee) => employee.position?.id === 1)
-        .map((employee) => employee.isPensioner);
-
-      const filteredEmployeesString = filteredEmployeesR.join(", ");
-      const result = filteredEmployeesString === 'false' ? `yo'q` : 'ha';
-      const apparatus = bkutData.statistics?.isProvidedPaidApparatus === 'false' ? `yo'q` : 'ha'
-      const tempJsonData = {
-        CURRENTYEARS: year.toString(),
-        BKUTNAME: bkutData.name,
-        BKUTDIRECTOR: filteredEmployees.join(", "),
-        PHONE: bkutData.phone,
-        ISFIRED: result,
-        ISAPPARATUS: apparatus,
-        WORKERSAMOUNT: bkutData.statistics?.workersAmount?.toString(),
-        WORKERSFEMALE:bkutData.statistics?.workersFemale?.toString(),
-        WORKERSADULTS:bkutData.statistics?.workersAdults?.toString(),
-        WORKERSMEMBERS:bkutData.statistics?.workersMembers?.toString(),
-        WORKERSFEMALEMEMBERS:bkutData.statistics?.workersFemaleMembers?.toString(),
-        WORKERSADULTSMEMBERS:bkutData.statistics?.workersAdultsMembers?.toString(),
-        STUDENTSAMOUNT:bkutData.statistics?.studentsAmount?.toString(),
-        STUDENTSFEMALE:bkutData.statistics?.studentsFemale?.toString(),
-        STUDENTSADULTS:bkutData.statistics?.studentsAdults?.toString(),
-        STUDENTSMEMBERS:bkutData.statistics?.studentsMembers?.toString(),
-        STUDENTSFEMALEMEMBERS:bkutData.statistics?.studentsFemaleMembers?.toString(),
-        STUDENTSADULTSMEMBERS:bkutData.statistics?.studentsAdultsMembers?.toString(),
-        PENSIONERAMOUNT:bkutData.statistics?.pensionerAmount?.toString(),
-        STAFFINGAMOUNT:bkutData.statistics?.staffingAmount?.toString(),
-        STAFFINGWORKERSAMOUNT:bkutData.statistics?.staffingWorkersAmount?.toString(),
-        STAFFINGRESPONSIBLEWORKERS:bkutData.statistics?.staffingResponsibleWorkers?.toString(),
-        STAFFINGTECHNICALWORKERS:bkutData.statistics?.staffingTechnicalWorkers?.toString(),
-        // ... other fields
-      };
-
-      setJsonData(tempJsonData); // Update state with JSON data
-
       const WebViewer = await getImportViewer();
 
       const webViewer2 = WebViewer(
@@ -93,5 +70,5 @@ export default function OneTI() {
 }
 
 OneTI.layout = function (Component, t) {
-  return <HomeWrapper title="1TI hisobot shakli">{Component}</HomeWrapper>;
+  return <HomeWrapper title="1T shakli">{Component}</HomeWrapper>;
 };

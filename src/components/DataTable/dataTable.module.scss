@@ -9,13 +9,13 @@
 .paper {
   height: 100%;
 }
-.deleteIcon{
+.deleteIcon {
   font-size: 50px !important;
   margin-top: 20px;
   margin-left: 10px;
   margin-right: -10px;
 }
-.dialogTitle{
+.dialogTitle {
   padding-bottom: 10px;
 }
 .dataTable {
@@ -60,10 +60,25 @@
   width: 100%;
   justify-content: space-between;
 }
-.row{
+.row {
   display: flex;
   flex-wrap: nowrap;
 }
 .tool {
   border-radius: var(--input-radius);
+}
+.statusChip {
+  width: max-content;
+  display: flex;
+  gap: 2px;
+  flex-direction: column;
+  & > :first-child {
+    padding: 0px 10px 0 10px;
+    & > span {
+      font-size: 18px !important;
+    }
+  }
+  & > span {
+    font-size: 14px;
+  }
 }

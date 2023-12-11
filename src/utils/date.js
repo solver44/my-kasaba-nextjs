@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { t } from "i18next";
 
 export function convertToDate(dateString) {
   const [year, month, day] = dateString.split("-").map(Number);
@@ -13,5 +14,27 @@ export function convertToDate(dateString) {
 }
 export function convertStringToFormatted(dateString, withTime) {
   const date = dayjs(dateString);
-  return date.format(withTime ? "DD.MM.YYYY  HH:m:s" : "DD.MM.YYYY");
+  return date.format(withTime ? "DD.MM.YYYY  HH:m" : "DD.MM.YYYY");
+}
+
+function asLocalDate(dateString) {
+  return new Date(dateString);
+}
+export function getRestOfDays(date2, date1) {
+  if (!date1 || !date2) return 0;
+  const localEndDate = asLocalDate(date2);
+  return Math.round((localEndDate - date1) / (1000 * 60 * 60 * 24));
+}
+export function getFormattedWithRestDay(date) {
+  if (!date) return t("no");
+  const formattedDate = convertStringToFormatted(date);
+  const restOfDays = getRestOfDays(date, new Date());
+  const result = `${formattedDate} (${restOfDays} ${t("leave-day")})`;
+  return result;
+}
+
+export function isOutdated(dateString) {
+  if (!dateString) return true;
+  const restOfDays = getRestOfDays(dateString, new Date());
+  return restOfDays <= 0 ? true : false;
 }

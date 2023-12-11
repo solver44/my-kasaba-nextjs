@@ -58,6 +58,11 @@ const menu = [
     title: "1ti",
     path: "/1ti",
   },
+  {
+    icon: LibraryBooks,
+    title: "1jsh-report",
+    path: "/1jsh",
+  },
   // {
   //   icon: LibraryBooks,
   //   title: "reports",

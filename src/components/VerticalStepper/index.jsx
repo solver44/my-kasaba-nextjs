@@ -28,7 +28,7 @@ export default function VerticalStepper({
           type={validation ? "submit" : "button"}
           onClick={validation ? null : onFinish}
         >
-          {t("sent")}
+          {t("send")}
         </LoadingButton>
       )}
     </div>

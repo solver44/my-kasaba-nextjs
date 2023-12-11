@@ -19,6 +19,8 @@
   &.disabled {
     background: var(--input-disabled-color) !important;
     input {
+      color: var(--input-disabled-fcolor) !important;
+      -webkit-text-fill-color: var(--input-disabled-fcolor) !important;
       cursor: not-allowed !important;
     }
     fieldset {
