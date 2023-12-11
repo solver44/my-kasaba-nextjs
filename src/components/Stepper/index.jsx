@@ -171,7 +171,7 @@ export default function LinearStepper({
           {loading ? (
             <CircularProgress size={25} />
           ) : activeStep === steps.length - 1 ? (
-            t("sent")
+            t("send")
           ) : (
             t("next")
           )}

@@ -11,10 +11,12 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useTranslation } from "react-i18next";
 import InputDate from "../InputDate";
 import { UploadRounded } from "@mui/icons-material";
 import dayjs from "dayjs";
+import { downloadFile } from "@/http/data";
 
 function getStyles(currentData, multipleValues = []) {
   const isSelected = !Array.isArray(multipleValues)
@@ -42,6 +44,7 @@ export default function ChangableInput({
   options = [],
   dataSelect = [],
   name,
+  style = {},
   ...props
 }) {
   let value = propValue || undefined;
@@ -87,6 +90,14 @@ export default function ChangableInput({
     onChange(file, name);
   }
 
+  async function openFile(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (value.slice(0, 3) === "fs:") {
+      const result = await downloadFile(value, nameOfFile);
+    }
+  }
+
   const multipleValues = Object.keys(propValue ?? {}).filter(
     (p) => propValue[p]
   );
@@ -95,7 +106,7 @@ export default function ChangableInput({
     typeof invalid === "string" ? validationError : "invalid-input";
 
   return (
-    <div className={styles.wrapper}>
+    <div style={style} className={styles.wrapper}>
       <label className={styles.label}>
         {label}
         {required ? <span className="red"> *</span> : ""}
@@ -217,19 +228,24 @@ export default function ChangableInput({
           className={[
             styles.fileInputLabel,
             invalid ? styles.invalid : "",
+            props.disabled ? styles.disabled : "",
           ].join(" ")}
         >
           <input
             type="file"
-            accept="*/*"
+            disabled={props.disabled}
+            accept=".doc, .docx, .pdf"
             style={{ display: "none" }}
             onChange={handleFileInputChange}
           />
           <div className={styles.fileInput}>{fileName || nameOfFile}</div>
-          <UploadRounded
-            style={{ cursor: "pointer" }}
-            className={styles.cloudIcon}
-          />
+          <div className={styles.fileActions}>
+            <VisibilityIcon
+              onClick={(e) => openFile(e)}
+              style={{ cursor: "pointer" }}
+            />
+            {!props.disabled && <UploadRounded style={{ cursor: "pointer" }} />}
+          </div>
           {invalid && (
             <div className={styles.invalid_title}>{t("invalid-input")}</div>
           )}

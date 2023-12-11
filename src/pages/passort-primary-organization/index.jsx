@@ -20,7 +20,7 @@ import { LoadingButton } from "@mui/lab";
 import useActions from "@/hooks/useActions";
 import areEqual from "@/utils/areEqual";
 
-async function parseFile(file) {
+export async function parseFile(file) {
   if (!file) return [null, null];
   const res = await getFile(file);
   return [res, decodeURIComponent(file.split("=")[1]).replace(/\+/g, " ")];
@@ -44,10 +44,10 @@ export default function PassortPrimaryOrganization() {
   });
 
   const filteredEmployees = bkutData?.employees
-  ? bkutData.employees
-      .filter((employee) => employee.position?.id === 1)
-      .map((employee) => employee._instanceName)
-  : [];
+    ? bkutData.employees
+        .filter((employee) => employee.position?.id === 1)
+        .map((employee) => employee._instanceName)
+    : [];
 
   useEffect(() => {
     const fetchData = async () => {

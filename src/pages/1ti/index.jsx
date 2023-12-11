@@ -11,27 +11,25 @@ export default function OneTI() {
   const dateObj = new Date();
   const year = dateObj.getFullYear(); // Extract the year
   const filteredEmployees = bkutData?.employees
-  ? bkutData.employees
-      .filter((employee) => employee.position?.id === 1)
-      .map((employee) => employee._instanceName)
-  : [];
+    ? bkutData.employees
+        .filter((employee) => employee.position?.id === 1)
+        .map((employee) => employee._instanceName)
+    : [];
   const filteredEmployeesR = bkutData?.employees
-  ? bkutData.employees
-      .filter((employee) => employee.position?.id === 1)
-      .map((employee) => employee.isPensioner)
-  : [];
+    ? bkutData.employees
+        .filter((employee) => employee.position?.id === 1)
+        .map((employee) => employee.isPensioner)
+    : [];
   const filteredEmployeesString = filteredEmployeesR.join(", ");
-  const result = filteredEmployeesString === 'false' ? `yo'q` : 'ha';
+  const result = filteredEmployeesString === "false" ? `yo'q` : "ha";
 
-console.log(filteredEmployees);
+  console.log(filteredEmployees);
   const jsonData = {
     CURRENTYEARS: year.toString(),
     BKUTNAME: bkutData.name,
     BKUTDIRECTOR: filteredEmployees.join(", "),
     PHONE: bkutData.phone,
-    ISFIRED: result
-    
-
+    ISFIRED: result,
   };
 
   useEffect(() => {
@@ -67,5 +65,5 @@ console.log(filteredEmployees);
 }
 
 OneTI.layout = function (Component, t) {
-  return <HomeWrapper title="1T shakli">{Component}</HomeWrapper>;
+  return <HomeWrapper title="1T hisoboti">{Component}</HomeWrapper>;
 };

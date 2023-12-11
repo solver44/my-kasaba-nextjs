@@ -14,6 +14,7 @@ function ModalUI({
   onChanged,
   isForm,
   handleClose,
+  dataModal,
   modalWidth,
   loading,
   title,
@@ -93,20 +94,21 @@ function ModalUI({
                     onClose,
                     isView,
                     isChanged,
-                    currentData
+                    currentData,
+                    dataModal
                   )}
                 </div>
               ) : (
-                 <div className={[styles.bottom, styles.row].join(" ")}>
+                <div className={[styles.bottom, styles.row].join(" ")}>
                   {hideBtn === false ? (
-                  <Button
-                    onClick={isForm ? handleSubmit : onSubmit}
-                    variant="contained"
-                    disabled={!isChanged}
-                  >
-                    {t("save")}
-                  </Button>
-                ) : null}
+                    <Button
+                      onClick={isForm ? handleSubmit : onSubmit}
+                      variant="contained"
+                      disabled={!isChanged}
+                    >
+                      {t("save")}
+                    </Button>
+                  ) : null}
                   <Button onClick={onClose}>{t("close")}</Button>
                 </div>
               )}

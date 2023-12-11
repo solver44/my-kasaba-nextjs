@@ -1,10 +1,10 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import styles from "./dataTable.module.scss";
 import BigButton from "../BigButton";
-import AddIcon from "@mui/icons-material/Add";
 import { useTranslation } from "react-i18next";
 import PrintIcon from "@mui/icons-material/Print";
 import CustomNoRowsOverlay from "./noRows";
+import AddIcon from "@mui/icons-material/Add";
 import {
   Box,
   Button,
@@ -19,7 +19,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import ModalUI from "../ModalUI";
-import { replaceValuesInArray } from "@/utils/data";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
@@ -38,7 +37,8 @@ import ExportTableForm from "@/utils/exportExcel";
 import ImportTableForm from "@/utils/importExcel";
 import { useSnackbar } from "notistack";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import useAnimation from "@/hooks/useAnimation";
+import { getStatusColors } from "@/utils/data";
+import { convertStringToFormatted } from "@/utils/date";
 
 function DataTable({
   columns = [],
@@ -58,7 +58,7 @@ function DataTable({
   onImportFinished,
   hideExportImport,
   hideFirstButton,
-  showGreenBtn,
+  hideActions,
   hideImport,
   hideDelete,
   hides,
@@ -89,6 +89,9 @@ function DataTable({
   const isChanged = useRef(false);
   const currentRow = useRef();
 
+  const fullModalFunc = (data) =>
+    typeof fullModal === "function" ? fullModal(data) : !!fullModal;
+
   function setRowSelection(func) {
     let value = func;
     if (typeof func === "function") value = func(rowSelectionRef.current);
@@ -117,7 +120,11 @@ function DataTable({
     toggleDeleteDialog();
   };
 
-  function toggleModal(value) {
+  function toggleModal(value, row) {
+    if (row) {
+      handleViewClick(row);
+      return;
+    }
     if (dataModalRef.current) {
       setDataModal();
       dataModalRef.current = null;
@@ -138,7 +145,23 @@ function DataTable({
         accessorKey: column.field,
         header: t(column.headerName),
       };
-      if (column.type === "boolean") {
+      if (column.type === "status") {
+        return {
+          ...temp,
+          Cell: ({ cell }) => {
+            const v = cell.getValue();
+            const val = v?.value || v;
+            const translateKey = t("status." + val);
+            const color = getStatusColors(val);
+            return (
+              <div className={styles.statusChip}>
+                <Chip label={translateKey} size="small" color={color} />
+                {v?.date && <span>{convertStringToFormatted(v.date)}</span>}
+              </div>
+            );
+          },
+        };
+      } else if (column.type === "boolean") {
         return {
           ...temp,
           Cell: ({ cell }) => <Checkbox defaultChecked={cell.getValue()} />,
@@ -257,13 +280,12 @@ function DataTable({
                 )}
               </Box>
               <Box sx={{ display: "flex", gap: "10px" }}>
-                {topButtons && topButtons(selectedRows)}
-                {!hideFirstButton && <BigButton onClick={() => toggleModal()} Icon={AddIcon}>
-                  {t("add")}
-                </BigButton>}
-                {showGreenBtn && <BigButton green={'success'} onClick={() => toggleModal()} Icon={AddIcon}>
-                  {t("projectAdd")}
-                </BigButton>}
+                {topButtons && topButtons(selectedRows, toggleModal)}
+                {!hideFirstButton && (
+                  <BigButton onClick={() => toggleModal()} Icon={AddIcon}>
+                    {t("add")}
+                  </BigButton>
+                )}
               </Box>
             </React.Fragment>
           )}
@@ -276,26 +298,20 @@ function DataTable({
           enablePinning
           enableRowNumbers
           enableStickyHeader
-          
           // enableMultiRowSelection={false}
           // enableRowSelection
           onRowSelectionChange={setRowSelection}
           muiTableBodyRowProps={({ row }) => {
-            const isConfirmed = row.original.status === 'Tasdiqlangan';
-            const isInalasys = row.original.status === `Ko'rib chiqilmoqda`;
             const isSelected = rowSelection[row.id];
-          
             let rowStyles = { cursor: "pointer" };
-          
+
             if (isSelected) {
-              rowStyles = { ...rowStyles, backgroundColor: "var(--row-selected-color) !important" };
-            } else if (isConfirmed) {
-              rowStyles = { ...rowStyles, backgroundColor: '#C3E6CB', };
+              rowStyles = {
+                ...rowStyles,
+                backgroundColor: "var(--row-selected-color) !important",
+              };
             }
-            else if(isInalasys){
-              rowStyles = { ...rowStyles, backgroundColor: "#FFEEBA", };
-            }
-          
+
             return {
               onClick: () => {
                 let isSelected = false;
@@ -371,7 +387,7 @@ function DataTable({
             },
           }}
           // className={[styles.dataTable, min ? styles.mini : ""].join(" ")}
-          enableRowActions
+          enableRowActions={!hideActions}
           renderEmptyRowsFallback={CustomNoRowsOverlay}
           renderRowActions={({ row }) => {
             return (
@@ -379,16 +395,20 @@ function DataTable({
                 <IconButton onClick={() => handleViewClick(row.original)}>
                   <VisibilityIcon />
                 </IconButton>
-                {!hideDelete &&<IconButton onClick={() => handleDeleteClick(row.original)}>
-                  <DeleteIcon />
-                </IconButton>}
+                {!hideDelete && (
+                  <IconButton onClick={() => handleDeleteClick(row.original)}>
+                    <DeleteIcon />
+                  </IconButton>
+                )}
               </Box>
             );
           }}
         />
       </div>
       <ModalUI
-        onSubmit={(data) => onSubmitModal(data, forceCloseModal, !!dataModal)}
+        onSubmit={(data) =>
+          onSubmitModal(data, forceCloseModal, !!dataModal, dataModal)
+        }
         onChanged={(_isChanged, data) => {
           if (onChangedModal) onChangedModal(data);
           isChanged.current = _isChanged;
@@ -396,11 +416,12 @@ function DataTable({
         bkutData={bkutData}
         isForm={isFormModal}
         open={show}
-        full={fullModal}
+        full={fullModalFunc(dataModal)}
         title={title}
         loading={loading}
         modalWidth={modalWidth}
         isView={!!dataModal}
+        dataModal={dataModal}
         bottomModal={bottomModal}
         handleClose={closeModal}
         hideBtn={hides}

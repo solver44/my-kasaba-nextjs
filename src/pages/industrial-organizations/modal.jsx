@@ -13,7 +13,7 @@ import Tabs from "@/components/Tabs";
 import { convertStringToFormatted } from "@/utils/date";
 import DownloadLink from "@/components/DownloadLink";
 import AllEmployeesDT from "../members/allEmployeesDataTable";
-import InDataTable from "../team-contracts/allTeam";
+import JSHDataTable from "../team-contracts/dataTable";
 
 export default function ViewModal({ isOpen, handleClose }) {
   const { t } = useTranslation();
@@ -159,7 +159,7 @@ export default function ViewModal({ isOpen, handleClose }) {
               ),
             },
             { label: "organization.statistic", children: <StatDataTable /> },
-            { label: "teamContracts", children: <InDataTable/> },
+            { label: "teamContracts", children: <JSHDataTable/> },
           ]}
         />
       </div>

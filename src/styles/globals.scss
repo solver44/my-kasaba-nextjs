@@ -22,7 +22,8 @@
   --input-inside-font-size: 18px;
   --input-font-weight: 500;
   --input-incolor: white;
-  --input-disabled-color: rgba(0, 0, 0, 0.03);
+  --input-disabled-color: rgba(0, 0, 0, 0.02);
+  --input-disabled-fcolor: rgba(0, 0, 0, 0.7);
 
   --table-font-size: 20px;
   --table-row-font-size: 18px;
@@ -69,6 +70,7 @@ body {
 .tab-main {
   button {
     font-size: 18px;
+    min-height: 50px;
   }
 }
 .row {

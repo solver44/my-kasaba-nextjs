@@ -1,7 +1,8 @@
 import TOKENS from "@/utils/config";
 import { readJSONFile } from "@/utils/jsonUtils";
 import axios from "axios";
-export const BASE_URL = "http://test.kasaba.uz:8000";
+// export const BASE_URL = "http://test.kasaba.uz:8000";
+export const BASE_URL = "http://localhost:8000";
 
 const config = {
   headers: {
@@ -51,7 +52,10 @@ $axios.interceptors.response.use(
 
         // Retry the original request with the updated token
         // return $axios.request(error.config); // Use $axios to make the request
-        // window.location.reload();
+        window.clearTimeout(globalThis.relTimeout);
+        globalThis.relTimeout = window.setTimeout(() => {
+          window.location.reload();
+        }, 500);
       } catch (refreshError) {
         throw refreshError;
       }

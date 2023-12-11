@@ -52,6 +52,14 @@ const MyApp = ({ Component, pageProps, tokens }) => {
           async
           defer
         ></script>
+        <script
+          type="text/javascript"
+          src="https://unpkg.com/jszip/dist/jszip.min.js"
+        ></script>
+        <script src="/js/docx-preview.js"></script>
+        <script src="/js/docxtemplater.js"></script>
+        <script src="/js/pizzip.js"></script>
+        <script src="/js/pizzip-utils.js"></script>
         <link rel="shortcut icon" href="/icon.png" />
       </Head>
       <SnackbarProvider

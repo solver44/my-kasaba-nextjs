@@ -13,17 +13,15 @@ function FormValidation({
   const methods = useForm();
   const initialData = useRef();
   const timeOut = useRef();
-  // methods.watch((d) => {
-  //   clearTimeout(timeOut.current);
-  //   timeOut.current = setTimeout(() => {
-  //     if (Object.keys(d).length < 1) return;
-  //     onChanged && onChanged(d);
-  //   }, 40);
-  // });
+  const useEffectTimeOut = useRef();
+
   useEffect(() => {
     let unsubscribe = () => {};
-    setTimeout(() => {
+    clearTimeout(useEffectTimeOut.current);
+    useEffectTimeOut.current = setTimeout(() => {
       initialData.current = methods.getValues();
+      if(Object.keys(initialData.current).length < 1) return;
+      onChanged && onChanged(initialData.current, initialData.current);
       const { unsubscribe: un } = methods.watch((d) => {
         clearTimeout(timeOut.current);
         timeOut.current = setTimeout(() => {
@@ -31,7 +29,7 @@ function FormValidation({
         }, 40);
       });
       unsubscribe = un;
-    }, 100);
+    }, 500);
     return () => unsubscribe();
   }, [methods.watch]);
 

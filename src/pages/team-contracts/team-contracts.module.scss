@@ -1,9 +1,26 @@
-.containers{
-    width: 100%;
-    margin-top: 30px;
+.containers {
+  width: 100%;
+  margin-top: 30px;
 }
 .confirmed-row {
-    background-color: green; /* Change background color to green for confirmed rows */
-    color: white; /* Set text color to white or any other color for better visibility */
-    /* Add any other desired styles */
-  }
+  background-color: green; /* Change background color to green for confirmed rows */
+  color: white; /* Set text color to white or any other color for better visibility */
+  /* Add any other desired styles */
+}
+.row {
+  display: flex;
+  gap: 10px;
+}
+.experts {
+  display: flex;
+  flex-direction: column;
+}
+.label {
+  font-size: var(--input-font-size);
+  color: var(--input-color);
+  font-weight: var(--input-font-weight);
+}
+.expertFIO {
+  font-size: 18px;
+  text-decoration: underline;
+}

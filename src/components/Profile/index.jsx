@@ -4,7 +4,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import { getFIO } from "@/utils/data";
+import { getFIO, getPresidentBKUT } from "@/utils/data";
 
 export default function Profile({ img, collapsed, imgOnly, mini }) {
   const { t } = useTranslation();
@@ -38,7 +38,8 @@ export default function Profile({ img, collapsed, imgOnly, mini }) {
       )}
       <div className={styles.col}>
         <p className={styles.title}>
-          {getFIO(bkutData?.application?.passport)}
+          {getFIO(bkutData?.application?.passport) ||
+            getPresidentBKUT(bkutData)}
         </p>
         <p
           className={[
