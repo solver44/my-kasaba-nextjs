@@ -69,6 +69,10 @@ export default function InDataTable({ filter }) {
       headerName: t("team-contracts.status"),
       type: "status",
     },
+    {
+      field: "contractEndDate",
+      headerName: t("team-contracts.contractEndDate"),
+    },
   ];
 
   useEffect(() => {
@@ -105,6 +109,10 @@ export default function InDataTable({ filter }) {
           status: { value: e.status, date },
           contractDate: e.approvedDate,
           statementNumber: e.statementNo,
+          contractEndDate:
+            e?.status === "CONFIRMED"
+              ? getFormattedWithRestDay(e.contractEndDate)
+              : "",
           expertizeDate: isConsidered
             ? convertStringToFormatted(e.expertizeCompleteDate)
             : getFormattedWithRestDay(e.expertizeEndDate),
