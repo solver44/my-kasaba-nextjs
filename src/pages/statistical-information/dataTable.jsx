@@ -75,7 +75,7 @@ export default function InDataTable() {
   async function sendData(forms, hideModal) {
     const requestData = {
       bkut: {
-        id: "",
+        id: bkutData.id,
       },
       workersAdults: forms.workersAdults,
       workersFemale: forms.workersFemale,
@@ -107,7 +107,13 @@ export default function InDataTable() {
       workersFemaleMembers: forms.workersFemaleMembers,
       workersAdultsMembers: forms.workersAdultsMembers,
       staffingAmount: forms.staffingAmount,
-      isProvidedPrivateRoom: forms.isProvidedPrivateRoom
+      isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
+      isProvidedPC: forms.isProvidedPC,
+      isProvidedInternet: forms.isProvidedInternet,
+      isProvidedPaidApparatus: forms.isProvidedPaidApparatus,
+      isFiredFromMainJob: forms.isFiredFromMainJob,
+      isCollegialPresident: forms.isCollegialPresident,
+      isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
     };
     const response = await sendStatistics(requestData);
     if (response?.success) {
@@ -175,17 +181,23 @@ function ModalUI({ hideModal, data }) {
     workersFemaleMembers: "",
     workersAdultsMembers: "",
     staffingAmount:"",
+    isProvidedPC: false,
+    isProvidedInternet: false,
+    isProvidedPaidApparatus: false,
+    isFiredFromMainJob: false,
+    isCollegialPresident: false,
+    isProvidedPrivateRoom: false,
   });
   const { t } = useTranslation();
   const { tin } = data;
 
   const radioData = [
     {
-      value: "1",
+      value: 'true',
       label: t("yes"),
     },
     {
-      value: "0",
+      value: 'false',
       label: t("no"),
     },
   ];
@@ -217,275 +229,317 @@ function ModalUI({ hideModal, data }) {
         workersFemaleMembers: data.workersFemaleMembers,
         workersAdultsMembers: data.workersAdultsMembers,
         staffingAmount:data.staffingAmount,
+        isProvidedPC: data.isProvidedPC,
+        isProvidedInternet: data.isProvidedInternet,
+        isProvidedPaidApparatus: data.isProvidedPaidApparatus,
+        isFiredFromMainJob: data.isFiredFromMainJob,
+        isCollegialPresident: data.isCollegialPresident,
+        isProvidedPrivateRoom: data.isProvidedPrivateRoom,
       }));
     };
     fetchData();
   }, [data]);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
   return (
     <div className="modal-content">
-      <FormInput
-        name="enterDate"
-        required
-        date
-        label={t("statistical-information.signDate")}
-      />
-      <div className="modal-row">
-        <Group title={t("statistical-information.group1")}>
+         {/* <FormInput
+          name="enterDate"
+          required
+          date
+          label={t("statistical-information.signDate")}
+        /> */}
+        <div className="modal-row">
+          <Group title={t("statistical-information.group1")}>
+            <div datatype="list">
+              <FormInput
+                name="workersAmount"
+                required
+                value={values.workersAmount}
+                type="number"
+                label={t("statistical-information.all")}
+                onChange={handleInputChange}
+              />
+              <FormInput
+                name="workersFemale"
+                required
+                value={values.workersFemale}
+                type="number"
+                label={t("statistical-information.women")}
+                onChange={handleInputChange}
+              />
+              <FormInput
+                name="workersAdults"
+                required
+                value={values.workersAdults}
+                type="number"
+                label={t("statistical-information.adults")}
+                onChange={handleInputChange}
+              />
+            </div>
+          </Group>
+          
+          <Group title={t("statistical-information.group2")}>
+            <div datatype="list">
+              <FormInput
+                name="workersMembers"
+                required
+                value={values.workersMembers}
+                type="number"
+                label={t("statistical-information.all")}
+                onChange={handleInputChange}
+              />
+              <FormInput
+                name="workersFemaleMembers"
+                required
+                value={values.workersFemaleMembers}
+                type="number"
+                label={t("statistical-information.women")}
+                onChange={handleInputChange}
+              />
+              <FormInput
+                name="workersAdultsMembers"
+                required
+                value={values.workersAdultsMembers}
+                type="number"
+                label={t("statistical-information.adults")}
+                onChange={handleInputChange}
+              />
+            </div>
+          </Group>
+        </div>
+        <div className="modal-row">
+          <Group title={t("statistical-information.group3")}>
+            <div datatype="list">
+              <FormInput
+                name="studentsAmount"
+                required
+                value={values.studentsAmount}
+                type="number"
+                label={t("statistical-information.all")}
+                onChange={handleInputChange}
+              />
+              <FormInput
+                name="studentsFemale"
+                required
+                value={values.studentsFemale}
+                type="number"
+                label={t("statistical-information.women")}
+                onChange={handleInputChange}
+              />
+              <FormInput
+                name="studentsAdults"
+                required
+                value={values.studentsAdults}
+                type="number"
+                label={t("statistical-information.adults")}
+                onChange={handleInputChange}
+              />
+            </div>
+          </Group>
+          <Group title={t("statistical-information.group2")}>
+            <div datatype="list">
+              <FormInput
+                name="studentsMembers"
+                required
+                value={values.studentsMembers}
+                type="number"
+                label={t("statistical-information.all")}
+                onChange={handleInputChange}
+              />
+              <FormInput
+                name="studentsFemaleMembers"
+                required
+                value={values.studentsFemaleMembers}
+                type="number"
+                label={t("statistical-information.women")}v
+                onChange={handleInputChange}
+              />
+              <FormInput
+                name="studentsAdultsMembers"
+                required
+                value={values.studentsAdultsMembers}
+                type="number"
+                label={t("statistical-information.adults")}
+                onChange={handleInputChange}
+              />
+            </div>
+          </Group>
+        </div>
+  
+        <Group title={t("statistical-information.group4")}>
           <div datatype="list">
             <FormInput
-              name="workersAmount"
-              
+              name="pensionerAmount"
               required
-              value={values.workersAmount}
+              value={values.pensionerAmount}
               type="number"
               label={t("statistical-information.all")}
-            />
-            <FormInput
-              name="workersFemale"
-              required
-              value={values.workersFemale}
-              type="number"
-              label={t("statistical-information.women")}
-            />
-            <FormInput
-              name="workersAdults"
-              required
-              value={values.workersAdults}
-              type="number"
-              label={t("statistical-information.adults")}
+              onChange={handleInputChange}
             />
           </div>
         </Group>
-        
-        <Group title={t("statistical-information.group2")}>
+        <div className="modal-row">
+          <Group title={t("statistical-information.group5")}>
+            <div datatype="list">
+              <FormInput
+                name="homemakerAmount"
+                required
+                value={values.homemakerAmount}
+                type="number"
+                label={t("statistical-information.all")}
+                onChange={handleInputChange}
+              />
+            </div>
+          </Group>
+          <Group title={t("statistical-information.group6")}>
+            <div datatype="list">
+              <FormInput
+                name="invalidAmount"
+                required
+                value={values.invalidAmount}
+                type="number"
+                label={t("statistical-information.all")}
+                onChange={handleInputChange}
+              />
+            </div>
+          </Group>
+        </div>
+        <Group title={t("statistical-information.group7")}>
           <div datatype="list">
             <FormInput
-              name="workersMembers"
+              name="staffingAmount"
               required
-              value={values.workersMembers}
+              value={values.staffingAmount}
               type="number"
-              label={t("statistical-information.all")}
+              label={t("statistical-information.input1")}
+              onChange={handleInputChange}
             />
             <FormInput
-              name="workersFemaleMembers"
+              name="staffingResponsibleWorkers"
               required
-              value={values.workersFemaleMembers}
+              value={values.staffingWorkersAmount}
               type="number"
-              label={t("statistical-information.women")}
+              label={t("statistical-information.input2")}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div datatype="list">
+            <FormInput
+              name="staffingResponsibleWorkers"
+              required
+              value={values.staffingResponsibleWorkers}
+              type="number"
+              label={t("statistical-information.input3")}
+              onChange={handleInputChange}
             />
             <FormInput
-              name="workersAdultsMembers"
+              name="staffingTechnicalWorkers"
               required
-              value={values.workersAdultsMembers}
+              value={values.staffingTechnicalWorkers}
               type="number"
-              label={t("statistical-information.adults")}
+              label={t("statistical-information.input4")}
+              onChange={handleInputChange}
             />
+          </div>
+        </Group>
+        <Group title={t("statistical-information.group8")}>
+          <div datatype="list">
+            <FormInput
+              name="salaryByAgreements"
+              required
+              value={values.salaryByAgreements}
+              type="number"
+              label={t("statistical-information.input5")}
+              onChange={handleInputChange}
+            />
+            <FormInput
+              name="spentAmount"
+              required
+              value={values.spentAmount}
+              type="number"
+              label={t("statistical-information.input6")}
+              onChange={handleInputChange}
+            />
+            <FormInput
+              name="newMemebersAmount"
+              required
+              value={values.newMemebersAmount}
+              type="number"
+              label={t("statistical-information.input7")}
+              onChange={handleInputChange}
+            />
+            <FormInput
+              name="firedMembersAmount"
+              required
+              value={values.firedMembersAmount}
+              type="number"
+              label={t("statistical-information.input8")}
+              onChange={handleInputChange}
+            />
+            <FormInput
+              name="membersProvidedTicket"
+              required
+              value={values.membersProvidedTicket}
+              type="number"
+              label={t("statistical-information.input9")}
+              onChange={handleInputChange}
+            />
+            <div style={{ marginTop: 20 }} className="modal-row radio">
+              <RadioGroup
+                value={values.isProvidedPrivateRoom}
+                name="isProvidedPrivateRoom"
+                label={t("statistical-information.input10")}
+                onChange={handleInputChange}
+                data={radioData}
+              />
+              <RadioGroup
+                value={values.isProvidedPC}
+                name="isProvidedPC"
+                label={t("statistical-information.input11")}
+                data={radioData}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="modal-row radio">
+              <RadioGroup
+                value={values.isProvidedInternet}
+                name="isProvidedInternet"
+                label={t("statistical-information.input12")}
+                data={radioData}
+                onChange={handleInputChange}
+              />
+              <RadioGroup
+                value={values.isCollegialPresident}
+                name="isCollegialPresident"
+                label={t("statistical-information.input13")}
+                data={radioData}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="modal-row radio">
+              <RadioGroup
+                value={values.isFiredFromMainJob}
+                name="isFiredFromMainJob"
+                label={t("statistical-information.input14")}
+                data={radioData}
+                onChange={handleInputChange}
+              />
+              <RadioGroup
+                value={values.isProvidedPaidApparatus}
+                name="isProvidedPaidApparatus"
+                label={t("statistical-information.input15")}
+                data={radioData}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
         </Group>
       </div>
-      <div className="modal-row">
-        <Group title={t("statistical-information.group3")}>
-          <div datatype="list">
-            <FormInput
-              name="studentsAmount"
-              required
-              value={values.studentsAmount}
-              type="number"
-              label={t("statistical-information.all")}
-            />
-            <FormInput
-              name="studentsFemale"
-              required
-              value={values.studentsFemale}
-              type="number"
-              label={t("statistical-information.women")}
-            />
-            <FormInput
-              name="studentsAdults"
-              required
-              value={values.studentsAdults}
-              type="number"
-              label={t("statistical-information.adults")}
-            />
-          </div>
-        </Group>
-        <Group title={t("statistical-information.group2")}>
-          <div datatype="list">
-            <FormInput
-              name="studentsMembers"
-              required
-              value={values.studentsMembers}
-              type="number"
-              label={t("statistical-information.all")}
-            />
-            <FormInput
-              name="studentsFemaleMembers"
-              required
-              value={values.studentsFemaleMembers}
-              type="number"
-              label={t("statistical-information.women")}
-            />
-            <FormInput
-              name="studentsAdultsMembers"
-              required
-              value={values.studentsAdultsMembers}
-              type="number"
-              label={t("statistical-information.adults")}
-            />
-          </div>
-        </Group>
-      </div>
-
-      <Group title={t("statistical-information.group4")}>
-        <div datatype="list">
-          <FormInput
-            name="pensionerAmount"
-            required
-            value={values.pensionerAmount}
-            type="number"
-            label={t("statistical-information.all")}
-          />
-        </div>
-      </Group>
-      <div className="modal-row">
-        <Group title={t("statistical-information.group5")}>
-          <div datatype="list">
-            <FormInput
-              name="homemakerAmount"
-              required
-              value={values.homemakerAmount}
-              type="number"
-              label={t("statistical-information.all")}
-            />
-          </div>
-        </Group>
-        <Group title={t("statistical-information.group6")}>
-          <div datatype="list">
-            <FormInput
-              name="invalidAmount"
-              required
-              value={values.invalidAmount}
-              type="number"
-              label={t("statistical-information.all")}
-            />
-          </div>
-        </Group>
-      </div>
-      <Group title={t("statistical-information.group7")}>
-        <div datatype="list">
-          <FormInput
-            name="staffingAmount"
-            required
-            value={values.staffingAmount}
-            type="number"
-            label={t("statistical-information.input1")}
-          />
-          <FormInput
-            name="staffingResponsibleWorkers"
-            required
-            value={values.staffingResponsibleWorkers}
-            type="number"
-            label={t("statistical-information.input2")}
-          />
-        </div>
-        <div datatype="list">
-          <FormInput
-            name="group7-3"
-            required
-            value="0"
-            type="number"
-            label={t("statistical-information.input3")}
-          />
-          <FormInput
-            name="group7-4"
-            required
-            value="0"
-            type="number"
-            label={t("statistical-information.input4")}
-          />
-        </div>
-      </Group>
-      <Group title={t("statistical-information.group8")}>
-        <div datatype="list">
-          <FormInput
-            name="group8-1"
-            required
-            value="0"
-            type="number"
-            label={t("statistical-information.input5")}
-          />
-          <FormInput
-            name="group8-2"
-            required
-            value="0"
-            type="number"
-            label={t("statistical-information.input6")}
-          />
-          <FormInput
-            name="group8-3"
-            required
-            value="0"
-            type="number"
-            label={t("statistical-information.input7")}
-          />
-          <FormInput
-            name="group8-4"
-            required
-            value="0"
-            type="number"
-            label={t("statistical-information.input8")}
-          />
-          <FormInput
-            name="group8-5"
-            required
-            value="0"
-            type="number"
-            label={t("statistical-information.input9")}
-          />
-          <div style={{ marginTop: 20 }} className="modal-row radio">
-            <RadioGroup
-              value={0}
-              name="group8-6"
-              label={t("statistical-information.input10")}
-              data={radioData}
-            />
-            <RadioGroup
-              value={0}
-              name="group8-7"
-              label={t("statistical-information.input11")}
-              data={radioData}
-            />
-          </div>
-          <div className="modal-row radio">
-            <RadioGroup
-              value={0}
-              name="group8-8"
-              label={t("statistical-information.input12")}
-              data={radioData}
-            />
-            <RadioGroup
-              value={0}
-              name="group8-9"
-              label={t("statistical-information.input13")}
-              data={radioData}
-            />
-          </div>
-          <div className="modal-row radio">
-            <RadioGroup
-              value={0}
-              name="group8-10"
-              label={t("statistical-information.input14")}
-              data={radioData}
-            />
-            <RadioGroup
-              value={0}
-              name="group8-11"
-              label={t("statistical-information.input15")}
-              data={radioData}
-            />
-          </div>
-        </div>
-      </Group>
-    </div>
   );
 }
