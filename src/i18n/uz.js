@@ -259,8 +259,8 @@ export default {
     province: "Viloyat",
     district: "Tuman",
     address: "Manzil",
-    isFired: "Xodim asosiy ishidan ozod etilganmi?",
-    isKasabaActive: "Kasaba uyushmasi qo'mitasi xodimi?",
+    isFired: "Xodim asosiy ishidan ozod etilgan",
+    isKasabaActive: "Kasaba uyushmasi qo'mitasi xodimi",
     "senior-organization": "Yuqori turuvchi tashkilot",
     all: "Barchasi",
     bkutEmployee: "Boshlang'ich tashkilot xodimi",
@@ -337,7 +337,7 @@ export default {
     add: "Qo'shish",
     projectAdd: "Loyiha kiritish",
     fio: "F.I.O.",
-    isMember: "Kasaba uyushmasiga a'zomi?",
+    isMember: "Kasaba uyushmasiga a'zo",
     employment: "Bandligi",
     gender: "Jinsi",
     man: "Erkak",
@@ -367,6 +367,7 @@ export default {
     "error-auth": "Login yoki parol topilmadi.",
     "fetch-error":
       "Ma'lumotlarni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
+    "fetch-error1": "Ma'lumotlarni yuklashda xatolik mavjud.",
     "stir-not-found": "Kiritilgan STIR tizimdan topilmadi.",
     "pinfl-not-found": "Kiritilgan PINFL yoki pasport berilgan sana topilmadi.",
     "upload-file-error":
@@ -382,6 +383,8 @@ export default {
     "not-found": "Yo'q",
     "application-exists": "Ushbu STIR orqali allaqachon murojaat yuborilgan.",
     "main-info": "Asosiy ma'lumotlar",
+    "error-generate-ticket":
+      "A'zolik biletini shakllantirishda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "send-data-error":
       "Ma'lumotlarni yuborishda xatolik mavjud. Iltimos keyinroq qayta urinib ko'ring.",
     "recaptcha-error": "Iltimos, reCAPTCHA tekshiruvini yakunlang.",
@@ -389,7 +392,7 @@ export default {
     "bkut-exists": "Ushbu STIR orqali avval tashkilot ro'yhatdan o'tkazilgan.",
     "application-exists": "Ushbu STIR orqali allaqachon murojaat yuborilgan.",
     "pinfl-fetch-error":
-      "Ma'lumotlarni yuklashda xatolik mavjud. Iltimos qayta urinib ko'ring.",
+      "Ma'lumotlarni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     isStudent: "Talaba",
     isPensioner: "Ishlamaydigan pensioner",
     isHomemaker: "Kasanachi",
@@ -454,7 +457,6 @@ export default {
     considired: "Ko'rib chiqilgan",
     confirmed: "Tasdiqlangan",
     "1jsh-report": "1JSH hisoboti",
-    no: "yo'q",
     "to-register": "Ro'yhatdan o'tkazish",
     "leave-day": "kun qoldi",
     "status-label": "Holati",

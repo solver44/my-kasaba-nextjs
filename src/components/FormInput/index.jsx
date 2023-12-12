@@ -8,6 +8,7 @@ export default function FormInput({
   name,
   onChange,
   value,
+  hidden,
   invalid,
   ...props
 }) {
@@ -33,6 +34,8 @@ export default function FormInput({
     if (onChange) onChange(e, name);
     if (field.onChange) field.onChange(e, name);
   }
+
+  if (hidden) return null;
 
   return (
     <ChangableInput

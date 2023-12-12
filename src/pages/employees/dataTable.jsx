@@ -14,7 +14,6 @@ import {
   splitFIO,
 } from "@/utils/data";
 import { useSelector } from "react-redux";
-import { deleteMember, sendMember } from "@/http/data";
 import CheckBoxGroup from "@/components/CheckBoxGroup";
 import useActions from "@/hooks/useActions";
 import { showYesNoDialog } from "@/utils/dialog";
@@ -27,15 +26,21 @@ import SimpleDialog from "@/components/SimpleDialog";
 import QRCode from "react-qr-code";
 import { convertStringToFormatted } from "@/utils/date";
 import { i18n } from "../../../next.config";
+import RadioGroup from "@/components/RadioGroup";
+import {
+  deleteEmployee,
+  generateTicketMember,
+  sendEmployee,
+} from "@/http/employees";
 
-export default function InDataTable() {
+export default function InDataTable({ filter }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
-  const [qrURL, setQRURL] = useState("");
-  const [isZoomQR, setIsZoomQR] = useState(false);
-  const [ticketCreated, setTickedCreated] = useState(false);
+  const [zoomQRURL, setZoomQRURL] = useState(false);
   const [ticketLoading, setTicketLoading] = useState(false);
   const { bkutData = {} } = useSelector((states) => states);
+  const qrURL = useRef("");
+  const ticketCreated = useRef(false);
   const bkutDataRef = useRef(bkutData);
   const { enqueueSnackbar } = useSnackbar();
   const actions = useActions();
@@ -75,11 +80,12 @@ export default function InDataTable() {
   }
 
   useEffect(() => {
+    bkutDataRef.current = bkutData;
     if (!bkutData?.employees?.length) return;
     setRows(
-      bkutData?.employees.map((e) => {
+      bkutData.employees.filter(filter ? filter : () => true).map((e) => {
         return {
-          id: e?.individual?.id,
+          id: e?.id,
           fio: getFIO(e.individual),
           signDate: e.memberJoinDate,
           employment: getEmployeement(e),
@@ -91,77 +97,54 @@ export default function InDataTable() {
       })
     );
   }, [bkutData]);
-  async function onSubmitModal(forms, hideModal, isView) {
+  async function onSubmitModal(forms, hideModal, isView, _dataModal) {
+    const {
+      createdDate,
+      lastModifiedDate,
+      _entityName,
+      _instanceName,
+      ...dataModal
+    } = _dataModal;
     if (
       !isView &&
-      (bkutData?.members ?? []).find((e) => e.member.pinfl == forms.pinfl)
+      (bkutData?.employees ?? []).find((e) => e.individual.pinfl == forms.pinfl)
     ) {
       showYesNoDialog(
         t("rewrite-pinfl-member"),
-        () => sendData(forms, hideModal, true),
+        () => sendData({ forms, dataModal }, hideModal, true),
         () => {},
         t
       );
       return;
     }
-    sendData(forms, hideModal, isView);
+    sendData({ forms, dataModal }, hideModal, isView);
   }
 
-  async function sendData(forms, hideModal, isView, noAlert = false) {
+  async function sendData(_data, hideModal, isView, noAlert = false) {
     const bkutData = bkutDataRef.current;
-    const members = (bkutData.employees ?? [])
-      .filter((e) => e.individual.pinfl != forms.pinfl)
-      .map((e) => ({
-        ...e,
-        bkut: {
-          id: bkutData.id,
-        },
-        individual: {
-          id: e.pinfl, // Use the pinfl when searching
-          phone: e.phone,
-          email: e.email,
-        },
-        isKasabaActive: false, // Example values, replace with your logic
-        isHomemaker: e.isHomemaker || false,
-        isMember: e.isMember || false,
-        isInvalid: e.isInvalid || false,
-        isPensioner: false, // Example value, replace with your logic
-        isStudent: e.isStudent || false,
-        position: {
-          id: e.position, // Use the lavozim id
-        },
-        memberJoinDate: e.signDate, // Use the join date
-      }));
+
+    const { forms, dataModal } = _data;
     const requestData = {
+      // ...dataModal,
+      id: dataModal.id,
       bkut: {
         id: bkutData.id,
       },
       individual: {
-        id: forms.pinfl, // Use the pinfl when searching
+        ...dataModal.individual,
         phone: forms.phone,
         email: forms.email,
       },
-      isKasabaActive: forms.isKasabaActive || false, // Example values, replace with your logic
-      isHomemaker: forms.isHomemaker || false,
-      isMember: forms.isMember || false,
-      isInvalid: forms.isInvalid || false,
-      isPensioner: false, // Example value, replace with your logic
-      isStudent: forms.isStudent || false,
+      isKasabaActive: forms.isKasabaActive,
+      isMember: forms.isMember,
+      isFired: forms.isFired,
+      ...forms.personInfo,
       position: {
-        id: forms.position, // Use the lavozim id
+        id: forms.position,
       },
-      memberJoinDate: forms.signDate, // Use the join date
+      memberJoinDate: forms.signDate,
     };
-    const fio = splitFIO(forms.fio);
-    const data = {
-      bkutId: requestData.id,
-      pinfl: forms.pinfl,
-      firstName: fio[0],
-      lastName: fio[1],
-      middleName: fio[2],
-      birthDate: forms.birthDate,
-    };
-    const response = await sendMember(requestData, data, members);
+    const response = await sendEmployee(requestData);
     if (response?.success) {
       const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
       setRows((rows) => [
@@ -181,27 +164,24 @@ export default function InDataTable() {
     if (hideModal) hideModal();
   }
 
-  async function generateDoc(_data) {
-    if (ticketCreated) {
-      openBlankURL(qrURL);
+  async function generateTicket(employee) {
+    if (ticketCreated.current) {
+      openBlankURL(qrURL.current);
       return;
     }
     setTicketLoading(true);
     try {
-      const data = bkutData.members.find((m) => m.member.pinfl == _data.pinfl);
-      const director = getFIO(
-        bkutData.employees.find((e) => e.position.id == 1).employee
-      );
-      const query = generateTicketData({
-        ...data,
-        id: "173T112211B-00000",
-        bkutName: bkutData.name,
-        director,
-      });
-      const url = getUrlWithQuery("/ticket/0", { d: query });
-      setQRURL(url);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      setTickedCreated(true);
+      const response = await generateTicketMember(bkutData.id, employee.id);
+      if (!response?.success) {
+        enqueueSnackbar(t("error-generate-ticket"), { variant: "error" });
+        setTicketLoading(false);
+        return;
+      }
+      const queryId = response.code;
+      const url = getUrlWithQuery("/ticket/" + queryId);
+      qrURL.current = url;
+      ticketCreated.current = true;
     } catch (error) {
       console.log(error);
       enqueueSnackbar(t("doc-create-error"), { variant: "error" });
@@ -214,7 +194,7 @@ export default function InDataTable() {
     return data;
   }
   async function deleteRow(id) {
-    const res = await deleteMember(id);
+    const res = await deleteEmployee(id);
     if (res) {
       setRows((rows) => rows.filter((row) => row?.id != id));
       actions.updateData();
@@ -230,13 +210,15 @@ export default function InDataTable() {
 
   return (
     <React.Fragment>
-      <SimpleDialog open={isZoomQR} onClose={() => setIsZoomQR(false)}>
-        <QRCode
-          size={400}
-          value={qrURL}
-          style={{ height: "auto" }}
-          viewBox={`0 0 400 400`}
-        />
+      <SimpleDialog open={!!zoomQRURL} onClose={() => setZoomQRURL(false)}>
+        {zoomQRURL && (
+          <QRCode
+            size={400}
+            value={zoomQRURL}
+            style={{ height: "auto" }}
+            viewBox={`0 0 400 400`}
+          />
+        )}
       </SimpleDialog>
       <DataTable
         fetchData={fetchData}
@@ -251,6 +233,10 @@ export default function InDataTable() {
         loading={ticketLoading}
         modalWidth="80vw"
         bottomModal={(handleSubmit, handleClose, isView, _, data) => {
+          if (data.ticketCode) {
+            ticketCreated.current = true;
+            qrURL.current = getUrlWithQuery("/ticket/" + data.ticketCode);
+          }
           return (
             <div className={styles.bottom} style={{ position: "relative" }}>
               <div className={styles.row}>
@@ -261,22 +247,22 @@ export default function InDataTable() {
               </div>
               {isView && (
                 <LoadingButton
-                  style={ticketCreated ? { marginRight: 130 } : {}}
-                  onClick={() => generateDoc(data)}
+                  style={ticketCreated.current ? { marginRight: 130 } : {}}
+                  onClick={() => generateTicket(data)}
                   loading={ticketLoading}
                   variant="contained"
                   color="success"
                 >
-                  {ticketCreated && (
+                  {ticketCreated.current && (
                     <VisibilityIcon style={{ marginRight: 5 }} />
                   )}
-                  {ticketCreated ? t("showTicket") : t("createDoc")}
+                  {ticketCreated.current ? t("showTicket") : t("createDoc")}
                 </LoadingButton>
               )}
-              {ticketCreated && qrURL && (
+              {ticketCreated.current && qrURL.current && (
                 <React.Fragment>
                   <QRCode
-                    onClick={() => setIsZoomQR(true)}
+                    onClick={() => setZoomQRURL(qrURL.current)}
                     size={100}
                     style={{
                       cursor: "pointer",
@@ -285,7 +271,7 @@ export default function InDataTable() {
                       right: 0,
                       height: "auto",
                     }}
-                    value={qrURL}
+                    value={qrURL.current}
                     viewBox={`0 0 100 100`}
                   />
                 </React.Fragment>
@@ -308,24 +294,28 @@ function ModalUI({ hideModal, data = {} }) {
     birthDate: "",
   });
   const [positions] = useDynamicData({ positions: true });
+  const [isMemberValue, setIsMember] = useState(false);
   const {
     id,
     position,
-    phone,
-    email,
-    member = {},
-    joinDate,
+    individual = {},
+    isFired,
+    isKasabaActive,
+    isMember,
+    memberJoinDate,
     _entityName,
     _instanceName,
     ...inData
   } = data;
+  const phone = individual.phone;
+  const email = individual.email;
 
   useEffect(() => {
-    const FIO = getFIO(data.member);
+    const FIO = getFIO(individual);
     if (!FIO) return;
     setFormData({
       fio: FIO,
-      birthDate: member.birthDate ? dayjs(member.birthDate) : "",
+      birthDate: individual.birthDate ? dayjs(individual.birthDate) : "",
     });
   }, [data]);
 
@@ -337,12 +327,16 @@ function ModalUI({ hideModal, data = {} }) {
       birthDate: dayjs(data.birth_date),
     });
   }
+
   return (
     <div className="modal-content">
+      <FormInput hidden name="id" value={data.id} />
+      <FormInput hidden name="ticketCode" value={data.ticketCode} />
       <div className="modal-row">
         <FinderPINFL
           disablePINFL
-          pinflValue={member.pinfl}
+          style={individual.pinfl ? { display: "none" } : {}}
+          pinflValue={individual.pinfl}
           onFetch={onFetchPINFL}
         />
       </div>
@@ -377,46 +371,109 @@ function ModalUI({ hideModal, data = {} }) {
           value={formData.birthDate}
         />
         <FormInput
-          value={position}
+          select
+          value={position.id}
           name="position"
-          autocomplete
-          options={positions}
+          dataSelect={positions}
           label={t("employees.position")}
         />
       </div>
-      <FormInput
-        date
-        label={t("employees.dateSign")}
-        value={joinDate ? dayjs(joinDate) : null}
-        required
-        name="signDate"
-      />
       <div className="modal-row">
-        <FormInput value={phone} label={t("phone-number")} name="phoneNumber" />
+        <FormInput value={phone} label={t("phone-number")} name="phone" />
         <FormInput value={email} label={t("employees.email")} name="email" />
       </div>
-      <CheckBoxGroup
-        name="personInfo"
-        value={inData}
-        data={[
-          {
-            value: "isStudent",
-            label: t("isStudent"),
-          },
-          {
-            value: "isPensioner",
-            label: t("isPensioner"),
-          },
-          {
-            value: "isHomemaker",
-            label: t("isHomemaker"),
-          },
-          {
-            value: "isInvalid",
-            label: t("isInvalid"),
-          },
-        ]}
-      />
+      <div className="modal-row">
+        <RadioGroup
+          label={t("isMember")}
+          left
+          name="isMember"
+          value={isMember}
+          defaultValue={true}
+          onChange={(e) => {
+            setIsMember(e.target.value === "false" ? false : true);
+          }}
+          data={[
+            {
+              value: true,
+              label: t("yes"),
+            },
+            {
+              value: false,
+              label: t("no"),
+            },
+          ]}
+        />
+        {isMemberValue && (
+          <FormInput
+            date
+            label={t("employees.dateSign")}
+            value={memberJoinDate ? dayjs(memberJoinDate) : null}
+            required
+            name="signDate"
+          />
+        )}
+      </div>
+      <div style={{ marginTop: 10 }} className="modal-row">
+        <div className="modal-col">
+          <RadioGroup
+            defaultValue={false}
+            label={t("isKasabaActive")}
+            left
+            name="isKasabaActive"
+            value={isKasabaActive}
+            data={[
+              {
+                value: true,
+                label: t("yes"),
+              },
+              {
+                value: false,
+                label: t("no"),
+              },
+            ]}
+          />
+          <RadioGroup
+            defaultValue={false}
+            label={t("isFired")}
+            left
+            name="isFired"
+            value={isFired}
+            data={[
+              {
+                value: true,
+                label: t("yes"),
+              },
+              {
+                value: false,
+                label: t("no"),
+              },
+            ]}
+          />
+        </div>
+        <CheckBoxGroup
+          vertical
+          name="personInfo"
+          value={inData}
+          data={[
+            {
+              value: "isStudent",
+              label: t("isStudent"),
+            },
+            {
+              value: "isPensioner",
+              label: t("isPensioner"),
+            },
+            {
+              value: "isHomemaker",
+              label: t("isHomemaker"),
+            },
+            {
+              value: "isInvalid",
+              label: t("isInvalid"),
+            },
+          ]}
+        />
+      </div>
     </div>
   );
 }

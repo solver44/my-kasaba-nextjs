@@ -12,6 +12,7 @@ export default function FinderPINFL({
   disablePINFL,
   pinflValue = "",
   givenDate = "",
+  style = {},
   onFetch = () => {},
 }) {
   const { t } = useTranslation();
@@ -66,10 +67,10 @@ export default function FinderPINFL({
     } else {
       setInputValidation({ pinfl: false, givenDate: false });
     }
-    onFetch(data?.data);
+    onFetch(data?.data?.profile);
   }
   return (
-    <div className={styles.wrapper}>
+    <div style={style} className={styles.wrapper}>
       <FormInput
         required
         name="pinfl"

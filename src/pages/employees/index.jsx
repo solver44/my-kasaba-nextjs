@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import HomeWrapper from "../home/wrapper";
 import styles from "./employees.module.scss";
-import ActiveEmployeeDT from "./dataTable";
 import { useSelector } from "react-redux";
 import { getFIO } from "@/utils/data";
 import Tabs from "@/components/Tabs";
@@ -24,8 +23,8 @@ export default function Employees() {
         value={(searchParams.get("tab") ?? 1) - 1}
         tabs={[
           { label: "all-employees", children: <DataTable /> },
-          { label: "member-employees", children: <DataTable /> },
-          { label: "employees.title1", children: <DataTable /> },
+          { label: "member-employees", children: <DataTable filter={(data) => data.isMember} /> },
+          { label: "employees.title1", children: <DataTable filter={(data) => data.isKasabaActive} /> },
         ]}
       />
     </div>

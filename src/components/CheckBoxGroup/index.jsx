@@ -49,7 +49,14 @@ function CheckBoxGroup({
       field.onChange({
         target: {
           name,
-          value: { [key]: !field.value[key] },
+          value: data.reduce(
+            (current, data) => ({
+              ...current,
+              [data.value]: false,
+              [key]: e.target.checked,
+            }),
+            {}
+          ),
         },
       });
     }
@@ -62,7 +69,7 @@ function CheckBoxGroup({
         style={{
           gap: vertical ? 0 : 20,
           flexDirection: vertical ? "column" : "row",
-          maxHeight: vertical ? 100 : "auto",
+          maxHeight: vertical ? 150 : "auto",
         }}
         row={row}
       >
