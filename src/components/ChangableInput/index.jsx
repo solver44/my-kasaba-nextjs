@@ -109,7 +109,7 @@ export default function ChangableInput({
     <div style={style} className={styles.wrapper}>
       <label className={styles.label}>
         {label}
-        {required ? <span className="red"> *</span> : ""}
+        {required ? <span className={styles.requiredMark}>*</span> : ""}
       </label>
       {!editable ? (
         <span className={styles.content}>{value}</span>

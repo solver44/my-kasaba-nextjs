@@ -9,7 +9,7 @@ import FormInput from "@/components/FormInput";
 
 export default function Step1({ bkutData = {}, canChange }) {
   const { t, i18n } = useTranslation();
-  const [mode, setMode] = useState(0);
+  const [mode, setMode] = useState(false);
   const [provinces, setProvinces] = useState();
   const [districts, setDistricts] = useState();
   const [branches, setBranches] = useState();
@@ -73,43 +73,43 @@ export default function Step1({ bkutData = {}, canChange }) {
             label={t("bkutName1")}
             value={bkutData.name}
           />
-          {mode == 1 && (
-            <FormInput
-              required
-              maxLength={9}
-              name="bkutSTIR"
-              value={bkutData?.application?.tin}
-              label={t("bkutSTIR1")}
-            />
-          )}
         </div>
         <RadioGroups
-          defaultValue={0}
-          value={bkutData?.bkutType ?? 0}
-          name="bkutType"
+          defaultValue={false}
+          value={bkutData?.isLegalEntity}
+          name="isLegalEntity"
           onChange={(e) => {
-            setMode(e.target.value);
+            setMode(JSON.parse(e.target.value));
           }}
           label={t("bkutType1")}
           data={[
             {
-              value: "1",
+              value: true,
               label: t("yes"),
             },
             {
-              value: "0",
+              value: false,
               label: t("no"),
             },
           ]}
         />
+        {mode && (
+          <FormInput
+            required
+            maxLength={9}
+            name="bkutSTIR"
+            value={bkutData?.application?.tin}
+            label={t("bkutSTIR1")}
+          />
+        )}
         <FormInput
           required
-          disabled={!canChange}
+          disabled
           name="seniorOrganization"
           label={t("seniorOrganization")}
           value={bkutData?.parent?._instanceName}
         />
-        
+
         <FormInput
           required
           disabled={!canChange}

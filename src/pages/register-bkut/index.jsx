@@ -75,7 +75,7 @@ export default function RegisterBkut() {
         },
         applicationFile: applicationFileRef,
         protocolNumber: data.foundingDocNum,
-        bkutType: data.bkutType,
+        isLegalEntity: data.isLegalEntity,
         email: data.email,
         protocolFile: protocolFileRef,
         inn: data.bkutSTIR || bkutData.application.tin,

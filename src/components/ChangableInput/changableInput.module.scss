@@ -13,6 +13,8 @@
   font-size: var(--input-font-size);
   color: var(--input-color);
   font-weight: var(--input-font-weight);
+  position: relative;
+  width: max-content;
 }
 .content {
   font-size: 15px;
@@ -44,6 +46,12 @@
       cursor: not-allowed !important;
     }
   }
+}
+.requiredMark{
+  color: red;
+  position: absolute;
+  top: 0;
+  right: -15px;
 }
 .fileActions {
   position: absolute;

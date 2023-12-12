@@ -11,13 +11,10 @@ export default function DownloadLink({
   const createDownloadLink = () => {
     const blob = new Blob([binaryData], { type: "octet/stream" });
     const url = URL.createObjectURL(blob);
-
     const a = element.current;
     a.href = url;
     a.download = fileName;
-
     a.innerHTML = fileName;
-
     // URL.revokeObjectURL(url);
   };
 

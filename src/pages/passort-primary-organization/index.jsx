@@ -31,7 +31,6 @@ export default function PassortPrimaryOrganization() {
   const { bkutData = {} } = useSelector((states) => states);
   const [editMode, setEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-  const currentData = useRef();
   const [loadingEditMode, setLoadingEditMode] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [animRef] = useAutoAnimate();
@@ -111,7 +110,7 @@ export default function PassortPrimaryOrganization() {
         },
         applicationFile: applicationFileRef,
         protocolNumber: data.foundingDocNum,
-        bkutType: data.bkutType,
+        isLegalEntity: data.isLegalEntity,
         email: data.email,
         protocolFile: protocolFileRef,
         tin: data.bkutSTIR || bkutData.application.tin,
@@ -140,12 +139,9 @@ export default function PassortPrimaryOrganization() {
   return (
     <FormValidation
       onSubmit={saveBKUT}
-      onChanged={(data) => {
-        if (!currentData.current) {
-          currentData.current = data;
-          return;
-        }
-        if (areEqual(data, currentData.current)) setIsChanged(false);
+      refresh={editMode}
+      onChanged={(newData, currentData) => {
+        if (areEqual(newData, currentData)) setIsChanged(false);
         else setIsChanged(true);
       }}
     >
@@ -155,7 +151,6 @@ export default function PassortPrimaryOrganization() {
             <Button
               variant="text"
               onClick={() => {
-                currentData.current = undefined;
                 setIsChanged(false);
                 setEditMode(false);
               }}

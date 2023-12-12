@@ -28,8 +28,7 @@ export async function downloadFile(file, name) {
     const url = `/rest/files?fileRef=${encodeURIComponent(
       file
     )}&attachment=false`;
-    const response = await $axios.get(url);
-    console.log(response);
+    const response = await $axios.get(url, { responseType: "arraybuffer" });
     const blob = new Blob([response.data], {
       type: response.headers["Content-Type"],
     });
@@ -45,7 +44,6 @@ export async function initFile(file) {
   try {
     const formData = new FormData();
     formData.append("file", file);
-
     const { data } = await $axios.post(`/rest/files/`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -60,6 +58,7 @@ export async function getFile(fileRef) {
   try {
     const { data } = await $axios.get(`/rest/files/`, {
       params: { fileRef },
+      responseType: "arraybuffer",
     });
     return data;
   } catch (error) {
