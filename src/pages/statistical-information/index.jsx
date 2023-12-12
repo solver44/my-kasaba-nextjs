@@ -168,7 +168,7 @@ export default function StatisticalInformation() {
             <LoadingButton
             variant="contained"
             type="submit"
-            disabled={!isChanged}
+            disabled={isChanged}
             startIcon={<EditIcon />}
             loading={loadingEditMode}
           >
