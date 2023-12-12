@@ -33,7 +33,7 @@ import {
   sendEmployee,
 } from "@/http/employees";
 
-export default function InDataTable({ filter }) {
+export default function InDataTable({ filter, onUpload, min }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const [zoomQRURL, setZoomQRURL] = useState(false);
@@ -79,6 +79,9 @@ export default function InDataTable({ filter }) {
     return result;
   }
 
+  useEffect(() => {
+    if (onUpload) onUpload({ columns, rows });
+  }, [rows]);
   useEffect(() => {
     bkutDataRef.current = bkutData;
     if (!bkutData?.employees?.length) return;
@@ -221,6 +224,7 @@ export default function InDataTable({ filter }) {
         )}
       </SimpleDialog>
       <DataTable
+        min={min}
         fetchData={fetchData}
         handleDeleteClick={deleteRow}
         columns={columns}

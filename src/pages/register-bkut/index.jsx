@@ -27,20 +27,13 @@ export default function RegisterBkut() {
   const handleFinish = async (data) => {
     try {
       setLoading(true);
-      if (employees.current?.rows?.length < 1) {
+      if (!employees.current?.rows?.length) {
         enqueueSnackbar(t("employees.empty"), { variant: "error" });
         return;
       }
+
       const employeesRequest = employees.current.rows.map((e) => ({
-        position: {
-          id: e.position.value,
-        },
-        employee: {
-          id: e.id,
-        },
-        bkut: {
-          id: bkutData.id,
-        },
+        id: e.id,
       }));
       let applicationFileRef, protocolFileRef;
       let responseFile = await initFile(data.electronicFile);
@@ -78,7 +71,7 @@ export default function RegisterBkut() {
         isLegalEntity: data.isLegalEntity,
         email: data.email,
         protocolFile: protocolFileRef,
-        inn: data.bkutSTIR || bkutData.application.tin,
+        tin: data.bkutSTIR,
         phone: data.phoneNumber,
         protocolDate: data.foundingDocDate,
         name: data.bkutName,
@@ -94,6 +87,7 @@ export default function RegisterBkut() {
         enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
       }
     } catch (error) {
+      console.log(error);
     } finally {
       setLoading(false);
     }
