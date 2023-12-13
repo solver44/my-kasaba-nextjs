@@ -3,8 +3,9 @@ import styles from "./registerBkut.module.scss";
 import { useTranslation } from "react-i18next";
 import FormInput from "@/components/FormInput";
 import dayjs from "dayjs";
+import areEqual from "@/utils/areEqual";
 
-export default function Step3({ bkutData = {}, files = {}, filesNotRequired }) {
+function Step3({ bkutData = {}, files = {}, filesNotRequired }) {
   const { t } = useTranslation();
   return (
     <div className={styles.grid}>
@@ -19,6 +20,7 @@ export default function Step3({ bkutData = {}, files = {}, filesNotRequired }) {
           required
           name="foundingDocDate"
           date
+          maxDate={dayjs()}
           value={bkutData.protocolDate ? dayjs(bkutData.protocolDate) : ""}
           label={t("founding-doc-date")}
         />
@@ -44,3 +46,5 @@ export default function Step3({ bkutData = {}, files = {}, filesNotRequired }) {
     </div>
   );
 }
+
+export default React.memo(Step3, areEqual);

@@ -376,7 +376,7 @@ function ModalUI({ hideModal, data = {} }) {
         />
         <FormInput
           select
-          value={position.id}
+          value={position?.id}
           name="position"
           dataSelect={positions}
           label={t("employees.position")}

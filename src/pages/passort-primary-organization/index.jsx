@@ -66,7 +66,6 @@ export default function PassortPrimaryOrganization() {
     if (!data) return;
     try {
       setLoadingEditMode(true);
-      console.log(data);
       let applicationFileRef, protocolFileRef, responseFile, temp;
       temp = data.electronicFile;
       if (typeof temp === "string" && temp.includes("fs://")) {

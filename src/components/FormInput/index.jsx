@@ -1,9 +1,10 @@
 import { useController, useFormContext } from "react-hook-form";
 import ChangableInput from "../ChangableInput";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { getEmptyValue } from "@/utils/data";
+import areEqual from "@/utils/areEqual";
 
-export default function FormInput({
+function FormInput({
   required,
   name,
   onChange,
@@ -48,3 +49,5 @@ export default function FormInput({
     />
   );
 }
+
+export default React.memo(FormInput, areEqual);

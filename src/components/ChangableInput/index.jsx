@@ -36,6 +36,8 @@ export default function ChangableInput({
   required,
   multiple,
   date,
+  maxDate,
+  minDate,
   invalid,
   select,
   autocomplete,
@@ -55,6 +57,7 @@ export default function ChangableInput({
     i18n: { language },
   } = useTranslation();
   const [fileName, setFileName] = useState(nameOfFile ?? "");
+
   function onChangeFunc({ target }) {
     let result = null;
     if (multiple) {
@@ -116,6 +119,8 @@ export default function ChangableInput({
       ) : date ? (
         <InputDate
           name={name}
+          maxDate={maxDate}
+          minDate={minDate}
           onChange={onChangeFunc}
           invalid={invalid}
           value={value}
