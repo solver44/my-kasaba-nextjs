@@ -6,7 +6,6 @@ import EmployeeDataTable from "../employees/dataTable";
 import { getFIO, getLocalizationNames, showOrNot } from "@/utils/data";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import StatDataTable from "../statistical-information/dataTable";
 import Tabs from "@/components/Tabs";
 import { convertStringToFormatted } from "@/utils/date";
 import DownloadLink from "@/components/DownloadLink";
@@ -144,7 +143,7 @@ export default function ViewModal({ isOpen, handleClose }) {
                 />
               ),
             },
-            { label: "organization.statistic", children: <StatDataTable /> },
+            // { label: "organization.statistic", children: <StatDataTable /> },
             { label: "teamContracts", children: "No content" },
           ]}
         />
