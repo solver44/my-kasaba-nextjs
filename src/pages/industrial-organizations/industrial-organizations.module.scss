@@ -1,4 +1,23 @@
-.containers{
-    width: 100%;
-    margin-top: 30px;
+.containers {
+  width: 100%;
+  margin-top: 30px;
+}
+.textRow {
+  display: flex;
+  gap: 10px;
+  font-size: 18px;
+  &:not(:last-child) {
+    border-bottom: 1px solid #dcdcdc;
+  }
+  & > :first-child {
+    width: 150px;
+  }
+  & > :last-child {
+    font-weight: bold;
+  }
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

@@ -393,6 +393,11 @@ export default {
     "application-exists": "Ushbu STIR orqali allaqachon murojaat yuborilgan.",
     "pinfl-fetch-error":
       "Ma'lumotlarni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
+    "error-get-user-organization":
+      "Foydalanuvchini olishda xatolik mavjud, Keyinroq qayta urinib ko'ring.",
+    username: "Foydalanuvchi",
+    "project-text": "Loyiha matni",
+    "last-login-time": "Oxirgi kirish qayd qilingan sana",
     isStudent: "Talaba",
     isPensioner: "Ishlamaydigan pensioner",
     isHomemaker: "Kasanachi",
@@ -418,7 +423,9 @@ export default {
     "found-on-group":
       "Ushbu tashkilot GURUH tashkilotlarida mavjud. O'zgartirish uchun GURUH tashkilotlari bo'limiga o'ting.",
 
-    "1ti": "1TI hisobot",
+    "1ti": "1TI hisoboti",
+    "file-cannot-open": "Ushbu faylni ochib bo'lmadi.",
+    "1ti1": "1TI hisobot shakli",
     "1t-report": "1TI hisobot",
     showTicket: "Guvohnomani ko'rish",
     print: "Chop etish",
@@ -460,6 +467,7 @@ export default {
     "to-register": "Ro'yhatdan o'tkazish",
     "leave-day": "kun qoldi",
     "status-label": "Holati",
+    "user-open": "Foydalanuvchini ko'rish",
     status: {
       CONFIRMED: "Tasdiqlangan",
       INEXECUTION: "Tahlilda",

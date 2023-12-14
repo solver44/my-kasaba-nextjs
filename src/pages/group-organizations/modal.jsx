@@ -3,7 +3,6 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Tab } from "@mui/material";
 import React, { useState } from "react";
 import EmployeeDataTable from "../employees/dataTable";
-import MembersDataTable from "../members/dataTable";
 import { getFIO, getLocalizationNames, showOrNot } from "@/utils/data";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
@@ -11,7 +10,6 @@ import StatDataTable from "../statistical-information/dataTable";
 import Tabs from "@/components/Tabs";
 import { convertStringToFormatted } from "@/utils/date";
 import DownloadLink from "@/components/DownloadLink";
-import AllEmployeesDT from "../members/allEmployeesDataTable";
 
 export default function ViewModal({ isOpen, handleClose }) {
   const { t } = useTranslation();
@@ -127,17 +125,20 @@ export default function ViewModal({ isOpen, handleClose }) {
                 <Tabs
                   color="secondary"
                   tabs={[
+                    { label: "all-employees", children: <EmployeeDataTable /> },
                     {
-                      label: "not-member-employees",
-                      children: <AllEmployeesDT />,
+                      label: "member-employees",
+                      children: (
+                        <EmployeeDataTable filter={(data) => data.isMember} />
+                      ),
                     },
                     {
                       label: "employees.title1",
-                      children: <EmployeeDataTable />,
-                    },
-                    {
-                      label: "member-employees",
-                      children: <MembersDataTable />,
+                      children: (
+                        <EmployeeDataTable
+                          filter={(data) => data.isKasabaActive}
+                        />
+                      ),
                     },
                   ]}
                 />

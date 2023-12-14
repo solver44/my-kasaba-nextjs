@@ -22,39 +22,48 @@ export default function OneTI() {
         .map((employee) => employee.isPensioner);
     } else {
     }
-    console.log(bkutData.statistics?.studentsFemale?.toString())
+    console.log(bkutData.statistics?.studentsFemale?.toString());
     const filteredEmployeesString = filteredEmployeesR.join(", ");
-    const result = filteredEmployeesString === 'false' ? `yo'q` : 'ha';
+    const result = filteredEmployeesString === "false" ? `yo'q` : "ha";
     const tempJsonData = {
       CURRENTYEARS: year.toString(),
       BKUTNAME: bkutData.name,
       BKUTDIRECTOR: filteredEmployees.join(", "),
       PHONE: bkutData.phone,
       ISFIRED: result,
-      ISAPPARATUS: bkutData.statistics?.isProvidedPaidApparatus === false ? "yo'q" : 'ha',
+      ISAPPARATUS:
+        bkutData.statistics?.isProvidedPaidApparatus === false ? "yo'q" : "ha",
       WORKERSAMOUNT: bkutData.statistics?.workersAmount?.toString(),
-      WORKERSFEMALE:bkutData.statistics?.workersFemale?.toString(),
-      WORKERSADULTS:bkutData.statistics?.workersAdults?.toString(),
-      WORKERSMEMBERS:bkutData.statistics?.workersMembers?.toString(),
-      WORKERSFEMALEMEMBERS:bkutData.statistics?.workersFemaleMembers?.toString(),
-      WORKERSADULTSMEMBERS:bkutData.statistics?.workersAdultsMembers?.toString(),
-      STUDENTSAMOUNT:bkutData.statistics?.studentsAmount?.toString(),
-      STUDENTSFEMALE:bkutData.statistics?.studentsFemale?.toString(),
-      STUDENTSADULTS:bkutData.statistics?.studentsAdults?.toString(),
-      STUDENTSMEMBERS:bkutData.statistics?.studentsMembers?.toString(),
-      STUDENTSFEMALEMEMBERS:bkutData.statistics?.studentsFemaleMembers?.toString(),
-      STUDENTSADULTSMEMBERS:bkutData.statistics?.studentsAdultsMembers?.toString(),
-      PENSIONERAMOUNT:bkutData.statistics?.pensionerAmount?.toString(),
-      STAFFINGAMOUNT:bkutData.statistics?.staffingAmount?.toString(),
-      STAFFINGWORKERSAMOUNT:bkutData.statistics?.staffingWorkersAmount?.toString(),
-      STAFFINGRESPONSIBLEWORKERS:bkutData.statistics?.staffingResponsibleWorkers?.toString(),
-      STAFFINGTECHNICALWORKERS:bkutData.statistics?.staffingTechnicalWorkers?.toString(),
+      WORKERSFEMALE: bkutData.statistics?.workersFemale?.toString(),
+      WORKERSADULTS: bkutData.statistics?.workersAdults?.toString(),
+      WORKERSMEMBERS: bkutData.statistics?.workersMembers?.toString(),
+      WORKERSFEMALEMEMBERS:
+        bkutData.statistics?.workersFemaleMembers?.toString(),
+      WORKERSADULTSMEMBERS:
+        bkutData.statistics?.workersAdultsMembers?.toString(),
+      STUDENTSAMOUNT: bkutData.statistics?.studentsAmount?.toString(),
+      STUDENTSFEMALE: bkutData.statistics?.studentsFemale?.toString(),
+      STUDENTSADULTS: bkutData.statistics?.studentsAdults?.toString(),
+      STUDENTSMEMBERS: bkutData.statistics?.studentsMembers?.toString(),
+      STUDENTSFEMALEMEMBERS:
+        bkutData.statistics?.studentsFemaleMembers?.toString(),
+      STUDENTSADULTSMEMBERS:
+        bkutData.statistics?.studentsAdultsMembers?.toString(),
+      PENSIONERAMOUNT: bkutData.statistics?.pensionerAmount?.toString(),
+      STAFFINGAMOUNT: bkutData.statistics?.staffingAmount?.toString(),
+      STAFFINGWORKERSAMOUNT:
+        bkutData.statistics?.staffingWorkersAmount?.toString(),
+      STAFFINGRESPONSIBLEWORKERS:
+        bkutData.statistics?.staffingResponsibleWorkers?.toString(),
+      STAFFINGTECHNICALWORKERS:
+        bkutData.statistics?.staffingTechnicalWorkers?.toString(),
     };
 
     setIframe(
       <DocumentViewer
         documentSrc="/report1ti.docx"
         generateData={tempJsonData}
+        fileName={bkutData.name + " 1ti hisoboti"}
       />
     );
   }, [bkutData]);
@@ -63,5 +72,5 @@ export default function OneTI() {
 }
 
 OneTI.layout = function (Component, t) {
-  return <HomeWrapper title="1TI shakli">{Component}</HomeWrapper>;
+  return <HomeWrapper title={t("1ti1")}>{Component}</HomeWrapper>;
 };

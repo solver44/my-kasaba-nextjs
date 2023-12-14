@@ -19,6 +19,7 @@ import {
 } from "@/utils/date";
 import {
   CommentSharp,
+  Description,
   InfoRounded,
   TopicRounded,
   Visibility,
@@ -30,6 +31,7 @@ import ChipStatus from "@/components/ChipStatus";
 import Tabs from "@/components/Tabs";
 import Opinions from "./opinionsTab";
 import MainTab from "./mainTab";
+import JShDocument from "./jshDocumentTab";
 
 export default function InDataTable({ filter }) {
   const { t } = useTranslation();
@@ -355,6 +357,17 @@ function ModalUI({ hideModal, data }) {
                     icon: <CommentSharp />,
                     children: (
                       <Opinions
+                        formData={formData}
+                        bkutData={bkutData}
+                        data={data}
+                      />
+                    ),
+                  },
+                  {
+                    label: "project-text",
+                    icon: <Description />,
+                    children: (
+                      <JShDocument
                         formData={formData}
                         bkutData={bkutData}
                         data={data}

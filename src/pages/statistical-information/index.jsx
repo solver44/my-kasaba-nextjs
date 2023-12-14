@@ -28,7 +28,6 @@ export default function StatisticalInformation() {
   const [loadingEditMode, setLoadingEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const animRef = useAnimation();
-  console.log(bkutData)
   const allText = t("statistical-information.all");
   // const employeesText = t("statistical-information.employees");
   const womenText = t("statistical-information.women");

@@ -106,10 +106,10 @@ export function getEmptyValue(obj) {
   return undefined;
 }
 
-export function getPresidentBKUT(obj = {}) {
-  if (!obj?.employees?.length) return "";
+export function getPresidentBKUT(bkutData = {}) {
+  if (!bkutData?.employees?.length) return "";
   return getFIO(
-    obj.employees.find((employee) => employee.position?.id === 1).individual
+    bkutData.employees.find((employee) => employee.position?.id === 1).individual
   );
 }
 

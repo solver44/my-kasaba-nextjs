@@ -23,7 +23,7 @@ export async function getBKUTData(id) {
   }
 }
 
-export async function downloadFile(file, name) {
+export async function downloadFile(file, name, onlyReturn) {
   try {
     const url = `/rest/files?fileRef=${encodeURIComponent(
       file
@@ -32,6 +32,7 @@ export async function downloadFile(file, name) {
     const blob = new Blob([response.data], {
       type: response.headers["Content-Type"],
     });
+    if(onlyReturn) return blob;
     saveAs(blob, name);
     return true;
   } catch (e) {

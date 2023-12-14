@@ -10,6 +10,7 @@ export default function Tabs({
   contentPadding,
   onChange,
   value: defaultValue = "",
+  scrollContent,
   scrollable,
   color,
 }) {
@@ -47,6 +48,7 @@ export default function Tabs({
             >
               {customTabs.map((tab, index) => (
                 <Tab
+                  style={scrollContent ? { overflowY: "auto" } : {}}
                   icon={tab?.icon}
                   iconPosition="start"
                   key={index}
@@ -58,9 +60,17 @@ export default function Tabs({
           </AppBarCom>
         </Box>
         {tabs.map((tab, index) => (
-          <Grow key={index} timeout={300} in={animate}>
+          <Grow
+            key={index}
+            timeout={300}
+            in={tab.disableAnimation ? true : animate}
+          >
             <TabPanel
-              style={contentPadding ? {} : { paddingRight: 0, paddingLeft: 0 }}
+              style={
+                contentPadding
+                  ? { padding: 24 }
+                  : { paddingRight: 0, paddingLeft: 0 }
+              }
               key={index}
               value={index + ""}
             >

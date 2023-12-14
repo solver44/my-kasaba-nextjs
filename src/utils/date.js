@@ -13,6 +13,7 @@ export function convertToDate(dateString) {
   return new Date(year, month - 1, day);
 }
 export function convertStringToFormatted(dateString, withTime) {
+  if(!dateString) return "";
   const date = dayjs(dateString);
   return date.format(withTime ? "DD.MM.YYYY  HH:m" : "DD.MM.YYYY");
 }

@@ -66,7 +66,6 @@ export default function InDataTable({ isGroup }) {
   ];
 
   useEffect(() => {
-    console.log(bkutData.organizations)
     if (!bkutData?.organizations?.length) return;
     setRows(
       bkutData.organizations

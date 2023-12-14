@@ -4,16 +4,20 @@ import { t } from "i18next";
 import { useEffect, useRef } from "react";
 import styles from "./styles.module.scss";
 import { CloudDownload, Download } from "@mui/icons-material";
+import { downloadFile } from "@/http/data";
+import { useSnackbar } from "notistack";
 
 const DocumentViewer = ({
   documentSrc,
   generateData,
+  url,
   ignoreWidth = false,
   hideDownloadBtn,
   fileName = "output.docx",
 }) => {
   const iframeRef = useRef();
   const dataForDownload = useRef();
+  const { enqueueSnackbar } = useSnackbar();
 
   function download() {
     if (!dataForDownload.current) return;
@@ -72,7 +76,15 @@ const DocumentViewer = ({
   useEffect(() => {
     async function initData() {
       let data = null;
-      if (generateData) data = generateDoc();
+      if (documentSrc) {
+        if (generateData) data = generateDoc();
+      } else if (url) {
+        data = await downloadFile(url, url.split("=")[1], true);
+        if (!data) {
+          enqueueSnackbar(t("file-cannot-open"), {variant: "error"});
+          return;
+        }
+      }
       previewWordDoc(data);
     }
     initData();
