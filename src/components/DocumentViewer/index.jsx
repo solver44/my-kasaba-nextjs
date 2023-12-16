@@ -79,7 +79,7 @@ const DocumentViewer = ({
       if (documentSrc) {
         if (generateData) data = generateDoc();
       } else if (url) {
-        data = await downloadFile(url, url.split("=")[1], true);
+        data = await downloadFile(url, decodeURIComponent(url.split("=")[1]), true);
         if (!data) {
           enqueueSnackbar(t("file-cannot-open"), {variant: "error"});
           return;

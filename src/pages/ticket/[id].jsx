@@ -55,7 +55,7 @@ export default function TicketPage(p) {
               <Image alt="kasaba-logo" className={styles.logo} src={logo} />
               <h1 className={styles.title}>
                 A'zolik bileti raqami:{" "}
-                <span className={styles.code}>B-{showOrNot((data.id || "").split("-")[1])}</span>
+                <span className={styles.code}>{showOrNot(data.id || "")}</span>
               </h1>
             </div>
             <p className={styles.row}>

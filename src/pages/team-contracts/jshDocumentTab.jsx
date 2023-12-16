@@ -14,6 +14,7 @@ export default function JShDocument({ data, bkutData }) {
     setSelectedDoc(index);
   }
 
+  console.log(currentFile)
   function newAdd() {}
 
   console.log(data);
@@ -28,7 +29,7 @@ export default function JShDocument({ data, bkutData }) {
             icon={selectedDoc == index ? <CheckCircle /> : ""}
             color={selectedDoc == index ? "primary" : "default"}
             variant={"outlined"}
-            label={app.file.split("=")[1]}
+            label={decodeURIComponent(app.file.split("=")[1]).replaceAll("+", " ")}
           />
         ))}
         {/* <Chip

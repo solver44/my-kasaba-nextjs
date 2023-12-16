@@ -47,7 +47,7 @@
     }
   }
 }
-.requiredMark{
+.requiredMark {
   color: red;
   position: absolute;
   top: 0;
@@ -92,7 +92,7 @@
 .autocomplete {
   background: var(--input-incolor);
   & > :first-child > :first-child {
-    padding: 0;
+    padding: 2px;
   }
 }
 .autocomplete_input {

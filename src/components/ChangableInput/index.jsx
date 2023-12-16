@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./changableInput.module.scss";
 import Input from "../Input";
 import {
@@ -57,6 +57,13 @@ export default function ChangableInput({
     i18n: { language },
   } = useTranslation();
   const [fileName, setFileName] = useState(nameOfFile ?? "");
+  const [autoCompleteValue, setAutoCompleteValue] = useState(value);
+
+
+  useEffect(() => {
+    if (!autocomplete) return;
+    setAutoCompleteValue(propValue);
+  }, [propValue]);
 
   function onChangeFunc({ target }) {
     let result = null;
@@ -131,9 +138,11 @@ export default function ChangableInput({
           id={name + "_autocomplete"}
           autoHighlight
           freeSolo
-          inputValue={propValue ?? ""}
+          inputValue={autoCompleteValue?.label || autoCompleteValue}
           onChange={(event, value) => {
-            onChangeFunc({ target: { value: value?.label ?? "" } });
+            onChangeFunc({
+              target: { value },
+            });
           }}
           options={options}
           className={[
@@ -239,7 +248,7 @@ export default function ChangableInput({
           <input
             type="file"
             disabled={props.disabled}
-            accept=".doc, .docx, .pdf"
+            accept=".docx"
             style={{ display: "none" }}
             onChange={handleFileInputChange}
           />

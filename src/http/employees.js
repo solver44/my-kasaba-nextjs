@@ -75,9 +75,10 @@ export async function sendIndividual(requestData) {
     return error;
   }
 }
-export async function sendEmployee(requestData) {
+export async function sendEmployee(requestData = {}) {
   try {
     const individualResponse = await sendIndividual(requestData.individual);
+    // requestData.individual = { id: individualResponse.id };
     const { data } = requestData.id
       ? await $axios.put(
           "/rest/entities/EOrganizationEmployees/" + requestData.id,

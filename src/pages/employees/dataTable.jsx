@@ -40,6 +40,7 @@ export default function InDataTable({ filter, onUpload, min }) {
   const [ticketLoading, setTicketLoading] = useState(false);
   const { bkutData = {} } = useSelector((states) => states);
   const qrURL = useRef("");
+  const individualId = useRef();
   const ticketCreated = useRef(false);
   const bkutDataRef = useRef(bkutData);
   const { enqueueSnackbar } = useSnackbar();
@@ -102,12 +103,12 @@ export default function InDataTable({ filter, onUpload, min }) {
   }, [bkutData]);
   async function onSubmitModal(forms, hideModal, isView, _dataModal) {
     const {
-      createdDate,
-      lastModifiedDate,
-      _entityName,
-      _instanceName,
+      createdDate = "",
+      lastModifiedDate = "",
+      _entityName = "",
+      _instanceName = "",
       ...dataModal
-    } = _dataModal;
+    } = _dataModal ?? {};
     if (
       !isView &&
       (bkutData?.employees ?? []).find((e) => e.individual.pinfl == forms.pinfl)
@@ -123,6 +124,10 @@ export default function InDataTable({ filter, onUpload, min }) {
     sendData({ forms, dataModal }, hideModal, isView);
   }
 
+  function onFetchIndividual(data = {}) {
+    individualId.current = data.id;
+  }
+
   async function sendData(_data, hideModal, isView, noAlert = false) {
     const bkutData = bkutDataRef.current;
 
@@ -134,6 +139,8 @@ export default function InDataTable({ filter, onUpload, min }) {
         id: bkutData.id,
       },
       individual: {
+        pinfl: forms.pinfl,
+        id: individualId.current,
         ...dataModal.individual,
         phone: forms.phone,
         email: forms.email,
@@ -263,7 +270,7 @@ export default function InDataTable({ filter, onUpload, min }) {
                   {ticketCreated.current ? t("showTicket") : t("createDoc")}
                 </LoadingButton>
               )}
-              {ticketCreated.current && qrURL.current && (
+              {isView && ticketCreated.current && qrURL.current && (
                 <React.Fragment>
                   <QRCode
                     onClick={() => setZoomQRURL(qrURL.current)}
@@ -284,14 +291,18 @@ export default function InDataTable({ filter, onUpload, min }) {
           );
         }}
         modal={(hideModal, dataModal) => (
-          <ModalUI data={dataModal} hideModal={hideModal} />
+          <ModalUI
+            onFetchIndividual={onFetchIndividual}
+            data={dataModal}
+            hideModal={hideModal}
+          />
         )}
       />
     </React.Fragment>
   );
 }
 
-function ModalUI({ hideModal, data = {} }) {
+function ModalUI({ hideModal, data = {}, onFetchIndividual }) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     fio: "",
@@ -325,6 +336,7 @@ function ModalUI({ hideModal, data = {} }) {
 
   function onFetchPINFL(data) {
     if (!data) return;
+    onFetchIndividual(data);
 
     setFormData({
       fio: getFIO(data),
@@ -394,7 +406,8 @@ function ModalUI({ hideModal, data = {} }) {
           value={isMember}
           defaultValue={true}
           onChange={(e) => {
-            setIsMember(e.target.value === "false" ? false : true);
+            const val = e.target.value;
+            setIsMember(val === "false" || !val ? false : true);
           }}
           data={[
             {

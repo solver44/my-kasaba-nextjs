@@ -14,7 +14,7 @@ import BarCharts from "@/components/Charts/Bar";
 import PieCharts from "@/components/Charts/Pie";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { sendStatistics } from "@/http/data";
+import { sendEBKUT, sendStatistics } from "@/http/data";
 import { useSelector } from "react-redux";
 import { enqueueSnackbar } from "notistack";
 import EditData from "./editData";
@@ -32,14 +32,13 @@ export default function StatisticalInformation() {
   // const employeesText = t("statistical-information.employees");
   const womenText = t("statistical-information.women");
   const adultsText = t("statistical-information.adults");
-  
+
   const saveStatistics = async (forms) => {
     try {
       const requestData = {
-        bkut: {
-          id: bkutData.id,
-        },
-        data: {
+        id: bkutData.id,
+        statistics: {
+          ...(bkutData.statistics || {}),
           workersAdults: forms.workersAdults,
           workersFemale: forms.workersFemale,
           firedMembersAmount: forms.firedMembersAmount,
@@ -76,24 +75,23 @@ export default function StatisticalInformation() {
           isFiredFromMainJob: forms.isFiredFromMainJob,
           isCollegialPresident: forms.isCollegialPresident,
           isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
-      }
-    };
+        },
+      };
+      if (bkutData?.statistics?.id)
+        requestData.statistics.id = bkutData.statistics.id;
 
-      const response = await sendStatistics(requestData);
+      const response = await sendEBKUT(requestData);
 
       if (response?.id) {
         setEditMode(false);
         enqueueSnackbar(t("successfully-saved"), { variant: "success" });
         actions.updateData();
-        
       } else {
         enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
-  
-  
+
   const categories = [t("all"), t("statistical-information.group2")];
   const group1Data = [
     { name: allText, y: [bkutData.statistics?.workersAmount] },
@@ -105,22 +103,55 @@ export default function StatisticalInformation() {
     { name: womenText, y: [bkutData.statistics?.studentsFemale] },
     { name: adultsText, y: [bkutData.statistics?.studentsAdults] },
   ];
-  const group4Data = [{ name: allText, y: [bkutData.statistics?.pensionerAmount] }];
-  const group5Data = [{ name: allText, y: [bkutData.statistics?.homemakerAmount] }];
-  const group6Data = [{ name: allText, y: [bkutData.statistics?.invalidAmount] }];
+  const group4Data = [
+    { name: allText, y: [bkutData.statistics?.pensionerAmount] },
+  ];
+  const group5Data = [
+    { name: allText, y: [bkutData.statistics?.homemakerAmount] },
+  ];
+  const group6Data = [
+    { name: allText, y: [bkutData.statistics?.invalidAmount] },
+  ];
 
   const group7Data = [
-    { name: t("statistical-information.input1"), y: [bkutData.statistics?.staffingAmount] },
-    { name: t("statistical-information.input2"), y: [bkutData.statistics?.staffingWorkersAmount] },
-    { name: t("statistical-information.input3"), y: [bkutData.statistics?.staffingResponsibleWorkers] },
-    { name: t("statistical-information.input4"), y: [bkutData.statistics?.staffingTechnicalWorkers] },
+    {
+      name: t("statistical-information.input1"),
+      y: [bkutData.statistics?.staffingAmount],
+    },
+    {
+      name: t("statistical-information.input2"),
+      y: [bkutData.statistics?.staffingWorkersAmount],
+    },
+    {
+      name: t("statistical-information.input3"),
+      y: [bkutData.statistics?.staffingResponsibleWorkers],
+    },
+    {
+      name: t("statistical-information.input4"),
+      y: [bkutData.statistics?.staffingTechnicalWorkers],
+    },
   ];
   const group8Data = [
-    { name: t("statistical-information.input5"), y: [bkutData.statistics?.salaryByAgreements] },
-    { name: t("statistical-information.input6"), y: [bkutData.statistics?.spentAmount] },
-    { name: t("statistical-information.input7"), y: [bkutData.statistics?.newMemebersAmount] },
-    { name: t("statistical-information.input8"), y: [bkutData.statistics?.firedMembersAmount] },
-    { name: t("statistical-information.input9"), y: [bkutData.statistics?.membersProvidedTicket] },
+    {
+      name: t("statistical-information.input5"),
+      y: [bkutData.statistics?.salaryByAgreements],
+    },
+    {
+      name: t("statistical-information.input6"),
+      y: [bkutData.statistics?.spentAmount],
+    },
+    {
+      name: t("statistical-information.input7"),
+      y: [bkutData.statistics?.newMemebersAmount],
+    },
+    {
+      name: t("statistical-information.input8"),
+      y: [bkutData.statistics?.firedMembersAmount],
+    },
+    {
+      name: t("statistical-information.input9"),
+      y: [bkutData.statistics?.membersProvidedTicket],
+    },
   ];
   const handleSubmit = async (forms, oldForms) => {
     try {
@@ -137,7 +168,7 @@ export default function StatisticalInformation() {
   return (
     <FormValidation
       className={styles.form}
-      onSubmit={handleSubmit} // Connect the onSubmit event to handleSubmit function
+      onSubmit={handleSubmit}
       onChanged={(data, oldData) => {
         if (areEqual(data, oldData)) setIsChanged(false);
         else setIsChanged(true);
@@ -165,14 +196,14 @@ export default function StatisticalInformation() {
             </Button>
           ) : (
             <LoadingButton
-            variant="contained"
-            type="submit"
-            disabled={isChanged}
-            startIcon={<EditIcon />}
-            loading={loadingEditMode}
-          >
-            {t("save")}
-          </LoadingButton>
+              variant="contained"
+              type="submit"
+              // disabled={!isChanged}
+              startIcon={<EditIcon />}
+              loading={loadingEditMode}
+            >
+              {t("save")}
+            </LoadingButton>
           )}
         </div>
         {!editMode ? (
@@ -223,7 +254,11 @@ export default function StatisticalInformation() {
               />
             </CardUI>
             <CardUI
-              value={<CheckedBox value={bkutData.statistics?.isProvidedPrivateRoom} />}
+              value={
+                <CheckedBox
+                  value={bkutData.statistics?.isProvidedPrivateRoom}
+                />
+              }
               label={t("statistical-information.input10")}
             />
             <CardUI
@@ -231,19 +266,29 @@ export default function StatisticalInformation() {
               label={t("statistical-information.input11")}
             />
             <CardUI
-              value={<CheckedBox value={bkutData.statistics?.isProvidedInternet} />}
+              value={
+                <CheckedBox value={bkutData.statistics?.isProvidedInternet} />
+              }
               label={t("statistical-information.input12")}
             />
             <CardUI
-              value={<CheckedBox value={bkutData.statistics?.isCollegialPresident} />}
+              value={
+                <CheckedBox value={bkutData.statistics?.isCollegialPresident} />
+              }
               label={t("statistical-information.input13")}
             />
             <CardUI
-              value={<CheckedBox value={bkutData.statistics?.isFiredFromMainJob} />}
+              value={
+                <CheckedBox value={bkutData.statistics?.isFiredFromMainJob} />
+              }
               label={t("statistical-information.input14")}
             />
             <CardUI
-              value={<CheckedBox value={bkutData.statistics?.isProvidedPaidApparatus} />}
+              value={
+                <CheckedBox
+                  value={bkutData.statistics?.isProvidedPaidApparatus}
+                />
+              }
               label={t("statistical-information.input15")}
             />
           </div>
@@ -263,7 +308,7 @@ function CheckedBox({ value }) {
   );
 }
 
-  <EditData/>
+<EditData />;
 
 StatisticalInformation.layout = function (Component, t) {
   return (

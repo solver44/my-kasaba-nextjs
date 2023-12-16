@@ -18,6 +18,7 @@ import {
   isOutdated,
 } from "@/utils/date";
 import {
+  Add,
   CommentSharp,
   Description,
   InfoRounded,
@@ -231,12 +232,11 @@ export default function InDataTable({ filter }) {
         return (
           <React.Fragment>
             <BigButton
-              green={"success"}
-              disabled={selectedRows.length != 1}
+              green={"primary"}
               onClick={() => toggleModal(null, selectedRows[0])}
-              Icon={Visibility}
+              Icon={Add}
             >
-              {t("watch")}
+              {t("jsh-add")}
             </BigButton>
             {!isHideAddBtn && (
               <BigButton
@@ -247,6 +247,14 @@ export default function InDataTable({ filter }) {
                 {t("projectAdd")}
               </BigButton>
             )}
+            <BigButton
+              green={"success"}
+              disabled={selectedRows.length != 1}
+              onClick={() => toggleModal(null, selectedRows[0])}
+              Icon={Visibility}
+            >
+              {t("watch")}
+            </BigButton>
           </React.Fragment>
         );
       }}

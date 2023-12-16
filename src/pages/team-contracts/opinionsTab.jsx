@@ -30,11 +30,10 @@ export default function OpinionsTab({ data, bkutData }) {
           org_name: bkutData.name,
           experts: experts.map((member) => ({ full_name: getFIO(member) })),
           rules: opinions
-            .filter((op) => op?.suggAndObj)
             .map((opinion) => {
               return {
                 section: opinion.section,
-                sugg: opinion.suggAndObj,
+                sugg: opinion.suggAndObj || "Taklif va e'tirozlar yo'q",
               };
             }),
         }}

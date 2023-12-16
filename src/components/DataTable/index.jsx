@@ -182,6 +182,11 @@ function DataTable({
             ));
           },
         };
+      } else if ((column.field ?? "").includes("Date")) {
+        return {
+          ...temp,
+          Cell: ({ cell }) => convertStringToFormatted(cell.getValue()),
+        };
       }
       return temp;
     });
