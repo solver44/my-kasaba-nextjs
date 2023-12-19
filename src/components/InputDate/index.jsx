@@ -75,26 +75,28 @@ const InsideInput = ({
   useEffect(() => {
     setInternalValue(value);
   }, [value]);
+  const mxDate =
+    maxDate ?? (name.includes("birth") ? dayjs().add(-18, "year") : dayjs());
 
   const handleDateChange = (selectedDate) => {
-    if (maxDate && selectedDate && selectedDate.isAfter(maxDate)) {
-      setInternalValue(maxDate);
-      onChangeFunc(maxDate);
-      return;
-    }
-    if (minDate && selectedDate && selectedDate.isBefore(maxDate)) {
-      setInternalValue(minDate);
-      onChangeFunc(minDate);
-      return;
+    if (selectedDate && selectedDate.year() > 1000) {
+      if (mxDate && selectedDate.isAfter(mxDate)) {
+        setInternalValue(mxDate);
+        onChangeFunc(mxDate);
+        return;
+      }
+      if (minDate && selectedDate.isBefore(minDate)) {
+        setInternalValue(undefined);
+        onChangeFunc(undefined);
+        return;
+      }
     }
     onChangeFunc(selectedDate);
   };
 
   return (
     <DatePicker
-      maxDate={
-        maxDate ?? (name.includes("birth") ? dayjs().add(-18, "year") : dayjs())
-      }
+      maxDate={mxDate}
       minDate={minDate}
       format="DD.MM.YYYY"
       disabled={disabled}

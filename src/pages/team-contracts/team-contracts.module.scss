@@ -32,4 +32,20 @@
   display: flex;
   justify-content: center;
   gap: 5px;
+  flex-direction: column;
+  width: 30%;
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+.JShDocumentContainer {
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+}
+.viewer {
+  height: 100%;
+  width: 100%;
 }

@@ -4,6 +4,10 @@
 }
 .textarea_input {
   border: 1px solid var(--input-border-color);
+  background: var(--input-incolor) !important;
+  &:disabled {
+    background-color: var(--input-disabled-color) !important;
+  }
 }
 .input {
   background: var(--input-incolor);
@@ -17,14 +21,14 @@
     font-size: 1rem;
   }
   &.disabled {
-    background: var(--input-disabled-color) !important;
+    // background: var(--input-disabled-color) !important;
     input {
       color: var(--input-disabled-fcolor) !important;
       -webkit-text-fill-color: var(--input-disabled-fcolor) !important;
       cursor: not-allowed !important;
     }
     fieldset {
-      background-color: var(--input-disabled-color);
+      background-color: var(--input-disabled-color) !important;
     }
   }
   &.invalid {

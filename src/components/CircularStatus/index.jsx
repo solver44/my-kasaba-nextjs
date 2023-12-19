@@ -11,8 +11,8 @@ export default function CircularStatus({
     <div
       className={[
         styles.wrapper,
-        warningValue >= value ? styles.warning : "",
         errorValue >= value ? styles.error : "",
+        value > errorValue && warningValue >= value ? styles.warning : "",
       ].join(" ")}
     >
       <p className={styles.value}>{value}</p>

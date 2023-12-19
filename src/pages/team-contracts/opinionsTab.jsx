@@ -10,33 +10,45 @@ import DocumentViewer from "@/components/DocumentViewer";
 import { convertStringToFormatted } from "@/utils/date";
 
 export default function OpinionsTab({ data, bkutData }) {
-  const { commission = {}, experts = [], opinions = [] } = data;
+  const { commission = {}, experts = [], opinions = [], opinionFile } = data;
   const { t } = useTranslation();
+  const isCurrentJSH = data?.status === "CURRENT_JSH";
   console.log(data);
   return (
     <div className="modal-col big">
-      <Paper style={{ padding: 10 }}>
-        <ChangableInput
-          value={commission._instanceName}
-          disabled
-          label={t("team-contracts.commission")}
-        />
-      </Paper>
+      {!isCurrentJSH && (
+        <Paper style={{ padding: 10 }}>
+          <ChangableInput
+            value={commission._instanceName}
+            disabled
+            label={t("team-contracts.commission")}
+          />
+        </Paper>
+      )}
       <DocumentViewer
-        documentSrc="/expertize-result.docx"
-        generateData={{
-          contract_end_date: convertStringToFormatted(data.contractEndDate),
-          parent_name: bkutData?.eLegalEntity?.name || "",
-          org_name: bkutData.name,
-          experts: experts.map((member) => ({ full_name: getFIO(member) })),
-          rules: opinions
-            .map((opinion) => {
-              return {
-                section: opinion.section,
-                sugg: opinion.suggAndObj || "Taklif va e'tirozlar yo'q",
-              };
-            }),
-        }}
+        showNameFile
+        url={opinionFile}
+        documentSrc={isCurrentJSH ? null : "/expertize-result.docx"}
+        generateData={
+          isCurrentJSH
+            ? null
+            : {
+                contract_end_date: convertStringToFormatted(
+                  data.contractEndDate
+                ),
+                parent_name: bkutData?.eLegalEntity?.name || "",
+                org_name: bkutData.name,
+                experts: experts.map((member) => ({
+                  full_name: getFIO(member),
+                })),
+                rules: opinions.map((opinion) => {
+                  return {
+                    section: opinion.section,
+                    sugg: opinion.suggAndObj || "Taklif va e'tirozlar yo'q",
+                  };
+                }),
+              }
+        }
       />
       {/* <Paper style={{ padding: 10 }}>
         <Accordion

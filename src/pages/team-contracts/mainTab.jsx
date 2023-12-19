@@ -36,19 +36,15 @@ export default function MainTab({ files, data, formData, bkutData }) {
         )}
       </div>
       <div className="modal-row">
-        <FormInput
-          name="employer"
-          disabled={isConfirmed}
-          required
-          value={data.employer}
-          label={t("team-contracts.employer")}
-        />
-        {/* <FormInput
-          name="bkutPpo"
-          value={bkutData.name}
-          disabled
-          label={t("team-contracts.bkutPpo")}
-        /> */}
+        {!isAnalysis && (
+          <FormInput
+            name="employer"
+            disabled={isConfirmed}
+            required
+            value={data.employer}
+            label={t("team-contracts.employer")}
+          />
+        )}
         <FormInput
           name="director"
           value={formData.director}
@@ -80,11 +76,6 @@ export default function MainTab({ files, data, formData, bkutData }) {
             required
             label={t("team-contracts.applicationNumber")}
           />
-          {/* <FormInput
-name="signDate"
-date
-label={t("team-contracts.signDate")}
-/> */}
         </div>
       )}
       {!isAnalysis && (

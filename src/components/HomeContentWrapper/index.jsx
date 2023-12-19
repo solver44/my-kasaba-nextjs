@@ -27,12 +27,13 @@ export default function HomeContentWrapper({
   const [countNotViewed, setCountNotViewed] = useState(0);
   const { bkutData = {} } = useSelector((state) => state);
   function openNotifications() {
-    setTimeout(async () => {
-      if (bkutData.id) {
-        await readAllNotifications(bkutData.id);
-        setCountNotViewed(0);
-      }
-    }, 100);
+    if (countNotViewed > 0)
+      setTimeout(async () => {
+        if (bkutData.id) {
+          await readAllNotifications(bkutData.id);
+          setCountNotViewed(0);
+        }
+      }, 100);
     setOpenDrawer(true);
   }
 
@@ -79,7 +80,7 @@ export default function HomeContentWrapper({
       >
         <div className={styles.drawer_content}>
           <h1 className={styles.drawer_title}>Xabarlar</h1>
-          {messages.map((message) => (
+          {messages.reverse().map((message) => (
             <Notification
               key={message.id}
               title={message.title}

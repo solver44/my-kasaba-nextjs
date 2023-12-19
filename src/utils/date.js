@@ -13,8 +13,8 @@ export function convertToDate(dateString) {
   return new Date(year, month - 1, day);
 }
 export function convertStringToFormatted(dateString, withTime) {
-  if(!dateString) return "";
-  const date = dayjs(dateString);
+  if (!dateString) return "";
+  const date = dayjs.isDayjs(dateString) ? dateString : dayjs(dateString);
   return date.format(withTime ? "DD.MM.YYYY  HH:m" : "DD.MM.YYYY");
 }
 
@@ -26,10 +26,11 @@ export function getRestOfDays(date2, date1) {
   const localEndDate = asLocalDate(date2);
   return Math.round((localEndDate - date1) / (1000 * 60 * 60 * 24));
 }
-export function getFormattedWithRestDay(date) {
+export function getFormattedWithRestDay(date, withoutFormat) {
   if (!date) return t("no");
   const formattedDate = convertStringToFormatted(date);
   const restOfDays = getRestOfDays(date, new Date());
+  if(withoutFormat) return restOfDays;
   const result = `${formattedDate} (${restOfDays} ${t("leave-day")})`;
   return result;
 }

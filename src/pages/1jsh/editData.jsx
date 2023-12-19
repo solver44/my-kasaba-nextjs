@@ -76,8 +76,8 @@ export default function EditData() {
   }
   useEffect(() => {
     initData().then(() => {
-      const el = bkutData.eLegalEntity;
-      let dbibt = el.soogu;
+      const el = bkutData?.eLegalEntity || {};
+      let dbibt = el?.soogu || {};
       dbibt = {
         value: dbibt.id,
         ktutCode: dbibt.ktutCode,
@@ -87,9 +87,9 @@ export default function EditData() {
       const soato = `${el.soato.code || ""} ${
         el.soato.nameUz || el.soato.nameRu
       }`;
-      const opf = `${el.opf.code || ""} ${el.opf.nameUz || el.opf.nameRu}`;
-      const ownership = `${el.ownership.code || ""} ${
-        el.ownership.nameUz || el.ownership.nameRu
+      const opf = `${el.opf?.code || ""} ${el.opf?.nameUz || el.opf?.nameRu}`;
+      const ownership = `${el.ownership?.code || ""} ${
+        el.ownership?.nameUz || el.ownership?.nameRu
       }`;
       const mainActivity = el.mainActivity;
       setValues((vals) => ({

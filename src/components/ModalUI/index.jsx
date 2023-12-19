@@ -79,7 +79,9 @@ function ModalUI({
           return (
             <React.Fragment>
               <div className={styles.top}>
-                <h2 className={styles.title}>{title}</h2>
+                <h2 className={styles.title}>
+                  {typeof title === "function" ? title(dataModal) : title}
+                </h2>
                 <IconButton onClick={onClose}>
                   <CloseOutlined />
                 </IconButton>

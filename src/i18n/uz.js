@@ -172,12 +172,18 @@ export default {
       sentDate: "Yuborilgan sana",
       signK: "Kasaba uyushmasidan imzoladi",
       commission: "Jamoatchilik ekspertizasining tashkilotchisi",
+      project: "Loyiha",
+      confirmed: "Tasdiqlangan",
+      "jsh-text": "Jamoa shartnomasi matni",
       "jsh-sent":
         "Jamoa shartnomasi tasdiqlash uchun muvaffaqiyatli yuborildi.",
       "project-sent": "Jamoa shartnoma loyihasi muvaffaqiyatli yuborildi.",
       "project-already-sent": "Jamoa shartnoma loyihasi allaqachon yuborilgan.",
       "project-not-expired":
         "Ushbu BKUT uchun amalda jamoa shartnomasi mavjud.",
+      "expired-current-jsh":
+        "Ushbu jamoa shartnomasining amal qilish muddati tugagan",
+      "expertize-file": "Ekspert xulosasi",
     },
     oneTI: {
       title:
@@ -257,7 +263,8 @@ export default {
       input3: "Shu jumladan, tuzilgan yakka mehnat nizolari komissiyalari",
       input4: "Yakka mehnat nizolari komissiyalari tomonidan koʼrilgan nizolar",
       input5: "Shundan hal etilgan nizolar soni",
-      input6: "Jamoa shartnomasi tadbirlarini bajarish uchun yil davomida sarf qilingan jami mablagʼ (soʼm)",
+      input6:
+        "Jamoa shartnomasi tadbirlarini bajarish uchun yil davomida sarf qilingan jami mablagʼ (soʼm)",
     },
 
     pinfl: "JShShIR",
@@ -493,6 +500,7 @@ export default {
       INANALYSIS: "Tahlilda",
       CONSIDERED: "Ko'rib chiqildi",
       TO_CONFIRM: "Tasdiqlash uchun yuborilgan",
+      CURRENT_JSH: "Amaldagi",
     },
     dTable: {
       toolbarDensity: "O'lcham",

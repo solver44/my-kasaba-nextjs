@@ -1,13 +1,15 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { saveAs } from "file-saver";
 import { t } from "i18next";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { CloudDownload, Download } from "@mui/icons-material";
 import { downloadFile } from "@/http/data";
 import { useSnackbar } from "notistack";
+import useAnimation from "@/hooks/useAnimation";
 
 const DocumentViewer = ({
+  showNameFile,
   documentSrc,
   generateData,
   url,
@@ -18,6 +20,7 @@ const DocumentViewer = ({
   const iframeRef = useRef();
   const dataForDownload = useRef();
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
 
   function download() {
     if (!dataForDownload.current) return;
@@ -75,20 +78,27 @@ const DocumentViewer = ({
   }
   useEffect(() => {
     async function initData() {
+      setLoading(true);
       let data = null;
       if (documentSrc) {
         if (generateData) data = generateDoc();
       } else if (url) {
-        data = await downloadFile(url, decodeURIComponent(url.split("=")[1]), true);
+        data = await downloadFile(
+          url,
+          decodeURIComponent(url.split("=")[1]),
+          true
+        );
         if (!data) {
-          enqueueSnackbar(t("file-cannot-open"), {variant: "error"});
+          setLoading(false);
+          enqueueSnackbar(t("file-cannot-open"), { variant: "error" });
           return;
         }
       }
-      previewWordDoc(data);
+      await previewWordDoc(data);
+      setLoading(false);
     }
     initData();
-  }, []);
+  }, [url]);
   return (
     <div className={styles.wrapper}>
       {!hideDownloadBtn && (
@@ -97,6 +107,7 @@ const DocumentViewer = ({
           <CloudDownload />
         </Button>
       )}
+      {loading && <CircularProgress className={styles.loader} />}
       <div ref={iframeRef}></div>
     </div>
   );

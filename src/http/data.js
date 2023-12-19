@@ -32,7 +32,7 @@ export async function downloadFile(file, name, onlyReturn) {
     const blob = new Blob([response.data], {
       type: response.headers["Content-Type"],
     });
-    if(onlyReturn) return blob;
+    if (onlyReturn) return blob;
     saveAs(blob, name);
     return true;
   } catch (e) {
@@ -117,10 +117,10 @@ export async function sendEBKUT(data) {
 }
 
 // Function to send contracts
-export async function sendContracts(data) {
+export async function sendContracts(data, isReturn) {
   try {
     const response = await $axios.post(
-      data?.collectiveAgreements?.statementNo
+      isReturn
         ? "/rest/services/application/returnCollectiveAgreements"
         : "/rest/services/application/applyCollectiveAgreements",
       data,
