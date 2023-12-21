@@ -4,13 +4,23 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
-export default function EditData() {
+function getOption(obj = {}) {
+  return {
+    value: obj.id,
+    ktutCode: obj.ktutCode,
+    label: `${obj.code || ""} ${obj.nameUz || obj.nameRu}`,
+    labelRu: obj.nameRu,
+  };
+}
+
+export default function EditData({ currentReport = {} }) {
   const { t } = useTranslation();
   const { bkutData = {} } = useSelector((states) => states);
-  const st = bkutData.statistics || {};
+  const st = currentReport || {};
   const [options, setOptions] = useState({});
   const [KTUTValue, setKTUT] = useState("");
   const [values, setValues] = useState({
+    date: st.date,
     bhutForm: st.bhutForm,
     xxtutForm: st.xxtutForm,
     ifutForm: st.ifutForm,
@@ -26,71 +36,41 @@ export default function EditData() {
     spentColAgrSum: st.spentColAgrSum,
   });
 
-  //   console.log(values);
-  useEffect(() => {
-    if (!bkutData.id) return;
-  }, [bkutData]);
-
   async function initData() {
     getDBOBT().then((data) => {
       setOptions((opts) => ({
         ...opts,
-        dbobt: data.map((current) => ({
-          value: current.id,
-          ktutCode: current.ktutCode,
-          label: `${current.code || ""} ${current.nameUz || current.nameRu}`,
-          labelRu: current.nameRu,
-        })),
+        dbobt: data.map((current) => getOption(current)),
       }));
     });
     getSOATO().then((data) => {
       setOptions((opts) => ({
         ...opts,
-        soato: data.map((current) => ({
-          value: current.id,
-          label: `${current.code || ""} ${current.nameUz || current.nameRu}`,
-          labelRu: current.nameRu,
-        })),
+        soato: data.map((current) => getOption(current)),
       }));
     });
     getOPF().then((data) => {
       setOptions((opts) => ({
         ...opts,
-        txt: data.map((current) => ({
-          value: current.id,
-          label: `${current.code || ""} ${current.nameUz || current.nameRu}`,
-          labelRu: current.nameRu,
-        })),
+        txt: data.map((current) => getOption(current)),
       }));
     });
     getOwnership().then((data) => {
       setOptions((opts) => ({
         ...opts,
-        msht: data.map((current) => ({
-          value: current.id,
-          label: `${current.code || ""} ${current.nameUz || current.nameRu}`,
-          labelRu: current.nameRu,
-        })),
+        msht: data.map((current) => getOption(current)),
       }));
     });
   }
   useEffect(() => {
+    if (!bkutData.id) return;
+
     initData().then(() => {
       const el = bkutData?.eLegalEntity || {};
-      let dbibt = el?.soogu || {};
-      dbibt = {
-        value: dbibt.id,
-        ktutCode: dbibt.ktutCode,
-        label: `${dbibt.code || ""} ${dbibt.nameUz || dbibt.nameRu}`,
-        labelRu: dbibt.nameRu,
-      };
-      const soato = `${el.soato.code || ""} ${
-        el.soato.nameUz || el.soato.nameRu
-      }`;
-      const opf = `${el.opf?.code || ""} ${el.opf?.nameUz || el.opf?.nameRu}`;
-      const ownership = `${el.ownership?.code || ""} ${
-        el.ownership?.nameUz || el.ownership?.nameRu
-      }`;
+      let dbibt = getOption(el?.soogu);
+      let soato = getOption(el?.soato);
+      let opf = getOption(el?.opf);
+      let ownership = getOption(el?.ownership);
       const mainActivity = el.mainActivity;
       setValues((vals) => ({
         ...vals,
@@ -101,10 +81,12 @@ export default function EditData() {
         mainActivity,
       }));
     });
-  }, []);
+  }, [bkutData]);
 
   return (
     <div style={{ marginTop: 20 }} className="modal-content">
+      <FormInput name="id" hidden value={currentReport.id} />
+      <FormInput name="date" hidden value={values.date} />
       <FormInput
         name="stir"
         disabled
@@ -115,8 +97,9 @@ export default function EditData() {
         <FormInput
           name="dbibt"
           required
-          autocomplete
-          options={options.dbobt}
+          select
+          allowInputSelect
+          dataSelect={options.dbobt}
           value={values.dbibt}
           onChange={({ target }) => {
             const data = target.value;
@@ -156,8 +139,9 @@ export default function EditData() {
         <FormInput
           name="soato"
           required
-          autocomplete
-          options={options.soato}
+          select
+          allowInputSelect
+          dataSelect={options.soato}
           value={values.soato}
           label={t("1sh.soato")}
         />
@@ -166,16 +150,18 @@ export default function EditData() {
         <FormInput
           name="txt"
           required
-          autocomplete
-          options={options.txt}
+          select
+          allowInputSelect
+          dataSelect={options.txt}
           value={values.opf}
           label={t("1sh.txt")}
         />
         <FormInput
           name="msht"
           required
-          autocomplete
-          options={options.msht}
+          select
+          allowInputSelect
+          dataSelect={options.msht}
           value={values.ownership}
           label={t("1sh.msht")}
         />

@@ -17,6 +17,7 @@ import InputDate from "../InputDate";
 import { UploadRounded } from "@mui/icons-material";
 import dayjs from "dayjs";
 import { downloadFile } from "@/http/data";
+import areEqual from "@/utils/areEqual";
 
 function getStyles(currentData, multipleValues = []) {
   const isSelected = !Array.isArray(multipleValues)
@@ -28,19 +29,20 @@ function getStyles(currentData, multipleValues = []) {
   };
 }
 
-export default function ChangableInput({
+function ChangableInput({
   editable = true,
   onChange,
   value: propValue,
+  allowInputSelect,
   label,
   required,
+  hideEmpty,
   multiple,
   date,
   maxDate,
   minDate,
   invalid,
   select,
-  autocomplete,
   fileInput,
   nameOfFile,
   options = [],
@@ -57,13 +59,6 @@ export default function ChangableInput({
     i18n: { language },
   } = useTranslation();
   const [fileName, setFileName] = useState(nameOfFile ?? "");
-  const [autoCompleteValue, setAutoCompleteValue] = useState(value);
-
-
-  useEffect(() => {
-    if (!autocomplete) return;
-    setAutoCompleteValue(propValue);
-  }, [propValue]);
 
   function onChangeFunc({ target }) {
     let result = null;
@@ -115,6 +110,13 @@ export default function ChangableInput({
   const validationError =
     typeof invalid === "string" ? validationError : "invalid-input";
 
+  const autocompleteValue = propValue !== undefined ? propValue : "";
+
+  useEffect(() => {
+    if (!allowInputSelect || !autocompleteValue) return;
+    onChange({ target: { value: autocompleteValue } }, name);
+  }, [propValue]);
+
   return (
     <div style={style} className={styles.wrapper}>
       <label className={styles.label}>
@@ -133,110 +135,105 @@ export default function ChangableInput({
           value={value}
           {...props}
         />
-      ) : autocomplete ? (
-        <Autocomplete
-          id={name + "_autocomplete"}
-          autoHighlight
-          freeSolo
-          inputValue={autoCompleteValue?.label || autoCompleteValue}
-          onChange={(event, value) => {
-            onChangeFunc({
-              target: { value },
-            });
-          }}
-          options={options}
-          className={[
-            styles.autocomplete,
-            props.disabled ? styles.disabled : "",
-            invalid ? styles.invalid : "",
-          ].join(" ")}
-          getOptionLabel={(current) =>
-            language === "uz" ? current.label : current?.labelRu
-          }
-          renderInput={(params) => {
-            return (
-              <TextField
-                {...params}
-                name={name}
-                error={!!invalid}
-                helperText={invalid ? t(validationError) : false}
-                className={[
-                  styles.autocomplete_input,
-                  !!invalid ? styles.invalid : "",
-                ].join(" ")}
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
-                }}
-              />
-            );
-          }}
-        />
       ) : select ? (
-        <FormControl>
-          <Select
-            name={name}
-            multiple={!!multiple}
-            onChange={onChangeFunc}
-            displayEmpty
-            value={
-              !!multiple
-                ? multipleValues
-                : dataSelect.find((d) => d.value == propValue)?.label ?? ""
-            }
+        allowInputSelect ? (
+          <Autocomplete
+            value={autocompleteValue}
+            autoHighlight
             className={[
-              styles.select,
-              !!multiple ? styles.multipleSelect : "",
+              styles.autocomplete,
               props.disabled ? styles.disabled : "",
               invalid ? styles.invalid : "",
             ].join(" ")}
-            renderValue={
-              multiple
-                ? (selected) => {
-                    if (!selected?.length) return null;
-                    return (
-                      <Box
-                        sx={{
-                          marginTop: "-4px",
-                          marginBottom: "-4px",
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: 0.5,
-                        }}
-                      >
-                        {(selected ?? []).map((t) => {
-                          const current = dataSelect.find((d) => d.value == t);
-                          return (
-                            <Chip key={current.value} label={current.label} />
-                          );
-                        })}
-                      </Box>
-                    );
-                  }
-                : (selected) => {
-                    if (!selected) return "";
-                    return selected;
-                  }
+            onChange={(event, newValue) => {
+              onChange({ target: { value: newValue } }, name);
+            }}
+            options={dataSelect}
+            getOptionLabel={(current) =>
+              (language === "uz" ? current?.label : current?.labelRu) || ""
             }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={!!invalid}
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: "new-password",
+                }}
+              />
+            )}
             {...props}
-          >
-            {dataSelect.map((current) => (
-              <MenuItem
-                key={current.value}
-                value={current.value}
-                style={getStyles(
-                  current,
-                  !!multiple ? multipleValues : propValue
-                )}
-              >
-                {language === "uz" ? current.label : current?.labelRu}
-              </MenuItem>
-            ))}
-          </Select>
-          {invalid && (
-            <FormHelperText error>{t(validationError)}</FormHelperText>
-          )}
-        </FormControl>
+          />
+        ) : (
+          <FormControl>
+            <Select
+              name={name}
+              multiple={!!multiple}
+              onChange={onChangeFunc}
+              displayEmpty={hideEmpty}
+              value={
+                !!multiple
+                  ? multipleValues
+                  : dataSelect.find((d) => d.value == propValue)?.label ?? ""
+              }
+              className={[
+                styles.select,
+                !!multiple ? styles.multipleSelect : "",
+                props.disabled ? styles.disabled : "",
+                invalid ? styles.invalid : "",
+              ].join(" ")}
+              renderValue={
+                multiple
+                  ? (selected) => {
+                      if (!selected?.length) return null;
+                      return (
+                        <Box
+                          sx={{
+                            marginTop: "-4px",
+                            marginBottom: "-4px",
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 0.5,
+                          }}
+                        >
+                          {(selected ?? []).map((t) => {
+                            const current = dataSelect.find(
+                              (d) => d.value == t
+                            );
+                            return (
+                              <Chip key={current.value} label={current.label} />
+                            );
+                          })}
+                        </Box>
+                      );
+                    }
+                  : (selected) => {
+                      if (!selected) return "";
+                      return selected;
+                    }
+              }
+              {...props}
+            >
+              {dataSelect.map((current) => (
+                <MenuItem
+                  key={current.value}
+                  value={current.value}
+                  style={getStyles(
+                    current,
+                    !!multiple ? multipleValues : propValue
+                  )}
+                >
+                  {language === "uz"
+                    ? current.label
+                    : current?.labelRu || current?.label}
+                </MenuItem>
+              ))}
+            </Select>
+            {invalid && (
+              <FormHelperText error>{t(validationError)}</FormHelperText>
+            )}
+          </FormControl>
+        )
       ) : fileInput ? (
         <label
           className={[
@@ -279,3 +276,4 @@ export default function ChangableInput({
     </div>
   );
 }
+export default React.memo(ChangableInput, areEqual);

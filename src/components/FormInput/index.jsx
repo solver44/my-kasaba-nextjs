@@ -11,6 +11,7 @@ function FormInput({
   value,
   hidden,
   invalid,
+  autoComplete,
   ...props
 }) {
   const { control, setValue } = useFormContext() ?? { control: false };

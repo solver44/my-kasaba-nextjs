@@ -259,13 +259,15 @@ export default function InDataTable({ filter }) {
       topButtons={(selectedRows, toggleModal) => {
         return (
           <React.Fragment>
-            <BigButton
-              green={"primary"}
-              onClick={() => toggleModal(null, { id: "currentJSH" })}
-              Icon={Add}
-            >
-              {t("jsh-add")}
-            </BigButton>
+            {!isHideAddBtn && (
+              <BigButton
+                green={"primary"}
+                onClick={() => toggleModal(null, { id: "currentJSH" })}
+                Icon={Add}
+              >
+                {t("jsh-add")}
+              </BigButton>
+            )}
             {!isHideAddBtn && (
               <BigButton
                 green={"success"}

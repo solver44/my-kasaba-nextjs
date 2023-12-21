@@ -98,7 +98,7 @@ const DocumentViewer = ({
       setLoading(false);
     }
     initData();
-  }, [url]);
+  }, [url, generateData]);
   return (
     <div className={styles.wrapper}>
       {!hideDownloadBtn && (

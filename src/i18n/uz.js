@@ -173,7 +173,7 @@ export default {
       signK: "Kasaba uyushmasidan imzoladi",
       commission: "Jamoatchilik ekspertizasining tashkilotchisi",
       project: "Loyiha",
-      confirmed: "Tasdiqlangan",
+      confirmed: "Ro'yhatga olingan",
       "jsh-text": "Jamoa shartnomasi matni",
       "jsh-sent":
         "Jamoa shartnomasi tasdiqlash uchun muvaffaqiyatli yuborildi.",
@@ -184,6 +184,8 @@ export default {
       "expired-current-jsh":
         "Ushbu jamoa shartnomasining amal qilish muddati tugagan",
       "expertize-file": "Ekspert xulosasi",
+      "opinion-file": "Ekspert xulosa fayli",
+      "opinions": "Ekspert xulosasi",
     },
     oneTI: {
       title:
@@ -290,6 +292,9 @@ export default {
     all: "Barchasi",
     bkutEmployee: "Boshlang'ich tashkilot xodimi",
 
+    "for-year": "{{year}} yil uchun",
+    "report-entered": "Hisobot kiritilgan",
+    "report-not-entered": "Hisobot kiritilmagan",
     createDoc: "Guvohnoma yaratish",
     certificate: "Guvohnoma",
     requestGivenDate: "Murojaat berilgan sana",
@@ -488,19 +493,19 @@ export default {
     opinions: "Ekspert xulosasi",
     "jsh-add": "Amaldagi JSH ni qo'shish",
     considired: "Ko'rib chiqilgan",
-    confirmed: "Tasdiqlangan",
+    confirmed: "Ro'yhatdan o'tgan",
     "1jsh-report": "1JSH hisoboti",
     "to-register": "Ro'yhatdan o'tkazish",
     "leave-day": "kun qoldi",
     "status-label": "Holati",
     "user-open": "Foydalanuvchini ko'rish",
     status: {
-      CONFIRMED: "Tasdiqlangan",
+      CONFIRMED: "Ro'yhatga olingan",
       INEXECUTION: "Tahlilda",
       INANALYSIS: "Tahlilda",
       CONSIDERED: "Ko'rib chiqildi",
       TO_CONFIRM: "Tasdiqlash uchun yuborilgan",
-      CURRENT_JSH: "Amaldagi",
+      CURRENT_JSH: "Tahlilda",
     },
     dTable: {
       toolbarDensity: "O'lcham",

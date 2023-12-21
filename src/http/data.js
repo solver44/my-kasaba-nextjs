@@ -116,7 +116,21 @@ export async function sendEBKUT(data) {
   }
 }
 
-// Function to send contracts
+export async function sendCollectiveReport(data) {
+  try {
+    const { data: response } = await $axios.post(
+      "/rest/services/application/sendCollectiveAgrReport",
+      data,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function sendContracts(data, isReturn) {
   try {
     const response = await $axios.post(

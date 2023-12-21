@@ -11,7 +11,7 @@
 }
 .label {
   font-size: var(--input-font-size);
-  color: var(--input-color);
+  color: var(--input-label-color);
   font-weight: var(--input-font-weight);
   position: relative;
   width: max-content;
@@ -93,6 +93,7 @@
   background: var(--input-incolor);
   & > :first-child > :first-child {
     padding: 2px;
+    font-size: var(--input-inside-font-size) !important;
   }
 }
 .autocomplete_input {
@@ -106,17 +107,9 @@
     }
   }
   border-radius: var(--input-radius);
-  input {
-    padding: 8px !important;
-    resize: vertical;
-    font-size: 1rem;
-    font-size: var(--input-inside-font-size);
-  }
   &.disabled {
     background: var(--input-disabled-color) !important;
-    input {
-      cursor: not-allowed !important;
-    }
+    cursor: not-allowed !important;
     fieldset {
       background-color: var(--input-disabled-color) !important;
     }
@@ -133,8 +126,8 @@
     border: 1px solid var(--input-border-color) !important;
   }
   border-radius: var(--input-radius);
+  max-width: 500px;
   & > :first-child {
-    max-width: 500px;
     overflow: hidden;
     padding: 10px !important;
     min-height: auto !important;
