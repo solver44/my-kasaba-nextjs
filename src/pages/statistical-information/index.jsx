@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HomeWrapper from "../home/wrapper";
 import styles from "./statistical-information.module.scss";
 import useAnimation from "@/hooks/useAnimation";
@@ -19,6 +19,8 @@ import { useSelector } from "react-redux";
 import { enqueueSnackbar } from "notistack";
 import EditData from "./editData";
 import useActions from "@/hooks/useActions";
+import dayjs from "dayjs";
+import ChangableInput from "@/components/ChangableInput";
 
 export default function StatisticalInformation() {
   const { t } = useTranslation();
@@ -27,6 +29,9 @@ export default function StatisticalInformation() {
   const { bkutData = {} } = useSelector((states) => states);
   const [loadingEditMode, setLoadingEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
+  const [currentReport, setCurrentReport] = useState({});
+  const [years, setYears] = useState([]);
+  const [currentYear, setYear] = useState(dayjs().year());
   const animRef = useAnimation();
   const allText = t("statistical-information.all");
   // const employeesText = t("statistical-information.employees");
@@ -36,51 +41,49 @@ export default function StatisticalInformation() {
   const saveStatistics = async (forms) => {
     try {
       const requestData = {
-        id: bkutData.id,
-        statistics: {
-          ...(bkutData.statistics || {}),
-          workersAdults: forms.workersAdults,
-          workersFemale: forms.workersFemale,
-          firedMembersAmount: forms.firedMembersAmount,
-          staffingResponsibleWorkers: forms.staffingResponsibleWorkers,
-          homemakerAmount: forms.homemakerAmount,
-          isProvidedPC: forms.isProvidedPC,
-          staffingTechnicalWorkers: forms.staffingTechnicalWorkers,
-          isProvidedInternet: forms.isProvidedInternet,
-          newMemebersAmount: forms.newMemebersAmount,
-          pensionerAmount: forms.pensionerAmount,
-          isProvidedPaidApparatus: forms.isProvidedPaidApparatus,
-          studentsFemale: forms.studentsFemale,
-          workersMembers: forms.workersMembers,
-          isFiredFromMainJob: forms.isFiredFromMainJob,
-          staffingWorkersAmount: forms.staffingWorkersAmount,
-          isCollegialPresident: forms.isCollegialPresident,
-          workersAmount: forms.workersAmount,
-          membersProvidedTicket: forms.membersProvidedTicket,
-          studentsAdultsMembers: forms.studentsAdultsMembers,
-          studentsAmount: forms.studentsAmount,
-          studentsAdults: forms.studentsAdults,
-          studentsMembers: forms.studentsMembers,
-          studentsFemaleMembers: forms.studentsFemaleMembers,
-          invalidAmount: forms.invalidAmount,
-          salaryByAgreements: forms.salaryByAgreements,
-          spentAmount: forms.spentAmount,
-          workersFemaleMembers: forms.workersFemaleMembers,
-          workersAdultsMembers: forms.workersAdultsMembers,
-          staffingAmount: forms.staffingAmount,
-          staffingResponsibleWorkers: forms.staffingResponsibleWorkers,
-          isProvidedPC: forms.isProvidedPC,
-          isProvidedInternet: forms.isProvidedInternet,
-          isProvidedPaidApparatus: forms.isProvidedPaidApparatus,
-          isFiredFromMainJob: forms.isFiredFromMainJob,
-          isCollegialPresident: forms.isCollegialPresident,
-          isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
+        bkut: {
+          id: bkutData.id,
         },
+        workersAdults: forms.workersAdults,
+        workersFemale: forms.workersFemale,
+        firedMembersAmount: forms.firedMembersAmount,
+        staffingResponsibleWorkers: forms.staffingResponsibleWorkers,
+        homemakerAmount: forms.homemakerAmount,
+        isProvidedPC: forms.isProvidedPC,
+        staffingTechnicalWorkers: forms.staffingTechnicalWorkers,
+        isProvidedInternet: forms.isProvidedInternet,
+        newMemebersAmount: forms.newMemebersAmount,
+        pensionerAmount: forms.pensionerAmount,
+        isProvidedPaidApparatus: forms.isProvidedPaidApparatus,
+        studentsFemale: forms.studentsFemale,
+        workersMembers: forms.workersMembers,
+        isFiredFromMainJob: forms.isFiredFromMainJob,
+        staffingWorkersAmount: forms.staffingWorkersAmount,
+        isCollegialPresident: forms.isCollegialPresident,
+        workersAmount: forms.workersAmount,
+        membersProvidedTicket: forms.membersProvidedTicket,
+        studentsAdultsMembers: forms.studentsAdultsMembers,
+        studentsAmount: forms.studentsAmount,
+        studentsAdults: forms.studentsAdults,
+        studentsMembers: forms.studentsMembers,
+        studentsFemaleMembers: forms.studentsFemaleMembers,
+        invalidAmount: forms.invalidAmount,
+        salaryByAgreements: forms.salaryByAgreements,
+        spentAmount: forms.spentAmount,
+        workersFemaleMembers: forms.workersFemaleMembers,
+        workersAdultsMembers: forms.workersAdultsMembers,
+        staffingAmount: forms.staffingAmount,
+        staffingResponsibleWorkers: forms.staffingResponsibleWorkers,
+        isProvidedPC: forms.isProvidedPC,
+        isProvidedInternet: forms.isProvidedInternet,
+        isProvidedPaidApparatus: forms.isProvidedPaidApparatus,
+        isFiredFromMainJob: forms.isFiredFromMainJob,
+        isCollegialPresident: forms.isCollegialPresident,
+        isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
       };
-      if (bkutData?.statistics?.id)
-        requestData.statistics.id = bkutData.statistics.id;
+      if (currentReport?.id) requestData.id = currentReport.id;
 
-      const response = await sendEBKUT(requestData);
+      const response = await sendStatistics(requestData);
 
       if (response?.id) {
         setEditMode(false);
@@ -94,77 +97,96 @@ export default function StatisticalInformation() {
 
   const categories = [t("all"), t("statistical-information.group2")];
   const group1Data = [
-    { name: allText, y: [bkutData.statistics?.workersAmount] },
-    { name: womenText, y: [bkutData.statistics?.workersFemale] },
-    { name: adultsText, y: [bkutData.statistics?.workersAdults] },
+    { name: allText, y: [currentReport?.workersAmount] },
+    { name: womenText, y: [currentReport?.workersFemale] },
+    { name: adultsText, y: [currentReport?.workersAdults] },
   ];
   const group3Data = [
-    { name: allText, y: [bkutData.statistics?.studentsAmount] },
-    { name: womenText, y: [bkutData.statistics?.studentsFemale] },
-    { name: adultsText, y: [bkutData.statistics?.studentsAdults] },
+    { name: allText, y: [currentReport?.studentsAmount] },
+    { name: womenText, y: [currentReport?.studentsFemale] },
+    { name: adultsText, y: [currentReport?.studentsAdults] },
   ];
-  const group4Data = [
-    { name: allText, y: [bkutData.statistics?.pensionerAmount] },
-  ];
-  const group5Data = [
-    { name: allText, y: [bkutData.statistics?.homemakerAmount] },
-  ];
-  const group6Data = [
-    { name: allText, y: [bkutData.statistics?.invalidAmount] },
-  ];
+  const group4Data = [{ name: allText, y: [currentReport?.pensionerAmount] }];
+  const group5Data = [{ name: allText, y: [currentReport?.homemakerAmount] }];
+  const group6Data = [{ name: allText, y: [currentReport?.invalidAmount] }];
 
   const group7Data = [
     {
       name: t("statistical-information.input1"),
-      y: [bkutData.statistics?.staffingAmount],
+      y: [currentReport?.staffingAmount],
     },
     {
       name: t("statistical-information.input2"),
-      y: [bkutData.statistics?.staffingWorkersAmount],
+      y: [currentReport?.staffingWorkersAmount],
     },
     {
       name: t("statistical-information.input3"),
-      y: [bkutData.statistics?.staffingResponsibleWorkers],
+      y: [currentReport?.staffingResponsibleWorkers],
     },
     {
       name: t("statistical-information.input4"),
-      y: [bkutData.statistics?.staffingTechnicalWorkers],
+      y: [currentReport?.staffingTechnicalWorkers],
     },
   ];
   const group8Data = [
     {
       name: t("statistical-information.input5"),
-      y: [bkutData.statistics?.salaryByAgreements],
+      y: [currentReport?.salaryByAgreements],
     },
     {
       name: t("statistical-information.input6"),
-      y: [bkutData.statistics?.spentAmount],
+      y: [currentReport?.spentAmount],
     },
     {
       name: t("statistical-information.input7"),
-      y: [bkutData.statistics?.newMemebersAmount],
+      y: [currentReport?.newMemebersAmount],
     },
     {
       name: t("statistical-information.input8"),
-      y: [bkutData.statistics?.firedMembersAmount],
+      y: [currentReport?.firedMembersAmount],
     },
     {
       name: t("statistical-information.input9"),
-      y: [bkutData.statistics?.membersProvidedTicket],
+      y: [currentReport?.membersProvidedTicket],
     },
   ];
   const handleSubmit = async (forms, oldForms) => {
     try {
-      if (!areEqual(forms, oldForms)) {
-        setLoadingEditMode(true);
-        await saveStatistics(forms);
-        setLoadingEditMode(false);
-        setIsChanged(false);
-      }
+      setLoadingEditMode(true);
+      await saveStatistics(forms);
+      setLoadingEditMode(false);
+      setIsChanged(false);
     } catch (error) {
       // Handle any errors here
     }
   };
+
+  useEffect(() => {
+    if (!bkutData.id) return;
+    const allYears = [];
+    const y = dayjs().year();
+    (bkutData.reports || []).forEach((r) => {
+      const cYear = dayjs(r.date).year();
+      if (cYear == y) return;
+      allYears.push({
+        value: cYear,
+        label: t("for-year", { year: cYear }),
+        labelRu: t("for-year", { year: cYear }),
+      });
+    });
+    allYears.push({ value: y, label: t("for-year", { year: y }) });
+    setYears(allYears.reverse());
+  }, [bkutData]);
+
+  useEffect(() => {
+    if (!bkutData.id) return;
+    const temp = (bkutData.reports || []).find((r) => {
+      const cYear = dayjs(r.date).year();
+      return cYear == currentYear;
+    });
+    setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
+  }, [currentYear, bkutData]);
+
   return (
     <FormValidation
       className={styles.form}
@@ -195,16 +217,38 @@ export default function StatisticalInformation() {
               {t("change")}
             </Button>
           ) : (
-            <LoadingButton
-              variant="contained"
-              type="submit"
-              // disabled={!isChanged}
-              startIcon={<EditIcon />}
-              loading={loadingEditMode}
-            >
-              {t("save")}
-            </LoadingButton>
+            dayjs(currentReport?.date).year() == dayjs().year() && (
+              <LoadingButton
+                variant="contained"
+                type="submit"
+                // disabled={!isChanged}
+                startIcon={<EditIcon />}
+                loading={loadingEditMode}
+              >
+                {t("save")}
+              </LoadingButton>
+            )
           )}
+          {!editMode && (
+            <ChangableInput
+              style={{ width: 200 }}
+              hideEmpty
+              value={currentYear}
+              select
+              dataSelect={years}
+              onChange={({ target: { value } }) => setYear(value)}
+            />
+          )}
+          <p
+            className={[
+              styles.titleYear,
+              currentReport?.workersAmount ? "" : styles.red,
+            ].join(" ")}
+          >
+            {currentReport?.workersAmount
+              ? t("report-entered")
+              : t("report-not-entered")}
+          </p>
         </div>
         {!editMode ? (
           <div className={styles.grid}>
@@ -255,45 +299,35 @@ export default function StatisticalInformation() {
             </CardUI>
             <CardUI
               value={
-                <CheckedBox
-                  value={bkutData.statistics?.isProvidedPrivateRoom}
-                />
+                <CheckedBox value={currentReport?.isProvidedPrivateRoom} />
               }
               label={t("statistical-information.input10")}
             />
             <CardUI
-              value={<CheckedBox value={bkutData.statistics?.isProvidedPC} />}
+              value={<CheckedBox value={currentReport?.isProvidedPC} />}
               label={t("statistical-information.input11")}
             />
             <CardUI
-              value={
-                <CheckedBox value={bkutData.statistics?.isProvidedInternet} />
-              }
+              value={<CheckedBox value={currentReport?.isProvidedInternet} />}
               label={t("statistical-information.input12")}
             />
             <CardUI
-              value={
-                <CheckedBox value={bkutData.statistics?.isCollegialPresident} />
-              }
+              value={<CheckedBox value={currentReport?.isCollegialPresident} />}
               label={t("statistical-information.input13")}
             />
             <CardUI
-              value={
-                <CheckedBox value={bkutData.statistics?.isFiredFromMainJob} />
-              }
+              value={<CheckedBox value={currentReport?.isFiredFromMainJob} />}
               label={t("statistical-information.input14")}
             />
             <CardUI
               value={
-                <CheckedBox
-                  value={bkutData.statistics?.isProvidedPaidApparatus}
-                />
+                <CheckedBox value={currentReport?.isProvidedPaidApparatus} />
               }
               label={t("statistical-information.input15")}
             />
           </div>
         ) : (
-          <EditData />
+          <EditData currentReport={currentReport} />
         )}
       </div>
     </FormValidation>

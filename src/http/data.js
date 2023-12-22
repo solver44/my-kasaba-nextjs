@@ -148,16 +148,16 @@ export async function sendContracts(data, isReturn) {
     return error;
   }
 }
-export async function sendStatistics(_data) {
+export async function sendStatistics(_data = {}) {
   try {
-    const { ...data } = _data;
-    const { data: response } = await $axios.post(
-      "/rest/entities/EReports",
-      data,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const { id, ...data } = _data;
+    const { data: response } = id
+      ? await $axios.put("/rest/entities/EReports/" + id, data, {
+          headers: { "Content-Type": "application/json" },
+        })
+      : await $axios.post("/rest/entities/EReports", data, {
+          headers: { "Content-Type": "application/json" },
+        });
     return response?.id
       ? { ...response, success: true }
       : { ...response, success: false };

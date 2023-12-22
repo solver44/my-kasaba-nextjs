@@ -6,10 +6,9 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export default function EditData() {
+export default function EditData({ currentReport = {} }) {
   const { t } = useTranslation();
-  const { bkutData = {} } = useSelector((states) => states);
-  const st = bkutData.statistics || {};
+  const st = currentReport;
   const [values, setValues] = useState({
     workersAdults: st.workersAdults ?? 0,
     workersFemale: st.workersFemale ?? 0,

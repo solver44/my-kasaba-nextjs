@@ -108,10 +108,6 @@ export default function JSH1() {
     <FormValidation
       className={styles.form}
       onSubmit={handleSubmit}
-      // onChanged={(data, oldData) => {
-      //   if (areEqual(data, oldData)) setIsChanged(false);
-      //   else setIsChanged(true);
-      // }}
     >
       <div ref={animRef} className={styles.container}>
         <div className={styles.editBtn}>
