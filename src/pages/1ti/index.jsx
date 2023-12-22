@@ -43,37 +43,37 @@ export default function OneTI() {
   }, [currentYear, bkutData]);
 
   useEffect(() => {
-    if (!currentReport.id) return;
+    if (!currentReport.date) return;
 
     const year = currentYear;
     const rais = getPresidentBKUT(bkutData);
 
     const tempJsonData = {
-      CURRENTYEARS: year.toString(),
+      CURRENTYEARS: year.toString() || "0",
       BKUTNAME: bkutData.name,
       BKUTDIRECTOR: rais,
       PHONE: bkutData.phone,
       ISFIRED: !currentReport.isFiredFromMainJob ? "yo'q" : "ha",
       ISAPPARATUS: !currentReport?.isProvidedPaidApparatus ? "yo'q" : "ha",
-      WORKERSAMOUNT: currentReport?.workersAmount?.toString(),
-      WORKERSFEMALE: currentReport?.workersFemale?.toString(),
-      WORKERSADULTS: currentReport?.workersAdults?.toString(),
-      WORKERSMEMBERS: currentReport?.workersMembers?.toString(),
-      WORKERSFEMALEMEMBERS: currentReport?.workersFemaleMembers?.toString(),
-      WORKERSADULTSMEMBERS: currentReport?.workersAdultsMembers?.toString(),
-      STUDENTSAMOUNT: currentReport?.studentsAmount?.toString(),
-      STUDENTSFEMALE: currentReport?.studentsFemale?.toString(),
-      STUDENTSADULTS: currentReport?.studentsAdults?.toString(),
-      STUDENTSMEMBERS: currentReport?.studentsMembers?.toString(),
-      STUDENTSFEMALEMEMBERS: currentReport?.studentsFemaleMembers?.toString(),
-      STUDENTSADULTSMEMBERS: currentReport?.studentsAdultsMembers?.toString(),
-      PENSIONERAMOUNT: currentReport?.pensionerAmount?.toString(),
-      STAFFINGAMOUNT: currentReport?.staffingAmount?.toString(),
-      STAFFINGWORKERSAMOUNT: currentReport?.staffingWorkersAmount?.toString(),
+      WORKERSAMOUNT: currentReport?.workersAmount?.toString() || "0",
+      WORKERSFEMALE: currentReport?.workersFemale?.toString() || "0",
+      WORKERSADULTS: currentReport?.workersAdults?.toString() || "0",
+      WORKERSMEMBERS: currentReport?.workersMembers?.toString() || "0",
+      WORKERSFEMALEMEMBERS: currentReport?.workersFemaleMembers?.toString() || "0",
+      WORKERSADULTSMEMBERS: currentReport?.workersAdultsMembers?.toString() || "0",
+      STUDENTSAMOUNT: currentReport?.studentsAmount?.toString() || "0",
+      STUDENTSFEMALE: currentReport?.studentsFemale?.toString() || "0",
+      STUDENTSADULTS: currentReport?.studentsAdults?.toString() || "0",
+      STUDENTSMEMBERS: currentReport?.studentsMembers?.toString() || "0",
+      STUDENTSFEMALEMEMBERS: currentReport?.studentsFemaleMembers?.toString() || "0",
+      STUDENTSADULTSMEMBERS: currentReport?.studentsAdultsMembers?.toString() || "0",
+      PENSIONERAMOUNT: currentReport?.pensionerAmount?.toString() || "0",
+      STAFFINGAMOUNT: currentReport?.staffingAmount?.toString() || "0",
+      STAFFINGWORKERSAMOUNT: currentReport?.staffingWorkersAmount?.toString() || "0",
       STAFFINGRESPONSIBLEWORKERS:
-        currentReport?.staffingResponsibleWorkers?.toString(),
+        currentReport?.staffingResponsibleWorkers?.toString() || "0",
       STAFFINGTECHNICALWORKERS:
-        currentReport?.staffingTechnicalWorkers?.toString(),
+        currentReport?.staffingTechnicalWorkers?.toString() || "0",
     };
 
     setData(tempJsonData);
