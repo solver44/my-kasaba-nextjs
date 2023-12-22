@@ -44,6 +44,7 @@ export default function StatisticalInformation() {
         bkut: {
           id: bkutData.id,
         },
+        date: currentReport.date,
         workersAdults: forms.workersAdults,
         workersFemale: forms.workersFemale,
         firedMembersAmount: forms.firedMembersAmount,
