@@ -40,7 +40,6 @@ export default function OneTI() {
       return cYear == currentYear;
     });
     setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
-    if (!temp?.workersAmount && !editMode) setEditMode(true);
   }, [currentYear, bkutData]);
 
   useEffect(() => {
