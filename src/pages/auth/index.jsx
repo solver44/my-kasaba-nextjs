@@ -18,7 +18,7 @@ import Image from "next/image";
 import Input from "@/components/Input";
 import { validateEmpty } from "@/utils/validation";
 import { useSnackbar } from "notistack";
-import { getBKUTData, getBKUTID } from "@/http/data";
+import { getBKUTData, getBKUTID, loginRest } from "@/http/data";
 import Cookies from "universal-cookie";
 
 export default function Auth() {
@@ -54,11 +54,13 @@ export default function Auth() {
     }
     actions.showLoading(true);
 
-    const bkutData = await getBKUTID(inputData.username, inputData.password);
+    const bkutData = await loginRest(inputData.username, inputData.password);
     if (bkutData?.success) {
       localStorage.setItem("token", bkutData.id);
+      localStorage.setItem("type", bkutData.type);
       const cookies = new Cookies();
       cookies.set("token", bkutData.id);
+      cookies.set("type", bkutData.type);
       actions.loginSuccess();
       const resData = await getBKUTData(bkutData.id);
       if (resData?.protocolFile) {

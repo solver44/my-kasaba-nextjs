@@ -126,8 +126,8 @@
     border: 1px solid var(--input-border-color) !important;
   }
   border-radius: var(--input-radius);
-  max-width: 500px;
   & > :first-child {
+    max-width: 500px;
     overflow: hidden;
     padding: 10px !important;
     min-height: auto !important;

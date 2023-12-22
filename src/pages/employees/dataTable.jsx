@@ -85,7 +85,7 @@ export default function InDataTable({ filter, onUpload, min }) {
   }, [rows]);
   useEffect(() => {
     bkutDataRef.current = bkutData;
-    if (!bkutData?.employees?.length) return;
+    if (!bkutData?.id) return;
     setRows(
       bkutData.employees.filter(filter ? filter : () => true).map((e) => {
         return {

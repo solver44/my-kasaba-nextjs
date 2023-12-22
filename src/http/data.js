@@ -1,9 +1,19 @@
 import { saveAs } from "file-saver";
 import { $axios, BASE_URL, getDeleteResponse } from ".";
 
+export async function loginRest(login, password) {
+  try {
+    const { data } = await $axios.get("/rest/services/application/login", {
+      params: { email: login, password },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
 export async function getBKUTID(login, password) {
   try {
-    const { data } = await $axios.get("/rest/services/bkut/get", {
+    const { data } = await $axios.get("/rest/services/appli", {
       params: { email: login, password },
     });
     return data;

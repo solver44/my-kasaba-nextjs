@@ -39,6 +39,9 @@ export default function OneTI() {
       const cYear = dayjs(r.date).year();
       return cYear == currentYear;
     });
+    if (typeof temp === "object")
+      temp.date = temp?.date || dayjs().format("YYYY-MM-DD");
+
     setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
   }, [currentYear, bkutData]);
 
@@ -49,31 +52,30 @@ export default function OneTI() {
     const rais = getPresidentBKUT(bkutData);
 
     const tempJsonData = {
-      CURRENTYEARS: year.toString() || "0",
+      CURRENTYEARS: year,
       BKUTNAME: bkutData.name,
       BKUTDIRECTOR: rais,
       PHONE: bkutData.phone,
       ISFIRED: !currentReport.isFiredFromMainJob ? "yo'q" : "ha",
       ISAPPARATUS: !currentReport?.isProvidedPaidApparatus ? "yo'q" : "ha",
-      WORKERSAMOUNT: currentReport?.workersAmount?.toString() || "0",
-      WORKERSFEMALE: currentReport?.workersFemale?.toString() || "0",
-      WORKERSADULTS: currentReport?.workersAdults?.toString() || "0",
-      WORKERSMEMBERS: currentReport?.workersMembers?.toString() || "0",
-      WORKERSFEMALEMEMBERS: currentReport?.workersFemaleMembers?.toString() || "0",
-      WORKERSADULTSMEMBERS: currentReport?.workersAdultsMembers?.toString() || "0",
-      STUDENTSAMOUNT: currentReport?.studentsAmount?.toString() || "0",
-      STUDENTSFEMALE: currentReport?.studentsFemale?.toString() || "0",
-      STUDENTSADULTS: currentReport?.studentsAdults?.toString() || "0",
-      STUDENTSMEMBERS: currentReport?.studentsMembers?.toString() || "0",
-      STUDENTSFEMALEMEMBERS: currentReport?.studentsFemaleMembers?.toString() || "0",
-      STUDENTSADULTSMEMBERS: currentReport?.studentsAdultsMembers?.toString() || "0",
-      PENSIONERAMOUNT: currentReport?.pensionerAmount?.toString() || "0",
-      STAFFINGAMOUNT: currentReport?.staffingAmount?.toString() || "0",
-      STAFFINGWORKERSAMOUNT: currentReport?.staffingWorkersAmount?.toString() || "0",
+      WORKERSAMOUNT: currentReport?.workersAmount || "0",
+      WORKERSFEMALE: currentReport?.workersFemale || "0",
+      WORKERSADULTS: currentReport?.workersAdults || "0",
+      WORKERSMEMBERS: currentReport?.workersMembers || "0",
+      WORKERSFEMALEMEMBERS: currentReport?.workersFemaleMembers || "0",
+      WORKERSADULTSMEMBERS: currentReport?.workersAdultsMembers || "0",
+      STUDENTSAMOUNT: currentReport?.studentsAmount || "0",
+      STUDENTSFEMALE: currentReport?.studentsFemale || "0",
+      STUDENTSADULTS: currentReport?.studentsAdults || "0",
+      STUDENTSMEMBERS: currentReport?.studentsMembers || "0",
+      STUDENTSFEMALEMEMBERS: currentReport?.studentsFemaleMembers || "0",
+      STUDENTSADULTSMEMBERS: currentReport?.studentsAdultsMembers || "0",
+      PENSIONERAMOUNT: currentReport?.pensionerAmount || "0",
+      STAFFINGAMOUNT: currentReport?.staffingAmount || "0",
+      STAFFINGWORKERSAMOUNT: currentReport?.staffingWorkersAmount || "0",
       STAFFINGRESPONSIBLEWORKERS:
-        currentReport?.staffingResponsibleWorkers?.toString() || "0",
-      STAFFINGTECHNICALWORKERS:
-        currentReport?.staffingTechnicalWorkers?.toString() || "0",
+        currentReport?.staffingResponsibleWorkers || "0",
+      STAFFINGTECHNICALWORKERS: currentReport?.staffingTechnicalWorkers || "0",
     };
 
     setData(tempJsonData);

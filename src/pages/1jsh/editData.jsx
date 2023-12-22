@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
 function getOption(obj = {}) {
+  if(!obj.id) return "";
   return {
     value: obj.id,
     ktutCode: obj.ktutCode,
