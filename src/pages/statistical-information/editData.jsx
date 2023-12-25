@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import RadioGroup from "@/components/RadioGroup";
 import Group from "@/components/Group";
 import FormInput from "@/components/FormInput";
@@ -8,39 +8,44 @@ import { useTranslation } from "react-i18next";
 
 export default function EditData({ currentReport = {} }) {
   const { t } = useTranslation();
-  const st = currentReport;
-  const [values, setValues] = useState({
-    workersAdults: st.workersAdults ?? 0,
-    workersFemale: st.workersFemale ?? 0,
-    firedMembersAmount: st.firedMembersAmount ?? 0,
-    staffingResponsibleWorkers: st.staffingResponsibleWorkers ?? 0,
-    homemakerAmount: st.homemakerAmount ?? 0,
-    staffingTechnicalWorkers: st.staffingTechnicalWorkers ?? 0,
-    newMemebersAmount: st.newMemebersAmount ?? 0,
-    pensionerAmount: st.pensionerAmount ?? 0,
-    studentsFemale: st.studentsFemale ?? 0,
-    workersMembers: st.workersMembers ?? 0,
-    staffingWorkersAmount: st.staffingWorkersAmount ?? 0,
-    workersAmount: st.workersAmount ?? 0,
-    membersProvidedTicket: st.membersProvidedTicket ?? 0,
-    studentsAdultsMembers: st.studentsAdultsMembers ?? 0,
-    studentsAmount: st.studentsAmount ?? 0,
-    studentsAdults: st.studentsAdults ?? 0,
-    studentsMembers: st.studentsMembers ?? 0,
-    studentsFemaleMembers: st.studentsFemaleMembers ?? 0,
-    invalidAmount: st.invalidAmount ?? 0,
-    salaryByAgreements: st.salaryByAgreements ?? 0,
-    spentAmount: st.spentAmount ?? 0,
-    workersFemaleMembers: st.workersFemaleMembers ?? 0,
-    workersAdultsMembers: st.workersAdultsMembers ?? 0,
-    staffingAmount: st.staffingAmount ?? 0,
-    isProvidedPC: st.isProvidedPC,
-    isProvidedInternet: st.isProvidedInternet,
-    isProvidedPaidApparatus: st.isProvidedPaidApparatus,
-    isFiredFromMainJob: st.isFiredFromMainJob,
-    isCollegialPresident: st.isCollegialPresident,
-    isProvidedPrivateRoom: st.isProvidedPrivateRoom,
-  });
+  const [values, setValues] = useState({});
+
+  useEffect(() => {
+    const st = currentReport;
+    setValues({
+      workersAdults: st.workersAdults ?? 0,
+      workersFemale: st.workersFemale ?? 0,
+      firedMembersAmount: st.firedMembersAmount ?? 0,
+      staffingResponsibleWorkers: st.staffingResponsibleWorkers ?? 0,
+      homemakerAmount: st.homemakerAmount ?? 0,
+      staffingTechnicalWorkers: st.staffingTechnicalWorkers ?? 0,
+      newMemebersAmount: st.newMemebersAmount ?? 0,
+      pensionerAmount: st.pensionerAmount ?? 0,
+      studentsFemale: st.studentsFemale ?? 0,
+      workersMembers: st.workersMembers ?? 0,
+      staffingWorkersAmount: st.staffingWorkersAmount ?? 0,
+      workersAmount: st.workersAmount ?? 0,
+      membersProvidedTicket: st.membersProvidedTicket ?? 0,
+      studentsAdultsMembers: st.studentsAdultsMembers ?? 0,
+      studentsAmount: st.studentsAmount ?? 0,
+      studentsAdults: st.studentsAdults ?? 0,
+      studentsMembers: st.studentsMembers ?? 0,
+      studentsFemaleMembers: st.studentsFemaleMembers ?? 0,
+      invalidAmount: st.invalidAmount ?? 0,
+      salaryByAgreements: st.salaryByAgreements ?? 0,
+      spentAmount: st.spentAmount ?? 0,
+      workersFemaleMembers: st.workersFemaleMembers ?? 0,
+      workersAdultsMembers: st.workersAdultsMembers ?? 0,
+      staffingAmount: st.staffingAmount ?? 0,
+      isProvidedPC: st.isProvidedPC ?? false,
+      isProvidedInternet: st.isProvidedInternet ?? false,
+      isProvidedPaidApparatus: st.isProvidedPaidApparatus ?? false,
+      isFiredFromMainJob: st.isFiredFromMainJob ?? false,
+      isCollegialPresident: st.isCollegialPresident ?? false,
+      isProvidedPrivateRoom: st.isProvidedPrivateRoom ?? false,
+    });
+  }, [currentReport]);
+
   const radioData = [
     {
       value: true,

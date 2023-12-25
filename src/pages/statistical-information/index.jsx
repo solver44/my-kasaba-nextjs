@@ -41,7 +41,7 @@ export default function StatisticalInformation() {
   const saveStatistics = async (forms) => {
     try {
       const requestData = {
-        bkut: {
+        eBKUT: {
           id: bkutData.id,
         },
         date: currentReport.date,

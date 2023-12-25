@@ -268,7 +268,7 @@ function ChangableInput({
             if (onChange) onChange(e, name);
           }}
           invalid={invalid}
-          value={value}
+          value={propValue ?? undefined}
           name={name}
           {...props}
         />

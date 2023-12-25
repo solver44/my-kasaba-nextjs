@@ -41,16 +41,17 @@ const DocumentViewer = ({
       paragraphLoop: true,
       linebreaks: true,
     });
-
+    
     doc.render(generateData);
-
+    
     const blob = doc.getZip().generate({
       type: "blob",
       mimeType:
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       compression: "DEFLATE",
     });
     // Output the document using Data-URI
+    console.log(blob);
     dataForDownload.current = blob;
     return blob;
   }

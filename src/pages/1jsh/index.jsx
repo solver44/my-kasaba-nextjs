@@ -3,7 +3,7 @@ import HomeWrapper from "../home/wrapper";
 import DocumentViewer from "@/components/DocumentViewer";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
-import { getPresidentBKUT } from "@/utils/data";
+import { getPresidentBKUT, showOrNot } from "@/utils/data";
 import useAnimation from "@/hooks/useAnimation";
 import EditData from "./editData";
 import { Button } from "@mui/material";
@@ -23,6 +23,7 @@ export default function JSH1() {
   const [loadingEditMode, setLoadingEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const [currentReport, setCurrentReport] = useState({});
+  const [employeeCount, setEmployeeCount] = useState(0);
   const [years, setYears] = useState([]);
   const [currentYear, setYear] = useState(dayjs().year());
   const animRef = useAnimation();
@@ -53,6 +54,11 @@ export default function JSH1() {
       const cYear = dayjs(r.date).year();
       return cYear == currentYear;
     });
+    const temp1 = (bkutData.reports || []).find((r) => {
+      const cYear = dayjs(r.date).year();
+      return cYear == currentYear;
+    });
+    setEmployeeCount(temp1?.workersAmount || 0);
     setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
     if (!temp?.bhutForm && !editMode) setEditMode(true);
   }, [currentYear, bkutData]);
@@ -105,10 +111,7 @@ export default function JSH1() {
   };
 
   return (
-    <FormValidation
-      className={styles.form}
-      onSubmit={handleSubmit}
-    >
+    <FormValidation className={styles.form} onSubmit={handleSubmit}>
       <div ref={animRef} className={styles.container}>
         <div className={styles.editBtn}>
           {editMode && (
@@ -143,14 +146,16 @@ export default function JSH1() {
                 </LoadingButton>
               )
             )}
-            {!editMode && <ChangableInput
-              style={{ width: 200 }}
-              hideEmpty
-              value={currentYear}
-              select
-              dataSelect={years}
-              onChange={({ target: { value } }) => setYear(value)}
-            />}
+            {!editMode && (
+              <ChangableInput
+                style={{ width: 200 }}
+                hideEmpty
+                value={currentYear}
+                select
+                dataSelect={years}
+                onChange={({ target: { value } }) => setYear(value)}
+              />
+            )}
             <p
               className={[
                 styles.titleYear,
@@ -174,27 +179,31 @@ export default function JSH1() {
               txt: bkutData.eLegalEntity?.opf?.nameUz || "",
               msht_form: bkutData.eLegalEntity?.ownership?.code || "",
               main_activity: bkutData.eLegalEntity?.mainActivity || "",
-              stir: bkutData.tin,
+              stir: bkutData.tin || "",
               soato: bkutData.eLegalEntity?.soato?.code || "",
               organization_name: bkutData.name || "",
               organization_address: bkutData.address || "",
               organization_ownership:
                 bkutData.eLegalEntity?.ownership?.nameUz || "",
               organization_president: getPresidentBKUT(bkutData) || "",
-              employees_count: bkutData.statistics?.workersAmount || "",
+              employees_count: employeeCount || "0",
 
-              bhut_form: currentReport.bhutForm,
-              xxtut_form: currentReport.xxtutForm,
-              ifut_form: currentReport.ifutForm,
-              colAgrAmount: currentReport.colAgrAmount,
-              colAgrFinishedAmount: currentReport.colAgrFinishedAmount,
-              includingLaborCommission: currentReport.includingLaborCommission,
-              labors: `${currentReport.includingLaborConsidered}/${currentReport.includingLaborSolved}`,
-              spentColAgrSum: currentReport.spentColAgrSum,
-              resultSpentAmount: (
-                (currentReport.spentColAgrSum || 0) /
-                (bkutData.statistics?.workersAmount || 0)
-              ).toFixed(2),
+              bhut_form: currentReport.bhutForm || "",
+              xxtut_form: currentReport.xxtutForm || "",
+              ifut_form: currentReport.ifutForm || "",
+              colAgrAmount: currentReport.colAgrAmount || "",
+              colAgrFinishedAmount: currentReport.colAgrFinishedAmount || "",
+              includingLaborCommission:
+                currentReport.includingLaborCommission || "",
+              labors: `${showOrNot(
+                currentReport.includingLaborConsidered
+              )}/${showOrNot(currentReport.includingLaborSolved)}`,
+              spentColAgrSum: currentReport.spentColAgrSum || "",
+              resultSpentAmount: employeeCount
+                ? ((currentReport.spentColAgrSum || 0) / employeeCount).toFixed(
+                    2
+                  )
+                : 0,
             }}
             documentSrc="/1jsh.docx"
             fileName={bkutData.name + " 1jsh hisoboti"}
