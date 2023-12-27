@@ -37,6 +37,7 @@
   position: sticky;
   top: 0;
   left: 0;
+  max-width: 350px;
 }
 .JShDocumentContainer {
   height: 100%;
@@ -52,4 +53,17 @@
 .opinionsRow {
   width: 100%;
   display: flex;
+}
+
+@media screen and (max-width: 1631px) {
+  .JShDocumentContainer {
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+  }
+  .topDocs {
+    flex-direction: row;
+    max-width: none;
+    width: 50%;
+  }
 }

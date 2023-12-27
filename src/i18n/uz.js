@@ -455,6 +455,7 @@ export default {
 
     "1ti": "1TI hisoboti",
     "file-cannot-open": "Ushbu faylni ochib bo'lmadi.",
+    "file-should-be-docx": "Ushbu faylning formati docx bo'lishi zarur.",
     "1ti1": "1TI hisobot shakli",
     "1t-report": "1TI hisobot",
     showTicket: "Guvohnomani ko'rish",

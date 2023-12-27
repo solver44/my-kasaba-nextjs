@@ -41,17 +41,16 @@ const DocumentViewer = ({
       paragraphLoop: true,
       linebreaks: true,
     });
-    
+
     doc.render(generateData);
-    
+
     const blob = doc.getZip().generate({
       type: "blob",
       mimeType:
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       compression: "DEFLATE",
     });
     // Output the document using Data-URI
-    console.log(blob);
     dataForDownload.current = blob;
     return blob;
   }
@@ -81,17 +80,22 @@ const DocumentViewer = ({
     async function initData() {
       setLoading(true);
       let data = null;
+
       if (documentSrc) {
         if (generateData) data = generateDoc();
       } else if (url) {
-        data = await downloadFile(
-          url,
-          decodeURIComponent(url.split("=")[1]),
-          true
-        );
+        const name = decodeURIComponent(url.split("=")[1]);
+        if (name && name.split(".").pop() !== "docx") {
+          setLoading(false);
+          enqueueSnackbar(t("file-should-be-docx"), { variant: "error" });
+          iframeRef.current.innerHTML = "";
+          return;
+        }
+        data = await downloadFile(url, name, true);
         if (!data) {
           setLoading(false);
           enqueueSnackbar(t("file-cannot-open"), { variant: "error" });
+          iframeRef.current.innerHTML = "";
           return;
         }
       }

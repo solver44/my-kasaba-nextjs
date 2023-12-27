@@ -145,8 +145,8 @@ export default function InDataTable({ filter }) {
       })
     );
   }, [bkutData]);
-  async function onSubmitModal(forms, hideModal, isView, dataModal) {
-    const isCurrentJSH = dataModal.currentJSH;
+  async function onSubmitModal(forms, hideModal, isView, dataModal = {}) {
+    const isCurrentJSH = dataModal?.currentJSH;
     try {
       if (forms?.restDay && forms?.restDay < 0) {
         enqueueSnackbar(t("team-contracts.expired-current-jsh"), {
@@ -362,7 +362,7 @@ function ModalUI({ data }) {
     fetchData();
   }, [data]);
 
-  const isCurrentJSH = data.currentJSH;
+  const isCurrentJSH = data?.currentJSH;
   const isCurrentJSHOnly = data.status === "CURRENT_JSH";
   const isConsideredOnly = data.status == "CONSIDERED";
   const isToConfirm = data.status == "TO_CONFIRM";
@@ -385,7 +385,7 @@ function ModalUI({ data }) {
         />
       ) : isConsidered || isAnalysis || isCurrentJSHOnly ? (
         <React.Fragment>
-          <div className="modal-row full">
+          <div className="modal-row fulldoc">
             {isAnalysis ? (
               <MainTab
                 files={files}
