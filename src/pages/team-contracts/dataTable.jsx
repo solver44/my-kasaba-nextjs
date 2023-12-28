@@ -156,7 +156,7 @@ export default function InDataTable({ filter }) {
       }
 
       let project = await getFile(forms.applications);
-      if (!forms.bkutId) throw Error("error");
+      if (!forms.bkutId || !project) throw Error("error");
       const requestData = {
         collectiveAgreements: {
           bkut: {

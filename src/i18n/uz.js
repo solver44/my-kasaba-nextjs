@@ -185,7 +185,7 @@ export default {
         "Ushbu jamoa shartnomasining amal qilish muddati tugagan",
       "expertize-file": "Ekspert xulosasi",
       "opinion-file": "Ekspert xulosa fayli",
-      "opinions": "Ekspert xulosasi",
+      opinions: "Ekspert xulosasi",
     },
     oneTI: {
       title:
@@ -395,6 +395,7 @@ export default {
     "invalid-email": "Elektron pochta manzili xato kiritildi",
     "invalid-input": "Maydonda xatolik mavjud!",
     "error-auth": "Login yoki parol topilmadi.",
+    "bkut-is-expelled": "Tashkilot a'zolikdan chiqarilgan.",
     "fetch-error":
       "Ma'lumotlarni yuklashda xatolik mavjud. Keyinroq qayta urinib ko'ring.",
     "fetch-error1": "Ma'lumotlarni yuklashda xatolik mavjud.",

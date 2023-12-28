@@ -71,7 +71,9 @@ export default function Auth() {
         await navigate.push("/register-bkut");
       }
     } else {
-      enqueueSnackbar(t("error-auth"), { variant: "error" });
+      if (bkutData.message === "bkut is expelled")
+        enqueueSnackbar(t("bkut-is-expelled"), { variant: "error" });
+      else enqueueSnackbar(t("error-auth"), { variant: "error" });
     }
     actions.showLoading(false);
   };
