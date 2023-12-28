@@ -156,10 +156,11 @@ export default function InDataTable({ filter }) {
       }
 
       let project = await getFile(forms.applications);
+      if (!forms.bkutId) throw Error("error");
       const requestData = {
         collectiveAgreements: {
           bkut: {
-            id: bkutData.id,
+            id: forms.bkutId,
           },
           applications: [
             {
@@ -170,9 +171,9 @@ export default function InDataTable({ filter }) {
       };
 
       let application = await getFile(forms.applications1);
-      let expertizeFile = await getFile(forms.expertize);
       if (application || isCurrentJSH) {
         if (isCurrentJSH) {
+          let expertizeFile = await getFile(forms.expertize);
           requestData.collectiveAgreements.status = "CURRENT_JSH";
           requestData.collectiveAgreements.approvedDate = forms.approvedDate;
           requestData.collectiveAgreements.contractDate = forms.contractDate;
@@ -376,6 +377,7 @@ function ModalUI({ data }) {
 
   return (
     <div className="modal-content">
+      <FormInput name="bkutId" value={bkutData.id} hidden />
       {isCurrentJSH ? (
         <CurrentJSHTab
           files={files}

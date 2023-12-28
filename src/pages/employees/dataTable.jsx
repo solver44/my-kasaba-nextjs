@@ -49,6 +49,7 @@ export default function InDataTable({ filter, onUpload, min }) {
   const columns = [
     { field: "fio", headerName: "employees.fio", size: 280 },
     { field: "signDate", headerName: "join-date" },
+    { field: "position", headerName: "job-position" },
     {
       field: "employment",
       type: "chip",
@@ -60,8 +61,6 @@ export default function InDataTable({ filter, onUpload, min }) {
         t("isStudent"),
       ].join(", "),
     },
-    { field: "pinfl", headerName: "pinfl", hidden: true },
-    { field: "position", headerName: "job-position", hidden: true },
     { field: "birthDate", headerName: "birth-date", hidden: true },
     { field: "phoneNumber", headerName: "phone-number" },
     {
