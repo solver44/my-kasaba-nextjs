@@ -11,6 +11,8 @@
   --menu-selected-text-color: black;
   --menu-selected-border-color: #b8d3ff;
   --menu-font-size: 20px;
+  --menu-icon-size: 24px;
+  --badge-size: 16px;
   --radius: 55px;
 
   --modal-color: white;
@@ -37,6 +39,9 @@ body {
   background-color: var(--dark-bg);
 }
 
+button{
+  font-size: var(--button-font-size) !important;
+}
 .login-btn {
   cursor: pointer;
   border: 0;
@@ -70,7 +75,7 @@ body {
 }
 .tab-main {
   button {
-    font-size: 18px;
+    font-size: var( --input-inside-font-size);
     min-height: 50px;
   }
 }

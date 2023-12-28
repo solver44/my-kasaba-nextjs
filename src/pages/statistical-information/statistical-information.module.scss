@@ -17,7 +17,7 @@
 .titleYear {
   margin: 0;
   padding: 0;
-  font-size: 20px;
+  font-size: var(--menu-font-size);
   // font-weight: bold;
   &.red {
     color: red;

@@ -2,6 +2,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { AppBar, Box, Grow, Tab } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import styles from "./tabs.module.scss";
 
 export default function Tabs({
   tabs = [],
@@ -52,6 +53,7 @@ export default function Tabs({
                   icon={tab?.icon}
                   iconPosition="start"
                   key={index}
+                  className={styles.label}
                   label={t(tab.label)}
                   value={index + ""}
                 />

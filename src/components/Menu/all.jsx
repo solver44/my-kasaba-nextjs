@@ -96,7 +96,7 @@ export default function AllMenu({ collapsed }) {
             menu.path === navigate.pathname ? styles.selected : "",
           ].join(" ")}
         >
-          <menu.icon />
+          <menu.icon className={styles.icon} />
           <span>{t(menu.title)}</span>
         </div>
       ))}
