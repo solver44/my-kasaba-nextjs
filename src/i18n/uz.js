@@ -160,6 +160,7 @@ export default {
       director: "Muallif (BKUT raisi)",
       companyName: "Tashkilot, muasssasa nomlanishi",
       application: "Jamoa shartnomasi (Ma'qullangan)",
+      application1: "Jamoa shartnomasi",
       selectDate: "Yuborilgan sanasi",
       signDate: "Imzolangan sana",
       contractNumber: "Shartnoma raqami",

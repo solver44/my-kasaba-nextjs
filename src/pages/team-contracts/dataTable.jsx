@@ -561,7 +561,7 @@ function ModalUI({ data }) {
             fileInput
             value={files.applications?.url}
             nameOfFile={files.applications?.name}
-            label={t("team-contracts.application")}
+            label={t("team-contracts.application1")}
           />
         </React.Fragment>
       )}

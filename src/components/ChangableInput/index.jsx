@@ -245,7 +245,7 @@ function ChangableInput({
           <input
             type="file"
             disabled={props.disabled}
-            accept=".docx"
+            accept=".docx,.pdf"
             style={{ display: "none" }}
             onChange={handleFileInputChange}
           />
