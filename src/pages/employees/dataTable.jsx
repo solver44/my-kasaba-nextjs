@@ -108,10 +108,11 @@ export default function InDataTable({ filter, onUpload, min }) {
       _instanceName = "",
       ...dataModal
     } = _dataModal ?? {};
-    if (
-      !isView &&
-      (bkutData?.employees ?? []).find((e) => e.individual.pinfl == forms.pinfl)
-    ) {
+    const currentIndvidual = (bkutData?.employees ?? []).find(
+      (e) => e.individual.pinfl == forms.pinfl
+    );
+    if (!isView && currentIndvidual) {
+      individualId.current = currentIndvidual.individual.id;
       showYesNoDialog(
         t("rewrite-pinfl-member"),
         () => sendData({ forms, dataModal }, hideModal, true),
@@ -131,6 +132,7 @@ export default function InDataTable({ filter, onUpload, min }) {
     const bkutData = bkutDataRef.current;
 
     const { forms, dataModal } = _data;
+    if (!dataModal?.individual?.id) delete dataModal?.individual?.id;
     const requestData = {
       // ...dataModal,
       id: dataModal.id,

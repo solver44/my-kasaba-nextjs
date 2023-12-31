@@ -1,9 +1,11 @@
+import DocumentViewer from "@/components/DocumentViewer";
 import FormInput from "@/components/FormInput";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function MainTab({ files, data, formData, bkutData }) {
   const { t } = useTranslation();
+  const { applications = [] } = data;
 
   const isConfirmed = data.status == "CONFIRMED";
   const isAnalysis =
@@ -53,20 +55,26 @@ export default function MainTab({ files, data, formData, bkutData }) {
           label={t("team-contracts.director")}
         />
       </div>
-      <FormInput
-        name="applications"
-        required
-        fileInput
-        style={{ display: "none" }}
-        disabled
-        value={files.applications?.url}
-        nameOfFile={files.applications?.name}
-        label={t(
-          isConsidered
-            ? "team-contracts.applicationProject"
-            : "team-contracts.application"
-        )}
-      />
+      {isAnalysis ? (
+        <DocumentViewer
+          url={applications?.length > 0 ? applications[0].file : ""}
+        />
+      ) : (
+        <FormInput
+          name="applications"
+          required
+          fileInput
+          hidden
+          disabled
+          value={files.applications?.url}
+          nameOfFile={files.applications?.name}
+          label={t(
+            isConsidered
+              ? "team-contracts.applicationProject"
+              : "team-contracts.application"
+          )}
+        />
+      )}
       {!isAnalysis && (
         <div className="modal-row">
           <FormInput

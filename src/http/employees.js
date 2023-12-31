@@ -77,7 +77,8 @@ export async function sendIndividual(requestData) {
 }
 export async function sendEmployee(requestData = {}) {
   try {
-    const individualResponse = await sendIndividual(requestData.individual);
+    if (requestData?.individual?.firstName && requestData?.individual?.id)
+      await sendIndividual(requestData.individual);
     // requestData.individual = { id: individualResponse.id };
     const { data } = requestData.id
       ? await $axios.put(

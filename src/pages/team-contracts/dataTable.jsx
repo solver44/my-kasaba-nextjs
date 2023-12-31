@@ -292,6 +292,8 @@ export default function InDataTable({ filter }) {
       fullModal={(data) => {
         if (!data) return false;
         return (
+          data?.status == "INANALYSIS" || 
+          data?.status == "INEXECUTION" || 
           data?.status == "CONSIDERED" ||
           data?.status == "CONFIRMED" ||
           data?.status == "CURRENT_JSH" ||

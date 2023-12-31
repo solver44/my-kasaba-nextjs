@@ -61,7 +61,7 @@ export default function currentJSHTab({ formData, files, bkutData, data }) {
           name="applications"
           required
           fileInput
-          style={{ display: "none" }}
+          hidden
           disabled={isOld}
           value={files.applications?.url}
           nameOfFile={files.applications?.name}

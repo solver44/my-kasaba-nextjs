@@ -50,12 +50,9 @@ export default function TermsContracts() {
   );
 }
 
-TermsContracts.layout = function (Component, t) {
+TermsContracts.layout = function (Component, t, bkutData) {
   return (
-    <HomeWrapper
-      title={t("team-contracts.title")}
-      desc={t("profile-page.desc")}
-    >
+    <HomeWrapper title={bkutData?.name} desc={t("profile-page.desc")}>
       {Component}
     </HomeWrapper>
   );
