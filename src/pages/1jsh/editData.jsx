@@ -1,11 +1,18 @@
 import FormInput from "@/components/FormInput";
-import { getDBOBT, getOPF, getOwnership, getSOATO } from "@/http/handbooks";
+import {
+  getDBOBT,
+  getIFUT,
+  getOPF,
+  getOwnership,
+  getSOATO,
+  getXXTUT,
+} from "@/http/handbooks";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
 function getOption(obj = {}) {
-  if(!obj.id) return "";
+  if (!obj.id) return "";
   return {
     value: obj.id,
     ktutCode: obj.ktutCode,
@@ -23,11 +30,11 @@ export default function EditData({ currentReport = {} }) {
   const [values, setValues] = useState({
     date: st.date,
     bhutForm: st.bhutForm,
-    xxtutForm: st.xxtutForm,
-    ifutForm: st.ifutForm,
     dbibt: undefined,
     opf: undefined,
     soato: undefined,
+    ifut: undefined,
+    xxtut: undefined,
     mainActivity: undefined,
     colAgrAmount: st.colAgrAmount,
     colAgrFinishedAmount: st.colAgrFinishedAmount,
@@ -62,6 +69,18 @@ export default function EditData({ currentReport = {} }) {
         msht: data.map((current) => getOption(current)),
       }));
     });
+    getIFUT().then((data) => {
+      setOptions((opts) => ({
+        ...opts,
+        ifut: data.map((current) => getOption(current)),
+      }));
+    });
+    getXXTUT().then((data) => {
+      setOptions((opts) => ({
+        ...opts,
+        xxtut: data.map((current) => getOption(current)),
+      }));
+    });
   }
   useEffect(() => {
     if (!bkutData.id) return;
@@ -72,6 +91,9 @@ export default function EditData({ currentReport = {} }) {
       let soato = getOption(el?.soato);
       let opf = getOption(el?.opf);
       let ownership = getOption(el?.ownership);
+      let ifut = getOption(el?.oked);
+      let xxtut = getOption(el?.okonx);
+      console.log(el);
       const mainActivity = el.mainActivity;
       setValues((vals) => ({
         ...vals,
@@ -79,6 +101,8 @@ export default function EditData({ currentReport = {} }) {
         soato,
         opf,
         ownership,
+        ifut,
+        xxtut,
         mainActivity,
       }));
     });
@@ -123,17 +147,23 @@ export default function EditData({ currentReport = {} }) {
           label={t("1sh.bhut")}
         />
         <FormInput
-          name="xxtutForm"
+          name="xxtut"
           required
-          value={values.xxtutForm}
+          select
+          allowInputSelect
+          dataSelect={options.xxtut}
+          value={values.xxtut}
           label={t("1sh.xxtut")}
         />
       </div>
       <div className="modal-row">
         <FormInput
-          name="ifutForm"
+          name="ifut"
           required
-          value={values.ifutForm}
+          select
+          allowInputSelect
+          dataSelect={options.ifut}
+          value={values.ifut}
           label={t("1sh.ifut")}
         />
         <FormInput

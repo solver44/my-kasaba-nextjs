@@ -73,7 +73,6 @@ export default function JSH1() {
           },
           date: forms.date,
           bhutForm: forms.bhutForm,
-          xxtutForm: forms.xxtutForm,
           ifutForm: forms.ifutForm,
           colAgrAmount: forms.colAgrAmount,
           colAgrFinishedAmount: forms.colAgrFinishedAmount,
@@ -87,6 +86,8 @@ export default function JSH1() {
         soato: forms.soato.value,
         opf: forms.txt.value,
         ownership: forms.msht.value,
+        ifut: forms.ifut.value,
+        xxtut: forms.xxtut.value,
       };
       if (forms?.id) requestData.reports.id = forms.id;
 
@@ -160,10 +161,10 @@ export default function JSH1() {
             <p
               className={[
                 styles.titleYear,
-                currentReport?.ifutForm ? "" : styles.red,
+                currentReport?.colAgrAmount ? "" : styles.red,
               ].join(" ")}
             >
-              {currentReport?.ifutForm
+              {currentReport?.colAgrAmount
                 ? t("report-entered")
                 : t("report-not-entered")}
             </p>
@@ -180,6 +181,8 @@ export default function JSH1() {
               txt: bkutData.eLegalEntity?.opf?.nameUz || "",
               msht_form: bkutData.eLegalEntity?.ownership?.code || "",
               main_activity: bkutData.eLegalEntity?.mainActivity || "",
+              xxtut_form: bkutData.eLegalEntity?.okonx?.code || "",
+              ifut_form: bkutData.eLegalEntity?.oked?.code || "",
               stir: bkutData.tin || "",
               soato: bkutData.eLegalEntity?.soato?.code || "",
               organization_name: bkutData.name || "",
@@ -190,8 +193,6 @@ export default function JSH1() {
               employees_count: employeeCount || "0",
 
               bhut_form: currentReport.bhutForm || "",
-              xxtut_form: currentReport.xxtutForm || "",
-              ifut_form: currentReport.ifutForm || "",
               colAgrAmount: currentReport.colAgrAmount || "",
               colAgrFinishedAmount: currentReport.colAgrFinishedAmount || "",
               includingLaborCommission:

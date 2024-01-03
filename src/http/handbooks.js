@@ -40,6 +40,26 @@ export async function getOwnership() {
   }
 }
 
+export async function getIFUT() {
+  try {
+    const { data } = await $axios.get(`/rest/entities/HOked`);
+
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function getXXTUT() {
+  try {
+    const { data } = await $axios.get(`/rest/entities/HOkonx`);
+
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function getSettings() {
   try {
     const { data } = await $axios.get(`/rest/entities/Settings`, {

@@ -30,7 +30,9 @@ $axios.interceptors.response.use(
     if (
       error?.response &&
       (error.response?.data?.error === "invalid_token" ||
-        error.response.status === 401)
+        error.response.status === 401 ||
+        (error.response.status === 500 &&
+          error.response.data.path === "/rest/services/application/login"))
     ) {
       try {
         if (!TOKENS.renew) {
@@ -54,8 +56,9 @@ $axios.interceptors.response.use(
         // Update the original request headers with the new access token
         error.config.headers.Authorization = `Bearer ${TOKENS.ACCESS_TOKEN}`;
 
-        // Retry the original request with the updated token
-        // return $axios.request(error.config); // Use $axios to make the request
+        if (error.response.data.path === "/rest/services/application/login")
+          return $axios.request(error.config); // Use $axios to make the request
+
         window.clearTimeout(globalThis.relTimeout);
         globalThis.relTimeout = window.setTimeout(() => {
           window.location.reload();
