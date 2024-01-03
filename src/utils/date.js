@@ -30,7 +30,7 @@ export function getFormattedWithRestDay(date, withoutFormat) {
   if (!date) return t("no");
   const formattedDate = convertStringToFormatted(date);
   const restOfDays = getRestOfDays(date, new Date());
-  if(withoutFormat) return restOfDays;
+  if (withoutFormat) return restOfDays;
   const result = `${formattedDate} (${restOfDays} ${t("leave-day")})`;
   return result;
 }
@@ -39,4 +39,23 @@ export function isOutdated(dateString) {
   if (!dateString) return true;
   const restOfDays = getRestOfDays(dateString, new Date());
   return restOfDays <= 0 ? true : false;
+}
+
+export function isOutdatedReport(dateString, day = 0) {
+  if (!dateString) return false;
+  const restOfDays = getRestOfDays(dateString, new Date());
+  return restOfDays <= day ? true : false;
+}
+export function getReportYear(settings) {
+  const deadline = settings?.deadlineJSH;
+  const suffix = deadline ? deadline.slice(4) : "-01-27";
+  let currentYear = dayjs().year();
+  return dayjs().isBefore(dayjs(currentYear + suffix))
+    ? dayjs().isAfter(dayjs(currentYear - 1 + "-12-31"))
+      ? currentYear - 1
+      : currentYear
+    : currentYear;
+}
+export function getReportDate() {
+  return dayjs(getReportYear() + "-01-01").format("YYYY-MM-DD");
 }

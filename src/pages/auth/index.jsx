@@ -18,7 +18,7 @@ import Image from "next/image";
 import Input from "@/components/Input";
 import { validateEmpty } from "@/utils/validation";
 import { useSnackbar } from "notistack";
-import { getBKUTData, getBKUTID, loginRest } from "@/http/data";
+import { getBKUTData, loginRest } from "@/http/data";
 import Cookies from "universal-cookie";
 
 export default function Auth() {

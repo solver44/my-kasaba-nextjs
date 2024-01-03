@@ -6,6 +6,7 @@ import {
   CACHES,
   IS_MEMBER,
   BKUT_DATA,
+  SETTINGS,
   DATA_LOADING,
   UPDATE_DATA,
 } from "./actions";
@@ -50,6 +51,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         bkutData: action.payload,
+      };
+    case SETTINGS:
+      return {
+        ...state,
+        settings: action.payload,
       };
     case DATA_LOADING:
       return {

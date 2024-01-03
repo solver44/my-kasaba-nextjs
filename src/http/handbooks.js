@@ -39,3 +39,16 @@ export async function getOwnership() {
     return error;
   }
 }
+
+export async function getSettings() {
+  try {
+    const { data } = await $axios.get(`/rest/entities/Settings`, {
+      params: {
+        limit: 1,
+      },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+}

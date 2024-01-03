@@ -7,19 +7,20 @@ import styles from "./1ti.module.scss";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { getPresidentBKUT } from "@/utils/data";
+import { getReportDate, getReportYear } from "@/utils/date";
 
 export default function OneTI() {
   const { bkutData = {} } = useSelector((states) => states);
   const [currentReport, setCurrentReport] = useState({});
   const [years, setYears] = useState([]);
-  const [currentYear, setYear] = useState(dayjs().year());
+  const [currentYear, setYear] = useState(getReportYear());
   const [data, setData] = useState({});
   const { t } = useTranslation();
 
   useEffect(() => {
     if (!bkutData.id) return;
     const allYears = [];
-    const y = dayjs().year();
+    const y = getReportYear();
     (bkutData.reports || []).forEach((r) => {
       const cYear = dayjs(r.date).year();
       if (cYear == y) return;
@@ -39,10 +40,9 @@ export default function OneTI() {
       const cYear = dayjs(r.date).year();
       return cYear == currentYear;
     });
-    if (typeof temp === "object")
-      temp.date = temp?.date || dayjs().format("YYYY-MM-DD");
+    if (typeof temp === "object") temp.date = temp?.date || getReportDate();
 
-    setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
+    setCurrentReport(temp || { date: getReportDate() });
   }, [currentYear, bkutData]);
 
   useEffect(() => {

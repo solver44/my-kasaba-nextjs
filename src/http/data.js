@@ -1,11 +1,18 @@
 import { saveAs } from "file-saver";
 import { $axios, BASE_URL, getDeleteResponse } from ".";
 
-export async function loginRest(login, password) {
+export async function loginRest(email, password) {
   try {
-    const { data } = await $axios.get("/rest/services/application/login", {
-      params: { email: login, password },
-    });
+    const { data } = await $axios.post(
+      "/rest/services/application/login",
+      {
+        email,
+        password,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
     return data;
   } catch (error) {
     return error;
@@ -13,7 +20,7 @@ export async function loginRest(login, password) {
 }
 export async function getBKUTID(login, password) {
   try {
-    const { data } = await $axios.get("/rest/services/appli", {
+    const { data } = await $axios.get("/rest/services/bkut/get", {
       params: { email: login, password },
     });
     return data;
@@ -42,6 +49,7 @@ export async function downloadFile(file, name, onlyReturn) {
     const blob = new Blob([response.data], {
       type: response.headers["Content-Type"],
     });
+
     if (onlyReturn) return blob;
     saveAs(blob, name);
     return true;

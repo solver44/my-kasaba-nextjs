@@ -16,16 +16,17 @@ import ChangableInput from "@/components/ChangableInput";
 import { sendCollectiveReport } from "@/http/data";
 import { useSnackbar } from "notistack";
 import useActions from "@/hooks/useActions";
+import { getReportDate, getReportYear } from "@/utils/date";
 
 export default function JSH1() {
   const [editMode, setEditMode] = useState(false);
-  const { bkutData = {} } = useSelector((state) => state);
+  const { bkutData = {}, settings = {} } = useSelector((state) => state);
   const [loadingEditMode, setLoadingEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const [currentReport, setCurrentReport] = useState({});
   const [employeeCount, setEmployeeCount] = useState(0);
   const [years, setYears] = useState([]);
-  const [currentYear, setYear] = useState(dayjs().year());
+  const [currentYear, setYear] = useState(getReportYear(settings));
   const animRef = useAnimation();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
@@ -34,7 +35,7 @@ export default function JSH1() {
   useEffect(() => {
     if (!bkutData.id) return;
     const allYears = [];
-    const y = dayjs().year();
+    const y = getReportYear(settings);
     (bkutData.collectiveAgreementsReports || []).forEach((r) => {
       const cYear = dayjs(r.date).year();
       if (cYear == y) return;
@@ -59,7 +60,7 @@ export default function JSH1() {
       return cYear == currentYear;
     });
     setEmployeeCount(temp1?.workersAmount || 0);
-    setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
+    setCurrentReport(temp || { date: getReportDate() });
     if (!temp?.bhutForm && !editMode) setEditMode(true);
   }, [currentYear, bkutData]);
 
@@ -134,7 +135,7 @@ export default function JSH1() {
                 {t("change")}
               </Button>
             ) : (
-              dayjs(currentReport?.date).year() == dayjs().year() && (
+              dayjs(currentReport?.date).year() == getReportYear(settings) && (
                 <LoadingButton
                   variant="contained"
                   type="submit"

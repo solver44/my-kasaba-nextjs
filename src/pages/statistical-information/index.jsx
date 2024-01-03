@@ -21,6 +21,7 @@ import EditData from "./editData";
 import useActions from "@/hooks/useActions";
 import dayjs from "dayjs";
 import ChangableInput from "@/components/ChangableInput";
+import { getReportDate, getReportYear } from "@/utils/date";
 
 export default function StatisticalInformation() {
   const { t } = useTranslation();
@@ -31,7 +32,7 @@ export default function StatisticalInformation() {
   const [isChanged, setIsChanged] = useState(false);
   const [currentReport, setCurrentReport] = useState({});
   const [years, setYears] = useState([]);
-  const [currentYear, setYear] = useState(dayjs().year());
+  const [currentYear, setYear] = useState(getReportYear());
   const animRef = useAnimation();
   const allText = t("statistical-information.all");
   // const employeesText = t("statistical-information.employees");
@@ -165,7 +166,7 @@ export default function StatisticalInformation() {
   useEffect(() => {
     if (!bkutData.id) return;
     const allYears = [];
-    const y = dayjs().year();
+    const y = getReportYear();
     (bkutData.reports || []).forEach((r) => {
       const cYear = dayjs(r.date).year();
       if (cYear == y) return;
@@ -185,7 +186,7 @@ export default function StatisticalInformation() {
       const cYear = dayjs(r.date).year();
       return cYear == currentYear;
     });
-    setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
+    setCurrentReport(temp || { date: getReportDate() });
   }, [currentYear, bkutData]);
 
   return (
@@ -218,7 +219,7 @@ export default function StatisticalInformation() {
               {t("change")}
             </Button>
           ) : (
-            dayjs(currentReport?.date).year() == dayjs().year() && (
+            dayjs(currentReport?.date).year() == getReportYear() && (
               <LoadingButton
                 variant="contained"
                 type="submit"

@@ -4,6 +4,7 @@ export const SHOW_LOADING = "SHOW_LOADING";
 export const CACHES = "CACHES";
 export const IS_MEMBER = "IS_MEMBER";
 export const BKUT_DATA = "BKUT_DATA";
+export const SETTINGS = "SETTINGS";
 export const DATA_LOADING = "DATA_LOADING";
 export const UPDATE_DATA = "UPDATE_DATA";
 
@@ -61,6 +62,13 @@ const updateData = () => {
   };
 };
 
+const setSettings = (payload) => {
+  return {
+    type: SETTINGS,
+    payload,
+  };
+};
+
 export default {
   showLoading,
   loginFailure,
@@ -70,4 +78,5 @@ export default {
   bkutData,
   dataLoading,
   updateData,
+  setSettings,
 };

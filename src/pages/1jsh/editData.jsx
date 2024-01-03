@@ -119,7 +119,6 @@ export default function EditData({ currentReport = {} }) {
       <div className="modal-row">
         <FormInput
           name="bhutForm"
-          required
           value={values.bhutForm}
           label={t("1sh.bhut")}
         />

@@ -17,6 +17,7 @@ import {
   getFormattedWithRestDay,
   getRestOfDays,
   isOutdated,
+  isOutdatedReport,
 } from "@/utils/date";
 import {
   Add,
@@ -39,7 +40,7 @@ export default function InDataTable({ filter }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const { bkutData = {} } = useSelector((states) => states);
+  const { bkutData = {}, settings = {} } = useSelector((states) => states);
   const [isHideAddBtn, setIsHideAddBtn] = useState(true);
   const actions = useActions();
 
@@ -101,7 +102,10 @@ export default function InDataTable({ filter }) {
     setIsHideAddBtn(true);
 
     bkutData.agreements.forEach((e) => {
-      if (e.status == "CONFIRMED" && isOutdated(e.contractEndDate)) {
+      if (
+        e.status == "CONFIRMED" &&
+        isOutdatedReport(e.contractEndDate, settings.remainDayForShowJSH)
+      ) {
         setIsHideAddBtn(false);
         return;
       }
@@ -292,8 +296,8 @@ export default function InDataTable({ filter }) {
       fullModal={(data) => {
         if (!data) return false;
         return (
-          data?.status == "INANALYSIS" || 
-          data?.status == "INEXECUTION" || 
+          data?.status == "INANALYSIS" ||
+          data?.status == "INEXECUTION" ||
           data?.status == "CONSIDERED" ||
           data?.status == "CONFIRMED" ||
           data?.status == "CURRENT_JSH" ||
