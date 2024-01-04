@@ -308,6 +308,7 @@ function ModalUI({ hideModal, data = {}, onFetchIndividual }) {
   const [formData, setFormData] = useState({
     fio: "",
     birthDate: "",
+    gender: "",
   });
   const [positions] = useDynamicData({ positions: true });
   const [isMemberValue, setIsMember] = useState(false);
@@ -332,6 +333,7 @@ function ModalUI({ hideModal, data = {}, onFetchIndividual }) {
     setFormData({
       fio: FIO,
       birthDate: individual.birthDate ? dayjs(individual.birthDate) : "",
+      gender: individual?.gender?.id,
     });
   }, [data]);
 
@@ -342,6 +344,7 @@ function ModalUI({ hideModal, data = {}, onFetchIndividual }) {
     setFormData({
       fio: getFIO(data),
       birthDate: dayjs(data.birth_date),
+      gender: data.gender,
     });
   }
 
@@ -368,12 +371,12 @@ function ModalUI({ hideModal, data = {}, onFetchIndividual }) {
         <FormInput
           select
           required
-          value="1"
+          value={formData.gender}
           disabled
           name="gender"
           dataSelect={[
             { value: 1, label: t("man") },
-            { value: 0, label: t("woman") },
+            { value: 2, label: t("woman") },
           ]}
           label={t("gender")}
         />
