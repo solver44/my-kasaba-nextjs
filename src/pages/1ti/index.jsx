@@ -7,7 +7,8 @@ import styles from "./1ti.module.scss";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { getPresidentBKUT } from "@/utils/data";
-import { getReportDate, getReportYear } from "@/utils/date";
+import { getReportDate, getReportYear, getYearFrom } from "@/utils/date";
+import { getReport1ti } from "@/http/reports";
 
 export default function OneTI() {
   const { bkutData = {} } = useSelector((states) => states);
@@ -22,7 +23,7 @@ export default function OneTI() {
     const allYears = [];
     const y = getReportYear();
     (bkutData.reports || []).forEach((r) => {
-      const cYear = dayjs(r.date).year();
+      const cYear = getYearFrom(r.date);
       if (cYear == y) return;
       allYears.push({
         value: cYear,
@@ -37,48 +38,52 @@ export default function OneTI() {
   useEffect(() => {
     if (!bkutData.id) return;
     const temp = (bkutData.reports || []).find((r) => {
-      const cYear = dayjs(r.date).year();
+      const cYear = getYearFrom(r.date);
       return cYear == currentYear;
     });
-    if (typeof temp === "object") temp.date = temp?.date || getReportDate();
+    if (typeof temp === "object")
+      temp.date = temp?.date || dayjs().format("YYYY-MM-DD");
 
-    setCurrentReport(temp || { date: getReportDate() });
+    setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
   }, [currentYear, bkutData]);
 
   useEffect(() => {
-    if (!currentReport.date) return;
+    async function initData() {
+      if (!currentReport.date) return;
 
-    const year = currentYear;
-    const rais = getPresidentBKUT(bkutData);
+      let data = await getReport1ti(bkutData.id, currentReport.date);
+      if (!data.data) return;
+      data = typeof data.data === "string" ? JSON.parse(data.data) : data.data;
 
-    const tempJsonData = {
-      CURRENTYEARS: year,
-      BKUTNAME: bkutData.name,
-      BKUTDIRECTOR: rais,
-      PHONE: bkutData.phone,
-      ISFIRED: !currentReport.isFiredFromMainJob ? "yo'q" : "ha",
-      ISAPPARATUS: !currentReport?.isProvidedPaidApparatus ? "yo'q" : "ha",
-      WORKERSAMOUNT: currentReport?.workersAmount || "0",
-      WORKERSFEMALE: currentReport?.workersFemale || "0",
-      WORKERSADULTS: currentReport?.workersAdults || "0",
-      WORKERSMEMBERS: currentReport?.workersMembers || "0",
-      WORKERSFEMALEMEMBERS: currentReport?.workersFemaleMembers || "0",
-      WORKERSADULTSMEMBERS: currentReport?.workersAdultsMembers || "0",
-      STUDENTSAMOUNT: currentReport?.studentsAmount || "0",
-      STUDENTSFEMALE: currentReport?.studentsFemale || "0",
-      STUDENTSADULTS: currentReport?.studentsAdults || "0",
-      STUDENTSMEMBERS: currentReport?.studentsMembers || "0",
-      STUDENTSFEMALEMEMBERS: currentReport?.studentsFemaleMembers || "0",
-      STUDENTSADULTSMEMBERS: currentReport?.studentsAdultsMembers || "0",
-      PENSIONERAMOUNT: currentReport?.pensionerAmount || "0",
-      STAFFINGAMOUNT: currentReport?.staffingAmount || "0",
-      STAFFINGWORKERSAMOUNT: currentReport?.staffingWorkersAmount || "0",
-      STAFFINGRESPONSIBLEWORKERS:
-        currentReport?.staffingResponsibleWorkers || "0",
-      STAFFINGTECHNICALWORKERS: currentReport?.staffingTechnicalWorkers || "0",
-    };
+      const tempJsonData = {
+        CURRENTYEARS: data.currentYear,
+        BKUTNAME: data.name,
+        BKUTDIRECTOR: data.president,
+        PHONE: data.phone,
+        ISFIRED: data.raisOzod,
+        ISAPPARATUS: data.haqApparati,
+        WORKERSAMOUNT: data.leEmpAll,
+        WORKERSFEMALE: data.leEmpFemale,
+        WORKERSADULTS: data.leEmpAge30,
+        WORKERSMEMBERS: data.memberEmpAll,
+        WORKERSFEMALEMEMBERS: data.memberEmpFemale,
+        WORKERSADULTSMEMBERS: data.memberEmpAge30,
+        STUDENTSAMOUNT: data.studentAll,
+        STUDENTSFEMALE: data.studentFemale,
+        STUDENTSADULTS: data.studentAge30,
+        STUDENTSMEMBERS: data.memberStudentAll,
+        STUDENTSFEMALEMEMBERS: data.memberStudentFemale,
+        STUDENTSADULTSMEMBERS: data.memberStudentAge30,
+        PENSIONERAMOUNT: data.memberPensioner,
+        STAFFINGAMOUNT: data.kuShtat,
+        STAFFINGWORKERSAMOUNT: data.kuEmp,
+        STAFFINGRESPONSIBLEWORKERS: data.kuMasul,
+        STAFFINGTECHNICALWORKERS: data.kuTechnik,
+      };
 
-    setData(tempJsonData);
+      setData(tempJsonData);
+    }
+    initData();
   }, [currentReport]);
 
   return (

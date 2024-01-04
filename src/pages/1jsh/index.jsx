@@ -16,7 +16,7 @@ import ChangableInput from "@/components/ChangableInput";
 import { sendCollectiveReport } from "@/http/data";
 import { useSnackbar } from "notistack";
 import useActions from "@/hooks/useActions";
-import { getReportDate, getReportYear } from "@/utils/date";
+import { getReportDate, getReportYear, getYearFrom } from "@/utils/date";
 
 export default function JSH1() {
   const [editMode, setEditMode] = useState(false);
@@ -37,7 +37,7 @@ export default function JSH1() {
     const allYears = [];
     const y = getReportYear(settings);
     (bkutData.collectiveAgreementsReports || []).forEach((r) => {
-      const cYear = dayjs(r.date).year();
+      const cYear = getYearFrom(r.date);
       if (cYear == y) return;
       allYears.push({
         value: cYear,
@@ -52,15 +52,15 @@ export default function JSH1() {
   useEffect(() => {
     if (!bkutData.id) return;
     const temp = (bkutData.collectiveAgreementsReports || []).find((r) => {
-      const cYear = dayjs(r.date).year();
+      const cYear = getYearFrom(r.date);
       return cYear == currentYear;
     });
     const temp1 = (bkutData.reports || []).find((r) => {
-      const cYear = dayjs(r.date).year();
+      const cYear = getYearFrom(r.date);
       return cYear == currentYear;
     });
     setEmployeeCount(temp1?.workersAmount || 0);
-    setCurrentReport(temp || { date: getReportDate() });
+    setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
     if (!temp?.bhutForm && !editMode) setEditMode(true);
   }, [currentYear, bkutData]);
 
@@ -136,7 +136,7 @@ export default function JSH1() {
                 {t("change")}
               </Button>
             ) : (
-              dayjs(currentReport?.date).year() == getReportYear(settings) && (
+              getYearFrom(currentReport?.date) == getReportYear(settings) && (
                 <LoadingButton
                   variant="contained"
                   type="submit"

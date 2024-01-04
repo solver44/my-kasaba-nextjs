@@ -56,6 +56,14 @@ export function getReportYear(settings) {
       : currentYear
     : currentYear;
 }
+export function getYearFrom(date) {
+  const d = dayjs(date);
+  return d.isBefore(dayjs(d.year() + "-01-27"))
+    ? d.isAfter(dayjs(d.year() - 1 + "-12-31"))
+      ? d.year() - 1
+      : d.year()
+    : d.year();
+}
 export function getReportDate() {
   return dayjs(getReportYear() + "-01-01").format("YYYY-MM-DD");
 }
