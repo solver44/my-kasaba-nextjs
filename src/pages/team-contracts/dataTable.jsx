@@ -11,14 +11,18 @@ import BigButton from "@/components/BigButton";
 import AddIcon from "@mui/icons-material/Add";
 import styles from "./team-contracts.module.scss";
 import { Box, Button, Card } from "@mui/material";
+import CurrentJSHTab from "./currentJSHTab";
 import {
   convertStringToFormatted,
   getFormattedWithRestDay,
   getRestOfDays,
   isOutdated,
+  isOutdatedReport,
 } from "@/utils/date";
 import {
+  Add,
   CommentSharp,
+  Description,
   InfoRounded,
   TopicRounded,
   Visibility,
@@ -30,14 +34,28 @@ import ChipStatus from "@/components/ChipStatus";
 import Tabs from "@/components/Tabs";
 import Opinions from "./opinionsTab";
 import MainTab from "./mainTab";
+import JShDocument from "./jshDocumentTab";
 
 export default function InDataTable({ filter }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const { bkutData = {} } = useSelector((states) => states);
+  const { bkutData = {}, settings = {} } = useSelector((states) => states);
   const [isHideAddBtn, setIsHideAddBtn] = useState(true);
   const actions = useActions();
+
+  async function getFile(file) {
+    if (file && file.slice(0, 3) !== "fs:") {
+      let responseFile = await initFile(file);
+      if (!responseFile?.fileRef) {
+        enqueueSnackbar(t("upload-file-error"), { variant: "error" });
+        return;
+      }
+      return responseFile.fileRef;
+    } else {
+      return file;
+    }
+  }
 
   const columns = [
     {
@@ -69,6 +87,10 @@ export default function InDataTable({ filter }) {
       headerName: t("team-contracts.status"),
       type: "status",
     },
+    {
+      field: "contractEndDate",
+      headerName: t("team-contracts.contractEndDate"),
+    },
   ];
 
   useEffect(() => {
@@ -80,7 +102,10 @@ export default function InDataTable({ filter }) {
     setIsHideAddBtn(true);
 
     bkutData.agreements.forEach((e) => {
-      if (e.status == "CONFIRMED" && isOutdated(e.contractEndDate)) {
+      if (
+        e.status == "CONFIRMED" &&
+        isOutdatedReport(e.contractEndDate, settings.remainDayForShowJSH)
+      ) {
         setIsHideAddBtn(false);
         return;
       }
@@ -88,8 +113,11 @@ export default function InDataTable({ filter }) {
 
     setRows(
       bkutData.agreements.filter(filter ? filter : () => true).map((e) => {
+        const restDay =
+          e?.contractEndDate &&
+          getFormattedWithRestDay(e.contractEndDate, true);
         const isConsidered =
-          e.status == "CONSIDERED" ||
+          e?.status == "CONSIDERED" ||
           e?.status == "CONFIRMED" ||
           e?.status == "TO_CONFIRM";
         const date =
@@ -102,9 +130,18 @@ export default function InDataTable({ filter }) {
           id: e.id,
           projectSentDate: convertStringToFormatted(e.expertizeStartDate),
           contractNumber: e.contractNo,
-          status: { value: e.status, date },
-          contractDate: e.approvedDate,
+          status: {
+            value: e.status,
+            date,
+            color:
+              restDay <= 0 ? "error" : restDay <= 15 ? "warning" : undefined,
+          },
+          contractDate: convertStringToFormatted(e.contractDate),
           statementNumber: e.statementNo,
+          contractEndDate:
+            e?.status === "CONFIRMED" || e?.status === "CURRENT_JSH"
+              ? getFormattedWithRestDay(e.contractEndDate)
+              : "",
           expertizeDate: isConsidered
             ? convertStringToFormatted(e.expertizeCompleteDate)
             : getFormattedWithRestDay(e.expertizeEndDate),
@@ -112,26 +149,22 @@ export default function InDataTable({ filter }) {
       })
     );
   }, [bkutData]);
-  async function onSubmitModal(forms, hideModal, isView, dataModal) {
+  async function onSubmitModal(forms, hideModal, isView, dataModal = {}) {
+    const isCurrentJSH = dataModal?.currentJSH;
     try {
-      let project = null,
-        application = null;
-
-      if (forms.applications && forms.applications.slice(0, 3) !== "fs:") {
-        // Initiate file upload and retrieve file reference
-        let responseFile = await initFile(forms.applications);
-        if (!responseFile?.fileRef) {
-          enqueueSnackbar(t("upload-file-error"), { variant: "error" });
-          return;
-        }
-        project = responseFile.fileRef;
-      } else {
-        project = forms.applications;
+      if (forms?.restDay && forms?.restDay < 0) {
+        enqueueSnackbar(t("team-contracts.expired-current-jsh"), {
+          variant: "error",
+        });
+        return;
       }
+
+      let project = await getFile(forms.applications);
+      if (!forms.bkutId || !project) throw Error("error");
       const requestData = {
         collectiveAgreements: {
           bkut: {
-            id: bkutData.id,
+            id: forms.bkutId,
           },
           applications: [
             {
@@ -140,23 +173,23 @@ export default function InDataTable({ filter }) {
           ],
         },
       };
-      if (forms.applications1 && forms.applications1.slice(0, 3) !== "fs:") {
-        let responseFile = await initFile(forms.applications1);
-        if (!responseFile?.fileRef) {
-          enqueueSnackbar(t("upload-file-error"), { variant: "error" });
-          return;
+
+      let application = await getFile(forms.applications1);
+      if (application || isCurrentJSH) {
+        if (isCurrentJSH) {
+          let expertizeFile = await getFile(forms.expertize);
+          requestData.collectiveAgreements.status = "CURRENT_JSH";
+          requestData.collectiveAgreements.approvedDate = forms.approvedDate;
+          requestData.collectiveAgreements.contractDate = forms.contractDate;
+          requestData.collectiveAgreements.opinionFile = expertizeFile;
+        } else {
+          requestData.collectiveAgreements.applications = [
+            {
+              file: application,
+            },
+          ];
+          requestData.collectiveAgreements.id = dataModal.id;
         }
-        application = responseFile.fileRef;
-      } else {
-        application = forms.applications1;
-      }
-      if (application) {
-        requestData.collectiveAgreements.applications = [
-          {
-            file: application,
-          },
-        ];
-        requestData.collectiveAgreements.id = dataModal.id;
         requestData.collectiveAgreements.statementNo = forms.applicationNumber;
         requestData.collectiveAgreements.employer = forms.employer;
         requestData.collectiveAgreements.employerRepresentatives =
@@ -166,7 +199,10 @@ export default function InDataTable({ filter }) {
       }
 
       const isJSh = requestData.collectiveAgreements.statementNo;
-      const response = await sendContracts(requestData);
+      const response = await sendContracts(
+        requestData,
+        dataModal?.status === "CONSIDERED"
+      );
 
       if (response?.success) {
         const newId = rows.length > 0 ? rows[rows.length - 1].id + 1 : 1;
@@ -206,12 +242,20 @@ export default function InDataTable({ filter }) {
   }
 
   async function fetchData(id) {
+    if (id === "currentJSH") return { currentJSH: true };
     const data = (bkutData.agreements ?? []).find((agr) => agr.id == id);
     return data;
   }
+
   return (
     <DataTable
-      title={t("team-contracts.title1")}
+      title={(data) => {
+        const isAnalysis =
+          data?.status == "INANALYSIS" || data?.status == "INEXECUTION";
+        if (data?.currentJSH || (data?.status && !isAnalysis))
+          return t("team-contracts.title");
+        return t("team-contracts.title1");
+      }}
       columns={columns}
       rows={rows}
       hideImport
@@ -220,14 +264,15 @@ export default function InDataTable({ filter }) {
       topButtons={(selectedRows, toggleModal) => {
         return (
           <React.Fragment>
-            <BigButton
-              green={"success"}
-              disabled={selectedRows.length != 1}
-              onClick={() => toggleModal(null, selectedRows[0])}
-              Icon={Visibility}
-            >
-              {t("watch")}
-            </BigButton>
+            {!isHideAddBtn && (
+              <BigButton
+                green={"primary"}
+                onClick={() => toggleModal(null, { id: "currentJSH" })}
+                Icon={Add}
+              >
+                {t("jsh-add")}
+              </BigButton>
+            )}
             {!isHideAddBtn && (
               <BigButton
                 green={"success"}
@@ -237,23 +282,36 @@ export default function InDataTable({ filter }) {
                 {t("projectAdd")}
               </BigButton>
             )}
+            <BigButton
+              green={"success"}
+              disabled={selectedRows.length != 1}
+              onClick={() => toggleModal(null, selectedRows[0])}
+              Icon={Visibility}
+            >
+              {t("watch")}
+            </BigButton>
           </React.Fragment>
         );
       }}
       fullModal={(data) => {
         if (!data) return false;
         return (
+          data?.status == "INANALYSIS" ||
+          data?.status == "INEXECUTION" ||
           data?.status == "CONSIDERED" ||
           data?.status == "CONFIRMED" ||
+          data?.status == "CURRENT_JSH" ||
           data?.status == "TO_CONFIRM"
         );
       }}
       hideFirstButton
       hideDelete
       bottomModal={(handleSubmit, handleClose, isView, _, __, data) => {
+        const firstCond = !isView || data?.status == "CONSIDERED";
+        const secondCond = data?.currentJSH;
         return (
           <div className={styles.row}>
-            {(!isView || data.status == "CONSIDERED") && (
+            {(firstCond || secondCond) && (
               <Button onClick={handleSubmit} variant="contained">
                 {t(data?.status === "CONSIDERED" ? "to-register" : "send")}
               </Button>
@@ -267,20 +325,19 @@ export default function InDataTable({ filter }) {
       onSubmitModal={onSubmitModal}
       isFormModal
       fetchData={fetchData}
-      modal={(hideModal, dataModal, hideBtn) => (
+      modal={(hideModal, dataModal) => (
         <ModalUI hideModal={hideModal} data={dataModal} />
       )}
     />
   );
 }
 
-function ModalUI({ hideModal, data }) {
+function ModalUI({ data }) {
   const { t } = useTranslation();
   const [employees, bkutData] = useEmployees();
 
   const [formData, setFormData] = useState({
     director: "",
-    // Add other form input state values here
   });
   const [files, setFiles] = useState({
     applications: { loading: true },
@@ -288,6 +345,7 @@ function ModalUI({ hideModal, data }) {
   });
 
   useEffect(() => {
+    if (!bkutData.id) return;
     setFormData({ director: getPresidentBKUT(bkutData) });
   }, [bkutData]);
   useEffect(() => {
@@ -311,11 +369,8 @@ function ModalUI({ hideModal, data }) {
     fetchData();
   }, [data]);
 
-  useEffect(() => {
-    const fetchData = async () => {};
-    fetchData();
-  }, [data]);
-
+  const isCurrentJSH = data?.currentJSH;
+  const isCurrentJSHOnly = data.status === "CURRENT_JSH";
   const isConsideredOnly = data.status == "CONSIDERED";
   const isToConfirm = data.status == "TO_CONFIRM";
   const isConfirmed = data.status == "CONFIRMED";
@@ -328,9 +383,17 @@ function ModalUI({ hideModal, data }) {
 
   return (
     <div className="modal-content">
-      {isConsidered || isAnalysis ? (
+      <FormInput name="bkutId" value={bkutData.id} hidden />
+      {isCurrentJSH ? (
+        <CurrentJSHTab
+          files={files}
+          formData={formData}
+          bkutData={bkutData}
+          data={data}
+        />
+      ) : isConsidered || isAnalysis || isCurrentJSHOnly ? (
         <React.Fragment>
-          <div className="modal-row full">
+          <div className="modal-row fulldoc">
             {isAnalysis ? (
               <MainTab
                 files={files}
@@ -341,31 +404,81 @@ function ModalUI({ hideModal, data }) {
             ) : (
               <Tabs
                 reverse={isConfirmed}
-                tabs={[
-                  {
-                    label: "opinions",
-                    icon: <CommentSharp />,
-                    children: (
-                      <Opinions
-                        formData={formData}
-                        bkutData={bkutData}
-                        data={data}
-                      />
-                    ),
-                  },
-                  {
-                    label: "to-register",
-                    icon: <InfoRounded />,
-                    children: (
-                      <MainTab
-                        files={files}
-                        formData={formData}
-                        bkutData={bkutData}
-                        data={data}
-                      />
-                    ),
-                  },
-                ]}
+                tabs={
+                  isCurrentJSHOnly
+                    ? [
+                        {
+                          label: "to-register",
+                          icon: <InfoRounded />,
+                          children: (
+                            <CurrentJSHTab
+                              files={files}
+                              formData={formData}
+                              bkutData={bkutData}
+                              data={data}
+                            />
+                          ),
+                        },
+                        {
+                          label: "team-contracts.jsh-text",
+                          icon: <Description />,
+                          children: (
+                            <JShDocument
+                              formData={formData}
+                              bkutData={bkutData}
+                              data={data}
+                            />
+                          ),
+                        },
+                        {
+                          label: "opinions",
+                          icon: <CommentSharp />,
+                          children: (
+                            <Opinions
+                              formData={formData}
+                              bkutData={bkutData}
+                              data={data}
+                            />
+                          ),
+                        },
+                      ]
+                    : [
+                        {
+                          label: "opinions",
+                          icon: <CommentSharp />,
+                          children: (
+                            <Opinions
+                              formData={formData}
+                              bkutData={bkutData}
+                              data={data}
+                            />
+                          ),
+                        },
+                        {
+                          label: "project-text",
+                          icon: <Description />,
+                          children: (
+                            <JShDocument
+                              formData={formData}
+                              bkutData={bkutData}
+                              data={data}
+                            />
+                          ),
+                        },
+                        {
+                          label: "to-register",
+                          icon: <InfoRounded />,
+                          children: (
+                            <MainTab
+                              files={files}
+                              formData={formData}
+                              bkutData={bkutData}
+                              data={data}
+                            />
+                          ),
+                        },
+                      ]
+                }
               />
             )}
             <Card elevation={1} className="modal-sidebar">
@@ -406,7 +519,7 @@ function ModalUI({ hideModal, data }) {
                     />
                   )}
                 </React.Fragment>
-              ) : data.status === "CONFIRMED" ? (
+              ) : isConfirmed || isCurrentJSHOnly ? (
                 <React.Fragment>
                   <ChipStatus
                     isSidebar
@@ -452,7 +565,7 @@ function ModalUI({ hideModal, data }) {
             fileInput
             value={files.applications?.url}
             nameOfFile={files.applications?.name}
-            label={t("team-contracts.application")}
+            label={t("team-contracts.application1")}
           />
         </React.Fragment>
       )}

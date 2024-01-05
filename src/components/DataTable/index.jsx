@@ -129,7 +129,7 @@ function DataTable({
       setDataModal();
       dataModalRef.current = null;
     }
-    if (value !== undefined) {
+    if (typeof value === "boolean") {
       setShow(value);
       return;
     }
@@ -152,7 +152,7 @@ function DataTable({
             const v = cell.getValue();
             const val = v?.value || v;
             const translateKey = t("status." + val);
-            const color = getStatusColors(val);
+            const color = v?.color ? v.color : getStatusColors(val);
             return (
               <div className={styles.statusChip}>
                 <Chip label={translateKey} size="small" color={color} />
@@ -183,6 +183,12 @@ function DataTable({
           },
         };
       }
+      //  else if ((column.field ?? "").includes("Date")) {
+      //   return {
+      //     ...temp,
+      //     Cell: ({ cell }) => convertStringToFormatted(cell.getValue()),
+      //   };
+      // }
       return temp;
     });
 
@@ -318,7 +324,7 @@ function DataTable({
                 setRowSelection((prev) => {
                   if (!isSelected) isSelected = !prev[row.id];
                   return {
-                    ...prev,
+                    // ...prev,
                     [row.id]: !prev[row.id],
                   };
                 });

@@ -5,6 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 function FormValidation({
   children,
   style = {},
+  refresh,
   className,
   button,
   onSubmit,
@@ -31,7 +32,7 @@ function FormValidation({
       unsubscribe = un;
     }, 500);
     return () => unsubscribe();
-  }, [methods.watch]);
+  }, [methods.watch, refresh]);
 
   const handleSubmitFunc = (data, t) => {
     if (!data) return;

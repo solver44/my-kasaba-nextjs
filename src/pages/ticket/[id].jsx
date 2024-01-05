@@ -1,88 +1,106 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ticket.module.scss";
 import { useRouter } from "next/router";
-import { Paper } from "@mui/material";
+import { CircularProgress, Paper } from "@mui/material";
 import logo from "public/kasaba-logo.svg";
 import Image from "next/image";
 import { decryptData } from "@/utils/encryptdecrypt";
 import { showOrNot } from "@/utils/data";
 import QRCode from "react-qr-code";
 import { enqueueSnackbar } from "notistack";
+import { t } from "i18next";
+import { getTicketMember } from "@/http/employees";
+import { getUrlWithQuery } from "@/utils/window";
 
 export default function TicketPage(p) {
   const router = useRouter();
-  const [data, setData] = useState({
-    id: "173T112211B-00000",
-    firstName: "Zafar",
-    lastName: "Nabiyev",
-    middleName: "Irkinovich",
-    birthDate: "13.03.1971",
-    joinDate: "10.10.2000",
-    bkutName: "СОВЕТ ФЕДЕРАЦИИ ПРОФСОЮЗА",
-    director: "Jamshidbek Jamshidbekov Anvarovich",
-    url: "",
-  });
-  //same name as name of your file, can be [slug].js; [specialId].js - any name you want
-  const { id, d } = router.query;
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const { id } = router.query;
+
+  async function initData() {
+    const response = await getTicketMember(id);
+    if (!response.success) throw new Error("error");
+    const url = getUrlWithQuery("/ticket/" + id);
+    response.data.url = url;
+    return response.data;
+  }
   useEffect(() => {
-    if (!d) return;
-    try {
-      setData({ ...decryptData(d), url: window.location.href });
-    } catch (error) {
-      setData({});
-      enqueueSnackbar("Ma'lumotlarni yuklashda xatolik mavjud.", {
-        variant: "error",
+    if (!id) return;
+
+    initData()
+      .then((data) => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch((e) => {
+        setData({});
+        setLoading(false);
+        enqueueSnackbar(t("fetch-error1"), {
+          variant: "error",
+        });
       });
-    }
-  }, [d]);
+  }, [id]);
 
   return (
     <div className={styles.container}>
       <Paper elevation={2} variant="elevation" className={styles.content}>
-        <div className={styles.top}>
-          <Image className={styles.logo} src={logo} />
-          <h1 className={styles.title}>
-            A'zolik bileti raqami: {showOrNot(data.id.slice(0, 13))}
-          </h1>
-        </div>
-        <p className={styles.row}>
-          <span>Familyasi</span> <u>{showOrNot(data.lastName)}</u>
-        </p>
-        <p className={styles.row}>
-          <span>Ismi</span> <u>{showOrNot(data.firstName)}</u>
-        </p>
-        <p className={styles.row}>
-          <span>Otasining ismi</span> <u>{showOrNot(data.middleName)}</u>
-        </p>
-        <p className={styles.row}>
-          <span>Tug'ilgan yili</span> <u>{showOrNot(data.birthDate)}</u>
-        </p>
-        <p className={styles.row}>
-          <span>Kasaba uyushmasiga a'zo bo'lgan yili</span>{" "}
-          <u>{showOrNot(data.joinDate)}</u>
-        </p>
-        <p className={styles.row}>
-          <span>BKUT nomi</span> <u>{showOrNot(data.bkutName)}</u>
-        </p>
-        <p className={styles.row}>
-          <span>BKUT raisi</span> <u>{showOrNot(data.director)}</u>
-        </p>
+        {loading ? (
+          <div className={styles.loader}>
+            <CircularProgress style={{ color: "#618597" }} />
+          </div>
+        ) : (
+          <React.Fragment>
+            <div className={styles.top}>
+              <Image alt="kasaba-logo" className={styles.logo} src={logo} />
+              <h1 className={styles.title}>
+                A'zolik bileti raqami:{" "}
+                <span className={styles.code}>{showOrNot(data.id || "")}</span>
+              </h1>
+            </div>
+            <p className={styles.row}>
+              <span>Familyasi:</span> <u>{showOrNot(data.lastName)}</u>
+            </p>
+            <p className={styles.row}>
+              <span>Ismi:</span> <u>{showOrNot(data.firstName)}</u>
+            </p>
+            <p className={styles.row}>
+              <span>Otasining ismi:</span> <u>{showOrNot(data.middleName)}</u>
+            </p>
+            <p className={styles.row}>
+              <span>Tug'ilgan yili:</span> <u>{showOrNot(data.birthDate)}</u>
+            </p>
+            <p className={styles.row}>
+              <span>Kasaba uyushmasiga a'zo bo'lgan yili:</span>{" "}
+              <u>{showOrNot(data.joinDate)}</u>
+            </p>
+            <p className={styles.row}>
+              <span>BKUT nomi:</span>{" "}
+              <u className={styles.bold}>{showOrNot(data.bkutName)}</u>
+            </p>
+            <p className={styles.row}>
+              <span>BKUT raisi:</span> <u>{showOrNot(data.director)}</u>
+            </p>
 
-        {data.url && (
-          <QRCode
-            size={120}
-            className={styles.qrCode}
-            value={data.url}
-            viewBox={`0 0 120 120`}
-          />
-        )}
+            {data.url && (
+              <QRCode
+                size={80}
+                className={styles.qrCode}
+                value={data.url}
+                viewBox={`0 0 80 80`}
+              />
+            )}
 
-        {/* <img
+            {/* <img
           alt="qr code"
           height={90}
           src="https://www.qrstuff.com/images/default_qrcode.png"
         /> */}
-        <p className={styles.row}>Shaxsiy imzo _______________</p>
+            {/* <p role="sign" className={styles.row}>
+              Shaxsiy imzo _______________
+            </p> */}
+          </React.Fragment>
+        )}
       </Paper>
     </div>
   );

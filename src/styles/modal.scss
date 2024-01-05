@@ -8,6 +8,9 @@
 .modal-row {
   display: flex;
   gap: 20px;
+  &.fulldoc {
+    height: 100%;
+  }
   &.full {
     height: 100%;
   }

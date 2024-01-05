@@ -12,6 +12,7 @@ export default function FinderPINFL({
   disablePINFL,
   pinflValue = "",
   givenDate = "",
+  style = {},
   onFetch = () => {},
 }) {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ export default function FinderPINFL({
     if (!isValid) return;
 
     setLoading(true);
-    const { data } = await fetchPINFL(forms.pinfl, forms.givenDate);
+    const { data } = await fetchPINFL(forms.pinfl, "20-20-2020");
     setLoading(false);
     if (data === "") enqueueSnackbar(t("server-error"), { variant: "error" });
     else if (data?.success === false) {
@@ -66,10 +67,10 @@ export default function FinderPINFL({
     } else {
       setInputValidation({ pinfl: false, givenDate: false });
     }
-    onFetch(data?.data);
+    onFetch({ id: data?.data?.id, ...data?.data?.profile });
   }
   return (
-    <div className={styles.wrapper}>
+    <div style={style} className={styles.wrapper}>
       <FormInput
         required
         name="pinfl"

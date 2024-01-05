@@ -26,7 +26,7 @@ function Input({
 }) {
   const [isMask, setMask] = useState(useMask);
   const isEmail = useRef(emailRequired);
-  const [currentValue, setCurrentValue] = useState(value || "");
+  const [currentValue, setCurrentValue] = useState(value ?? "");
   const { t } = useTranslation();
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -38,11 +38,11 @@ function Input({
   }, [invalid]);
 
   useEffect(() => {
-    setCurrentValue(value || "");
+    setCurrentValue(value ?? "");
   }, [value]);
 
   useEffect(() => {
-    if (value) {
+    if (typeof value !== "undefined") {
       if (!onChange) return;
       onChange({ target: { value } }, name);
     }

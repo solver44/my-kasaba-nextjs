@@ -39,7 +39,8 @@ export default function Profile({ img, collapsed, imgOnly, mini }) {
       <div className={styles.col}>
         <p className={styles.title}>
           {getFIO(bkutData?.application?.passport) ||
-            getPresidentBKUT(bkutData)}
+            getPresidentBKUT(bkutData) ||
+            bkutData?.name}
         </p>
         <p
           className={[

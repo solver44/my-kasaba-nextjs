@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import MenuIcon from "@mui/icons-material/Menu";
 import { getAnimation } from "@/utils/animation";
 import Cookies from "universal-cookie";
+import { getSettings } from "@/http/handbooks";
 
 const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
   const { updateData, ...states } = useSelector((state) => state);
@@ -33,8 +34,13 @@ const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
       actions.showLoading(true);
       actions.dataLoading(true);
       const data = await getBKUTData();
+      const settings = await getSettings();
       const resError = data?.response?.data?.error;
-      if (resError == "Entity not found" || resError == "Invalid entity ID") {
+      if (
+        !data?.id ||
+        resError == "Entity not found" ||
+        resError == "Invalid entity ID"
+      ) {
         actions.loginFailure();
         localStorage.removeItem("token");
         const cookies = new Cookies();
@@ -45,6 +51,7 @@ const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
         return;
       }
       actions.bkutData(data);
+      actions.setSettings(settings?.length ? settings[0] : {});
       if (data?.protocolFile) {
         actions.isMember(true);
       }

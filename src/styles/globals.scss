@@ -11,12 +11,15 @@
   --menu-selected-text-color: black;
   --menu-selected-border-color: #b8d3ff;
   --menu-font-size: 20px;
+  --menu-icon-size: 24px;
+  --badge-size: 16px;
   --radius: 55px;
 
   --modal-color: white;
 
   --input-radius: 4px;
   --input-color: black;
+  --input-label-color: #111111;
   --input-border-color: #c7c9d9;
   --input-font-size: 20px;
   --input-inside-font-size: 18px;
@@ -36,6 +39,9 @@ body {
   background-color: var(--dark-bg);
 }
 
+button{
+  font-size: var(--button-font-size) !important;
+}
 .login-btn {
   cursor: pointer;
   border: 0;
@@ -69,7 +75,7 @@ body {
 }
 .tab-main {
   button {
-    font-size: 18px;
+    font-size: var( --input-inside-font-size);
     min-height: 50px;
   }
 }
@@ -107,7 +113,7 @@ body {
   font-size: 16px;
   font-weight: 700;
 }
-.big-icon{
+.big-icon {
   font-size: 40px;
   color: #197bbd;
 }

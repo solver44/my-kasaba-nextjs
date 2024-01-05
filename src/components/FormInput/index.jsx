@@ -1,14 +1,17 @@
 import { useController, useFormContext } from "react-hook-form";
 import ChangableInput from "../ChangableInput";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { getEmptyValue } from "@/utils/data";
+import areEqual from "@/utils/areEqual";
 
-export default function FormInput({
+function FormInput({
   required,
   name,
   onChange,
   value,
+  hidden,
   invalid,
+  autoComplete,
   ...props
 }) {
   const { control, setValue } = useFormContext() ?? { control: false };
@@ -34,6 +37,8 @@ export default function FormInput({
     if (field.onChange) field.onChange(e, name);
   }
 
+  if (hidden) return null;
+
   return (
     <ChangableInput
       {...props}
@@ -45,3 +50,5 @@ export default function FormInput({
     />
   );
 }
+
+export default React.memo(FormInput, areEqual);

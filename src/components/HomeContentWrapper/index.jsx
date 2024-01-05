@@ -10,7 +10,14 @@ import {
   Drawer,
   IconButton,
 } from "@mui/material";
-import { CloseRounded } from "@mui/icons-material";
+import {
+  Add,
+  AddBox,
+  CloseRounded,
+  IndeterminateCheckBox,
+  Refresh,
+  Remove,
+} from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { getNotifications, readAllNotifications } from "@/http/notifications";
 import { convertStringToFormatted } from "@/utils/date";
@@ -27,12 +34,13 @@ export default function HomeContentWrapper({
   const [countNotViewed, setCountNotViewed] = useState(0);
   const { bkutData = {} } = useSelector((state) => state);
   function openNotifications() {
-    setTimeout(async () => {
-      if (bkutData.id) {
-        await readAllNotifications(bkutData.id);
-        setCountNotViewed(0);
-      }
-    }, 100);
+    if (countNotViewed > 0)
+      setTimeout(async () => {
+        if (bkutData.id) {
+          await readAllNotifications(bkutData.id);
+          setCountNotViewed(0);
+        }
+      }, 100);
     setOpenDrawer(true);
   }
 
@@ -42,10 +50,32 @@ export default function HomeContentWrapper({
       const response = await getNotifications(bkutData.id);
       if (!response?.success) return;
       setCountNotViewed(response.countNotViewed);
-      setMessages(response.data);
+      setMessages(response.data.reverse());
     };
     initData();
   }, [bkutData]);
+
+  function changeFont(delta) {
+    const root = document.querySelector(":root");
+    setProps(root, "--menu-font-size", delta, 20);
+    setProps(root, "--input-font-size", delta, 20);
+    setProps(root, "--input-inside-font-size", delta, 18);
+    setProps(root, "--table-font-size", delta, 20);
+    setProps(root, "--table-row-font-size", delta, 18);
+    setProps(root, "--badge-size", delta, 16);
+    setProps(root, "--menu-icon-size", delta, 24);
+    setProps(root, "--button-font-size", delta, undefined);
+  }
+
+  function setProps(root, name, delta, value) {
+    if (!delta) {
+      root.style.setProperty(name, value + "px");
+      return;
+    }
+    const fs =
+      +getComputedStyle(root).getPropertyValue(name).split("px")[0] || 18;
+    root.style.setProperty(name, fs + delta + "px");
+  }
 
   return (
     <React.Fragment>
@@ -59,12 +89,16 @@ export default function HomeContentWrapper({
             {/* <div className={styles.desc}>{desc}</div> */}
           </div>
           <div className={styles.row}>
+            <div className={styles.specialButtons}>
+              <Add onClick={() => changeFont(1)} />
+              <Refresh onClick={() => changeFont()} />
+              <Remove onClick={() => changeFont(-1)} />
+            </div>
             <Badge
               style={{ cursor: "pointer" }}
               color="primary"
               onClick={openNotifications}
               badgeContent={countNotViewed}
-              max={999}
             >
               <NotificationsIcon htmlColor="#858585" />
             </Badge>

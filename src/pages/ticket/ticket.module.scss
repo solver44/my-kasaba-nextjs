@@ -1,7 +1,7 @@
 .container {
   width: 100vw;
   height: 100vh;
-  background-color: white;
+  background-color: #ccc;
 }
 .title {
   font-size: 22px;
@@ -13,19 +13,53 @@
   left: 20px;
 }
 .content {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   position: absolute;
+  border-radius: 0;
+  border: 15px solid #618597;
   top: 20%;
-  max-width: 650px;
-  width: 100%;
+  width: 700px;
+  min-height: 350px;
   left: 50%;
   transform: translateX(-50%);
   padding: 10px 20px;
+  // &::after {
+  //   content: "";
+  //   position: absolute;
+  //   top: 50%;
+  //   left: 50%;
+  //   transform: translate(-50%, -50%);
+  //   width: calc(100% + 20px);
+  //   height: calc(100% + 20px);
+  //   border: 2px solid white;
+  // }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    border: 2px solid white;
+  }
 }
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+// .divider {
+//   height: 1px;
+//   background-color: rgb(235, 235, 235);
+//   width: 100%;
+// }
 .row {
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 15px;
   & > :first-child {
     width: 50%;
     text-align: right;
@@ -34,13 +68,21 @@
     width: 50%;
     text-decoration: dashed;
   }
-  &:last-child {
+  &[role="sign"] {
     width: 100%;
     margin-top: 50px;
     float: right;
     display: flex;
     justify-content: flex-end;
   }
+}
+.code {
+  font-size: 28px;
+  text-decoration: underline;
+}
+.bold {
+  // font-weight: bold;
+  text-decoration: underline !important;
 }
 .top {
   display: flex;

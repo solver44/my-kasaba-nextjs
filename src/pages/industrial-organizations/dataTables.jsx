@@ -8,7 +8,12 @@ import { getDistricts, getRegions } from "@/http/public";
 import FinderSTIR from "@/components/FinderSTIR";
 import { useEmployees } from "../employees";
 import { useSelector } from "react-redux";
-import { deleteDepartment, sendDepartment, initFile, getFile } from "@/http/data";
+import {
+  deleteDepartment,
+  sendDepartment,
+  initFile,
+  getFile,
+} from "@/http/data";
 import useActions from "@/hooks/useActions";
 import { getFIO, splitFIO } from "@/utils/data";
 import { showYesNoDialog } from "@/utils/dialog";
@@ -66,7 +71,6 @@ export default function InDataTable({ isGroup }) {
   ];
 
   useEffect(() => {
-    console.log(bkutData.organizations)
     if (!bkutData?.organizations?.length) return;
     setRows(
       bkutData.organizations
@@ -78,13 +82,12 @@ export default function InDataTable({ isGroup }) {
             bkut: bkutData.name,
             address: e.address,
             director: bkutData?.employees[0]?._instanceName,
-            soato: e.soato._instanceName,
+            soato: e?.soato?._instanceName || e?.soato?.nameUz,
             email: e.email,
             phone: e.phone,
           };
         })
     );
-
   }, [bkutData]);
 
   async function onSubmitModal(forms, hideModal, isView) {
@@ -92,7 +95,8 @@ export default function InDataTable({ isGroup }) {
       (e) => e.tin == forms.tin
     );
     if (!isView && duplicate) {
-      const isAnother = duplicate.organizationType == (isGroup ? "SEH" : "GURUH");
+      const isAnother =
+        duplicate.organizationType == (isGroup ? "SEH" : "GURUH");
       showYesNoDialog(
         t(
           isAnother
@@ -102,7 +106,7 @@ export default function InDataTable({ isGroup }) {
             : "rewrite-stir"
         ),
         isAnother ? null : () => sendData(forms, hideModal, duplicate),
-        () => {}, 
+        () => {},
         t
       );
       return;
@@ -113,7 +117,7 @@ export default function InDataTable({ isGroup }) {
   async function sendData(forms, hideModal, duplicate) {
     try {
       let protocolFileRef = null;
-      
+
       if (forms.decisionFile) {
         // Initiate file upload and retrieve file reference
         let responseFile = await initFile(forms.decisionFile);
@@ -125,46 +129,46 @@ export default function InDataTable({ isGroup }) {
         protocolFileRef = responseFile.fileRef;
       }
       const members = (bkutData.employees ?? [])
-      .filter((e) => e.individual.pinfl != forms.pinfl)
-      .map((e) => ({
-        ...e,
-        individual: {
-          id: e.pinfl,
-        },
-        isKasabaActive: false, // Example values, replace with your logic
-        isHomemaker: e.isHomemaker || false,
-        isMember: e.isMember || false,
-        isInvalid: e.isInvalid || false,
-        isPensioner: false, // Example value, replace with your logic
-        isStudent: e.isStudent || false,
-        position: {
-          id: e.position, // Use the lavozim id
-        },
-        memberJoinDate: e.signDate, // Use the join date
-      }));
+        .filter((e) => e.individual.pinfl != forms.pinfl)
+        .map((e) => ({
+          ...e,
+          individual: {
+            id: e.pinfl,
+          },
+          isKasabaActive: false, // Example values, replace with your logic
+          isHomemaker: e.isHomemaker || false,
+          isMember: e.isMember || false,
+          isInvalid: e.isInvalid || false,
+          isPensioner: false, // Example value, replace with your logic
+          isStudent: e.isStudent || false,
+          position: {
+            id: e.position, // Use the lavozim id
+          },
+          memberJoinDate: e.signDate, // Use the join date
+        }));
       // Prepare request data excluding the decisionFile if it's not present or uploaded
       const requestData = {
-        bkut: { 
-          id: 
-          bkutData.id 
+        bkut: {
+          id: bkutData.id,
         },
         organizationType: isGroup ? "GURUH" : "SEH",
         tin: forms.tin,
         name: forms.name,
         phone: forms.phone,
         email: forms.email,
-        soato: { 
-          id: forms.district 
+        soato: {
+          id: forms.district,
         },
         address: forms.address,
-        employees: [{
-          individual:{
-            id: forms.individual
+        employees: [
+          {
+            individual: {
+              id: forms.individual,
+            },
           },
-        }
         ],
-        legalEntity: { 
-          id: bkutData.eLegalEntity.id 
+        legalEntity: {
+          id: bkutData.eLegalEntity.id,
         },
         isLegalEntity: forms.isLegalEntity,
         decisionNumber: forms.decisionNumber,
@@ -175,30 +179,30 @@ export default function InDataTable({ isGroup }) {
       if (protocolFileRef) {
         requestData.decisionFile = protocolFileRef;
       }
-  
+
       // Include ID for an existing entry
       if (duplicate) {
         requestData.id = duplicate.id;
       }
       const response = await sendDepartment(requestData);
-      console.log(forms)
+      console.log(forms);
       if (response?.success) {
         const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
         setRows((rows) => [
           ...rows.filter((r) => r.id !== newId),
           { id: newId, ...forms },
         ]);
-  
+
         enqueueSnackbar(t("successfully-saved"), { variant: "success" });
         actions.updateData();
       } else {
         enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
       }
-  
+
       if (hideModal) {
         hideModal();
       }
-    }  catch (error) {
+    } catch (error) {
       console.error("Error sending data:", error); // Log the specific error
       enqueueSnackbar(t("send-data-error"), { variant: "error" });
       return;
@@ -256,7 +260,7 @@ export default function InDataTable({ isGroup }) {
     </React.Fragment>
   );
 }
-function ModalUI({ hideModal, data, isGroup}) {
+function ModalUI({ hideModal, data, isGroup }) {
   const getLocal = getTranslation(isGroup);
   const { t } = useTranslation();
   const [employeess, bkutData] = useEmployees();
@@ -264,7 +268,6 @@ function ModalUI({ hideModal, data, isGroup}) {
     fio: "",
     birthDate: "",
     gender: 1,
-    
   });
   const [mode, setMode] = useState(0);
   const [provinces, setProvinces] = useState();
@@ -281,7 +284,7 @@ function ModalUI({ hideModal, data, isGroup}) {
     email: "",
     decisionNumber: "",
     decisionDate: "",
-    decisionFile:"",
+    decisionFile: "",
   });
   async function parseFile(file) {
     if (!file) return [null, null];
@@ -345,14 +348,20 @@ function ModalUI({ hideModal, data, isGroup}) {
     }));
   }
 
-  const {  tin, email, soato = {}, individual={}, isLegalEntity=false, } = data;
+  const {
+    tin,
+    email,
+    soato = {},
+    individual = {},
+    isLegalEntity = false,
+  } = data;
   useEffect(() => {
     const fetchData = async () => {
       if (!data?.id) return;
       const soatoId = (soato?.id ?? "").toString();
       const provinceId = soatoId.slice(0, 4);
       const districtId = soatoId;
-      console.log(data)
+      console.log(data);
       await handleProvince({ target: { value: provinceId } });
       setValues((values) => ({
         ...values,
@@ -369,9 +378,8 @@ function ModalUI({ hideModal, data, isGroup}) {
     };
     fetchData();
   }, [data]);
-  
+
   function onFetchPINFL(data) {
-   
     if (!data) return;
     setFormData({
       fio: getFIO(data.profile),
@@ -391,7 +399,8 @@ function ModalUI({ hideModal, data, isGroup}) {
   return (
     <div className="modal-content">
       <Alert className="modal-alert" severity="info">
-        {t("bkut1")} - {`${bkutData?.eLegalEntity.name} (${bkutData.tin ?? t("no")})`}
+        {t("bkut1")} -{" "}
+        {`${bkutData?.eLegalEntity.name} (${bkutData.tin ?? t("no")})`}
       </Alert>
       <Group title={t("main-info")}>
         <div datatype="list">
@@ -407,28 +416,33 @@ function ModalUI({ hideModal, data, isGroup}) {
             label={t(getLocal("name"))}
           />
           <div className="modal-row">
-          <RadioGroup
-                defaultValue={false}
-                label={t("bkutType1")}
-                left
-                name="isLegalEntity"
-                value={isLegalEntity ?? false}
-                onChange={(e) => {
-                  setMode(e.target.value);
-                }}
-                data={[
-                  {
-                    value: true,
-                    label: t("yes"),
-                  },
-                  {
-                    value: false,
-                    label: t("no"),
-                  },
-                ]}
-              />
+            <RadioGroup
+              defaultValue={false}
+              label={t("bkutType1")}
+              left
+              name="isLegalEntity"
+              value={isLegalEntity ?? false}
+              onChange={(e) => {
+                setMode(e.target.value);
+              }}
+              data={[
+                {
+                  value: true,
+                  label: t("yes"),
+                },
+                {
+                  value: false,
+                  label: t("no"),
+                },
+              ]}
+            />
             {mode && (
-              <FormInput name="tinSenior" required label={t("stir")} value={bkutData?.application?.tin}/>
+              <FormInput
+                name="tinSenior"
+                required
+                label={t("stir")}
+                value={bkutData?.application?.tin}
+              />
             )}
           </div>
         </div>
@@ -520,7 +534,12 @@ function ModalUI({ hideModal, data, isGroup}) {
               name="decisionNumber"
               value={values.decisionNumber}
             />
-            <FormInput name="decisionDate" date label={t("date")} value={values.decisionDate} />
+            <FormInput
+              name="decisionDate"
+              date
+              label={t("date")}
+              value={values.decisionDate}
+            />
           </div>
           <FormInput
             name="decisionFile"

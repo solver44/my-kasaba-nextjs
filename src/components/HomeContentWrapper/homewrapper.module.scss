@@ -19,7 +19,7 @@
   align-items: center;
 }
 .title {
-  font-size: 42px;
+  font-size: 30px;
 }
 .desc {
   font-size: 16px;
@@ -52,4 +52,15 @@
 .notification {
   position: relative;
   padding-bottom: 30px;
+}
+.specialButtons {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin-right: 10px;
+  & > * {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 }

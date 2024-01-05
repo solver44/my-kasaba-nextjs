@@ -43,14 +43,14 @@
   gap: 10px;
 }
 .title {
-  font-size: 18px;
+  font-size: var(--input-inside-font-size);
   font-weight: 500;
   margin: 0;
   padding: 0;
   padding-left: 15px;
 }
 .description {
-  font-size: 14px;
+  font-size: var(--badge-size);
   font-weight: 400;
   text-align: center;
   // color: #808080;
@@ -63,11 +63,11 @@
     background-color: #fcedec;
     color: #d74544;
   }
-  &.yellow{
+  &.yellow {
     background-color: #fef1f1;
     color: #d79044;
   }
-  &.primary{
+  &.primary {
     background-color: #ecf7fc;
     color: #4489d7;
   }

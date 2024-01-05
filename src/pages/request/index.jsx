@@ -334,9 +334,6 @@ export default function RequestPage({ router }) {
         setIsReglament(true);
       }}
       isReglament={isReglament}
-      onBack={() => {
-        actions.caches({ ...caches, sent: false });
-      }}
     >
       {isReglament ? (
         <Reglament

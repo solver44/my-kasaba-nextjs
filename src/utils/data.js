@@ -13,7 +13,9 @@ export function generateUniqueId(length = 9) {
 }
 
 export function showOrNot(text = "") {
-  const result = (text || "").trim();
+  let txt = text;
+  if (text) txt = text.toString();
+  const result = (txt || "").trim();
   if (!result) return "-";
   return result;
 }
@@ -96,7 +98,7 @@ export function splitEmployement(employment = "") {
 }
 
 export function getEmptyValue(obj) {
-  if (typeof obj !== "object" && obj) return obj;
+  if (typeof obj !== "object" && typeof obj !== "undefined") return obj;
   for (var prop in obj ?? {}) {
     if (Object.prototype.hasOwnProperty.call(obj, prop)) {
       return obj;
@@ -106,10 +108,11 @@ export function getEmptyValue(obj) {
   return undefined;
 }
 
-export function getPresidentBKUT(obj = {}) {
-  if (!obj?.employees?.length) return "";
+export function getPresidentBKUT(bkutData = {}) {
+  if (!bkutData?.employees?.length) return "";
   return getFIO(
-    obj.employees.find((employee) => employee.position?.id === 1).individual
+    bkutData.employees.find((employee) => employee.position?.id === 1)
+      .individual
   );
 }
 

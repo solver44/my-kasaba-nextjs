@@ -8,5 +8,14 @@
   padding: 0px 0;
 }
 .btn {
-  width: 156px;
+  // width: 156px;
+}
+.row{
+  display: flex;
+  gap: 10px;
+}
+.bottom {
+  padding: 5px 0;
+  display: flex;
+  justify-content: space-between;
 }

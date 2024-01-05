@@ -3,7 +3,7 @@ export const localStorage =
     ? window.localStorage
     : { getItem: () => {}, setItem: () => {}, removeItem: () => {} };
 
-export function getUrlWithQuery(newPath, queryParameters) {
+export function getUrlWithQuery(newPath, queryParameters = {}) {
   const newURL = new URL(window.location.origin + newPath);
   for (const key in queryParameters) {
     if (queryParameters.hasOwnProperty(key)) {

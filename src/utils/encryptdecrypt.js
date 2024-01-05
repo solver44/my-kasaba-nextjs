@@ -21,15 +21,13 @@ export const decryptData = (text) => {
 export function generateTicketData(data) {
   const reqData = {
     id: data.id,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    middleName: data.middleName,
-    birthDate: convertStringToFormatted(data.birthDate),
-    joinDate: convertStringToFormatted(data.memberJoinDate),
+    firstName: data.member.firstName,
+    lastName: data.member.lastName,
+    middleName: data.member.middleName,
+    birthDate: convertStringToFormatted(data.member.birthDate),
+    joinDate: convertStringToFormatted(data.joinDate),
     bkutName: data.bkutName,
-    director: data.direktor,
+    director: data.director,
   };
-  console.log(data)
   return encryptData(reqData);
-
 }

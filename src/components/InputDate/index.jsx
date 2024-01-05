@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./inputDate.module.scss";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useTranslation } from "react-i18next";
@@ -15,11 +15,13 @@ export default function InputDate({
   name,
   fullWidth,
   disabled,
+  maxDate,
+  minDate,
 }) {
   const { t } = useTranslation();
   const onChangeFunc = (e) => {
     if (!e) return;
-    const value = e.format("YYYY-MM-DD");
+    const value = e ? e.format("YYYY-MM-DD") : null;
     if (!onChange) return;
     onChange({ target: { value } }, name);
   };
@@ -40,6 +42,8 @@ export default function InputDate({
           invalid={invalid && t(validationError)}
           onChangeFunc={onChangeFunc}
           className={className}
+          maxDate={maxDate}
+          minDate={minDate}
         />
       </label>
     </div>
@@ -51,6 +55,8 @@ export default function InputDate({
       invalid={invalid && t(validationError)}
       onChangeFunc={onChangeFunc}
       className={className}
+      maxDate={maxDate}
+      minDate={minDate}
     />
   );
 }
@@ -62,25 +68,55 @@ const InsideInput = ({
   name,
   invalid,
   className,
-}) => (
-  <DatePicker
-    maxDate={name.includes("birth") ? dayjs().add(-18, "year") : dayjs()}
-    format="DD.MM.YYYY"
-    disabled={disabled}
-    value={value == "Invalid Date" || !value ? null : value}
-    slotProps={{
-      textField: {
-        color: "error",
-        error: true,
-        helperText: invalid,
-      },
-    }}
-    onChange={onChangeFunc}
-    className={[
-      styles.input,
-      className,
-      invalid ? styles.invalid : "",
-      disabled ? styles.disabled : "",
-    ].join(" ")}
-  />
-);
+  maxDate,
+  minDate,
+}) => {
+  const [internalValue, setInternalValue] = useState(value);
+  useEffect(() => {
+    setInternalValue(value);
+  }, [value]);
+  const mxDate =
+    maxDate ?? (name.includes("birth") ? dayjs().add(-18, "year") : dayjs());
+
+  const handleDateChange = (selectedDate) => {
+    if (selectedDate && selectedDate.year() > 1000) {
+      if (mxDate && selectedDate.isAfter(mxDate)) {
+        setInternalValue(mxDate);
+        onChangeFunc(mxDate);
+        return;
+      }
+      if (minDate && selectedDate.isBefore(minDate)) {
+        setInternalValue(undefined);
+        onChangeFunc(undefined);
+        return;
+      }
+    }
+    onChangeFunc(selectedDate);
+  };
+
+  return (
+    <DatePicker
+      maxDate={mxDate}
+      minDate={minDate}
+      format="DD.MM.YYYY"
+      disabled={disabled}
+      value={
+        internalValue == "Invalid Date" || !internalValue ? null : internalValue
+      }
+      slotProps={{
+        textField: {
+          color: "error",
+          error: true,
+          helperText: invalid,
+        },
+      }}
+      onChange={handleDateChange}
+      className={[
+        styles.input,
+        className,
+        invalid ? styles.invalid : "",
+        disabled ? styles.disabled : "",
+      ].join(" ")}
+    />
+  );
+};

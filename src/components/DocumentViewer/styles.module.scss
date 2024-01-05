@@ -4,7 +4,16 @@
   overflow: auto;
 }
 .button {
-  position: absolute;
+  position: absolute !important;
   top: 0;
-  right: 10px;
+  right: 10px !important;
+  z-index: 100;
+  background-color: white;
+}
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 100;
+  transform: translate(-50%, -50%);
 }

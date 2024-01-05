@@ -1,19 +1,26 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { saveAs } from "file-saver";
 import { t } from "i18next";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { CloudDownload, Download } from "@mui/icons-material";
+import { downloadFile } from "@/http/data";
+import { useSnackbar } from "notistack";
+import useAnimation from "@/hooks/useAnimation";
 
 const DocumentViewer = ({
+  showNameFile,
   documentSrc,
   generateData,
+  url,
   ignoreWidth = false,
   hideDownloadBtn,
   fileName = "output.docx",
 }) => {
   const iframeRef = useRef();
   const dataForDownload = useRef();
+  const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
 
   function download() {
     if (!dataForDownload.current) return;
@@ -71,12 +78,32 @@ const DocumentViewer = ({
   }
   useEffect(() => {
     async function initData() {
+      setLoading(true);
       let data = null;
-      if (generateData) data = generateDoc();
-      previewWordDoc(data);
+
+      if (documentSrc) {
+        if (generateData) data = generateDoc();
+      } else if (url) {
+        const name = decodeURIComponent(url.split("=")[1]);
+        if (name && name.split(".").pop() !== "docx") {
+          setLoading(false);
+          enqueueSnackbar(t("file-should-be-docx"), { variant: "error" });
+          iframeRef.current.innerHTML = "";
+          return;
+        }
+        data = await downloadFile(url, name, true);
+        if (!data) {
+          setLoading(false);
+          enqueueSnackbar(t("file-cannot-open"), { variant: "error" });
+          iframeRef.current.innerHTML = "";
+          return;
+        }
+      }
+      await previewWordDoc(data);
+      setLoading(false);
     }
     initData();
-  }, []);
+  }, [url, generateData]);
   return (
     <div className={styles.wrapper}>
       {!hideDownloadBtn && (
@@ -85,6 +112,7 @@ const DocumentViewer = ({
           <CloudDownload />
         </Button>
       )}
+      {loading && <CircularProgress className={styles.loader} />}
       <div ref={iframeRef}></div>
     </div>
   );
