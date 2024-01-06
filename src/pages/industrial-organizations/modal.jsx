@@ -31,6 +31,7 @@ import Popup from "@/components/Popup";
 import { getUserOrganization } from "@/http/organization";
 import { useSnackbar } from "notistack";
 import styles from "./industrial-organizations.module.scss";
+import Employees from "../employees";
 
 export default function ViewModal({ isOpen, handleClose }) {
   const { t } = useTranslation();
@@ -71,7 +72,7 @@ export default function ViewModal({ isOpen, handleClose }) {
     <ModalUI
       isForm={false}
       full={true}
-      title={t("industrial-organizations.title")}
+      title={data.name + " " + t("industrial-organizations.title")}
       open={!!isOpen}
       wrapperClass="viewModal-wrapper"
       handleClose={handleClose}
@@ -204,38 +205,17 @@ export default function ViewModal({ isOpen, handleClose }) {
               label: "employeesTitle",
               disableAnimation: true,
               icon: <PeopleAlt />,
-              children: (
-                <Tabs
-                  color="secondary"
-                  tabs={[
-                    { label: "all-employees", children: <EmployeeDataTable /> },
-                    {
-                      label: "member-employees",
-                      children: (
-                        <EmployeeDataTable filter={(data) => data.isMember} />
-                      ),
-                    },
-                    {
-                      label: "employees.title1",
-                      children: (
-                        <EmployeeDataTable
-                          filter={(data) => data.isKasabaActive}
-                        />
-                      ),
-                    },
-                  ]}
-                />
-              ),
+              children: <Employees organization={data} />,
             },
             {
               label: "organization.statistic",
               icon: <Assessment />,
-              children: <StatisticalInformation />,
+              children: <StatisticalInformation organization={data} />,
             },
             {
               label: "teamContracts",
               icon: <Diversity3 />,
-              children: <JSHDataTable />,
+              children: <JSHDataTable organization={data} />,
             },
           ]}
         />

@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { getFIO, getPresidentBKUT } from "@/utils/data";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import { Tooltip } from "@mui/material";
 
 export default function Profile({ img, collapsed, imgOnly, mini }) {
   const { t } = useTranslation();
@@ -13,13 +15,13 @@ export default function Profile({ img, collapsed, imgOnly, mini }) {
   const { isMember, bkutData = {} } = useSelector((states) => states);
 
   const handleClick = () => {
-    navigate.push("/profile");
+    // navigate.push("/profile");
   };
   return imgOnly ? (
     img ? (
       <img className={styles.recImage} src={img} alt="avatar" />
     ) : (
-      <PersonIcon className={styles.recImage} />
+      <ApartmentIcon className={styles.recImage} />
     )
   ) : (
     <div
@@ -34,31 +36,39 @@ export default function Profile({ img, collapsed, imgOnly, mini }) {
       {img ? (
         <img className={styles.image} src={img} alt="person" />
       ) : (
-        <PersonIcon className={styles.image} />
-      )}
-      <div className={styles.col}>
-        <p className={styles.title}>
-          {getFIO(bkutData?.application?.passport) ||
-            getPresidentBKUT(bkutData) ||
-            bkutData?.name}
-        </p>
-        <p
-          className={[
-            styles.description,
-            bkutData?.status == 4 ? styles.red : "",
-            bkutData?.status == 3 ? styles.yellow : "",
-            bkutData?.status == 1 ? styles.primary : "",
-          ].join(" ")}
+        <Tooltip
+          className={styles.tooltip}
+          title={
+            collapsed && <p className={styles.tooltipTitle}>{bkutData?.name}</p>
+          }
         >
-          {bkutData.status == 1
-            ? t("registered")
-            : bkutData.status == 2
-            ? t("data-full")
-            : bkutData.status == 3
-            ? t("data-not-full")
-            : t("rejected")}
-        </p>
-      </div>
+          <ApartmentIcon className={styles.image} />
+        </Tooltip>
+      )}
+      {!collapsed && (
+        <div className={styles.col}>
+          <p className={styles.title}>{bkutData?.name}</p>
+          <p className={styles.president}>{getPresidentBKUT(bkutData)}</p>
+          <p
+            className={[
+              styles.description,
+              bkutData?.status == 4 ? styles.red : "",
+              bkutData?.status == 3 ? styles.yellow : "",
+              bkutData?.status == 1 ? styles.primary : "",
+            ].join(" ")}
+          >
+            {bkutData.status == 1
+              ? t("registered")
+              : bkutData.status == 2
+              ? t("data-full")
+              : bkutData.status == 3
+              ? t("data-not-full")
+              : bkutData.status == 4
+              ? t("rejected")
+              : ""}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

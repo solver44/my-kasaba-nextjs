@@ -56,7 +56,7 @@ export default function RegisterBkut() {
         soato: {
           id: data.district,
         },
-        adress: data.address,
+        address: data.address,
         branch: {
           id: data.network,
         },

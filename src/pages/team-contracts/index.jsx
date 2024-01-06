@@ -5,7 +5,7 @@ import DataTable from "./dataTable";
 import Tabs from "@/components/Tabs";
 import useQueryPage from "@/hooks/useQueryPage";
 
-export default function TermsContracts() {
+export default function TermsContracts({ organization }) {
   const { searchParams, addQueryToCurrentURL } = useQueryPage({
     tab: 1,
   });
@@ -13,6 +13,7 @@ export default function TermsContracts() {
   function onChangeTabs(index) {
     addQueryToCurrentURL({ tab: +index + 1 });
   }
+
   return (
     <div className={styles.containers}>
       <Tabs
@@ -24,6 +25,7 @@ export default function TermsContracts() {
             label: "inanalysis",
             children: (
               <DataTable
+                organization={organization}
                 filter={(item) =>
                   item.status == "INANALYSIS" ||
                   item.status === "INEXECUTION" ||
@@ -35,13 +37,19 @@ export default function TermsContracts() {
           {
             label: "considired",
             children: (
-              <DataTable filter={(item) => item.status == "CONSIDERED"} />
+              <DataTable
+                organization={organization}
+                filter={(item) => item.status == "CONSIDERED"}
+              />
             ),
           },
           {
             label: "confirmed",
             children: (
-              <DataTable filter={(item) => item.status == "CONFIRMED"} />
+              <DataTable
+                organization={organization}
+                filter={(item) => item.status == "CONFIRMED"}
+              />
             ),
           },
         ]}

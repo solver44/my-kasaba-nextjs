@@ -130,3 +130,7 @@ export function getStatusColors(val) {
       return "info";
   }
 }
+
+export function getIsOrganization(text) {
+  return (text ?? localStorage.getItem("type")) === "organization";
+}

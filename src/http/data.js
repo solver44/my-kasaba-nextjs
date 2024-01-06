@@ -1,5 +1,6 @@
 import { saveAs } from "file-saver";
 import { $axios, BASE_URL, getDeleteResponse } from ".";
+import { getIsOrganization } from "@/utils/data";
 
 export async function loginRest(email, password) {
   try {
@@ -28,12 +29,17 @@ export async function getBKUTID(login, password) {
     return error;
   }
 }
-export async function getBKUTData(id) {
+export async function getBKUTData(id, isOrg) {
   try {
     const bkutId = id ?? localStorage.getItem("token");
-    const { data } = await $axios.get(`/rest/entities/EBKUT/${bkutId}`, {
-      params: { fetchPlan: "bkut-cabinet" },
-    });
+    const { data } = await $axios.get(
+      isOrg
+        ? `/rest/entities/EBkutOrganizations/${bkutId}`
+        : `/rest/entities/EBKUT/${bkutId}`,
+      {
+        params: { fetchPlan: isOrg ? "all-organization" : "bkut-cabinet" },
+      }
+    );
     return data;
   } catch (error) {
     return error;
@@ -123,9 +129,15 @@ export async function sendDepartment(_data) {
 }
 export async function sendEBKUT(data) {
   try {
-    const { data: response } = await $axios.post("/rest/entities/EBKUT", data, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const { data: response } = await $axios.post(
+      getIsOrganization()
+        ? "/rest/entities/EBkutOrganizations"
+        : "/rest/entities/EBKUT",
+      data,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
     return response?.id
       ? { ...response, success: true }
       : { ...response, success: false };

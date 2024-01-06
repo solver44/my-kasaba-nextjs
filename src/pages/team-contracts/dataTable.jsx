@@ -36,11 +36,12 @@ import Opinions from "./opinionsTab";
 import MainTab from "./mainTab";
 import JShDocument from "./jshDocumentTab";
 
-export default function InDataTable({ filter }) {
+export default function InDataTable({ organization, filter }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const { bkutData = {}, settings = {} } = useSelector((states) => states);
+  let { bkutData = {}, settings = {} } = useSelector((states) => states);
+  bkutData = organization ? organization : bkutData;
   const [isHideAddBtn, setIsHideAddBtn] = useState(true);
   const actions = useActions();
 

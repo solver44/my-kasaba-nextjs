@@ -9,6 +9,7 @@ import {
   SETTINGS,
   DATA_LOADING,
   UPDATE_DATA,
+  IS_ORGANIZATION,
 } from "./actions";
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   dataLoading: false,
   updateData: 0,
   isMember: false,
+  isOrganization: false,
   caches: {},
 };
 
@@ -66,6 +68,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         updateData: state.updateData + action.payload,
+      };
+    case IS_ORGANIZATION:
+      return {
+        ...state,
+        isOrganization: action.payload,
       };
     default:
       return state;

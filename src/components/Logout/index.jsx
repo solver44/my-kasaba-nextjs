@@ -15,8 +15,10 @@ export default function Logout({ collapsed }) {
   const handleClick = () => {
     actions.loginFailure();
     localStorage.removeItem("token");
+    localStorage.removeItem("type");
     const cookies = new Cookies();
     cookies.remove("token");
+    cookies.remove("type");
     navigate.replace("/auth");
   };
 

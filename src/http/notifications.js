@@ -1,13 +1,14 @@
+import { getIsOrganization } from "@/utils/data";
 import { $axios } from ".";
 
-export async function readAllNotifications(bkutId) {
+export async function readAllNotifications(id) {
   try {
+    const isOrg = getIsOrganization();
     const { data } = await $axios.post(
       "/rest/services/bkut/readAllNotifications",
       {
-        bkut: {
-          id: bkutId,
-        },
+        id,
+        type: isOrg ? "organization" : "bkut",
       },
       {
         headers: { "Content-Type": "application/json" },
@@ -19,14 +20,14 @@ export async function readAllNotifications(bkutId) {
   }
 }
 
-export async function getNotifications(bkutId) {
+export async function getNotifications(id) {
   try {
+    const isOrg = getIsOrganization();
     const { data } = await $axios.post(
       "/rest/services/bkut/notifications",
       {
-        bkut: {
-          id: bkutId,
-        },
+        id,
+        type: isOrg ? "organization" : "bkut",
       },
       { headers: { "Content-Type": "application/json" } }
     );

@@ -15,6 +15,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { getAnimation } from "@/utils/animation";
 import Cookies from "universal-cookie";
 import { getSettings } from "@/http/handbooks";
+import { getIsOrganization } from "@/utils/data";
 
 const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
   const { updateData, ...states } = useSelector((state) => state);
@@ -33,23 +34,28 @@ const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
     const fetchData = async () => {
       actions.showLoading(true);
       actions.dataLoading(true);
-      const data = await getBKUTData();
+      const isOrg = getIsOrganization();
+      const data = await getBKUTData(null, isOrg);
       const settings = await getSettings();
       const resError = data?.response?.data?.error;
       if (
+        !localStorage.getItem("type") ||
         !data?.id ||
         resError == "Entity not found" ||
         resError == "Invalid entity ID"
       ) {
         actions.loginFailure();
         localStorage.removeItem("token");
+        localStorage.removeItem("type");
         const cookies = new Cookies();
         cookies.remove("token");
+        cookies.remove("type");
         actions.showLoading(false);
         actions.dataLoading(false);
         route.replace("/auth");
         return;
       }
+      actions.setIsOrganization(isOrg);
       actions.bkutData(data);
       actions.setSettings(settings?.length ? settings[0] : {});
       if (data?.protocolFile) {

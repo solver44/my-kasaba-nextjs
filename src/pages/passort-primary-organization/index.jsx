@@ -28,7 +28,7 @@ export async function parseFile(file) {
 
 export default function PassortPrimaryOrganization() {
   const { t, i18n } = useTranslation();
-  const { bkutData = {} } = useSelector((states) => states);
+  const { bkutData = {}, isOrganization } = useSelector((states) => states);
   const [editMode, setEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const [loadingEditMode, setLoadingEditMode] = useState(false);
@@ -67,27 +67,29 @@ export default function PassortPrimaryOrganization() {
     try {
       setLoadingEditMode(true);
       let applicationFileRef, protocolFileRef, responseFile, temp;
-      temp = data.electronicFile;
-      if (typeof temp === "string" && temp.includes("fs://")) {
-        protocolFileRef = data.electronicFile;
-      } else {
-        responseFile = await initFile(data.electronicFile);
-        if (!responseFile?.fileRef) {
-          enqueueSnackbar(t("upload-file-error"), { variant: "error" });
-          return;
+      if (!isOrganization) {
+        temp = data.electronicFile;
+        if (typeof temp === "string" && temp.includes("fs://")) {
+          protocolFileRef = data.electronicFile;
+        } else {
+          responseFile = await initFile(data.electronicFile);
+          if (!responseFile?.fileRef) {
+            enqueueSnackbar(t("upload-file-error"), { variant: "error" });
+            return;
+          }
+          protocolFileRef = responseFile.fileRef;
         }
-        protocolFileRef = responseFile.fileRef;
-      }
-      temp = data.application;
-      if (typeof temp === "string" && temp.includes("fs://")) {
-        applicationFileRef = data.application;
-      } else {
-        responseFile = await initFile(data.application);
-        if (!responseFile?.fileRef) {
-          enqueueSnackbar(t("upload-file-error"), { variant: "error" });
-          return;
+        temp = data.application;
+        if (typeof temp === "string" && temp.includes("fs://")) {
+          applicationFileRef = data.application;
+        } else {
+          responseFile = await initFile(data.application);
+          if (!responseFile?.fileRef) {
+            enqueueSnackbar(t("upload-file-error"), { variant: "error" });
+            return;
+          }
+          applicationFileRef = responseFile.fileRef;
         }
-        applicationFileRef = responseFile.fileRef;
       }
 
       const requestData = {
@@ -117,6 +119,22 @@ export default function PassortPrimaryOrganization() {
         protocolDate: data.foundingDocDate,
         name: data.bkutName,
       };
+      if (isOrganization) {
+        temp = data.decisionFile;
+        if (typeof temp === "string" && temp.includes("fs://")) {
+          applicationFileRef = temp;
+        } else {
+          responseFile = await initFile(temp);
+          if (!responseFile?.fileRef) {
+            enqueueSnackbar(t("upload-file-error"), { variant: "error" });
+            return;
+          }
+          applicationFileRef = responseFile.fileRef;
+        }
+        requestData.decisionDate = data.decisionDate;
+        requestData.decisionNumber = data.decisionNumber;
+        requestData.decisionFile = applicationFileRef;
+      }
 
       const response = await sendEBKUT(requestData);
 
@@ -252,36 +270,44 @@ export default function PassortPrimaryOrganization() {
                 {showOrNot(bkutData.email)}
               </span>
             </div>
-            <div className={styles.flex}>
-              <label>{t("founding-doc-num")}</label>
-              <span style={{ textAlign: "left" }}>
-                {showOrNot(bkutData.protocolNumber)}
-              </span>
-            </div>
-            <div className={styles.flex}>
-              <label>{t("founding-doc-date")}</label>
-              <span style={{ textAlign: "left" }}>
-                {showOrNot(convertStringToFormatted(bkutData.protocolDate))}
-              </span>
-            </div>
-            <div className={styles.flex}>
-              <label>{t("electronic-file")}</label>
-              <DownloadLink
-                loading={files.protocolFile.loading}
-                style={{ textAlign: "left" }}
-                fileName={files.protocolFile.name}
-                binaryData={files.protocolFile.data}
-              />
-            </div>
-            <div className={styles.flex}>
-              <label>{t("application")}</label>
-              <DownloadLink
-                style={{ textAlign: "left" }}
-                loading={files.applicationFile.loading}
-                fileName={files.applicationFile.name}
-                binaryData={files.applicationFile.data}
-              />
-            </div>
+            {!isOrganization && (
+              <div className={styles.flex}>
+                <label>{t("founding-doc-num")}</label>
+                <span style={{ textAlign: "left" }}>
+                  {showOrNot(bkutData.protocolNumber)}
+                </span>
+              </div>
+            )}
+            {!isOrganization && (
+              <div className={styles.flex}>
+                <label>{t("founding-doc-date")}</label>
+                <span style={{ textAlign: "left" }}>
+                  {showOrNot(convertStringToFormatted(bkutData.protocolDate))}
+                </span>
+              </div>
+            )}
+            {!isOrganization && (
+              <div className={styles.flex}>
+                <label>{t("electronic-file")}</label>
+                <DownloadLink
+                  loading={files.protocolFile.loading}
+                  style={{ textAlign: "left" }}
+                  fileName={files.protocolFile.name}
+                  binaryData={files.protocolFile.data}
+                />
+              </div>
+            )}
+            {!isOrganization && (
+              <div className={styles.flex}>
+                <label>{t("application")}</label>
+                <DownloadLink
+                  style={{ textAlign: "left" }}
+                  loading={files.applicationFile.loading}
+                  fileName={files.applicationFile.name}
+                  binaryData={files.applicationFile.data}
+                />
+              </div>
+            )}
             <div className={styles.flex}>
               <label>{t("decision-title")}</label>
               <span style={{ textAlign: "left" }}>

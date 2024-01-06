@@ -33,12 +33,13 @@ import {
   sendEmployee,
 } from "@/http/employees";
 
-export default function InDataTable({ filter, onUpload, min }) {
+export default function InDataTable({ organization, filter, onUpload, min }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const [zoomQRURL, setZoomQRURL] = useState(false);
   const [ticketLoading, setTicketLoading] = useState(false);
-  const { bkutData = {} } = useSelector((states) => states);
+  let { bkutData = {} } = useSelector((states) => states);
+  bkutData = organization ? organization : bkutData;
   const qrURL = useRef("");
   const individualId = useRef();
   const ticketCreated = useRef(false);
@@ -136,9 +137,6 @@ export default function InDataTable({ filter, onUpload, min }) {
     const requestData = {
       // ...dataModal,
       id: dataModal.id,
-      bkut: {
-        id: bkutData.id,
-      },
       individual: {
         pinfl: forms.pinfl,
         id: individualId.current,
@@ -155,6 +153,9 @@ export default function InDataTable({ filter, onUpload, min }) {
       },
       memberJoinDate: forms.signDate,
     };
+    if (organization?.id) requestData.eBkutOrganization.id = organization.id;
+    else requestData.bkut.id = bkutData.id;
+
     const response = await sendEmployee(requestData);
     if (response?.success) {
       const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;

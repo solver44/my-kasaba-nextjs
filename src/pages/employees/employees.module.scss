@@ -2,6 +2,9 @@
   width: 100%;
   margin-top: 10px;
 }
+.org {
+  margin: 0;
+}
 .control {
   display: flex;
   justify-content: flex-end;
@@ -10,7 +13,7 @@
 .btn {
   // width: 156px;
 }
-.row{
+.row {
   display: flex;
   gap: 10px;
 }

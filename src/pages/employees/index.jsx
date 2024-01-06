@@ -7,7 +7,7 @@ import Tabs from "@/components/Tabs";
 import DataTable from "./dataTable";
 import useQueryPage from "@/hooks/useQueryPage";
 
-export default function Employees() {
+export default function Employees({ organization }) {
   const { searchParams, addQueryToCurrentURL } = useQueryPage({
     tab: 1,
   });
@@ -17,14 +17,36 @@ export default function Employees() {
   }
 
   return (
-    <div className={styles.containers}>
+    <div
+      className={[styles.containers, organization ? styles.org : ""].join(" ")}
+    >
       <Tabs
+        color={organization ? "secondary" : ""}
         onChange={onChangeTabs}
         value={(searchParams.get("tab") ?? 1) - 1}
         tabs={[
-          { label: "all-employees", children: <DataTable /> },
-          { label: "member-employees", children: <DataTable filter={(data) => data.isMember} /> },
-          { label: "employees.title1", children: <DataTable filter={(data) => data.isKasabaActive} /> },
+          {
+            label: "all-employees",
+            children: <DataTable organization={organization} />,
+          },
+          {
+            label: "member-employees",
+            children: (
+              <DataTable
+                organization={organization}
+                filter={(data) => data.isMember}
+              />
+            ),
+          },
+          {
+            label: "employees.title1",
+            children: (
+              <DataTable
+                organization={organization}
+                filter={(data) => data.isKasabaActive}
+              />
+            ),
+          },
         ]}
       />
     </div>

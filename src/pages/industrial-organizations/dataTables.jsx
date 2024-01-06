@@ -15,13 +15,14 @@ import {
   getFile,
 } from "@/http/data";
 import useActions from "@/hooks/useActions";
-import { getFIO, splitFIO } from "@/utils/data";
+import { getFIO, getPresidentBKUT, splitFIO } from "@/utils/data";
 import { showYesNoDialog } from "@/utils/dialog";
 import Group from "@/components/Group";
 import dayjs from "dayjs";
 import ViewModal from "./modal";
 import RadioGroup from "@/components/RadioGroup";
 import FinderPINFL from "@/components/FinderPINFL";
+import { getOrganizations } from "@/http/organization";
 
 function getTranslation(isGroup) {
   return (key) =>
@@ -31,8 +32,9 @@ function getTranslation(isGroup) {
 export default function InDataTable({ isGroup }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
-  const employees = useRef({});
   const [viewModal, setViewModal] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
+  const [organizations, setOrganizations] = useState([]);
   const { bkutData = {} } = useSelector((states) => states);
   const { enqueueSnackbar } = useSnackbar();
   const actions = useActions();
@@ -52,12 +54,13 @@ export default function InDataTable({ isGroup }) {
       field: "bkut",
       headerName: "bkut1",
       onlyShow: true,
+      hidden: true,
     },
     {
       field: "address",
       headerName: "address",
     },
-    { field: "soato", headerName: "soatoFull", hidden: true },
+    { field: "soato", headerName: "soatoFull" },
     {
       field: "email",
       headerName: "email",
@@ -66,28 +69,39 @@ export default function InDataTable({ isGroup }) {
     {
       field: "phone",
       headerName: getLocal("phone"),
-      hidden: true,
     },
   ];
 
+  async function initOrgs() {
+    setLoadingData(true);
+    try {
+      const data = await getOrganizations(bkutData.id);
+      setOrganizations(data || []);
+      setRows(
+        (data || [])
+          .filter((d) => d.organizationType == (isGroup ? "GURUH" : "SEH"))
+          .map((e) => {
+            return {
+              id: e.id,
+              name: e.name,
+              bkut: bkutData.name,
+              address: e.address,
+              director: getPresidentBKUT(e),
+              soato: e?.soato?._instanceName || e?.soato?.nameUz,
+              email: e.email,
+              phone: e.phone,
+            };
+          })
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingData(false);
+    }
+  }
   useEffect(() => {
-    if (!bkutData?.organizations?.length) return;
-    setRows(
-      bkutData.organizations
-        .filter((d) => d.organizationType == (isGroup ? "GURUH" : "SEH"))
-        .map((e) => {
-          return {
-            id: e.id,
-            name: e.name,
-            bkut: bkutData.name,
-            address: e.address,
-            director: bkutData?.employees[0]?._instanceName,
-            soato: e?.soato?._instanceName || e?.soato?.nameUz,
-            email: e.email,
-            phone: e.phone,
-          };
-        })
-    );
+    if (!bkutData?.id) return;
+    initOrgs();
   }, [bkutData]);
 
   async function onSubmitModal(forms, hideModal, isView) {
@@ -128,25 +142,7 @@ export default function InDataTable({ isGroup }) {
         // File upload successful, assign file reference
         protocolFileRef = responseFile.fileRef;
       }
-      const members = (bkutData.employees ?? [])
-        .filter((e) => e.individual.pinfl != forms.pinfl)
-        .map((e) => ({
-          ...e,
-          individual: {
-            id: e.pinfl,
-          },
-          isKasabaActive: false, // Example values, replace with your logic
-          isHomemaker: e.isHomemaker || false,
-          isMember: e.isMember || false,
-          isInvalid: e.isInvalid || false,
-          isPensioner: false, // Example value, replace with your logic
-          isStudent: e.isStudent || false,
-          position: {
-            id: e.position, // Use the lavozim id
-          },
-          memberJoinDate: e.signDate, // Use the join date
-        }));
-      // Prepare request data excluding the decisionFile if it's not present or uploaded
+
       const requestData = {
         bkut: {
           id: bkutData.id,
@@ -185,7 +181,6 @@ export default function InDataTable({ isGroup }) {
         requestData.id = duplicate.id;
       }
       const response = await sendDepartment(requestData);
-      console.log(forms);
       if (response?.success) {
         const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
         setRows((rows) => [
@@ -210,7 +205,7 @@ export default function InDataTable({ isGroup }) {
   }
 
   async function fetchData(id) {
-    const data = (bkutData.organizations ?? []).find((ok) => ok.id == id);
+    const data = organizations.find((ok) => ok.id == id);
     return data;
   }
   async function deleteRow(id, row) {
@@ -222,13 +217,15 @@ export default function InDataTable({ isGroup }) {
   }
 
   function toggleViewModal(row) {
-    setViewModal((bkutData?.organizations ?? []).find((e) => e.id == row.id));
+    setViewModal(organizations.find((e) => e.id == row.id));
   }
 
   return (
     <React.Fragment>
       <DataTable
+        hideView
         fetchData={fetchData}
+        loading={loadingData}
         handleDeleteClick={deleteRow}
         topButtons={(selectedRows) => {
           const isEmpty = selectedRows?.length < 1;

@@ -23,11 +23,12 @@ import dayjs from "dayjs";
 import ChangableInput from "@/components/ChangableInput";
 import { getReportDate, getReportYear, getYearFrom } from "@/utils/date";
 
-export default function StatisticalInformation() {
+export default function StatisticalInformation({ organization }) {
   const { t } = useTranslation();
   const actions = useActions();
   const [editMode, setEditMode] = useState(false);
-  const { bkutData = {} } = useSelector((states) => states);
+  let { bkutData = {} } = useSelector((states) => states);
+  bkutData = organization ? organization : bkutData;
   const [loadingEditMode, setLoadingEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const [currentReport, setCurrentReport] = useState({});
@@ -42,9 +43,6 @@ export default function StatisticalInformation() {
   const saveStatistics = async (forms) => {
     try {
       const requestData = {
-        eBKUT: {
-          id: bkutData.id,
-        },
         date: currentReport.date,
         workersAdults: forms.workersAdults,
         workersFemale: forms.workersFemale,
@@ -83,8 +81,10 @@ export default function StatisticalInformation() {
         isCollegialPresident: forms.isCollegialPresident,
         isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
       };
-      if (currentReport?.id) requestData.id = currentReport.id;
+      if (organization?.id) requestData.eBkutOrganization.id = organization.id;
+      else requestData.eBKUT.id = bkutData.id;
 
+      if (currentReport?.id) requestData.id = currentReport.id;
       const response = await sendStatistics(requestData);
 
       if (response?.id) {

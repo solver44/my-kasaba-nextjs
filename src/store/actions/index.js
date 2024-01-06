@@ -7,6 +7,7 @@ export const BKUT_DATA = "BKUT_DATA";
 export const SETTINGS = "SETTINGS";
 export const DATA_LOADING = "DATA_LOADING";
 export const UPDATE_DATA = "UPDATE_DATA";
+export const IS_ORGANIZATION = "IS_ORGANIZATION";
 
 const loginSuccess = () => {
   return {
@@ -69,6 +70,13 @@ const setSettings = (payload) => {
   };
 };
 
+const setIsOrganization = (payload) => {
+  return {
+    type: IS_ORGANIZATION,
+    payload,
+  };
+};
+
 export default {
   showLoading,
   loginFailure,
@@ -79,4 +87,5 @@ export default {
   dataLoading,
   updateData,
   setSettings,
+  setIsOrganization,
 };

@@ -116,9 +116,6 @@ export async function generateTicketMember(bkutId, memberId) {
     const { data } = await $axios.post(
       "/rest/services/application/generateTicket",
       {
-        bkut: {
-          id: bkutId,
-        },
         member: {
           id: memberId,
         },

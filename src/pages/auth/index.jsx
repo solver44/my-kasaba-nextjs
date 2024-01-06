@@ -20,6 +20,7 @@ import { validateEmpty } from "@/utils/validation";
 import { useSnackbar } from "notistack";
 import { getBKUTData, loginRest } from "@/http/data";
 import Cookies from "universal-cookie";
+import { getIsOrganization } from "@/utils/data";
 
 export default function Auth() {
   const actions = useActions();
@@ -58,12 +59,14 @@ export default function Auth() {
     if (bkutData?.success) {
       localStorage.setItem("token", bkutData.id);
       localStorage.setItem("type", bkutData.type);
+      const isOrg = getIsOrganization(bkutData.type);
       const cookies = new Cookies();
       cookies.set("token", bkutData.id);
       cookies.set("type", bkutData.type);
       actions.loginSuccess();
-      const resData = await getBKUTData(bkutData.id);
-      if (resData?.protocolFile) {
+      actions.setIsOrganization(isOrg);
+      const resData = await getBKUTData(bkutData.id, isOrg);
+      if (resData?.protocolFile || isOrg) {
         actions.isMember(true);
         await navigate.push("/");
       } else {

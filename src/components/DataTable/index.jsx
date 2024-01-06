@@ -57,6 +57,7 @@ function DataTable({
   onImportRow,
   onImportFinished,
   hideExportImport,
+  hideView,
   hideFirstButton,
   hideActions,
   hideImport,
@@ -398,9 +399,11 @@ function DataTable({
           renderRowActions={({ row }) => {
             return (
               <Box className={styles.row}>
-                <IconButton onClick={() => handleViewClick(row.original)}>
-                  <VisibilityIcon />
-                </IconButton>
+                {!hideView && (
+                  <IconButton onClick={() => handleViewClick(row.original)}>
+                    <VisibilityIcon />
+                  </IconButton>
+                )}
                 {!hideDelete && (
                   <IconButton onClick={() => handleDeleteClick(row.original)}>
                     <DeleteIcon />
