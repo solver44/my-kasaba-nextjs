@@ -27,7 +27,7 @@ export default function StatisticalInformation({ organization }) {
   const { t } = useTranslation();
   const actions = useActions();
   const [editMode, setEditMode] = useState(false);
-  let { bkutData = {} } = useSelector((states) => states);
+  let { bkutData = {}, isOrganization } = useSelector((states) => states);
   bkutData = organization ? organization : bkutData;
   const [loadingEditMode, setLoadingEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
@@ -81,8 +81,9 @@ export default function StatisticalInformation({ organization }) {
         isCollegialPresident: forms.isCollegialPresident,
         isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
       };
-      if (organization?.id) requestData.eBkutOrganization.id = organization.id;
-      else requestData.eBKUT.id = bkutData.id;
+      if (isOrganization || organization?.id)
+        requestData.eBkutOrganization.id = { id: bkutData.id };
+      else requestData.eBKUT = { id: bkutData.id };
 
       if (currentReport?.id) requestData.id = currentReport.id;
       const response = await sendStatistics(requestData);
@@ -94,7 +95,9 @@ export default function StatisticalInformation({ organization }) {
       } else {
         enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const categories = [t("all"), t("statistical-information.group2")];

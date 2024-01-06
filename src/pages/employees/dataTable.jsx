@@ -154,8 +154,8 @@ export default function InDataTable({ organization, filter, onUpload, min }) {
       memberJoinDate: forms.signDate,
     };
     if (isOrganization || organization?.id)
-      requestData.eBkutOrganization.id = bkutData.id;
-    else requestData.bkut.id = bkutData.id;
+      requestData.eBkutOrganization = { id: bkutData.id };
+    else requestData.bkut = { id: bkutData.id };
 
     const response = await sendEmployee(requestData);
     if (response?.success) {

@@ -177,8 +177,10 @@ export default function InDataTable({ organization, filter }) {
       };
 
       if (isOrganization || organization)
-        requestData.collectiveAgreements.eBkutOrganization.id = forms.bkutId;
-      else requestData.collectiveAgreements.bkut.id = forms.bkutId;
+        requestData.collectiveAgreements.eBkutOrganization = {
+          id: bkutData.id,
+        };
+      else requestData.collectiveAgreements.bkut = { id: bkutData.id };
 
       let application = await getFile(forms.applications1);
       if (application || isCurrentJSH) {

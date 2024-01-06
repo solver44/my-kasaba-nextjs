@@ -90,8 +90,8 @@ export default function JSH1() {
         ifut: forms.ifut.value,
         xxtut: forms.xxtut.value,
       };
-      if (isOrganization) requestData.eBkutOrganization.id = bkutData.id;
-      else requestData.eBKUT.id = bkutData.id;
+      if (isOrganization) requestData.reports.eBkutOrganization = { id: bkutData.id };
+      else requestData.reports.eBKUT = { id: bkutData.id };
       if (forms?.id) requestData.reports.id = forms.id;
 
       const response = await sendCollectiveReport(requestData);
