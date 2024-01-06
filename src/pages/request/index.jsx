@@ -69,6 +69,7 @@ export default function RequestPage({ router }) {
   const [isReglament, setIsReglament] = useState(false);
   const { caches } = useSelector((state) => state);
   const actions = useActions();
+  const userId = useRef();
 
   const initializeRecaptcha = () => {
     if (window.grecaptcha && window.grecaptcha.render) {
@@ -186,6 +187,8 @@ export default function RequestPage({ router }) {
         branchId,
         email: formData.email,
         comment: formData.form4,
+        address: formData.address,
+        passport: userId.current,
       },
       recaptchaResponse
     );
@@ -269,6 +272,7 @@ export default function RequestPage({ router }) {
 
     resetValidation();
 
+    userId.current = data?.id;
     setFormData((formData) => ({
       ...formData,
       firstName: data?.profile?.person_name,
