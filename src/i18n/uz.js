@@ -50,20 +50,20 @@ export default {
       title1: "Shaxsiy ma'lumotlar",
     },
     "passort-primary-organization": {
-      title: "Boshlang’ich tashkilot pasporti",
-      firstOrganizationName: "Boshlang’ich tashkilot nomi:",
-      firstOrganizationType: "Boshlang’ich tashkilot tashkil etilish turi:",
-      firstOrganizationSTIR: "Boshlang’ich tashkilot STIR (INN) raqami:",
-      firstOrganizationNetwork: "Boshlang’ich tashkilot qarashli tarmoq:",
-      firstOrganizationOrg: "Boshlang’ich tashkilot (PPO) yuqori tashkilot:",
+      title: "Tashkilot pasporti",
+      firstOrganizationName: "Tashkilot nomi:",
+      firstOrganizationType: "Tashkilot tashkil etilish turi:",
+      firstOrganizationSTIR: "Tashkilot STIR (INN) raqami:",
+      firstOrganizationNetwork: "Tashkilot qarashli tarmoq:",
+      firstOrganizationOrg: "Tashkilotning yuqori turuvchi tashkiloti:",
       firstOrganizationFirm:
-        "Boshlang’ich tashkilot faoliyat yuritayotgan korxona, tashkilot yoki muassasa:",
+        "Tashkilot faoliyat yuritayotgan korxona, tashkilot yoki muassasa:",
       firstOrganizationFirmSTIR:
         "Korxona, tashkilot yoki muassasa STIR(INN) raqami:",
-      firstOrganizationDirektor: "Boshlang’ich tashkilot rahbari:",
+      firstOrganizationDirektor: "Tashkilot rahbari:",
       firstOrganizationSoato: "МХОВТ(SOATO) raqami:",
       firstOrganizationAdr: "Manzil:",
-      firstOrganizationTel: "Boshlang’ich tashkilot (PPO) telefon raqamlari:",
+      firstOrganizationTel: "Tashkilot telefon raqamlari:",
       firstOrganizationEmail: "Elektron pochta manzil:",
       firstOrganizationAgree: "Davlat (xisob) ro’yhatidan o’tganmi? :",
       firstOrganizationH: "Hisob raqami:",
@@ -340,7 +340,7 @@ export default {
     "register-bkut": "BKUTni ro’yhatdan o’tkazish",
 
     //second menu
-    passortPrimaryOrganization: "Boshlang’ich tashkilot pasporti",
+    passortPrimaryOrganization: "Tashkilot pasporti",
     industrialOrganizations: "Tsex tashkilotlari",
     groupOrganizations: "Guruh tashkilotlari",
     statisticalInformation: "Statistik ma’lumotlar",
