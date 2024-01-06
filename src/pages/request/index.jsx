@@ -188,10 +188,10 @@ export default function RequestPage({ router }) {
         email: formData.email,
         comment: formData.form4,
         address: formData.address,
-        passport: userId.current,
       },
       recaptchaResponse
     );
+    if (userId.current) data.passport = { id: userId.current };
     actions.showLoading(false);
     if (data?.success) {
       actions.caches({
