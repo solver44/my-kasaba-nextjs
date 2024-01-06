@@ -38,7 +38,7 @@ export default function InDataTable({ organization, filter, onUpload, min }) {
   const [rows, setRows] = useState([]);
   const [zoomQRURL, setZoomQRURL] = useState(false);
   const [ticketLoading, setTicketLoading] = useState(false);
-  let { bkutData = {} } = useSelector((states) => states);
+  let { bkutData = {}, isOrganization } = useSelector((states) => states);
   bkutData = organization ? organization : bkutData;
   const qrURL = useRef("");
   const individualId = useRef();
@@ -153,7 +153,8 @@ export default function InDataTable({ organization, filter, onUpload, min }) {
       },
       memberJoinDate: forms.signDate,
     };
-    if (organization?.id) requestData.eBkutOrganization.id = organization.id;
+    if (isOrganization || organization?.id)
+      requestData.eBkutOrganization.id = bkutData.id;
     else requestData.bkut.id = bkutData.id;
 
     const response = await sendEmployee(requestData);

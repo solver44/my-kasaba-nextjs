@@ -20,7 +20,11 @@ import { getReportDate, getReportYear, getYearFrom } from "@/utils/date";
 
 export default function JSH1() {
   const [editMode, setEditMode] = useState(false);
-  const { bkutData = {}, settings = {} } = useSelector((state) => state);
+  const {
+    bkutData = {},
+    isOrganization,
+    settings = {},
+  } = useSelector((state) => state);
   const [loadingEditMode, setLoadingEditMode] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const [currentReport, setCurrentReport] = useState({});
@@ -68,9 +72,6 @@ export default function JSH1() {
     try {
       const requestData = {
         reports: {
-          eBKUT: {
-            id: bkutData.id,
-          },
           date: forms.date,
           bhutForm: forms.bhutForm,
           ifutForm: forms.ifutForm,
@@ -89,6 +90,8 @@ export default function JSH1() {
         ifut: forms.ifut.value,
         xxtut: forms.xxtut.value,
       };
+      if (isOrganization) requestData.eBkutOrganization.id = bkutData.id;
+      else requestData.eBKUT.id = bkutData.id;
       if (forms?.id) requestData.reports.id = forms.id;
 
       const response = await sendCollectiveReport(requestData);

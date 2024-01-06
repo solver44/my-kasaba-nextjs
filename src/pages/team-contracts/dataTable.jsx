@@ -40,7 +40,11 @@ export default function InDataTable({ organization, filter }) {
   const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  let { bkutData = {}, settings = {} } = useSelector((states) => states);
+  let {
+    bkutData = {},
+    isOrganization,
+    settings = {},
+  } = useSelector((states) => states);
   bkutData = organization ? organization : bkutData;
   const [isHideAddBtn, setIsHideAddBtn] = useState(true);
   const actions = useActions();
@@ -164,9 +168,6 @@ export default function InDataTable({ organization, filter }) {
       if (!forms.bkutId || !project) throw Error("error");
       const requestData = {
         collectiveAgreements: {
-          bkut: {
-            id: forms.bkutId,
-          },
           applications: [
             {
               file: project,
@@ -174,6 +175,10 @@ export default function InDataTable({ organization, filter }) {
           ],
         },
       };
+
+      if (isOrganization || organization)
+        requestData.collectiveAgreements.eBkutOrganization.id = forms.bkutId;
+      else requestData.collectiveAgreements.bkut.id = forms.bkutId;
 
       let application = await getFile(forms.applications1);
       if (application || isCurrentJSH) {
