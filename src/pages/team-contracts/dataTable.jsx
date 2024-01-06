@@ -99,12 +99,11 @@ export default function InDataTable({ organization, filter }) {
   ];
 
   useEffect(() => {
-    if (!bkutData.agreements) return;
+    if (!bkutData.id) return;
     if (!bkutData?.agreements?.length) {
       setIsHideAddBtn(false);
-      return;
-    }
-    setIsHideAddBtn(true);
+    } else setIsHideAddBtn(true);
+    bkutData.agreements = bkutData.agreements || [];
 
     bkutData.agreements.forEach((e) => {
       if (
