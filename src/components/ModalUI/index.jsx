@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import FormValidation from "../FormValidation";
 import areEqual from "@/utils/areEqual";
 import { CloseOutlined } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 
 function ModalUI({
   open,
@@ -45,7 +46,7 @@ function ModalUI({
               onChanged && onChanged(isChanged, currentData);
             }}
           >
-            {(onSubmit, data) => children(onSubmit, _isChanged, data)}
+            {(onSubmit, data) => children(onSubmit, _isChanged, data, loading)}
           </FormValidation>
         </div>
       )
@@ -55,7 +56,7 @@ function ModalUI({
           style={modalWidth ? { width: modalWidth } : {}}
           className={[styles.content, full ? styles.full : ""].join(" ")}
         >
-          {children(onSubmit)}
+          {children(onSubmit, null, null, loading)}
         </div>
       );
 
@@ -75,7 +76,7 @@ function ModalUI({
     >
       <Slide direction="up" in={open}>
         {/* <CloseRounded onClick={handleClose} className={styles.close} /> */}
-        {parent((handleSubmit, isChanged, currentData) => {
+        {parent((handleSubmit, isChanged, currentData, loading) => {
           return (
             <React.Fragment>
               <div className={styles.top}>
@@ -103,15 +104,18 @@ function ModalUI({
               ) : (
                 <div className={[styles.bottom, styles.row].join(" ")}>
                   {hideBtn === false ? (
-                    <Button
+                    <LoadingButton
                       onClick={isForm ? handleSubmit : onSubmit}
                       variant="contained"
                       disabled={!isChanged}
+                      loading={loading}
                     >
                       {t("save")}
-                    </Button>
+                    </LoadingButton>
                   ) : null}
-                  <Button onClick={onClose}>{t("close")}</Button>
+                  <Button disabled={loading} onClick={onClose}>
+                    {t("close")}
+                  </Button>
                 </div>
               )}
             </React.Fragment>

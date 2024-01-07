@@ -112,8 +112,14 @@ export function getPresidentBKUT(bkutData = {}) {
   if (!bkutData?.employees?.length) return "";
   return getFIO(
     bkutData.employees.find((employee) => employee.position?.id === 1)
-      .individual
+      ?.individual
   );
+}
+
+export function getPresidentId(bkutData = {}) {
+  if (!bkutData?.employees?.length) return "";
+  return bkutData.employees.find((employee) => employee.position?.id === 1)
+    ?.individual?.id;
 }
 
 export function getStatusColors(val) {

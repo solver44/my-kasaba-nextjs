@@ -134,6 +134,7 @@ export default function InDataTable({ organization, filter }) {
           id: e.id,
           projectSentDate: convertStringToFormatted(e.expertizeStartDate),
           contractNumber: e.contractNo,
+          currentJSH: e.status === "CURRENT_JSH",
           status: {
             value: e.status,
             date,
@@ -333,15 +334,14 @@ export default function InDataTable({ organization, filter }) {
       isFormModal
       fetchData={fetchData}
       modal={(hideModal, dataModal) => (
-        <ModalUI hideModal={hideModal} data={dataModal} />
+        <ModalUI hideModal={hideModal} bkutData={bkutData} data={dataModal} />
       )}
     />
   );
 }
 
-function ModalUI({ data }) {
+function ModalUI({ data, bkutData }) {
   const { t } = useTranslation();
-  const [employees, bkutData] = useEmployees();
 
   const [formData, setFormData] = useState({
     director: "",

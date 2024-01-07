@@ -1,6 +1,7 @@
 import { saveAs } from "file-saver";
 import { $axios, BASE_URL, getDeleteResponse } from ".";
 import { getIsOrganization } from "@/utils/data";
+import { sendEmployee, sendIndividual } from "./employees";
 
 export async function loginRest(email, password) {
   try {
@@ -108,19 +109,22 @@ export async function deleteDepartment(id) {
     return false;
   }
 }
-export async function sendDepartment(_data) {
+export async function sendDepartment(data) {
   try {
-    const { director, ...data } = _data;
-    let resDirector = await searchEmployee(director, true);
-    console.log(resDirector);
-    const { data: response } = await $axios.post(
-      "/rest/entities/EBkutOrganizations",
-      data,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response?.id
+    // const { employees, ...data } = _data;
+    const { data: response } = data?.id
+      ? await $axios.put("/rest/entities/EBkutOrganizations/" + data.id, data, {
+          headers: { "Content-Type": "application/json" },
+        })
+      : await $axios.post("/rest/entities/EBkutOrganizations", data, {
+          headers: { "Content-Type": "application/json" },
+        });
+    const id = response?.id;
+    // if (id && employees?.length) {
+    //   await sendEmployee({ ...employees[0], eBkutOrganization: { id } });
+    // }
+
+    return id
       ? { ...response, success: true }
       : { ...response, success: false };
   } catch (error) {

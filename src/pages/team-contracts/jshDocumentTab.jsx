@@ -50,7 +50,7 @@ export default function JShDocument({ data, bkutData }) {
                 )}
                 <span
                   style={{
-                    color: selectedDoc == index ? "#ccc" : "rgb(112 112 112)",
+                    color: "rgb(124 124 124)",
                     fontSize: 16,
                   }}
                 >

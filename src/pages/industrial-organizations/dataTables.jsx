@@ -15,7 +15,12 @@ import {
   getFile,
 } from "@/http/data";
 import useActions from "@/hooks/useActions";
-import { getFIO, getPresidentBKUT, splitFIO } from "@/utils/data";
+import {
+  getFIO,
+  getPresidentBKUT,
+  getPresidentId,
+  splitFIO,
+} from "@/utils/data";
 import { showYesNoDialog } from "@/utils/dialog";
 import Group from "@/components/Group";
 import dayjs from "dayjs";
@@ -39,6 +44,8 @@ export default function InDataTable({ isGroup }) {
   const { enqueueSnackbar } = useSnackbar();
   const actions = useActions();
   const getLocal = getTranslation(isGroup);
+  const individualId = useRef();
+
   const columns = [
     {
       field: "name",
@@ -105,9 +112,7 @@ export default function InDataTable({ isGroup }) {
   }, [bkutData]);
 
   async function onSubmitModal(forms, hideModal, isView) {
-    const duplicate = (bkutData?.organizations ?? []).find(
-      (e) => e.tin == forms.tin
-    );
+    const duplicate = organizations.find((e) => e.tin == forms.tin);
     if (!isView && duplicate) {
       const isAnother =
         duplicate.organizationType == (isGroup ? "SEH" : "GURUH");
@@ -129,6 +134,7 @@ export default function InDataTable({ isGroup }) {
   }
 
   async function sendData(forms, hideModal, duplicate) {
+    setLoadingData(true);
     try {
       let protocolFileRef = null;
 
@@ -158,26 +164,32 @@ export default function InDataTable({ isGroup }) {
         address: forms.address,
         employees: [
           {
+            isMember: true,
+            isKasabaActive: true,
+            position: {
+              value: 1,
+            },
             individual: {
-              id: forms.individual,
+              id: individualId.current,
             },
           },
         ],
-        legalEntity: {
+        eLegalEntity: {
           id: bkutData.eLegalEntity.id,
         },
         isLegalEntity: forms.isLegalEntity,
         decisionNumber: forms.decisionNumber,
         decisionDate: forms.decisionDate,
-        tinSenior: forms.tinSenior || bkutData.application.tin,
+        tin: forms.tinSenior,
       };
       // Include decisionFile reference in the request data if available
       if (protocolFileRef) {
         requestData.decisionFile = protocolFileRef;
       }
 
-      // Include ID for an existing entry
       if (duplicate) {
+        requestData.employees[0].individual.id =
+          getPresidentId(duplicate) || individualId.current;
         requestData.id = duplicate.id;
       }
       const response = await sendDepartment(requestData);
@@ -198,10 +210,16 @@ export default function InDataTable({ isGroup }) {
         hideModal();
       }
     } catch (error) {
-      console.error("Error sending data:", error); // Log the specific error
+      console.log(error);
       enqueueSnackbar(t("send-data-error"), { variant: "error" });
       return;
+    } finally {
+      setLoadingData(false);
     }
+  }
+
+  function onFetchIndividual(data = {}) {
+    individualId.current = data.id;
   }
 
   async function fetchData(id) {
@@ -250,14 +268,19 @@ export default function InDataTable({ isGroup }) {
         onSubmitModal={onSubmitModal}
         isFormModal
         modal={(hideModal, dataModal) => (
-          <ModalUI hideModal={hideModal} data={dataModal} isGroup={isGroup} />
+          <ModalUI
+            onFetchIndividual={onFetchIndividual}
+            hideModal={hideModal}
+            data={dataModal}
+            isGroup={isGroup}
+          />
         )}
       />
       <ViewModal isOpen={viewModal} handleClose={() => setViewModal(false)} />
     </React.Fragment>
   );
 }
-function ModalUI({ hideModal, data, isGroup }) {
+function ModalUI({ hideModal, data, isGroup, onFetchIndividual }) {
   const getLocal = getTranslation(isGroup);
   const { t } = useTranslation();
   const [employeess, bkutData] = useEmployees();
@@ -283,6 +306,7 @@ function ModalUI({ hideModal, data, isGroup }) {
     decisionDate: "",
     decisionFile: "",
   });
+
   async function parseFile(file) {
     if (!file) return [null, null];
     const res = await getFile(file);
@@ -358,7 +382,6 @@ function ModalUI({ hideModal, data, isGroup }) {
       const soatoId = (soato?.id ?? "").toString();
       const provinceId = soatoId.slice(0, 4);
       const districtId = soatoId;
-      console.log(data);
       await handleProvince({ target: { value: provinceId } });
       setValues((values) => ({
         ...values,
@@ -378,10 +401,11 @@ function ModalUI({ hideModal, data, isGroup }) {
 
   function onFetchPINFL(data) {
     if (!data) return;
+    onFetchIndividual(data);
     setFormData({
-      fio: getFIO(data.profile),
-      birthDate: dayjs(data.profile.birth_date),
-      gender: data.profile.gender != 1 ? 0 : 1,
+      fio: getFIO(data),
+      birthDate: dayjs(data.birth_date),
+      gender: data.gender,
     });
   }
   useEffect(() => {
@@ -396,8 +420,7 @@ function ModalUI({ hideModal, data, isGroup }) {
   return (
     <div className="modal-content">
       <Alert className="modal-alert" severity="info">
-        {t("bkut1")} -{" "}
-        {`${bkutData?.eLegalEntity.name} (${bkutData.tin ?? t("no")})`}
+        {t("bkut1")} - {`${bkutData?.name} (${bkutData.tin ?? t("no")})`}
       </Alert>
       <Group title={t("main-info")}>
         <div datatype="list">
@@ -420,7 +443,7 @@ function ModalUI({ hideModal, data, isGroup }) {
               name="isLegalEntity"
               value={isLegalEntity ?? false}
               onChange={(e) => {
-                setMode(e.target.value);
+                setMode(JSON.parse(e.target.value));
               }}
               data={[
                 {
@@ -438,7 +461,7 @@ function ModalUI({ hideModal, data, isGroup }) {
                 name="tinSenior"
                 required
                 label={t("stir")}
-                value={bkutData?.application?.tin}
+                // value={bkutData?.application?.tin}
               />
             )}
           </div>
@@ -487,6 +510,7 @@ function ModalUI({ hideModal, data, isGroup }) {
         <div datatype="list">
           <FinderPINFL
             disablePINFL
+            style={individual.pinfl ? { display: "none" } : {}}
             pinflValue={individual.pinfl}
             onFetch={onFetchPINFL}
           />
@@ -516,7 +540,7 @@ function ModalUI({ hideModal, data, isGroup }) {
               name="gender"
               dataSelect={[
                 { value: 1, label: t("man") },
-                { value: 0, label: t("woman") },
+                { value: 2, label: t("woman") },
               ]}
               label={t("gender")}
             />

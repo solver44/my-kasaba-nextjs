@@ -57,18 +57,30 @@ export async function deleteEmployee(id) {
     return false;
   }
 }
-export async function sendIndividual(requestData) {
+export async function sendIndividual(_requestData = {}, orig = false) {
   try {
-    const { data } = requestData.id
-      ? await $axios.put(
+    const { pinfl, ...requestData } = _requestData;
+    if (Object.keys(requestData).length < 2) return;
+    const { data } = !orig
+      ? await $axios.post(
+          "/rest/services/classifiers/individual",
+          { data: requestData },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+      : requestData?.id
+      ? $axios.put(
           "/rest/entities/HIndividual/" + requestData.id,
           requestData,
-          { headers: { "Content-Type": "application/json" } }
+          {
+            headers: { "Content-Type": "application/json" },
+          }
         )
       : await $axios.post("/rest/entities/HIndividual/", requestData, {
           headers: { "Content-Type": "application/json" },
         });
-    data.success = !!data?.id;
+    if (orig) data.success = !!data?.id;
 
     return data;
   } catch (error) {
@@ -77,7 +89,7 @@ export async function sendIndividual(requestData) {
 }
 export async function sendEmployee(requestData = {}) {
   try {
-    if (requestData?.individual?.firstName && requestData?.individual?.id)
+    if (requestData?.individual?.id)
       await sendIndividual(requestData.individual);
     // requestData.individual = { id: individualResponse.id };
     const { data } = requestData.id

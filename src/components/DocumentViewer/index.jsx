@@ -1,9 +1,15 @@
-import { Button, CircularProgress } from "@mui/material";
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import { saveAs } from "file-saver";
 import { t } from "i18next";
 import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
-import { CloudDownload, Download } from "@mui/icons-material";
+import { CloudDownload, Download, Refresh } from "@mui/icons-material";
 import { downloadFile } from "@/http/data";
 import { useSnackbar } from "notistack";
 import useAnimation from "@/hooks/useAnimation";
@@ -21,6 +27,7 @@ const DocumentViewer = ({
   const dataForDownload = useRef();
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   function download() {
     if (!dataForDownload.current) return;
@@ -76,43 +83,69 @@ const DocumentViewer = ({
       docx.renderAsync(fileData, container, null, docxOptions);
     }
   }
-  useEffect(() => {
-    async function initData() {
-      setLoading(true);
-      let data = null;
+  async function initData() {
+    setLoading(true);
+    setError(null);
+    let data = null;
 
-      if (documentSrc) {
-        if (generateData) data = generateDoc();
-      } else if (url) {
-        const name = decodeURIComponent(url.split("=")[1]);
-        if (name && name.split(".").pop() !== "docx") {
-          setLoading(false);
-          enqueueSnackbar(t("file-should-be-docx"), { variant: "error" });
-          iframeRef.current.innerHTML = "";
-          return;
-        }
-        data = await downloadFile(url, name, true);
-        if (!data) {
-          setLoading(false);
-          enqueueSnackbar(t("file-cannot-open"), { variant: "error" });
-          iframeRef.current.innerHTML = "";
-          return;
-        }
+    if (documentSrc) {
+      if (generateData) data = generateDoc();
+    } else if (url) {
+      const name = decodeURIComponent(url.split("=")[1]);
+      if (name && name.split(".").pop() !== "docx") {
+        await new Promise((res) => setTimeout(res, 500));
+        setLoading(false);
+        setError(t("file-should-be-docx"));
+        iframeRef.current.innerHTML = "";
+        return;
       }
-      await previewWordDoc(data);
-      setLoading(false);
+      data = await downloadFile(url, name, true);
+      if (!data) {
+        setLoading(false);
+        setError(t("file-cannot-open"));
+        iframeRef.current.innerHTML = "";
+        return;
+      }
     }
+    await previewWordDoc(data);
+    setLoading(false);
+  }
+  useEffect(() => {
     initData();
   }, [url, generateData]);
   return (
     <div className={styles.wrapper}>
       {!hideDownloadBtn && (
-        <Button onClick={download} variant="outlined" className={styles.button}>
-          {/* {t("download")} */}
-          <CloudDownload />
-        </Button>
+        <Tooltip
+          title={<p style={{ fontSize: 18, margin: 2 }}>{t("download")}</p>}
+        >
+          <Button
+            onClick={download}
+            variant="outlined"
+            className={styles.button}
+          >
+            {/* {t("download")} */}
+
+            <CloudDownload />
+          </Button>
+        </Tooltip>
       )}
       {loading && <CircularProgress className={styles.loader} />}
+      {error && (
+        <div className={styles.errorWrapper}>
+          <Alert
+            action={
+              <IconButton onClick={initData} color="inherit" size="small">
+                <Refresh />
+              </IconButton>
+            }
+            severity="error"
+            className={styles.error}
+          >
+            {error}
+          </Alert>
+        </div>
+      )}
       <div ref={iframeRef}></div>
     </div>
   );

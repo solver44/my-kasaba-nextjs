@@ -456,8 +456,8 @@ export default {
       "Ushbu tashkilot GURUH tashkilotlarida mavjud. O'zgartirish uchun GURUH tashkilotlari bo'limiga o'ting.",
 
     "1ti": "1TI hisoboti",
-    "file-cannot-open": "Ushbu faylni ochib bo'lmadi.",
-    "file-should-be-docx": "Ushbu faylning formati docx bo'lishi zarur.",
+    "file-cannot-open": "Ushbu fayl serverdan topilmadi.",
+    "file-should-be-docx": "Faylni ko'rish uchun faylning formati docx bo'lishi zarur.",
     "1ti1": "1TI hisobot shakli",
     "1t-report": "1TI hisobot",
     showTicket: "Guvohnomani ko'rish",
@@ -508,7 +508,7 @@ export default {
       INANALYSIS: "Tahlilda",
       CONSIDERED: "Ko'rib chiqildi",
       TO_CONFIRM: "Tasdiqlash uchun yuborilgan",
-      CURRENT_JSH: "Tahlilda",
+      CURRENT_JSH: "Amaldagi",
     },
     dTable: {
       toolbarDensity: "O'lcham",

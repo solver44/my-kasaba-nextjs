@@ -93,7 +93,6 @@ export default function EditData({ currentReport = {} }) {
       let ownership = getOption(el?.ownership);
       let ifut = getOption(el?.oked);
       let xxtut = getOption(el?.okonx);
-      console.log(el);
       const mainActivity = el.mainActivity;
       setValues((vals) => ({
         ...vals,

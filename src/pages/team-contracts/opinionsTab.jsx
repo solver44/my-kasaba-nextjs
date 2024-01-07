@@ -55,7 +55,11 @@ export default function OpinionsTab({ data, bkutData }) {
               clickable
               color={selectedDoc == 1 || isCurrentJSH ? "primary" : "default"}
               variant="outlined"
-              label={t("team-contracts.opinion-file")}
+              label={
+                <div>
+                  {decodeURIComponent(app.split("=")[1]).replaceAll("+", " ")}
+                </div>
+              }
             />
           )}
         </div>
