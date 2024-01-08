@@ -503,7 +503,7 @@ export default {
     "leave-day": "kun qoldi",
     "status-label": "Holati",
     "user-open": "Foydalanuvchini ko'rish",
-    organization: "Ro'yhatga olingan",
+    organizationTitle: "Ro'yhatga olingan",
     status: {
       CONFIRMED: "Ro'yhatga olingan",
       INEXECUTION: "Tahlilda",

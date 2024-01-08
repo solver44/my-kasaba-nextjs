@@ -155,7 +155,7 @@ export default function ViewModal({ isOpen, handleClose }) {
                     <div className="flex">
                       <label>{t("industrial-organizations.direktor")}</label>
                       <span style={{ textAlign: "left" }}>
-                        {showOrNot(getPresidentBKUT(bkutData))}
+                        {showOrNot(getPresidentBKUT(data))}
                       </span>
                     </div>
                     <div className="flex">

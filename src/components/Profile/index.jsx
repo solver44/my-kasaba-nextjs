@@ -65,7 +65,7 @@ export default function Profile({ img, collapsed, imgOnly, mini }) {
               ? t("data-not-full")
               : bkutData.status == 4
               ? t("rejected")
-              : t("organization")}
+              : t("organizationTitle")}
           </p>
         </div>
       )}
