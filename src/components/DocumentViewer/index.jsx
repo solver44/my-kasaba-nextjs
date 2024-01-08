@@ -101,8 +101,11 @@ const DocumentViewer = ({
     function renderAllPages(pdf) {
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
         pdf.getPage(pageNum).then((page) => {
-          let scale = 1.5;
+          let scale = 1;
+          var desiredWidth = 800;
           let viewport = page.getViewport({ scale: scale });
+          scale = desiredWidth / viewport.width;
+          viewport = page.getViewport({ scale: scale, });
           let canvas = document.createElement("canvas");
           let context = canvas.getContext("2d");
           canvas.height = viewport.height;

@@ -26,6 +26,7 @@ export default function HomeContentWrapper({
   children,
   noTitle,
   noHeader,
+  noMargin,
   title,
   desc,
 }) {
@@ -81,7 +82,9 @@ export default function HomeContentWrapper({
     <React.Fragment>
       {!noHeader && (
         <div
-          className={styles.wrapper}
+          className={[styles.wrapper, noMargin ? styles.noMargin : ""].join(
+            " "
+          )}
           // style={noTitle ? { paddingBottom: 0, paddingTop: 0 } : {}}
         >
           <div className={styles.col}>

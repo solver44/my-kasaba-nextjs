@@ -17,7 +17,14 @@ import Cookies from "universal-cookie";
 import { getSettings } from "@/http/handbooks";
 import { getIsOrganization } from "@/utils/data";
 
-const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
+const HomeWrapper = ({
+  children,
+  noMargin,
+  noTitle,
+  noHeader,
+  title,
+  desc,
+}) => {
   const { updateData, ...states } = useSelector((state) => state);
   const actions = useActions();
   const route = useRouter();
@@ -73,7 +80,9 @@ const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
 
   return (
     // <PrivateRoute>
-    <div className={styles.container}>
+    <div
+      className={[styles.container, noMargin ? styles.noMargin : ""].join(" ")}
+    >
       <div
         className={[styles.left, collapsed ? styles.collapsed : ""].join(" ")}
       >
@@ -95,6 +104,7 @@ const HomeWrapper = ({ children, noTitle, noHeader, title, desc }) => {
       <div ref={animRef} className={"wrapper " + styles.right}>
         <HomeContentWrapper
           noHeader={noHeader}
+          noMargin={noMargin}
           noTitle={noTitle}
           title={title}
           desc={desc}

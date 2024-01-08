@@ -61,7 +61,7 @@ export default function TermsContracts({ organization }) {
 
 TermsContracts.layout = function (Component, t, bkutData) {
   return (
-    <HomeWrapper title={bkutData?.name} desc={t("profile-page.desc")}>
+    <HomeWrapper noMargin title={t("team-contracts.title")} desc={t("profile-page.desc")}>
       {Component}
     </HomeWrapper>
   );

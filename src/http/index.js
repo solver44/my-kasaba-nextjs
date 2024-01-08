@@ -1,8 +1,8 @@
 import TOKENS from "@/utils/config";
 import { readJSONFile } from "@/utils/jsonUtils";
 import axios from "axios";
-export const BASE_URL = "http://test.kasaba.uz:8000";
-// export const BASE_URL = "http://localhost:8000";
+// export const BASE_URL = "http://test.kasaba.uz:8000";
+export const BASE_URL = "http://localhost:8000";
 
 const config = {
   headers: {
