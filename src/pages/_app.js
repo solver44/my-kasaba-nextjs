@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../styles/globals.scss";
 import "../styles/app.scss";
 import "../styles/drag&drop.scss";
@@ -41,6 +41,11 @@ const MyApp = ({ Component, pageProps, tokens }) => {
   const { showLoading, bkutData } = useSelector((state) => state);
   saveTokens(tokens);
 
+  useEffect(() => {
+    var { pdfjsLib } = globalThis;
+    if (pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = "/js/pdf.worker.js";
+  }, []);
+
   return (
     <LocalizationProvider
       dateAdapter={AdapterDayjs}
@@ -61,6 +66,7 @@ const MyApp = ({ Component, pageProps, tokens }) => {
         <script src="/js/docxtemplater.js"></script>
         <script src="/js/pizzip.js"></script>
         <script src="/js/pizzip-utils.js"></script>
+        <script type="module" src="/js/pdf.js"></script>
         <link rel="shortcut icon" href="/icon.png" />
       </Head>
       <SnackbarProvider

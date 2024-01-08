@@ -114,26 +114,28 @@ export default function PassortPrimaryOrganization() {
         isLegalEntity: data.isLegalEntity,
         email: data.email,
         protocolFile: protocolFileRef,
-        tin: data.bkutSTIR || bkutData.application.tin,
+        tin: data.bkutSTIR,
         phone: data.phoneNumber,
         protocolDate: data.foundingDocDate,
         name: data.bkutName,
       };
       if (isOrganization) {
-        temp = data.decisionFile;
-        if (typeof temp === "string" && temp.includes("fs://")) {
-          applicationFileRef = temp;
-        } else {
-          responseFile = await initFile(temp);
-          if (!responseFile?.fileRef) {
-            enqueueSnackbar(t("upload-file-error"), { variant: "error" });
-            return;
+        if (data.decisionFile) {
+          temp = data.decisionFile;
+          if (typeof temp === "string" && temp.includes("fs://")) {
+            applicationFileRef = temp;
+          } else {
+            responseFile = await initFile(temp);
+            if (!responseFile?.fileRef) {
+              enqueueSnackbar(t("upload-file-error"), { variant: "error" });
+              return;
+            }
+            applicationFileRef = responseFile.fileRef;
           }
-          applicationFileRef = responseFile.fileRef;
+          requestData.decisionFile = applicationFileRef;
         }
         requestData.decisionDate = data.decisionDate;
         requestData.decisionNumber = data.decisionNumber;
-        requestData.decisionFile = applicationFileRef;
       }
 
       const response = await sendEBKUT(requestData);
@@ -151,6 +153,11 @@ export default function PassortPrimaryOrganization() {
     } finally {
       setLoadingEditMode(false);
     }
+  }
+
+  if (isOrganization) {
+    bkutData.branch = bkutData.bkut.branch;
+    bkutData.parent = bkutData.bkut.parent;
   }
 
   return (
@@ -337,12 +344,19 @@ export default function PassortPrimaryOrganization() {
             steps={[
               {
                 label: t("register-bkut-page.step1"),
-                children: <Step1 canChange bkutData={bkutData} />,
+                children: (
+                  <Step1
+                    canChange
+                    isOrganization={isOrganization}
+                    bkutData={bkutData}
+                  />
+                ),
               },
               {
                 label: t("register-bkut-page.step3"),
                 children: (
                   <Step3
+                    isOrganization={isOrganization}
                     filesNotRequired
                     files={{
                       first: {

@@ -7,7 +7,7 @@ import { getBranches, getDistricts, getRegions } from "@/http/public";
 import { getLocalizationNames } from "@/utils/data";
 import FormInput from "@/components/FormInput";
 
-export default function Step1({ bkutData = {}, canChange }) {
+export default function Step1({ bkutData = {}, isOrganization, canChange }) {
   const { t, i18n } = useTranslation();
   const [mode, setMode] = useState(false);
   const [provinces, setProvinces] = useState();
@@ -112,7 +112,7 @@ export default function Step1({ bkutData = {}, canChange }) {
 
         <FormInput
           required
-          disabled={!canChange}
+          disabled={!canChange || isOrganization}
           select
           name="network"
           value={values.branchId}
@@ -158,7 +158,7 @@ export default function Step1({ bkutData = {}, canChange }) {
         <FormInput
           required
           label={t("email")}
-          value={bkutData.application?.email}
+          value={bkutData.email}
           name="email"
         />
       </div>

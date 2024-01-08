@@ -157,7 +157,7 @@ export default {
       employer: "Ish beruvchining F.I.O.",
       employeerRepresentatives: "Ish beruvchining vakillari (F.I.O.)",
       employeesRepresentatives: "Xodimlar vakillari (F.I.O.)",
-      director: "Muallif (BKUT raisi)",
+      director: "Muallif (Tashkilot raisi)",
       companyName: "Tashkilot, muasssasa nomlanishi",
       application: "Jamoa shartnomasi (Ma'qullangan)",
       application1: "Jamoa shartnomasi",
@@ -457,7 +457,8 @@ export default {
 
     "1ti": "1TI hisoboti",
     "file-cannot-open": "Ushbu fayl serverdan topilmadi.",
-    "file-should-be-docx": "Faylni ko'rish uchun faylning formati docx bo'lishi zarur.",
+    "file-should-be-docx":
+      "Faylni ko'rish uchun faylning formati docx yoki pdf bo'lishi zarur.",
     "1ti1": "1TI hisobot shakli",
     "1t-report": "1TI hisobot",
     showTicket: "Guvohnomani ko'rish",
@@ -502,6 +503,7 @@ export default {
     "leave-day": "kun qoldi",
     "status-label": "Holati",
     "user-open": "Foydalanuvchini ko'rish",
+    organization: "Ro'yhatga olingan",
     status: {
       CONFIRMED: "Ro'yhatga olingan",
       INEXECUTION: "Tahlilda",

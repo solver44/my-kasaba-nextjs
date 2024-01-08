@@ -47,12 +47,15 @@ export async function getBKUTData(id, isOrg) {
   }
 }
 
-export async function downloadFile(file, name, onlyReturn) {
+export async function downloadFile(file, name, onlyReturn, base64) {
   try {
     const url = `/rest/files?fileRef=${encodeURIComponent(
       file
     )}&attachment=false`;
     const response = await $axios.get(url, { responseType: "arraybuffer" });
+    if (onlyReturn && base64)
+      return Buffer.from(response.data, "binary").toString("base64");
+
     const blob = new Blob([response.data], {
       type: response.headers["Content-Type"],
     });

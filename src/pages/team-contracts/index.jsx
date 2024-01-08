@@ -29,6 +29,7 @@ export default function TermsContracts({ organization }) {
                 filter={(item) =>
                   item.status == "INANALYSIS" ||
                   item.status === "INEXECUTION" ||
+                  item.status === "CURRENT_JSH" ||
                   item.status === "TO_CONFIRM"
                 }
               />

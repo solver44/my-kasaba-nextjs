@@ -82,7 +82,7 @@ export default function StatisticalInformation({ organization }) {
         isProvidedPrivateRoom: forms.isProvidedPrivateRoom,
       };
       if (isOrganization || organization?.id)
-        requestData.eBkutOrganization.id = { id: bkutData.id };
+        requestData.eBkutOrganization = { id: bkutData.id };
       else requestData.eBKUT = { id: bkutData.id };
 
       if (currentReport?.id) requestData.id = currentReport.id;

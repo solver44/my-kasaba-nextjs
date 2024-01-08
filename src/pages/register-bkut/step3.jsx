@@ -4,10 +4,8 @@ import { useTranslation } from "react-i18next";
 import FormInput from "@/components/FormInput";
 import dayjs from "dayjs";
 import areEqual from "@/utils/areEqual";
-import { useSelector } from "react-redux";
 
-function Step3({ bkutData = {}, files = {}, filesNotRequired }) {
-  const { isOrganization } = useSelector((states) => states);
+function Step3({ bkutData = {}, isOrganization, files = {}, filesNotRequired }) {
   const { t } = useTranslation();
   return (
     <div className={styles.grid}>

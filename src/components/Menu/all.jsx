@@ -44,14 +44,14 @@ export default function AllMenu({ collapsed }) {
       path: "/employees",
     },
     {
-      icon: Diversity3,
-      title: "teamContracts",
-      path: "/team-contracts",
-    },
-    {
       icon: InsertChart,
       title: "statisticalInformation",
       path: "/statistical-information",
+    },
+    {
+      icon: Diversity3,
+      title: "teamContracts",
+      path: "/team-contracts",
     },
     {
       icon: LibraryBooks,

@@ -30,6 +30,12 @@ a {
 .Mui-TableHeadCell-Content-Wrapper {
   white-space: normal;
 }
+#pdfViewer {
+  background-color: transparent;
+}
+canvas {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
 // .highcharts-credits{
 //   display: none;
 // }

@@ -33,6 +33,11 @@
     font-size: 30px !important;
   }
 }
-.tooltip{
+.tooltip {
   font-size: 20px;
+}
+.previewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

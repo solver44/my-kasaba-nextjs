@@ -136,12 +136,14 @@
   &.disabled {
     background: var(--input-disabled-color) !important;
     & > :first-child {
+      color: var(--input-disabled-fcolor) !important;
+      -webkit-text-fill-color: var(--input-disabled-fcolor) !important;
       cursor: not-allowed !important;
     }
   }
-  input:disabled ~ fieldset {
-    background-color: var(--input-disabled-color) !important;
-  }
+  // input:disabled ~ fieldset {
+  //   background-color: var(--input-disabled-color) !important;
+  // }
   &.invalid {
     fieldset {
       border: 1px solid red !important;

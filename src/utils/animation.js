@@ -6,12 +6,3 @@ export async function getAnimation() {
     return () => {};
   }
 }
-
-export async function getImportViewer() {
-  if (typeof window !== "undefined") {
-    const webviewer = await import("@pdftron/webviewer");
-    return webviewer.default;
-  } else {
-    return () => {};
-  }
-}

@@ -25,13 +25,17 @@ const DocumentViewer = ({
 }) => {
   const iframeRef = useRef();
   const dataForDownload = useRef();
-  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [currentFileName, setFileName] = useState(fileName);
 
-  function download() {
+  const b64toBlob = (base64, type = "application/octet-stream") =>
+    fetch(`data:${type};base64,${base64}`).then((res) => res.blob());
+  async function download() {
     if (!dataForDownload.current) return;
-    saveAs(dataForDownload.current, fileName);
+    if (typeof dataForDownload.current === "string")
+      saveAs(await b64toBlob(dataForDownload.current), currentFileName);
+    else saveAs(dataForDownload.current, currentFileName);
   }
   function getBinaryData(url) {
     return new Promise((resolve) => {
@@ -83,23 +87,59 @@ const DocumentViewer = ({
       docx.renderAsync(fileData, container, null, docxOptions);
     }
   }
+  async function previewPdf(_data) {
+    let pdfDoc = null;
+    const data = atob(_data);
+    var container = iframeRef.current;
+    container.style = "padding: 10px 0";
+    container.innerHTML = "";
+    pdfjsLib.getDocument({ data }).promise.then((pdfDoc_) => {
+      pdfDoc = pdfDoc_;
+      renderAllPages(pdfDoc);
+    });
+
+    function renderAllPages(pdf) {
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        pdf.getPage(pageNum).then((page) => {
+          let scale = 1.5;
+          let viewport = page.getViewport({ scale: scale });
+          let canvas = document.createElement("canvas");
+          let context = canvas.getContext("2d");
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          let renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+          };
+          container.appendChild(canvas);
+          page.render(renderContext);
+        });
+      }
+    }
+  }
+
   async function initData() {
     setLoading(true);
     setError(null);
     let data = null;
+    let extension = "";
 
     if (documentSrc) {
       if (generateData) data = generateDoc();
     } else if (url) {
       const name = decodeURIComponent(url.split("=")[1]);
-      if (name && name.split(".").pop() !== "docx") {
+      extension = name && name.split(".").pop();
+      setFileName(extension ? name.replaceAll("+", " ") : fileName);
+      if (extension !== "docx" && extension !== "pdf") {
         await new Promise((res) => setTimeout(res, 500));
         setLoading(false);
         setError(t("file-should-be-docx"));
         iframeRef.current.innerHTML = "";
         return;
       }
-      data = await downloadFile(url, name, true);
+      data = await downloadFile(url, name, true, extension === "pdf");
+      dataForDownload.current = data;
       if (!data) {
         setLoading(false);
         setError(t("file-cannot-open"));
@@ -107,7 +147,8 @@ const DocumentViewer = ({
         return;
       }
     }
-    await previewWordDoc(data);
+    if (extension === "pdf") await previewPdf(data);
+    else await previewWordDoc(data);
     setLoading(false);
   }
   useEffect(() => {
@@ -146,7 +187,7 @@ const DocumentViewer = ({
           </Alert>
         </div>
       )}
-      <div ref={iframeRef}></div>
+      <div className={styles.previewer} ref={iframeRef}></div>
     </div>
   );
 };
