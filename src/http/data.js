@@ -30,9 +30,10 @@ export async function getBKUTID(login, password) {
     return error;
   }
 }
-export async function getBKUTData(id, isOrg) {
+export async function getBKUTData(id, isOrg, bkutData) {
   try {
     const bkutId = id ?? localStorage.getItem("token");
+    if(bkutData?.id === id) return bkutData;
     const { data } = await $axios.get(
       isOrg
         ? `/rest/entities/EBkutOrganizations/${bkutId}`

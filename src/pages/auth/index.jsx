@@ -66,6 +66,7 @@ export default function Auth() {
       actions.loginSuccess();
       actions.setIsOrganization(isOrg);
       const resData = await getBKUTData(bkutData.id, isOrg);
+      actions.bkutData(resData);
       if (resData?.protocolFile || isOrg) {
         actions.isMember(true);
         await navigate.push("/");

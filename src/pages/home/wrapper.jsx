@@ -25,7 +25,7 @@ const HomeWrapper = ({
   title,
   desc,
 }) => {
-  const { updateData, ...states } = useSelector((state) => state);
+  const { updateData, isLoggedIn, bkutData } = useSelector((state) => state);
   const actions = useActions();
   const route = useRouter();
   const [collapsed, setCollapsed] = useState();
@@ -37,12 +37,12 @@ const HomeWrapper = ({
         func(animRef.current);
       });
 
-    if (!states.isLoggedIn) return;
+    if (!isLoggedIn) return;
     const fetchData = async () => {
       actions.showLoading(true);
       actions.dataLoading(true);
       const isOrg = getIsOrganization();
-      const data = await getBKUTData(null, isOrg);
+      const data = await getBKUTData(null, isOrg, bkutData);
       const settings = await getSettings();
       const resError = data?.response?.data?.error;
       if (
