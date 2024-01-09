@@ -56,7 +56,7 @@ $axios.interceptors.response.use(
         // Update the original request headers with the new access token
         error.config.headers.Authorization = `Bearer ${TOKENS.ACCESS_TOKEN}`;
 
-        if (error.response.data.path === "/rest/services/application/login")
+        if (window?.location?.pathname === "/auth")
           return $axios.request(error.config); // Use $axios to make the request
 
         window.clearTimeout(globalThis.relTimeout);
