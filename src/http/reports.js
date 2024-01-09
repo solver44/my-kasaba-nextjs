@@ -1,14 +1,14 @@
 import { getIsOrganization } from "@/utils/data";
 import { $axios } from ".";
 
-export async function getReport1ti(id, date) {
+export async function getReport1ti(id, year) {
   try {
     const isOrg = getIsOrganization();
     const { data } = await $axios.post(
       "/rest/services/bkut/report1ti",
       {
         id,
-        date,
+        year,
         type: isOrg ? "organization" : "bkut",
       },
       {

@@ -41,7 +41,7 @@ export default function JSH1() {
     const allYears = [];
     const y = getReportYear(settings);
     (bkutData.collectiveAgreementsReports || []).forEach((r) => {
-      const cYear = getYearFrom(r.date);
+      const cYear = r.year;
       if (cYear == y) return;
       allYears.push({
         value: cYear,
@@ -56,15 +56,15 @@ export default function JSH1() {
   useEffect(() => {
     if (!bkutData.id) return;
     const temp = (bkutData.collectiveAgreementsReports || []).find((r) => {
-      const cYear = getYearFrom(r.date);
+      const cYear = r.year;
       return cYear == currentYear;
     });
     const temp1 = (bkutData.reports || []).find((r) => {
-      const cYear = getYearFrom(r.date);
+      const cYear = r.year;
       return cYear == currentYear;
     });
     setEmployeeCount(temp1?.workersAmount || 0);
-    setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
+    setCurrentReport(temp || { year: getReportYear(), date: dayjs().format("YYYY-MM-DD") });
     if (!temp?.bhutForm && !editMode) setEditMode(true);
   }, [currentYear, bkutData]);
 
@@ -72,6 +72,7 @@ export default function JSH1() {
     try {
       const requestData = {
         reports: {
+          year: getReportYear(),
           date: forms.date,
           bhutForm: forms.bhutForm,
           ifutForm: forms.ifutForm,
@@ -90,7 +91,8 @@ export default function JSH1() {
         ifut: forms.ifut.value,
         xxtut: forms.xxtut.value,
       };
-      if (isOrganization) requestData.reports.eBkutOrganization = { id: bkutData.id };
+      if (isOrganization)
+        requestData.reports.eBkutOrganization = { id: bkutData.id };
       else requestData.reports.eBKUT = { id: bkutData.id };
       if (forms?.id) requestData.reports.id = forms.id;
 
@@ -176,7 +178,7 @@ export default function JSH1() {
         {!editMode ? (
           <DocumentViewer
             generateData={{
-              year: dayjs(currentReport?.date || undefined).year(),
+              year: getYearFrom(currentReport?.date),
               dbibt: bkutData.eLegalEntity?.soogu?.code || "",
               dbibt_name: bkutData.eLegalEntity?.soogu?.nameUz || "",
               ktut_form: bkutData.eLegalEntity?.soogu?.ktutCode || "",

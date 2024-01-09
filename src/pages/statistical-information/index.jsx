@@ -43,6 +43,7 @@ export default function StatisticalInformation({ organization }) {
   const saveStatistics = async (forms) => {
     try {
       const requestData = {
+        year: currentReport.year,
         date: currentReport.date,
         workersAdults: forms.workersAdults,
         workersFemale: forms.workersFemale,
@@ -171,7 +172,7 @@ export default function StatisticalInformation({ organization }) {
     const allYears = [];
     const y = getReportYear();
     (bkutData.reports || []).forEach((r) => {
-      const cYear = getYearFrom(r.date);
+      const cYear = r.year;
       if (cYear == y) return;
       allYears.push({
         value: cYear,
@@ -186,10 +187,12 @@ export default function StatisticalInformation({ organization }) {
   useEffect(() => {
     if (!bkutData.id) return;
     const temp = (bkutData.reports || []).find((r) => {
-      const cYear = getYearFrom(r.date);
+      const cYear = r.year;
       return cYear == currentYear;
     });
-    setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
+    setCurrentReport(
+      temp || { year: getReportYear(), date: dayjs().format("YYYY-MM-DD") }
+    );
   }, [currentYear, bkutData]);
 
   return (

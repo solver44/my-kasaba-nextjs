@@ -23,7 +23,7 @@ export default function OneTI() {
     const allYears = [];
     const y = getReportYear();
     (bkutData.reports || []).forEach((r) => {
-      const cYear = getYearFrom(r.date);
+      const cYear = r.year;
       if (cYear == y) return;
       allYears.push({
         value: cYear,
@@ -38,20 +38,22 @@ export default function OneTI() {
   useEffect(() => {
     if (!bkutData.id) return;
     const temp = (bkutData.reports || []).find((r) => {
-      const cYear = getYearFrom(r.date);
+      const cYear = r.year;
       return cYear == currentYear;
     });
     if (typeof temp === "object")
       temp.date = temp?.date || dayjs().format("YYYY-MM-DD");
 
-    setCurrentReport(temp || { date: dayjs().format("YYYY-MM-DD") });
+    setCurrentReport(
+      temp || { year: getReportYear(), date: dayjs().format("YYYY-MM-DD") }
+    );
   }, [currentYear, bkutData]);
 
   useEffect(() => {
     async function initData() {
-      if (!currentReport.date) return;
+      if (!currentReport.year) return;
 
-      let data = await getReport1ti(bkutData.id, currentReport.date);
+      let data = await getReport1ti(bkutData.id, currentReport.year);
       if (!data.data) return;
       data = typeof data.data === "string" ? JSON.parse(data.data) : data.data;
 
