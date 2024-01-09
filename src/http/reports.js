@@ -8,7 +8,7 @@ export async function getReport1ti(id, year) {
       "/rest/services/bkut/report1ti",
       {
         id,
-        yaer: year + "",
+        year: year + "",
         type: isOrg ? "organization" : "bkut",
       },
       {
