@@ -190,9 +190,7 @@ export default function StatisticalInformation({ organization }) {
       const cYear = r.year;
       return cYear == currentYear;
     });
-    setCurrentReport(
-      temp || { year: getReportYear(), date: getReportDate() }
-    );
+    setCurrentReport(temp || { year: getReportYear(), date: getReportDate() });
   }, [currentYear, bkutData]);
 
   return (
@@ -225,7 +223,7 @@ export default function StatisticalInformation({ organization }) {
               {t("change")}
             </Button>
           ) : (
-            getYearFrom(currentReport?.date) == getReportYear() && (
+            currentReport?.year == getReportYear() && (
               <LoadingButton
                 variant="contained"
                 type="submit"

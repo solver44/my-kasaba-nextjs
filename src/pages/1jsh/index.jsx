@@ -141,7 +141,7 @@ export default function JSH1() {
                 {t("change")}
               </Button>
             ) : (
-              getYearFrom(currentReport?.date) == getReportYear(settings) && (
+              currentReport?.year == getReportYear(settings) && (
                 <LoadingButton
                   variant="contained"
                   type="submit"
@@ -178,7 +178,7 @@ export default function JSH1() {
         {!editMode ? (
           <DocumentViewer
             generateData={{
-              year: getYearFrom(currentReport?.date),
+              year: currentReport?.year,
               dbibt: bkutData.eLegalEntity?.soogu?.code || "",
               dbibt_name: bkutData.eLegalEntity?.soogu?.nameUz || "",
               ktut_form: bkutData.eLegalEntity?.soogu?.ktutCode || "",
