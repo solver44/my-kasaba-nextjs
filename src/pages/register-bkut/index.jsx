@@ -75,7 +75,6 @@ export default function RegisterBkut() {
         phone: data.phoneNumber,
         protocolDate: data.foundingDocDate,
         name: data.bkutName,
-        decisionDate: dayjs().format("YYYY-MM-DD"),
       };
 
       const response = await sendEBKUT(requestData);

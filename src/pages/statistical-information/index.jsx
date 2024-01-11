@@ -191,7 +191,7 @@ export default function StatisticalInformation({ organization }) {
       return cYear == currentYear;
     });
     setCurrentReport(
-      temp || { year: getReportYear(), date: dayjs().format("YYYY-MM-DD") }
+      temp || { year: getReportYear(), date: getReportDate() }
     );
   }, [currentYear, bkutData]);
 

@@ -44,10 +44,10 @@ export default function OneTI() {
       return cYear == currentYear;
     });
     if (typeof temp === "object")
-      temp.date = temp?.date || dayjs().format("YYYY-MM-DD");
+      temp.date = temp?.date || getReportDate();
 
     setCurrentReport(
-      temp || { year: getReportYear(), date: dayjs().format("YYYY-MM-DD") }
+      temp || { year: getReportYear(), date: getReportDate() }
     );
   }, [currentYear, bkutData]);
 

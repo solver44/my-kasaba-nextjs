@@ -64,7 +64,7 @@ export default function JSH1() {
       return cYear == currentYear;
     });
     setEmployeeCount(temp1?.workersAmount || 0);
-    setCurrentReport(temp || { year: getReportYear(), date: dayjs().format("YYYY-MM-DD") });
+    setCurrentReport(temp || { year: getReportYear(), date: getReportDate() });
     if (!temp?.bhutForm && !editMode) setEditMode(true);
   }, [currentYear, bkutData]);
 
