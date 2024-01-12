@@ -65,5 +65,5 @@ export function getYearFrom(date) {
     : d.year();
 }
 export function getReportDate() {
-  return dayjs(getReportYear() + "-01-01").format("YYYY-MM-DD");
+  return dayjs(getReportYear() + "-12-31").format("YYYY-MM-DD");
 }
