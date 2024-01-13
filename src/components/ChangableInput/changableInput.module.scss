@@ -21,15 +21,19 @@
   // overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  overflow: hidden;
   -webkit-box-orient: vertical;
-  &:hover::after {
-    content: attr(data);
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    // background-color: white;
-    z-index: 100;
+  &:hover {
+    overflow: visible;
+    &::after {
+      content: attr(data);
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      // background-color: white;
+      z-index: 100;
+    }
   }
 }
 .content {

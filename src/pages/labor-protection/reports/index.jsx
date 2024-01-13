@@ -47,7 +47,6 @@ export default function LaborProtectionReportsPage() {
   }
   async function initData() {
     const labors = await getLaborProtections(bkutData.id);
-    console.log(labors);
     setLabors(labors);
     const allYears = [];
     const y = dayjs().year();
@@ -138,6 +137,7 @@ export default function LaborProtectionReportsPage() {
 
   async function saveLabor(forms) {
     const requestData = {
+      id: currentReport.id,
       date: currentReport.date,
       year: currentReport.year,
       eBKUT: {
