@@ -41,6 +41,18 @@
     // padding-left: 27px;
   }
 }
-.icon{
+.icon {
   font-size: var(--menu-icon-size);
+}
+.caret{
+  margin-left: auto;
+  font-size: 28px;
+}
+.menu_child {
+  margin-left: 20px;
+  border-left: 1px solid #ccc;
+}
+.menu_wrapper {
+}
+.menu_children {
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./menu.module.scss";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
@@ -12,12 +12,17 @@ import {
   LibraryBooks,
   PeopleAlt,
 } from "@mui/icons-material";
+import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useSelector } from "react-redux";
+import useAnimation from "@/hooks/useAnimation";
 
 export default function AllMenu({ collapsed }) {
   const { t } = useTranslation();
   const navigate = useRouter();
   const { isOrganization } = useSelector((state) => state);
+  const animRef = useAnimation();
+  const [openedMenus, setOpenedMenus] = useState({});
 
   const menu = [
     { icon: HomeOutlined, title: "home", path: "/" },
@@ -44,6 +49,23 @@ export default function AllMenu({ collapsed }) {
       path: "/employees",
     },
     {
+      icon: HealthAndSafetyIcon,
+      title: "labor-protection",
+      path: "/labor-protection",
+      children: [
+        {
+          icon: LibraryBooks,
+          title: "labor.report",
+          path: "/labor-protection/reports",
+        },
+        {
+          icon: LibraryBooks,
+          title: "labor.app3",
+          path: "/labor-protection/app3",
+        },
+      ],
+    },
+    {
       icon: InsertChart,
       title: "statisticalInformation",
       path: "/statistical-information",
@@ -65,8 +87,15 @@ export default function AllMenu({ collapsed }) {
     },
   ];
 
-  const handleClick = (path) => {
-    navigate.push(path);
+  const handleClick = (menu) => {
+    if (menu.children) {
+      setOpenedMenus((menus) => ({
+        ...menus,
+        [menu.title]: !!!menus[menu.title],
+      }));
+      return;
+    }
+    navigate.push(menu.path);
   };
 
   return (
@@ -75,19 +104,55 @@ export default function AllMenu({ collapsed }) {
     >
       {menu
         .filter((m) => !m.hidden)
-        .map((menu) => (
-          <div
-            key={menu.path}
-            onClick={() => handleClick(menu.path)}
-            className={[
-              styles.menu_item,
-              menu.path === navigate.pathname ? styles.selected : "",
-            ].join(" ")}
-          >
-            <menu.icon className={styles.icon} />
-            <span>{t(menu.title)}</span>
-          </div>
-        ))}
+        .map((menu) => {
+          const isParent = menu.children;
+          const isOpened = openedMenus[menu.title];
+          const isExpanded =
+            isParent &&
+            menu.children.find((ch) => ch.path === navigate.pathname);
+          return (
+            <div
+              key={menu.path}
+              ref={isParent && animRef}
+              className={styles.menu_wrapper}
+            >
+              <div
+                onClick={() => handleClick(menu)}
+                className={[
+                  styles.menu_item,
+                  menu.path === navigate.pathname ? styles.selected : "",
+                ].join(" ")}
+              >
+                <menu.icon className={styles.icon} />
+                <span>{t(menu.title)}</span>
+                {isParent && (
+                  <ArrowDropDownIcon
+                    style={isOpened ? { transform: "rotateZ(180deg)" } : {}}
+                    className={styles.caret}
+                  />
+                )}
+              </div>
+              {((isParent && isOpened) || isExpanded) && (
+                <div className={styles.menu_children}>
+                  {menu.children.map((menu) => (
+                    <div
+                      key={menu.path}
+                      onClick={() => handleClick(menu)}
+                      className={[
+                        styles.menu_child,
+                        styles.menu_item,
+                        menu.path === navigate.pathname ? styles.selected : "",
+                      ].join(" ")}
+                    >
+                      <menu.icon className={styles.icon} />
+                      <span>{t(menu.title)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
     </div>
   );
 }

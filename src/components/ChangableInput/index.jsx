@@ -119,7 +119,7 @@ function ChangableInput({
 
   return (
     <div style={style} className={styles.wrapper}>
-      <label className={styles.label}>
+      <label data={label} className={styles.label}>
         {label}
         {required ? <span className={styles.requiredMark}>*</span> : ""}
       </label>

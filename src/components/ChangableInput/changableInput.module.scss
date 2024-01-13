@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  justify-content: space-between;
   p {
     position: absolute;
     bottom: -2px;
@@ -14,7 +15,22 @@
   color: var(--input-label-color);
   font-weight: var(--input-font-weight);
   position: relative;
-  width: max-content;
+  width: 100%;
+  // white-space: nowrap;
+  // text-overflow: ellipsis;
+  // overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  &:hover::after {
+    content: attr(data);
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    // background-color: white;
+    z-index: 100;
+  }
 }
 .content {
   font-size: 15px;
@@ -49,9 +65,10 @@
 }
 .requiredMark {
   color: red;
-  position: absolute;
-  top: 0;
-  right: -15px;
+  // position: absolute;
+  margin-left: 5px;
+  // top: 0;
+  // right: -15px;
 }
 .fileActions {
   position: absolute;

@@ -3,9 +3,13 @@
   border-color: rgba(0, 0, 0, 0.3);
   border-width: 2px;
   // border-radius: var(--input-radius);
-  border-bottom: none;
-  border-right: none;
-  border-left: none;
+  &.hide {
+    border-bottom: none;
+    border-right: none;
+    border-left: none;
+    background-color: transparent;
+  }
+  background-color: rgb(240, 248, 255);
   position: relative;
   margin: 10px 0 0 0;
   display: flex;

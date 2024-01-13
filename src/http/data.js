@@ -33,7 +33,7 @@ export async function getBKUTID(login, password) {
 export async function getBKUTData(id, isOrg, bkutData) {
   try {
     const bkutId = id ?? localStorage.getItem("token");
-    if(bkutData?.id === id) return bkutData;
+    if (bkutData?.id === id) return bkutData;
     const { data } = await $axios.get(
       isOrg
         ? `/rest/entities/EBkutOrganizations/${bkutId}`
@@ -199,6 +199,51 @@ export async function sendStatistics(_data = {}) {
     return response?.id
       ? { ...response, success: true }
       : { ...response, success: false };
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function sendELaborProtection(_data = {}) {
+  try {
+    const { id, ...data } = _data;
+    const { data: response } = id
+      ? await $axios.put("/rest/entities/ELaborProtection/" + id, data, {
+          headers: { "Content-Type": "application/json" },
+        })
+      : await $axios.post("/rest/entities/ELaborProtection", data, {
+          headers: { "Content-Type": "application/json" },
+        });
+    return response?.id
+      ? { ...response, success: true }
+      : { ...response, success: false };
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function getLaborProtections(bkutId) {
+  try {
+    const { data } = await $axios.post(
+      `/rest/entities/ELaborProtection/search`,
+      {
+        fetchPlan: "eLaborProtection-fetch-plan",
+        filter: {
+          conditions: [
+            {
+              property: "eBKUT.id",
+              operator: "=",
+              value: bkutId,
+            },
+          ],
+        },
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    return data;
   } catch (error) {
     return error;
   }

@@ -10,12 +10,13 @@
   max-width: 340px;
   padding: 10px 0;
   padding-top: 20px;
+  overflow: auto;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   // border-right: 1px solid var(--border-color) !important;
   transition: all 0.2s;
-  overflow: hidden;
   &.collapsed {
     max-width: 80px;
     .collapseBtn {
@@ -33,6 +34,7 @@
 .right {
   width: 100%;
   min-height: 100vh;
+  height: 100vh;
   overflow: auto;
   border-radius: 0;
   border-radius: 0;
@@ -50,7 +52,7 @@
 }
 .logo {
   align-self: center;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   min-height: 85px;
 }
 .bottom {

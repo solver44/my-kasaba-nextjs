@@ -67,3 +67,38 @@ export function getYearFrom(date) {
 export function getReportDate() {
   return dayjs(getReportYear() + "-12-31").format("YYYY-MM-DD");
 }
+
+export function getCurrentQuarter(year) {
+  const now = dayjs();
+  let currentYear = year || now.year();
+  const q1 = dayjs(currentYear + "04-01");
+  const q2 = dayjs(currentYear + "07-01");
+  const q3 = dayjs(currentYear + "10-01");
+  const q4 = dayjs(currentYear + 1 + "01-01");
+  return now.isBefore(q1)
+    ? 1
+    : now.isBefore(q2)
+    ? 2
+    : now.isBefore(q3)
+    ? 3
+    : now.isBefore(q4)
+    ? 4
+    : false;
+}
+export function checkQuarter(quarter) {
+  let now = dayjs();
+  let currentYear = now.year();
+  const qrs = {
+    1: dayjs(currentYear + "04-01"),
+    2: dayjs(currentYear + "07-01"),
+    3: dayjs(currentYear + "10-01"),
+    4: dayjs(currentYear + 1 + "01-01"),
+  };
+  if (quarter === 1 && now.isBefore(qrs["1"])) return true;
+  for (let i = 1; i <= quarter; i++) {
+    const q = qrs[i];
+    if (!now.isAfter(q) && q != quarter) return false;
+    else if (now.isBefore(q) && q == quarter) return true;
+  }
+  return false;
+}

@@ -63,8 +63,8 @@ export async function findSTIR(tin) {
   try {
     const { data } = await $axios.get("/integration/legal-entity", {
       params: { tin },
-      headers: {"Content-Type": "application/json"}
-    },);
+      headers: { "Content-Type": "application/json" },
+    });
     return data;
   } catch (error) {
     return { status: error?.status, message: error?.message };
@@ -73,8 +73,17 @@ export async function findSTIR(tin) {
 
 export async function sendApplication(_data) {
   try {
-    const { pinfl, tin, phone, givenDate, branchId, email, comment, soatoId } =
-      _data;
+    const {
+      pinfl,
+      tin,
+      phone,
+      givenDate,
+      branchId,
+      email,
+      comment,
+      address,
+      soatoId,
+    } = _data;
 
     // Define the request payload as a separate object for clarity
     const requestData = branchId
@@ -85,6 +94,7 @@ export async function sendApplication(_data) {
             phone,
             givenDate,
             email,
+            address,
             branch: {
               id: branchId,
             },
@@ -105,6 +115,7 @@ export async function sendApplication(_data) {
               id: soatoId,
             },
             comment,
+            address,
           },
         };
 
