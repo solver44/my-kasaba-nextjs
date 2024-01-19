@@ -110,6 +110,7 @@ function DataTable({
   };
 
   const handleViewClick = async (row) => {
+    currentRow.current = row;
     const data = await fetchData(row.id);
     setDataModal(data);
     dataModalRef.current = data;
@@ -435,7 +436,7 @@ function DataTable({
         handleClose={closeModal}
         hideBtn={hides}
       >
-        {modal(closeModal, dataModal ?? {})}
+        {modal(closeModal, dataModal ?? {}, currentRow.current)}
       </ModalUI>
       <Dialog
         open={openDilaog}

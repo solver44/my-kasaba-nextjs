@@ -7,6 +7,10 @@
   background: var(--input-incolor);
   fieldset {
     border: 1px solid var(--input-border-color) !important;
+    box-shadow: var(--input-shadow);
+    &:hover {
+      border-color: var(--input-outline-color);
+    }
   }
   border-radius: var(--input-radius);
   & > :first-child {

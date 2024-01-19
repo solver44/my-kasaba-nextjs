@@ -25,8 +25,10 @@
   -webkit-box-orient: vertical;
   &:hover {
     overflow: visible;
+    color: transparent;
     &::after {
       content: attr(data);
+      color: black;
       display: block;
       position: absolute;
       top: 0;
@@ -43,7 +45,7 @@
 .input {
   font-size: var(--input-font-size);
   fieldset {
-    border-radius: 4px;
+    border-radius: var(--input-radius);
   }
   input {
     padding: 10px 10px !important;
@@ -91,6 +93,9 @@
   min-height: 43px;
   padding: 10px;
   text-overflow: ellipsis;
+  &:hover {
+    border-color: var(--input-outline-color);
+  }
 }
 .invalid_title {
   color: #d32f2f;
@@ -112,15 +117,25 @@
 }
 .autocomplete {
   background: var(--input-incolor);
+  fieldset {
+    border: 1px solid var(--input-border-color) !important;
+    box-shadow: var(--input-shadow);
+  }
   & > :first-child > :first-child {
     padding: 2px;
     font-size: var(--input-inside-font-size) !important;
+  }
+  &:hover {
+    fieldset {
+      border-color: var(--input-outline-color) !important;
+    }
   }
 }
 .autocomplete_input {
   background: var(--input-incolor);
   fieldset {
     border: 1px solid var(--input-border-color) !important;
+    box-shadow: var(--input-shadow);
   }
   &.invalid {
     fieldset {
@@ -143,6 +158,11 @@
 }
 .select {
   background: var(--input-incolor);
+  &:hover {
+    fieldset {
+      border-color: var(--input-outline-color) !important;
+    }
+  }
   fieldset {
     border: 1px solid var(--input-border-color) !important;
   }

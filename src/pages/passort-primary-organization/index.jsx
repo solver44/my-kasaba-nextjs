@@ -204,6 +204,12 @@ export default function PassortPrimaryOrganization() {
         {!editMode ? (
           <div className={styles.colored}>
             <div className={styles.flex}>
+              <label>{t("passort-primary-organization.bkut")}</label>
+              <span style={{ textAlign: "left" }}>
+                {showOrNot(bkutData?.bkut?.name)}
+              </span>
+            </div>
+            <div className={styles.flex}>
               <label>
                 {t("passort-primary-organization.firstOrganizationName")}
               </label>

@@ -75,11 +75,16 @@ export default function TicketPage(p) {
               <u>{showOrNot(data.joinDate)}</u>
             </p>
             <p className={styles.row}>
-              <span>BKUT nomi:</span>{" "}
+              <span>Tashkilot nomi:</span>{" "}
               <u className={styles.bold}>{showOrNot(data.bkutName)}</u>
             </p>
             <p className={styles.row}>
-              <span>BKUT raisi:</span> <u>{showOrNot(data.director)}</u>
+              <span>
+                <span style={{ maxWidth: 200, display: "block", float: "right" }}>
+                  Kasaba uyushmasi qo'mitasi raisi:
+                </span>
+              </span>{" "}
+              <u>{showOrNot(data.director)}</u>
             </p>
 
             {data.url && (

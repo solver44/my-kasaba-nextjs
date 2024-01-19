@@ -91,6 +91,7 @@ const DocumentViewer = ({
     let pdfDoc = null;
     const data = atob(_data);
     var container = iframeRef.current;
+    if(!container) return;
     container.style = "padding: 10px 0";
     container.innerHTML = "";
     pdfjsLib.getDocument({ data }).promise.then((pdfDoc_) => {

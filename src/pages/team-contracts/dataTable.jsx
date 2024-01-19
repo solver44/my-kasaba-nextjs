@@ -105,21 +105,20 @@ export default function InDataTable({ organization, filter }) {
     } else setIsHideAddBtn(true);
     bkutData.agreements = bkutData.agreements || [];
 
-    bkutData.agreements.forEach((e) => {
-      if (
+    const isExpired = !!!bkutData.agreements.find(
+      (e) =>
         e.status == "CONFIRMED" &&
-        isOutdatedReport(e.contractEndDate, settings.remainDayForShowJSH)
-      ) {
-        setIsHideAddBtn(false);
-        return;
-      }
-    });
+        !isOutdatedReport(e.contractEndDate, settings.remainDayForShowJSH)
+    );
+
+    if (isExpired) setIsHideAddBtn(false);
 
     setRows(
       bkutData.agreements.filter(filter ? filter : () => true).map((e) => {
         const restDay =
           e?.contractEndDate &&
           getFormattedWithRestDay(e.contractEndDate, true);
+        const restDayJSH = settings.remainDayForShowJSH;
         const isConsidered =
           e?.status == "CONSIDERED" ||
           e?.status == "CONFIRMED" ||
@@ -136,10 +135,19 @@ export default function InDataTable({ organization, filter }) {
           contractNumber: e.contractNo,
           currentJSH: e.status === "CURRENT_JSH",
           status: {
-            value: e.status,
+            value:
+              restDay <= 0
+                ? "EXPIRED"
+                : restDay <= restDayJSH
+                ? "NEAR_EXPIRED"
+                : e.status,
             date,
             color:
-              restDay <= 0 ? "error" : restDay <= 15 ? "warning" : undefined,
+              restDay <= 0
+                ? "error"
+                : restDay <= restDayJSH
+                ? "warning"
+                : undefined,
           },
           contractDate: convertStringToFormatted(e.contractDate),
           statementNumber: e.statementNo,
@@ -333,9 +341,12 @@ export default function InDataTable({ organization, filter }) {
       onSubmitModal={onSubmitModal}
       isFormModal
       fetchData={fetchData}
-      modal={(hideModal, dataModal) => (
-        <ModalUI hideModal={hideModal} bkutData={bkutData} data={dataModal} />
-      )}
+      modal={(hideModal, dataModal, dataRow = {}) => {
+        if (dataRow.status) dataModal.newStatus = dataRow.status.value;
+        return (
+          <ModalUI hideModal={hideModal} bkutData={bkutData} data={dataModal} />
+        );
+      }}
     />
   );
 }
@@ -492,8 +503,8 @@ function ModalUI({ data, bkutData }) {
               <ChipStatus
                 isSidebar
                 label={t("status-label")}
-                colorValue={data.status}
-                value={t(`status.${data.status}`)}
+                colorValue={data.newStatus || data.status}
+                value={t(`status.${data.newStatus || data.status}`)}
               />
               {isToConfirm || isConsideredOnly || isAnalysis ? (
                 <React.Fragment>

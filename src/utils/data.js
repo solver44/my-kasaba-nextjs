@@ -131,6 +131,10 @@ export function getStatusColors(val) {
       return "primary";
     case "CONSIDERED":
       return "success";
+    case "EXPIRED":
+      return "error";
+    case "NEAR_EXPIRED":
+      return "warning";
     case "TO_CONFIRM":
     default:
       return "info";

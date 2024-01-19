@@ -64,9 +64,18 @@ export function getYearFrom(date) {
       : d.year()
     : d.year();
 }
-export function getReportDate() {
+export function getReportDate(deadline) {
+  if (deadline)
+    return dayjs(
+      getReportYear() + 1 + (deadline ? deadline.slice(4) : "-01-27")
+    ).format("YYYY-MM-DD");
   return dayjs(getReportYear() + "-12-31").format("YYYY-MM-DD");
 }
+
+// export function isOutdatedReport(deadline) {
+//   const suffix = deadline ? deadline.slice(4) : "-01-27";
+
+// }
 
 export function getCurrentQuarter(year) {
   const now = dayjs();

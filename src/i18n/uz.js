@@ -51,6 +51,7 @@ export default {
     },
     "passort-primary-organization": {
       title: "Tashkilot pasporti",
+      bkut: "BKUT nomi",
       firstOrganizationName: "Tashkilot nomi:",
       firstOrganizationType: "Tashkilot tashkil etilish turi:",
       firstOrganizationSTIR: "Tashkilot STIR (INN) raqami:",
@@ -252,13 +253,14 @@ export default {
     },
     "1sh": {
       bhut: "BHUT boʼyicha hujjat shakli",
-      xxtut: "XXTUT boʼyicha tarmoq",
-      ifut: "IFUT boʼyicha faoliyat turi",
+      xxtut: "XXTUT (ОКОНХ) boʼyicha tarmoq",
+      ifut: "IFUT (ОКЕД) boʼyicha faoliyat turi",
       stir: "STIR soliq toʼlovchining identifikatsiya raqami",
-      dbibt: "DBIBT boʼyicha vazirlik (idora), birlashma, kontsern, uyushma",
-      ktut: "KTUT boʼyicha hisobot tuzuvchi tashkilot",
-      soato: "MHOBT boʼyicha hudud",
-      txt: "THT boʼyicha tashkiliy huquqiy shakli",
+      dbibt:
+        "DBIBT (СООГУ) boʼyicha vazirlik (idora), birlashma, kontsern, uyushma",
+      ktut: "KTUT (ОКОНХ) boʼyicha hisobot tuzuvchi tashkilot",
+      soato: "MHOBT (СОАТО) boʼyicha hudud",
+      txt: "THT (ОПФ) boʼyicha tashkiliy huquqiy shakli",
       msht: "MShT boʼyicha mulkchilik shakli",
       mainActivity: "Аsosiy faoliyat turi",
       input1: "Jamoa shartnomasiga kiritilgan jami bandlar",
@@ -505,6 +507,9 @@ export default {
     "status-label": "Holati",
     "user-open": "Foydalanuvchini ko'rish",
     organizationTitle: "Ro'yhatga olingan",
+    "expired-jsh":
+      "Sizda jamoa shartnomasi mavjud emas yoki muddati tugagan, kiritishingiz talab etiladi.",
+
     status: {
       CONFIRMED: "Ro'yhatga olingan",
       INEXECUTION: "Tahlilda",
@@ -512,6 +517,8 @@ export default {
       CONSIDERED: "Ko'rib chiqildi",
       TO_CONFIRM: "Tasdiqlash uchun yuborilgan",
       CURRENT_JSH: "Amaldagi",
+      EXPIRED: "Muddati tugagan",
+      NEAR_EXPIRED: "Muddati kelgan",
     },
     dTable: {
       toolbarDensity: "O'lcham",
@@ -554,49 +561,79 @@ export default {
     labor: {
       report: "Hisobot shakllari",
       app3: "3-ilova hisoboti",
-      numberOfSpecialist: "Mehnatni muhofaza qilish boʼyicha mutaxassislar soni",
-      plannedActions: "Jamoa shartnomalarida mehnatni muhofaza qilish boʼyicha rejalashtirilgan tadbirlar soni",
-      plannedActionsSpent: "tadbirlarga sarflanadigan mablagʼ miqdori (ming. soʼm)",
+      numberOfSpecialist:
+        "Mehnatni muhofaza qilish boʼyicha mutaxassislar soni",
+      plannedActions:
+        "Jamoa shartnomalarida mehnatni muhofaza qilish boʼyicha rejalashtirilgan tadbirlar soni",
+      plannedActionsSpent:
+        "tadbirlarga sarflanadigan mablagʼ miqdori (ming. soʼm)",
       including: "shu jumladan",
-      includingActions: "mehnatni muhofaza qilish boʼyicha (mehnatni muhofaza qilishga doir tadbirlar rejasi va sarf-xarajatlar smetasiga koʼra) bitimdagi tadbirlar soni",
-      includingSpentTransaction: "bitim boʼyicha sarflanadigan mablagʼ miqdori (ming. soʼm)",
-      incudingSpentClothes: "maxsus kiyim, maxsus poyabzal va shaxsiy himoya vositalari uchun mablagʼ miqdori (ming soʼm)",
-      includingSpentFood: "sut (yoki shunga teng boshqa sut mahsulotlari), davolash-profilaktika oziq-ovqatlari uchun mablagʼ miqdori (ming soʼm)",
-      includingSpentHygiene: "gigiena vositalari (sovun, yuvish va (yoki) zararsizlantirish vositalari) uchun mablagʼ miqdori (ming soʼm)",
-      includingSpentInsurance: "ish beruvchining fuqarolik javobgarligini majburiy sugʼurta qilish shartnomasi boʼyicha sarflanadigan mablagʼ (ming soʼm)",
+      includingActions:
+        "mehnatni muhofaza qilish boʼyicha (mehnatni muhofaza qilishga doir tadbirlar rejasi va sarf-xarajatlar smetasiga koʼra) bitimdagi tadbirlar soni",
+      includingSpentTransaction:
+        "bitim boʼyicha sarflanadigan mablagʼ miqdori (ming. soʼm)",
+      incudingSpentClothes:
+        "maxsus kiyim, maxsus poyabzal va shaxsiy himoya vositalari uchun mablagʼ miqdori (ming soʼm)",
+      includingSpentFood:
+        "sut (yoki shunga teng boshqa sut mahsulotlari), davolash-profilaktika oziq-ovqatlari uchun mablagʼ miqdori (ming soʼm)",
+      includingSpentHygiene:
+        "gigiena vositalari (sovun, yuvish va (yoki) zararsizlantirish vositalari) uchun mablagʼ miqdori (ming soʼm)",
+      includingSpentInsurance:
+        "ish beruvchining fuqarolik javobgarligini majburiy sugʼurta qilish shartnomasi boʼyicha sarflanadigan mablagʼ (ming soʼm)",
       includingInsuranceEmp: "ulardan sugʼurtalanadigan xodimlar soni",
-      includingSpentMedicine: "dastlabki tarzda (ishga kirayotganda) va davriy (mehnat faoliyati davomida) majburiy tibbiy koʼriklar oʼtkazilishiga sarflanadigan mablagʼ (ming soʼm)",
-      performedActions: "Jamoa shartnomalarida mehnatni muhofaza qilish boʼyicha bajarilgan tadbirlar soni",
+      includingSpentMedicine:
+        "dastlabki tarzda (ishga kirayotganda) va davriy (mehnat faoliyati davomida) majburiy tibbiy koʼriklar oʼtkazilishiga sarflanadigan mablagʼ (ming soʼm)",
+      performedActions:
+        "Jamoa shartnomalarida mehnatni muhofaza qilish boʼyicha bajarilgan tadbirlar soni",
       performedActionsSpent: "ularga sarflangan mablagʼ miqdori (ming. soʼm)",
-      including2Actions: "mehnatni muhofaza qilish boʼyicha (mehnatni muhofaza qilishga doir tadbirlar rejasi va sarf-xarajatlar smetasi) bitimdagi tadbirlar soni",
-      including2SpentTransaction: "bitim boʼyicha sarflangan mablagʼ miqdori (ming soʼm)",
-      incuding2SpentClothes: "maxsus kiyim, maxsus poyabzal va shaxsiy himoya vositalari uchun mablagʼ miqdori (ming soʼm)",
-      including2SpentFood: "sut (yoki shunga teng boshqa sut mahsulotlari), davolash-profilaktika oziq-ovqatlari uchun mablagʼ miqdori (ming soʼm)",
-      including2SpentHygiene: "gigiena vositalari (sovun, yuvish va (yoki) zararsizlantirish vositalari) uchun mablagʼ miqdori (ming soʼm)",
-      including2SpentInsurance: "ish beruvchining fuqarolik javobgarligini majburiy sugʼurta qilish shartnomasi boʼyicha sarflangan mablagʼ (ming soʼm)",
+      including2Actions:
+        "mehnatni muhofaza qilish boʼyicha (mehnatni muhofaza qilishga doir tadbirlar rejasi va sarf-xarajatlar smetasi) bitimdagi tadbirlar soni",
+      including2SpentTransaction:
+        "bitim boʼyicha sarflangan mablagʼ miqdori (ming soʼm)",
+      incuding2SpentClothes:
+        "maxsus kiyim, maxsus poyabzal va shaxsiy himoya vositalari uchun mablagʼ miqdori (ming soʼm)",
+      including2SpentFood:
+        "sut (yoki shunga teng boshqa sut mahsulotlari), davolash-profilaktika oziq-ovqatlari uchun mablagʼ miqdori (ming soʼm)",
+      including2SpentHygiene:
+        "gigiena vositalari (sovun, yuvish va (yoki) zararsizlantirish vositalari) uchun mablagʼ miqdori (ming soʼm)",
+      including2SpentInsurance:
+        "ish beruvchining fuqarolik javobgarligini majburiy sugʼurta qilish shartnomasi boʼyicha sarflangan mablagʼ (ming soʼm)",
       including2InsuranceEmp: "ulardan sugʼurtalangan xodimlar soni",
-      including2SpentMedicine: "dastlabki tarzda (ishga kirayotganda) va davriy (mehnat faoliyati davomida) majburiy tibbiy koʼriklar oʼtkazilishiga sarflangan mablagʼ (ming soʼm)",
-      spentToEmp: "Mehnatni muhofaza qilish boʼyicha har bir xodimga sarflangan mablagʼ miqdori (ming soʼm)",
-      participatedCommissions: "Ishlab chiqarishdagi baxtsiz xodisalarni tekshirish komissiyalarida ishtirok etildi",
-      accidentsInProduction: "Ishlab chiqarishda sodir boʼlgan baxtsiz hodisalar soni, jami",
+      including2SpentMedicine:
+        "dastlabki tarzda (ishga kirayotganda) va davriy (mehnat faoliyati davomida) majburiy tibbiy koʼriklar oʼtkazilishiga sarflangan mablagʼ (ming soʼm)",
+      spentToEmp:
+        "Mehnatni muhofaza qilish boʼyicha har bir xodimga sarflangan mablagʼ miqdori (ming soʼm)",
+      participatedCommissions:
+        "Ishlab chiqarishdagi baxtsiz xodisalarni tekshirish komissiyalarida ishtirok etildi",
+      accidentsInProduction:
+        "Ishlab chiqarishda sodir boʼlgan baxtsiz hodisalar soni, jami",
       accidentsFatal: "Oʼlim bilan tugagan baxtsiz hodisalar soni",
       accidentsFatal1: "ulardan qoʼmita yigʼilishida koʼrib chiqilganlari",
       accidentsSerious: "Oqibati ogʼir baxtsiz hodisalar soni",
       accidentsSerious1: "ulardan qoʼmita yigʼilishida koʼrib chiqilganlari",
-      levelOfDisability: "Mehnat qobiliyatini yoʼqotganlik darajasi belgilangan xodimlar soni",
-      accidentsDisabledDue: "Ishlab chiqarishdagi baxtsiz hodisalar tufayli mehnat layoqatini vaqtinchalik yoʼqotgan xodimlar soni ",
+      levelOfDisability:
+        "Mehnat qobiliyatini yoʼqotganlik darajasi belgilangan xodimlar soni",
+      accidentsDisabledDue:
+        "Ishlab chiqarishdagi baxtsiz hodisalar tufayli mehnat layoqatini vaqtinchalik yoʼqotgan xodimlar soni ",
       accidentsDisabledDue1: "mehnatga layoqatsizlik kunlari soni",
-      participatedOccupational: "Ishlab chiqarishdagi kasb kasalliklarini tekshirish komissiyalarida ishtirok etildi",
+      participatedOccupational:
+        "Ishlab chiqarishdagi kasb kasalliklarini tekshirish komissiyalarida ishtirok etildi",
       participatedOccupational1: "ularda aniqlangan kasb kasalliklari soni",
-      meetingsMedicals: "Tibbiy-mehnat ekspert komissiyasi majlislarida ishtirok etildi",
-      meetingsMedicals1: "mehnat qobiliyatini yoʼqotganlik darajasi belgilangan xodimlar soni",
-      participatedAttestation: "Ish oʼrinlarini mehnat sharoitlari va asbob-uskunalarning jarohatlash xavfliligi yuzasidan attestatsiyadan oʼtkazish komissiyasida ishtirok etildi",
+      meetingsMedicals:
+        "Tibbiy-mehnat ekspert komissiyasi majlislarida ishtirok etildi",
+      meetingsMedicals1:
+        "mehnat qobiliyatini yoʼqotganlik darajasi belgilangan xodimlar soni",
+      participatedAttestation:
+        "Ish oʼrinlarini mehnat sharoitlari va asbob-uskunalarning jarohatlash xavfliligi yuzasidan attestatsiyadan oʼtkazish komissiyasida ishtirok etildi",
       participatedAttestation1: "attestatsiyadan oʼtgan ish oʼrinlari soni",
-      electedRepresentatives: "Mehnatni muhofaza qilish boʼyicha saylangan vakillar soni",
+      electedRepresentatives:
+        "Mehnatni muhofaza qilish boʼyicha saylangan vakillar soni",
       electedRepresentatives1: "shu jumladan o'qitilganlari",
-      identifiedRepresentatives: "Mehnat muhofazasi boʼyicha vakillar tomonidan aniqlangan va kasaba uyushma qoʼmitasi yoki ish beruvchiga yoʼllangan qonun, qoida va meʼyorlar talablarining buzilishlari soni",
+      identifiedRepresentatives:
+        "Mehnat muhofazasi boʼyicha vakillar tomonidan aniqlangan va kasaba uyushma qoʼmitasi yoki ish beruvchiga yoʼllangan qonun, qoida va meʼyorlar talablarining buzilishlari soni",
       identifiedRepresentatives1: "bartaraf qilinganlari",
-      submittedDocuments: "Qonun, qoida va meʼyorlar talablari buzilishlarining bartaraf etilishi yuzasidan yuqori kasaba uyushmalari tashkilotlariga va mehnatni muhofaza qilishning holati ustidan davlat nazorati va tekshiruvini amalga oshiruvchi organlarga qonunchilikda belgilangan tartibda chora koʼrish uchun topshirilgan hujjatlar soni",
+      submittedDocuments:
+        "Qonun, qoida va meʼyorlar talablari buzilishlarining bartaraf etilishi yuzasidan yuqori kasaba uyushmalari tashkilotlariga va mehnatni muhofaza qilishning holati ustidan davlat nazorati va tekshiruvini amalga oshiruvchi organlarga qonunchilikda belgilangan tartibda chora koʼrish uchun topshirilgan hujjatlar soni",
       submittedDocuments1: "belgilangan tartibda chora koʼrilganlari",
     },
   },

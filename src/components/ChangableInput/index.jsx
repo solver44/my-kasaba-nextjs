@@ -47,6 +47,8 @@ function ChangableInput({
   nameOfFile,
   options = [],
   dataSelect = [],
+  maxValue,
+  minValue,
   name,
   style = {},
   ...props
@@ -270,6 +272,8 @@ function ChangableInput({
           invalid={invalid}
           value={propValue ?? undefined}
           name={name}
+          maxValue={maxValue}
+          minValue={minValue}
           {...props}
         />
       )}

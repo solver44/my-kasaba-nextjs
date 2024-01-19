@@ -4,6 +4,7 @@ import ReactInputMask from "react-input-mask";
 import areEqual from "../../utils/areEqual";
 import { useTranslation } from "react-i18next";
 import { TextField } from "@mui/material";
+import NumberInput from "../NumberInput";
 
 function Input({
   titleText,
@@ -137,6 +138,9 @@ const InsideInput = React.memo(
     standart,
     disabled,
     name,
+    maxValue,
+    minValue = 0,
+    type,
     ...props
   }) => {
     const formattedMask = mask ? convertMask(mask) : mask; // Convert the mask
@@ -146,7 +150,14 @@ const InsideInput = React.memo(
       else if (name.includes("email")) return "email";
       return "text";
     }
-    return !textarea ? (
+    return type === "number" ? (
+      <NumberInput
+        value={value}
+        onChange={onChangeFunc}
+        max={maxValue}
+        min={minValue}
+      />
+    ) : !textarea ? (
       <ReactInputMask
         mask={formattedMask}
         value={value}

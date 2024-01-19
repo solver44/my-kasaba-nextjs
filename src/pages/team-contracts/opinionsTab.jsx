@@ -8,9 +8,15 @@ import DocumentViewer from "@/components/DocumentViewer";
 import { convertStringToFormatted } from "@/utils/date";
 
 export default function OpinionsTab({ data, bkutData }) {
-  const { commission = {}, experts = [], opinions = [], opinionFile } = data;
+  const {
+    commission = {},
+    experts = [],
+    expertizeEndDate,
+    opinions = [],
+    opinionFile,
+  } = data;
   const { t } = useTranslation();
-  const [selectedDoc, setSelectedDoc] = useState(0);
+  const [selectedDoc, setSelectedDoc] = useState(expertizeEndDate ? 0 : 1);
   function handleDoc(index) {
     if (isCurrentJSH) return;
     setSelectedDoc(index);
@@ -24,6 +30,7 @@ export default function OpinionsTab({ data, bkutData }) {
     borderRadius: 2,
   };
 
+  
   const app = opinionFile || "";
   return (
     <div className="modal-col big">
@@ -38,7 +45,7 @@ export default function OpinionsTab({ data, bkutData }) {
       )}
       <div className={styles.JShDocumentContainer}>
         <div className={styles.topDocs}>
-          {!isCurrentJSH && (
+          {!isCurrentJSH && expertizeEndDate && (
             <Chip
               style={chipStyle}
               onClick={() => handleDoc(0)}
@@ -66,7 +73,7 @@ export default function OpinionsTab({ data, bkutData }) {
         <div className={styles.viewer}>
           <DocumentViewer
             showNameFile
-            url={selectedDoc || isCurrentJSH ? opinionFile : null}
+            url={selectedDoc || isCurrentJSH ? app : null}
             documentSrc={
               isCurrentJSH || selectedDoc ? null : "/expertize-result.docx"
             }

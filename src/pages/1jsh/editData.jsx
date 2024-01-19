@@ -211,6 +211,7 @@ export default function EditData({ currentReport = {} }) {
         />
         <FormInput
           name="colAgrFinishedAmount"
+          maxInput="colAgrAmount"
           required
           type="number"
           value={values.colAgrFinishedAmount}

@@ -1,6 +1,6 @@
-import { useController, useFormContext } from "react-hook-form";
+import { useController, useForm, useFormContext } from "react-hook-form";
 import ChangableInput from "../ChangableInput";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { getEmptyValue } from "@/utils/data";
 import areEqual from "@/utils/areEqual";
 
@@ -12,9 +12,22 @@ function FormInput({
   hidden,
   invalid,
   autoComplete,
+  maxInput,
   ...props
 }) {
-  const { control, setValue } = useFormContext() ?? { control: false };
+  const { control, setValue, watch, getValues } = useFormContext() ?? {
+    control: false,
+  };
+  const [maxValue, setMaxValue] = useState(
+    typeof maxInput === "undefined" ? undefined : getValues()[maxInput] || 0
+  );
+  useEffect(() => {
+    if (!maxInput) return;
+    watch((d) => {
+      setMaxValue(d[maxInput] || 0);
+    });
+  }, [watch]);
+
   const {
     field,
     fieldState: { invalid: invalidProps },
@@ -43,6 +56,7 @@ function FormInput({
     <ChangableInput
       {...props}
       name={field.name}
+      maxValue={maxValue}
       required={required}
       invalid={invalidProps || invalid}
       onChange={onChangeFunc} // send value to hook form

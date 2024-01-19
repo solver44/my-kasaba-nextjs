@@ -85,6 +85,7 @@ export default function EditData({ currentReport = {} }) {
             />
             <FormInput
               name="workersFemale"
+              maxInput="workersAmount"
               required
               value={values.workersFemale}
               type="number"
@@ -93,6 +94,7 @@ export default function EditData({ currentReport = {} }) {
             />
             <FormInput
               name="workersAdults"
+              maxInput="workersAmount"
               required
               value={values.workersAdults}
               type="number"
@@ -106,6 +108,7 @@ export default function EditData({ currentReport = {} }) {
           <div datatype="list">
             <FormInput
               name="workersMembers"
+              maxInput="workersAmount"
               required
               value={values.workersMembers}
               type="number"
@@ -114,6 +117,7 @@ export default function EditData({ currentReport = {} }) {
             />
             <FormInput
               name="workersFemaleMembers"
+              maxInput="workersFemale"
               required
               value={values.workersFemaleMembers}
               type="number"
@@ -122,6 +126,7 @@ export default function EditData({ currentReport = {} }) {
             />
             <FormInput
               name="workersAdultsMembers"
+              maxInput="workersAdults"
               required
               value={values.workersAdultsMembers}
               type="number"
@@ -144,6 +149,7 @@ export default function EditData({ currentReport = {} }) {
             />
             <FormInput
               name="studentsFemale"
+              maxInput="studentsAmount"
               required
               value={values.studentsFemale}
               type="number"
@@ -152,6 +158,7 @@ export default function EditData({ currentReport = {} }) {
             />
             <FormInput
               name="studentsAdults"
+              maxInput="studentsAmount"
               required
               value={values.studentsAdults}
               type="number"
@@ -164,6 +171,7 @@ export default function EditData({ currentReport = {} }) {
           <div datatype="list">
             <FormInput
               name="studentsMembers"
+              maxInput="studentsAmount"
               required
               value={values.studentsMembers}
               type="number"
@@ -172,6 +180,7 @@ export default function EditData({ currentReport = {} }) {
             />
             <FormInput
               name="studentsFemaleMembers"
+              maxInput="studentsFemale"
               required
               value={values.studentsFemaleMembers}
               type="number"
@@ -180,6 +189,7 @@ export default function EditData({ currentReport = {} }) {
             />
             <FormInput
               name="studentsAdultsMembers"
+              maxInput="studentsAdults"
               required
               value={values.studentsAdultsMembers}
               type="number"
@@ -250,6 +260,7 @@ export default function EditData({ currentReport = {} }) {
         <div datatype="list">
           <FormInput
             name="staffingResponsibleWorkers"
+            maxInput="staffingWorkersAmount"
             required
             value={values.staffingResponsibleWorkers}
             type="number"
@@ -258,6 +269,7 @@ export default function EditData({ currentReport = {} }) {
           />
           <FormInput
             name="staffingTechnicalWorkers"
+            maxInput="staffingWorkersAmount"
             required
             value={values.staffingTechnicalWorkers}
             type="number"

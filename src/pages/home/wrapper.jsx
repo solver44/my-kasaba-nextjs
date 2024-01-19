@@ -16,6 +16,11 @@ import { getAnimation } from "@/utils/animation";
 import Cookies from "universal-cookie";
 import { getSettings } from "@/http/handbooks";
 import { getIsOrganization } from "@/utils/data";
+import { getReportDate, isOutdatedReport } from "@/utils/date";
+import { Alert } from "@mui/material";
+import Link from "next/link";
+import LaunchIcon from "@mui/icons-material/Launch";
+import { useTranslation } from "react-i18next";
 
 const HomeWrapper = ({
   children,
@@ -25,11 +30,14 @@ const HomeWrapper = ({
   title,
   desc,
 }) => {
-  const { updateData, isLoggedIn, bkutData } = useSelector((state) => state);
+  const { updateData, isLoggedIn, bkutData, settings } = useSelector(
+    (state) => state
+  );
   const actions = useActions();
   const route = useRouter();
   const [collapsed, setCollapsed] = useState();
   const animRef = useRef();
+  const { t } = useTranslation();
 
   useEffect(() => {
     animRef.current &&
@@ -64,7 +72,26 @@ const HomeWrapper = ({
       }
       actions.setIsOrganization(isOrg);
       actions.bkutData(data);
-      actions.setSettings(settings?.length ? settings[0] : {});
+      const finalSettings = settings?.length ? settings[0] : {};
+
+      const isExpired = !!!(data.agreements || []).find(
+        (e) =>
+          e.status == "CONFIRMED" &&
+          !isOutdatedReport(e.contractEndDate, settings.remainDayForShowJSH)
+      );
+
+      if (isExpired) {
+        const isOutdateJSH = isOutdatedReport(
+          getReportDate(finalSettings.deadlineJSH),
+          finalSettings.remainDayForShowJSH
+        );
+        if (isOutdateJSH)
+          finalSettings.errors = [
+            { to: "/team-contracts", value: "expired-jsh", color: "error" },
+          ];
+      }
+
+      actions.setSettings(finalSettings);
       if (data?.protocolFile) {
         actions.isMember(true);
       }
@@ -80,37 +107,55 @@ const HomeWrapper = ({
 
   return (
     // <PrivateRoute>
-    <div
-      className={[styles.container, noMargin ? styles.noMargin : ""].join(" ")}
-    >
+    <div className={styles.main}>
+      {settings?.errors && (
+        <div className={styles.topAlert}>
+          <Alert className={styles.alert} variant="filled" severity="error">
+            {settings.errors.map((error) => (
+              <Link className={styles.link} href={error.to}>
+                {t(error.value)}
+                <LaunchIcon />
+              </Link>
+            ))}
+          </Alert>
+        </div>
+      )}
       <div
-        className={[styles.left, collapsed ? styles.collapsed : ""].join(" ")}
+        className={[
+          styles.container,
+          settings?.errors ? styles.topPadding : "",
+          noMargin ? styles.noMargin : "",
+        ].join(" ")}
       >
-        <div className={styles.top}>
-          <MenuIcon
-            className={styles.collapseBtn}
-            onClick={toggleMenu}
-          ></MenuIcon>
-          <Image className={styles.logo} src={logo} alt="logotip kasaba" />
-          <Profile collapsed={collapsed} />
-          {/* {!states.isMember ? (
+        <div
+          className={[styles.left, collapsed ? styles.collapsed : ""].join(" ")}
+        >
+          <div className={styles.top}>
+            <MenuIcon
+              className={styles.collapseBtn}
+              onClick={toggleMenu}
+            ></MenuIcon>
+            <Image className={styles.logo} src={logo} alt="logotip kasaba" />
+            <Profile collapsed={collapsed} />
+            {/* {!states.isMember ? (
             <PartMenu collapsed={collapsed} />
           ) : ( */}
-          <Logout collapsed={collapsed} />
-          <AllMenu collapsed={collapsed} />
-          {/* )} */}
+            <Logout collapsed={collapsed} />
+            <AllMenu collapsed={collapsed} />
+            {/* )} */}
+          </div>
         </div>
-      </div>
-      <div ref={animRef} className={"wrapper " + styles.right}>
-        <HomeContentWrapper
-          noHeader={noHeader}
-          noMargin={noMargin}
-          noTitle={noTitle}
-          title={title}
-          desc={desc}
-        >
-          {children}
-        </HomeContentWrapper>
+        <div ref={animRef} className={"wrapper " + styles.right}>
+          <HomeContentWrapper
+            noHeader={noHeader}
+            noMargin={noMargin}
+            noTitle={noTitle}
+            title={title}
+            desc={desc}
+          >
+            {children}
+          </HomeContentWrapper>
+        </div>
       </div>
     </div>
     // </PrivateRoute>
