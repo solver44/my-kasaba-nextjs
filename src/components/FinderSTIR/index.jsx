@@ -58,7 +58,7 @@ export default function FinderSTIR({
     onFetch({
       ...d,
       companyBillingAddress: { streetName: d?.address, soato: d.city_soato },
-      company: { name: d.company_name },
+      company: { name: d.company_name, address: d?.address },
     });
   }
 

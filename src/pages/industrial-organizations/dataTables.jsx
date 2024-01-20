@@ -365,7 +365,7 @@ function ModalUI({ hideModal, data, isGroup, onFetchIndividual }) {
     setValues((formData) => ({
       ...formData,
       name: entityData.company.name,
-      address: entityData.companyBillingAddress.streetName,
+      address: entityData.company.address,
     }));
   }
 

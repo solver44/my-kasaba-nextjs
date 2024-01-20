@@ -42,7 +42,23 @@ export async function getOwnership() {
 
 export async function getIFUT() {
   try {
-    const { data } = await $axios.get(`/rest/entities/HOked`);
+    const request = {
+      filter: {
+        conditions: [
+          {
+            property: "okonx",
+            operator: "notEmpty",
+          },
+          {
+            property: "nameRu",
+            operator: "notEmpty",
+          },
+        ],
+      },
+    };
+    const { data } = await $axios.post(`/rest/entities/HOked/search`, request, {
+      headers: { "Content-Type": "application/json" },
+    });
 
     return data;
   } catch (error) {

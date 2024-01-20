@@ -112,7 +112,7 @@ const HomeWrapper = ({
         <div className={styles.topAlert}>
           <Alert className={styles.alert} variant="filled" severity="error">
             {settings.errors.map((error) => (
-              <Link className={styles.link} href={error.to}>
+              <Link className={styles.link} key={error.value} href={error.to}>
                 {t(error.value)}
                 <LaunchIcon />
               </Link>

@@ -321,7 +321,7 @@ export default function RequestPage({ router }) {
       setFormData((formData) => ({
         ...formData,
         name: data.company_name,
-        // address: data.companyBillingAddress.streetName,
+        address: data.address,
       }));
     } catch (error) {
       console.log(error);

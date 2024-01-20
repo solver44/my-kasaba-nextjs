@@ -14,7 +14,6 @@ export function getDeleteResponse(data) {
   return data.status === 204 ? true : false;
 }
 export const $axios = axios.create({
-  // baseURL: "http://test.kasaba.uz:8000",
   baseURL: BASE_URL,
   ...config,
 });
