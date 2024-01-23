@@ -82,7 +82,16 @@ const HomeWrapper = ({
           !isOutdatedReport(e.contractEndDate, settings.remainDayForShowJSH)
       );
 
-      if (isExpired) {
+      const isSentNewJSH = (data.agreements || []).find(
+        (e) =>
+          e?.status == "INANALYSIS" ||
+          e?.status == "INEXECUTION" ||
+          e?.status == "CONSIDERED" ||
+          e?.status == "CURRENT_JSH" ||
+          e?.status == "TO_CONFIRM"
+      );
+
+      if (isExpired && !isSentNewJSH) {
         const isOutdateJSH = isOutdatedReport(
           getReportDate(finalSettings.deadlineJSH),
           finalSettings.remainDayForShowJSH

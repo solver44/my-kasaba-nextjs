@@ -107,13 +107,22 @@ export default function InDataTable({ organization, filter }) {
     } else setIsHideAddBtn(true);
     bkutData.agreements = bkutData.agreements || [];
 
-    const isExpired = !!!bkutData.agreements.find(
+    const isExpired = !bkutData.agreements.find(
       (e) =>
         e.status == "CONFIRMED" &&
         !isOutdatedReport(e.contractEndDate, settings.remainDayForShowJSH)
     );
 
-    if (isExpired) setIsHideAddBtn(false);
+    const isSentAlready = bkutData.agreements.find(
+      (data) =>
+        data?.status == "INANALYSIS" ||
+        data?.status == "INEXECUTION" ||
+        data?.status == "CONSIDERED" ||
+        data?.status == "CURRENT_JSH" ||
+        data?.status == "TO_CONFIRM"
+    );
+
+    if (isExpired && !isSentAlready) setIsHideAddBtn(false);
 
     setRows(
       bkutData.agreements.filter(filter ? filter : () => true).map((e) => {
