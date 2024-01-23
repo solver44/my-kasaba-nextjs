@@ -238,7 +238,7 @@ export default function LaborApp4Page({
                 />
                 <FormInput
                   name="victimsFISH"
-                  // disabled
+                  disabled
                   required
                   value={values.victimsFISH}
                   label={t("labor.victimsFISH")}
@@ -247,7 +247,7 @@ export default function LaborApp4Page({
               <div className="modal-row">
                 <FormInput
                   name="birthDate"
-                  // disabled
+                  disabled
                   required
                   date
                   value={values.birthDate}

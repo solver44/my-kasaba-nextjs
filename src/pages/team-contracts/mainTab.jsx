@@ -2,6 +2,7 @@ import DocumentViewer from "@/components/DocumentViewer";
 import FormInput from "@/components/FormInput";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import styles from "./team-contracts.module.scss";
 
 export default function MainTab({ files, data, formData, bkutData }) {
   const { t } = useTranslation();
@@ -56,9 +57,11 @@ export default function MainTab({ files, data, formData, bkutData }) {
         />
       </div>
       {isAnalysis ? (
-        <DocumentViewer
-          url={applications?.length > 0 ? applications[0].file : ""}
-        />
+        <div className={styles.previewer}>
+          <DocumentViewer
+            url={applications?.length > 0 ? applications[0].file : ""}
+          />
+        </div>
       ) : (
         <FormInput
           name="applications"

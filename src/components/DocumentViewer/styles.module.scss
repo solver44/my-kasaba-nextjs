@@ -10,7 +10,7 @@
   right: 10px !important;
   z-index: 100;
   background-color: white;
-  &:hover{
+  &:hover {
     background-color: white;
     box-shadow: 0px 0px 10px 1px rgb(195, 195, 195);
   }
@@ -44,7 +44,9 @@
 .previewer {
   display: flex;
   overflow: auto;
-  // flex-direction: column;
+  &.pdf {
+    flex-direction: column;
+  }
   &.full {
     justify-content: unset;
   }

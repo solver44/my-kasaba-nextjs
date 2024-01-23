@@ -27,6 +27,7 @@ const DocumentViewer = ({
   const dataForDownload = useRef();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isPdf, setIsPdf] = useState(false);
   const [currentFileName, setFileName] = useState(fileName);
 
   let workBook = null;
@@ -234,8 +235,10 @@ const DocumentViewer = ({
         return;
       }
     }
-    if (extension === "pdf") await previewPdf(data);
-    else if (extension === "xlsx" || extension === "xls")
+    if (extension === "pdf") {
+      setIsPdf(true);
+      await previewPdf(data);
+    } else if (extension === "xlsx" || extension === "xls")
       await previewExcel(data);
     else await previewWordDoc(data);
     setLoading(false);
@@ -277,7 +280,11 @@ const DocumentViewer = ({
         </div>
       )}
       <div
-        className={[styles.previewer, ignoreWidth ? styles.full : ""].join(" ")}
+        className={[
+          styles.previewer,
+          isPdf ? styles.pdf : "",
+          ignoreWidth ? styles.full : "",
+        ].join(" ")}
         ref={iframeRef}
       ></div>
     </div>

@@ -35,6 +35,7 @@ import Tabs from "@/components/Tabs";
 import Opinions from "./opinionsTab";
 import MainTab from "./mainTab";
 import JShDocument from "./jshDocumentTab";
+import { LoadingButton } from "@mui/lab";
 
 export default function InDataTable({ organization, filter }) {
   const { t } = useTranslation();
@@ -48,6 +49,7 @@ export default function InDataTable({ organization, filter }) {
   bkutData = organization ? organization : bkutData;
   const [isHideAddBtn, setIsHideAddBtn] = useState(true);
   const actions = useActions();
+  const [loading, setLoading] = useState(false);
 
   async function getFile(file) {
     if (file && file.slice(0, 3) !== "fs:") {
@@ -171,6 +173,7 @@ export default function InDataTable({ organization, filter }) {
         });
         return;
       }
+      setLoading(true);
 
       let project = await getFile(forms.applications);
       if (!forms.bkutId || !project) throw Error("error");
@@ -254,6 +257,8 @@ export default function InDataTable({ organization, filter }) {
     } catch (error) {
       console.log(error);
       enqueueSnackbar(t("send-data-error"), { variant: "error" });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -275,6 +280,7 @@ export default function InDataTable({ organization, filter }) {
       columns={columns}
       rows={rows}
       hideImport
+      loading={loading}
       isHideAddBtn={isHideAddBtn}
       hideActions
       topButtons={(selectedRows, toggleModal) => {
@@ -328,9 +334,13 @@ export default function InDataTable({ organization, filter }) {
         return (
           <div className={styles.row}>
             {(firstCond || secondCond) && (
-              <Button onClick={handleSubmit} variant="contained">
+              <LoadingButton
+                loading={loading}
+                onClick={handleSubmit}
+                variant="contained"
+              >
                 {t(data?.status === "CONSIDERED" ? "to-register" : "send")}
-              </Button>
+              </LoadingButton>
             )}
             <Button onClick={handleClose}>{t("close")}</Button>
           </div>

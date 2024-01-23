@@ -7,6 +7,10 @@
   color: white; /* Set text color to white or any other color for better visibility */
   /* Add any other desired styles */
 }
+.previewer{
+  display: flex;
+  flex-direction: column;
+}
 .row {
   display: flex;
   gap: 10px;
