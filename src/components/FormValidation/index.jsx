@@ -21,7 +21,7 @@ function FormValidation({
     clearTimeout(useEffectTimeOut.current);
     useEffectTimeOut.current = setTimeout(() => {
       initialData.current = methods.getValues();
-      if(Object.keys(initialData.current).length < 1) return;
+      if (Object.keys(initialData.current).length < 1) return;
       onChanged && onChanged(initialData.current, initialData.current);
       const { unsubscribe: un } = methods.watch((d) => {
         clearTimeout(timeOut.current);

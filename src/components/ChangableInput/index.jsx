@@ -216,9 +216,9 @@ function ChangableInput({
               }
               {...props}
             >
-              {dataSelect.map((current) => (
+              {dataSelect.map((current, i) => (
                 <MenuItem
-                  key={current.value}
+                  key={i + "menu_item"}
                   value={current.value}
                   style={getStyles(
                     current,

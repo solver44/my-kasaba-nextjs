@@ -52,18 +52,18 @@ export default function AllMenu({ collapsed }) {
       icon: HealthAndSafetyIcon,
       title: "labor-protection",
       path: "/labor-protection",
-      children: [
-        {
-          icon: LibraryBooks,
-          title: "labor.report",
-          path: "/labor-protection/reports",
-        },
-        {
-          icon: LibraryBooks,
-          title: "labor.app3",
-          path: "/labor-protection/app3",
-        },
-      ],
+      // children: [
+      //   {
+      //     icon: LibraryBooks,
+      //     title: "labor.report",
+      //     path: "/labor-protection/reports",
+      //   },
+      //   {
+      //     icon: LibraryBooks,
+      //     title: "labor.app3",
+      //     path: "/labor-protection/app3",
+      //   },
+      // ],
     },
     {
       icon: InsertChart,

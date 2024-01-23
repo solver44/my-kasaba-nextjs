@@ -21,6 +21,7 @@ import { Alert } from "@mui/material";
 import Link from "next/link";
 import LaunchIcon from "@mui/icons-material/Launch";
 import { useTranslation } from "react-i18next";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 const HomeWrapper = ({
   children,
@@ -36,6 +37,7 @@ const HomeWrapper = ({
   const actions = useActions();
   const route = useRouter();
   const [collapsed, setCollapsed] = useState();
+  const [hiddenTop, setHiddenTop] = useState(false);
   const animRef = useRef();
   const { t } = useTranslation();
 
@@ -109,7 +111,11 @@ const HomeWrapper = ({
     // <PrivateRoute>
     <div className={styles.main}>
       {settings?.errors && (
-        <div className={styles.topAlert}>
+        <div
+          className={[styles.topAlert, hiddenTop ? styles.hidden : ""].join(
+            " "
+          )}
+        >
           <Alert className={styles.alert} variant="filled" severity="error">
             {settings.errors.map((error) => (
               <Link className={styles.link} key={error.value} href={error.to}>
@@ -118,6 +124,16 @@ const HomeWrapper = ({
               </Link>
             ))}
           </Alert>
+          <div
+            onClick={() => setHiddenTop((s) => !s)}
+            className={[
+              styles.hideTopBtn,
+              styles.red,
+              hiddenTop ? styles.hidden : "",
+            ].join(" ")}
+          >
+            <KeyboardArrowUpIcon />
+          </div>
         </div>
       )}
       <div

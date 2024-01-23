@@ -77,13 +77,14 @@ export function getReportDate(deadline) {
 
 // }
 
-export function getCurrentQuarter(year) {
+export function getCurrentQuarter(year, type) {
   const now = dayjs();
   let currentYear = year || now.year();
   const q1 = dayjs(currentYear + "04-01");
   const q2 = dayjs(currentYear + "07-01");
   const q3 = dayjs(currentYear + "10-01");
   const q4 = dayjs(currentYear + 1 + "01-01");
+  if (type == 2) return now.isBefore(q2) ? 2 : now.isBefore(q4) ? 4 : false;
   return now.isBefore(q1)
     ? 1
     : now.isBefore(q2)
@@ -94,20 +95,21 @@ export function getCurrentQuarter(year) {
     ? 4
     : false;
 }
-export function checkQuarter(quarter) {
+export function checkQuarter(quarter, type) {
   let now = dayjs();
   let currentYear = now.year();
   const qrs = {
-    1: dayjs(currentYear + "04-01"),
+    1: type == 2 ? null : dayjs(currentYear + "04-01"),
     2: dayjs(currentYear + "07-01"),
-    3: dayjs(currentYear + "10-01"),
+    3: type == 2 ? null : dayjs(currentYear + "10-01"),
     4: dayjs(currentYear + 1 + "01-01"),
   };
   if (quarter === 1 && now.isBefore(qrs["1"])) return true;
   for (let i = 1; i <= quarter; i++) {
     const q = qrs[i];
-    if (!now.isAfter(q) && q != quarter) return false;
-    else if (now.isBefore(q) && q == quarter) return true;
+    if (!q) continue;
+    if (!now.isAfter(q) && i != quarter) return false;
+    else if (now.isBefore(q) && i == quarter) return true;
   }
   return false;
 }

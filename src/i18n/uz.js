@@ -560,7 +560,11 @@ export default {
     "labor-protection": "Mehnat muhofazasi",
     labor: {
       report: "Hisobot shakllari",
-      app3: "3-ilova hisoboti",
+      app3: "Mehnat muhofazasi va xavfsizlik",
+      app4: "Baxtsiz xodisalar",
+      reportBtn: "Hisobot shakli",
+      quarter: "chorak",
+      formBtn: "Yopish",
       numberOfSpecialist:
         "Mehnatni muhofaza qilish boʼyicha mutaxassislar soni",
       plannedActions:
@@ -635,6 +639,31 @@ export default {
       submittedDocuments:
         "Qonun, qoida va meʼyorlar talablari buzilishlarining bartaraf etilishi yuzasidan yuqori kasaba uyushmalari tashkilotlariga va mehnatni muhofaza qilishning holati ustidan davlat nazorati va tekshiruvini amalga oshiruvchi organlarga qonunchilikda belgilangan tartibda chora koʼrish uchun topshirilgan hujjatlar soni",
       submittedDocuments1: "belgilangan tartibda chora koʼrilganlari",
+
+      nameOfThePlace:
+        "Baxtsiz xodisa yuz bergan joyning (boʼlinma, ustaxona, obʼekt) nomlanishi",
+      dateOfAccident: "Baxtsiz xodisa sodir boʼlgan sana",
+      victimsFISH: "Jabrlanuvchining F.I.SH.",
+      birthDate: "Tugʼilgan yili",
+      position: "Egallagan lavozimi",
+      descriptionOfAccident:
+        "Baxtsiz xodisaga olib kelgan sharoitning qisqacha tafsiloti",
+      causesOfAccident: "Baxtsiz xodisaning аsosiy sabablari",
+      tmekToVictim:
+        "Tmek tomonidan jabrlanuvchi(lar)ga (oʼlganlardan tashkari) belgilangan mehnatga layoqatsizlik darajasi (%)",
+      lawEnforcment:
+        "Hujjat qaysi xuquqni muhofaza qiluvchi organlarga yuborilgan. b.x.maxsus tekshiruv dalolatnomasi yuborilgan xat sanasi va raqami",
+      reviewResult: "Koʼrib chiqish natijalari",
+      accidentsTotal: "Baxtsiz xodisalar jami",
+      accidentsInDeath: "Oʼlim bilan tugagan",
+      accidentsSevere: "Oqibati ogʼir",
+      accidentsLight: "Oqibati yengil",
+      groupBX: "Guruxiy b/x",
+      accidents1Total: "Baxtsiz xodisa oqibati jami",
+      accidents1InDeath: "Xalok boʼldi",
+      accidents1Sever: "Ogʼir jarohatlandi",
+      accicents1Light: "Yengil jarohatlandi",
+      victim: "Jabrlanuvchi",
     },
   },
 };

@@ -2,6 +2,7 @@
   position: relative;
   height: 100%;
   overflow: auto;
+  overflow: hidden;
 }
 .button {
   position: absolute !important;
@@ -9,6 +10,10 @@
   right: 10px !important;
   z-index: 100;
   background-color: white;
+  &:hover{
+    background-color: white;
+    box-shadow: 0px 0px 10px 1px rgb(195, 195, 195);
+  }
 }
 .loader {
   position: absolute;
@@ -38,6 +43,10 @@
 }
 .previewer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  overflow: auto;
+  // flex-direction: column;
+  &.full {
+    justify-content: unset;
+  }
+  justify-content: center;
 }

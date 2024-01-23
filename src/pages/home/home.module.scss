@@ -22,17 +22,51 @@
 }
 .topAlert {
   // position: fixed;
+  position: relative;
   z-index: 100;
   top: 0;
   left: 0;
   right: 0;
+  &.hidden .alert {
+    overflow: hidden;
+    height: 0px;
+  }
   .alert {
+    height: 45px;
+    transition: height 0.3s;
     border-radius: 0;
     padding: 0 16px;
     font-size: 20px;
+    & > *{
+      overflow: hidden;
+    }
     & > :first-child {
       font-size: 28px;
     }
+  }
+}
+.hideTopBtn {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  border-radius: 0 0 10px 10px;
+  background-color: inherit;
+  padding: 5px 8px 0 8px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s;
+  bottom: 7px;
+  svg {
+    transition: transform 0.3s;
+  }
+  &.hidden {
+    transform: translateY(100%);
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+  &.red {
+    background: #d32f2f;
   }
 }
 .left {

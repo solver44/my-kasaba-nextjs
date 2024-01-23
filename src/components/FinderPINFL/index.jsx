@@ -10,6 +10,7 @@ import { useSnackbar } from "notistack";
 export default function FinderPINFL({
   required,
   disablePINFL,
+  removeGivenDate,
   pinflValue = "",
   givenDate = "",
   style = {},
@@ -27,7 +28,7 @@ export default function FinderPINFL({
   async function fetchData() {
     let isValid = true;
 
-    if (!forms.givenDate) {
+    if (!forms.givenDate && !removeGivenDate) {
       setInputValidation((inputValidation) => ({
         ...inputValidation,
         givenDate: true,
@@ -67,7 +68,11 @@ export default function FinderPINFL({
     } else {
       setInputValidation({ pinfl: false, givenDate: false });
     }
-    onFetch({ id: data?.data?.id, ...data?.data?.profile });
+    onFetch({
+      id: data?.data?.id,
+      ...data?.data?.profile,
+      experiences: data?.data?.experiences,
+    });
   }
   return (
     <div style={style} className={styles.wrapper}>
@@ -84,15 +89,17 @@ export default function FinderPINFL({
           setForms((forms) => ({ ...forms, [name]: e.target.value }))
         }
       />
-      <FormInput
-        date
-        invalid={inputValidation.givenDate}
-        onChange={(e, name) =>
-          setForms((forms) => ({ ...forms, [name]: e.target.value }))
-        }
-        name="givenDate"
-        label={t("passport-given-date")}
-      />
+      {!removeGivenDate && (
+        <FormInput
+          date
+          invalid={inputValidation.givenDate}
+          onChange={(e, name) =>
+            setForms((forms) => ({ ...forms, [name]: e.target.value }))
+          }
+          name="givenDate"
+          label={t("passport-given-date")}
+        />
+      )}
       <LoadingButton
         loading={loading}
         loadingPosition="start"

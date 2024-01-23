@@ -4,6 +4,7 @@ import "../styles/app.scss";
 import "../styles/drag&drop.scss";
 import "../styles/modal.scss";
 import "../styles/transitions.scss";
+import "../styles/excel.scss";
 import "../i18n";
 import { Provider, useSelector } from "react-redux";
 import { store } from "../store";
@@ -66,6 +67,7 @@ const MyApp = ({ Component, pageProps, tokens }) => {
         <script src="/js/docxtemplater.js"></script>
         <script src="/js/pizzip.js"></script>
         <script src="/js/pizzip-utils.js"></script>
+        <script src="/js/xlsx.min.js"></script>
         <script type="module" src="/js/pdf.js"></script>
         <link rel="shortcut icon" href="/icon.png" />
       </Head>

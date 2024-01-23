@@ -4,6 +4,11 @@
 }
 .input {
   background: var(--input-incolor);
+  &:hover {
+    fieldset {
+      border-color: var(--input-outline-color) !important;
+    }
+  }
   fieldset {
     border: 1px solid var(--input-border-color) !important;
   }
@@ -18,7 +23,7 @@
     }
   }
   &.disabled {
-    background: var(--input-disabled-color) !important;
+    background: var(--input-incolor) !important;
     input {
       font-size: var(--input-inside-font-size);
       cursor: not-allowed !important;

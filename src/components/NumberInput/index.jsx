@@ -7,9 +7,10 @@ import { styled } from "@mui/system";
 import areEqual from "@/utils/areEqual";
 
 const NumberInput = React.forwardRef(function CustomNumberInput(
-  { onChange, value, ...props },
+  { onChange, ...props },
   ref
 ) {
+  const value = typeof props.value === "undefined" ? 0 : +props.value;
   return (
     <BaseNumberInput
       slots={{
@@ -30,10 +31,10 @@ const NumberInput = React.forwardRef(function CustomNumberInput(
       }}
       onFocus={(e) => {
         setTimeout(() => {
-          e.target.value = value || 0;
+          e.target.value = value;
         }, 0);
       }}
-      value={value || 0}
+      value={value}
       onChange={(e, val) => {
         onChange({ target: { value: val || value } });
       }}

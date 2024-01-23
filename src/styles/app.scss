@@ -9,6 +9,7 @@ body {
   font-family: Inter, Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
+  overscroll-behavior-y: none;
 }
 *, *:before, *:after {
   box-sizing: inherit;

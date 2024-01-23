@@ -29,6 +29,13 @@ const DocumentViewer = ({
   const [error, setError] = useState("");
   const [currentFileName, setFileName] = useState(fileName);
 
+  let workBook = null;
+  let excelGrid = null;
+  let activeSheet = "";
+  let sheets = [];
+  let excelButtons = null;
+  let buttons = [];
+
   const b64toBlob = (base64, type = "application/octet-stream") =>
     fetch(`data:${type};base64,${base64}`).then((res) => res.blob());
   async function download() {
@@ -91,7 +98,7 @@ const DocumentViewer = ({
     let pdfDoc = null;
     const data = atob(_data);
     var container = iframeRef.current;
-    if(!container) return;
+    if (!container) return;
     container.style = "padding: 10px 0";
     container.innerHTML = "";
     pdfjsLib.getDocument({ data }).promise.then((pdfDoc_) => {
@@ -106,7 +113,7 @@ const DocumentViewer = ({
           var desiredWidth = 800;
           let viewport = page.getViewport({ scale: scale });
           scale = desiredWidth / viewport.width;
-          viewport = page.getViewport({ scale: scale, });
+          viewport = page.getViewport({ scale: scale });
           let canvas = document.createElement("canvas");
           let context = canvas.getContext("2d");
           canvas.height = viewport.height;
@@ -122,6 +129,76 @@ const DocumentViewer = ({
       }
     }
   }
+  function clearAll() {
+    var viewer = iframeRef.current;
+    if (!viewer) return;
+    viewer.innerHTML = "";
+    workBook = null;
+    excelGrid = null;
+    sheets = [];
+    excelButtons = null;
+    buttons = [];
+  }
+  async function previewExcel() {
+    clearAll();
+    const data = await getBinaryData(documentSrc);
+    var viewer = iframeRef.current;
+    if (!viewer) return;
+    workBook = XLSX.read(data, { type: "binary" });
+    sheets = workBook.SheetNames;
+    workBook.SheetNames.forEach(function (sheetName) {
+      var headers = [];
+      var sheet = workBook.Sheets[sheetName];
+      var range = XLSX.utils.decode_range(sheet["!ref"]);
+      var C = range.s.r;
+      var R = range.s.r;
+      for (C = range.s.c; C <= range.e.c; ++C) {
+        var cell = sheet[XLSX.utils.encode_cell({ c: C, r: R })];
+        var hdr = "NIPUN";
+        if (cell && cell.t) {
+          hdr = XLSX.utils.format_cell(cell);
+        }
+        headers.push(hdr);
+      }
+      var roa = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
+      if (roa.length > 0) {
+        roa.forEach(function (row) {
+          headers.forEach(function (hd) {
+            if (row[hd] === undefined) {
+              row[hd] = "";
+            }
+          });
+        });
+      }
+    });
+    excelGrid = document.createElement("table");
+    excelGrid.classList.add("table");
+    excelGrid.classList.add("table-bordered");
+    excelGrid.classList.add("table-responsive");
+    excelGrid.classList.add("excel-table");
+    excelButtons = document.createElement("div");
+    excelButtons.classList.add("excelButtons");
+    for (var i = 0; i < sheets.length; i++) {
+      let button = document.createElement("button");
+      button.classList.add("sheetBtn");
+      button.innerText = sheets[i];
+      button.addEventListener("click", (e) => {
+        showSheet(e.target);
+      });
+      excelButtons.appendChild(button);
+      buttons.push(button);
+    }
+    let container = document.createElement("div");
+    container.classList.add("excel-container");
+    container.appendChild(excelGrid);
+    viewer.innerHTML = "";
+    viewer.appendChild(container);
+    viewer.appendChild(excelButtons);
+    const el = buttons[0];
+    var workSheet = workBook.Sheets[el.innerText];
+    excelGrid.innerHTML = XLSX.utils.sheet_to_html(workSheet);
+    activeSheet = el.innerText;
+  }
 
   async function initData() {
     setLoading(true);
@@ -131,11 +208,17 @@ const DocumentViewer = ({
 
     if (documentSrc) {
       if (generateData) data = generateDoc();
+      extension = documentSrc.split(".").pop();
     } else if (url) {
       const name = decodeURIComponent(url.split("=")[1]);
       extension = name && name.split(".").pop();
       setFileName(extension ? name.replaceAll("+", " ") : fileName);
-      if (extension !== "docx" && extension !== "pdf") {
+      if (
+        extension !== "docx" &&
+        extension !== "pdf" &&
+        extension !== "xlsx" &&
+        extension !== "xls"
+      ) {
         await new Promise((res) => setTimeout(res, 500));
         setLoading(false);
         setError(t("file-should-be-docx"));
@@ -152,6 +235,8 @@ const DocumentViewer = ({
       }
     }
     if (extension === "pdf") await previewPdf(data);
+    else if (extension === "xlsx" || extension === "xls")
+      await previewExcel(data);
     else await previewWordDoc(data);
     setLoading(false);
   }
@@ -159,7 +244,7 @@ const DocumentViewer = ({
     initData();
   }, [url, generateData]);
   return (
-    <div className={styles.wrapper}>
+    <div className={[styles.wrapper].join(" ")}>
       {!hideDownloadBtn && (
         <Tooltip
           title={<p style={{ fontSize: 18, margin: 2 }}>{t("download")}</p>}
@@ -191,7 +276,10 @@ const DocumentViewer = ({
           </Alert>
         </div>
       )}
-      <div className={styles.previewer} ref={iframeRef}></div>
+      <div
+        className={[styles.previewer, ignoreWidth ? styles.full : ""].join(" ")}
+        ref={iframeRef}
+      ></div>
     </div>
   );
 };

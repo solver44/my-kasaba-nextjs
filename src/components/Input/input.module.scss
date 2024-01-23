@@ -6,6 +6,10 @@
   border: 1px solid var(--input-border-color);
   background: var(--input-incolor) !important;
   box-shadow: var(--input-shadow);
+  outline: none;
+  &:hover {
+    border-color: var(--input-outline-color) !important;
+  }
   &:disabled {
     background-color: var(--input-disabled-color) !important;
   }

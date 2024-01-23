@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import i18next, { t } from "i18next";
 
 export function generateUniqueId(length = 9) {
@@ -114,6 +115,14 @@ export function getPresidentBKUT(bkutData = {}) {
     bkutData.employees.find((employee) => employee.position?.id === 1)
       ?.individual
   );
+}
+
+export function getLastPosition(data = {}) {
+  const experiences = data.experiences || [];
+  if (experiences?.length < 1) return "";
+  return experiences.sort(
+    (a, b) => dayjs(b?.contract_date) - dayjs(a?.contract_date)
+  )[0]?.position_name;
 }
 
 export function getPresidentId(bkutData = {}) {
