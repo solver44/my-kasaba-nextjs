@@ -3,6 +3,7 @@
   height: 100%;
   overflow: auto;
   overflow: hidden;
+  width: 100%;
 }
 .button {
   position: absolute !important;
@@ -44,6 +45,7 @@
 .previewer {
   display: flex;
   overflow: auto;
+  align-items: center;
   &.pdf {
     flex-direction: column;
     padding: 10px 10px !important;
