@@ -46,6 +46,11 @@
   overflow: auto;
   &.pdf {
     flex-direction: column;
+    padding: 10px 10px !important;
+    gap: 10px;
+    canvas{
+      max-width: 900px;
+    }
   }
   &.full {
     justify-content: unset;
