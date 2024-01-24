@@ -71,20 +71,40 @@ export default function LaborApp4Page({
     return res + " " + t("labor.quarter");
   }
 
+  const exclude = [
+    "nameOfThePlace",
+    "dateOfAccident",
+    "victimsFISH",
+    "birthDate",
+    "position",
+    "descriptionOfAccident",
+    "causesOfAccident",
+    "tmekToVictim",
+    "lawEnforcment",
+    "reviewResult",
+  ];
+
   let st = (currentReport?.app4 || []).find((a) => a.quarter == quarter) || {};
+  let stAll = (currentReport?.app4 || [])
+    .filter((a) => a.quarter < quarter)
+    .reduce((current, next) => {
+      Object.keys(next).forEach((key) => {
+        if (exclude.includes(key)) return (current[key] = next[key]);
+        if (typeof current[key] === "undefined") current[key] = 0;
+        current[key] += next[key] || 0;
+      });
+      return current;
+    }, {});
   useEffect(() => {
-    const exclude = [
-      "nameOfThePlace",
-      "dateOfAccident",
-      "victimsFISH",
-      "birthDate",
-      "position",
-      "descriptionOfAccident",
-      "causesOfAccident",
-      "tmekToVictim",
-      "lawEnforcment",
-      "reviewResult",
-    ];
+    let stApp3 = (currentReport?.app3 || [])
+      .filter((a) => a.quarter <= quarter)
+      .reduce((current, next) => {
+        Object.keys(next).forEach((key) => {
+          if (typeof current[key] === "undefined") current[key] = 0;
+          current[key] += next[key] || 0;
+        });
+        return current;
+      }, {});
 
     if (isReport)
       st = (currentReport?.app4 || [])
@@ -109,9 +129,9 @@ export default function LaborApp4Page({
       tmekToVictim: st.tmekToVictim || "",
       lawEnforcment: st.lawEnforcment || "",
       reviewResult: st.reviewResult || "",
-      accidentsTotal: st.accidentsTotal || 0,
-      accidentsInDeath: st.accidentsInDeath || 0,
-      accidentsSevere: st.accidentsSevere || 0,
+      accidentsTotal: stApp3.accidentsInProduction || 0,
+      accidentsInDeath: stApp3.accidentsFatal || 0, // o'lim bilan tugagan 3-ilovadan
+      accidentsSevere: stApp3.accidentsSerious || 0, // oqibati ogir 3-ilovadan
       accidentsLight: st.accidentsLight || 0,
       groupBX: st.groupBX || 0,
       accidents1Total: st.accidents1Total || 0,
@@ -300,6 +320,8 @@ export default function LaborApp4Page({
           <FormInput
             name="accidentsTotal"
             required
+            disabled
+            suffixPlusInput={stAll}
             type="number"
             value={values.accidentsTotal}
             label={t("labor.accidentsTotal")}
@@ -308,6 +330,7 @@ export default function LaborApp4Page({
             <FormInput
               name="accidentsInDeath"
               maxInput="accidentsTotal"
+              disabled
               required
               type="number"
               value={values.accidentsInDeath}
@@ -316,6 +339,7 @@ export default function LaborApp4Page({
             <FormInput
               name="accidentsSevere"
               maxInput="accidentsTotal"
+              disabled
               required
               type="number"
               value={values.accidentsSevere}
@@ -324,6 +348,7 @@ export default function LaborApp4Page({
             <FormInput
               name="accidentsLight"
               maxInput="accidentsTotal"
+              suffixPlusInput={stAll}
               required
               type="number"
               value={values.accidentsLight}
@@ -331,6 +356,7 @@ export default function LaborApp4Page({
             />
             <FormInput
               name="groupBX"
+              suffixPlusInput={stAll}
               required
               type="number"
               value={values.groupBX}
@@ -339,6 +365,7 @@ export default function LaborApp4Page({
           </Group>
           <FormInput
             name="accidents1Total"
+            suffixPlusInput={stAll}
             required
             type="number"
             value={values.accidents1Total}
@@ -347,6 +374,7 @@ export default function LaborApp4Page({
           <Group showAllBorder title={t("labor.including")}>
             <FormInput
               name="accidents1InDeath"
+              suffixPlusInput={stAll}
               required
               type="number"
               value={values.accidents1InDeath}
@@ -354,6 +382,7 @@ export default function LaborApp4Page({
             />
             <FormInput
               name="accidents1Sever"
+              suffixPlusInput={stAll}
               required
               type="number"
               value={values.accidents1Sever}
@@ -363,6 +392,7 @@ export default function LaborApp4Page({
               name="accicents1Light"
               required
               type="number"
+              suffixPlusInput={stAll}
               value={values.accicents1Light}
               label={t("labor.accicents1Light")}
             />

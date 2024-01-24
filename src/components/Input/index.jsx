@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactInputMask from "react-input-mask";
 import areEqual from "../../utils/areEqual";
 import { useTranslation } from "react-i18next";
-import { TextField } from "@mui/material";
+import { TextField, styled } from "@mui/material";
 import NumberInput from "../NumberInput";
 
 function Input({
@@ -141,9 +141,12 @@ const InsideInput = React.memo(
     maxValue,
     minValue = 0,
     type,
+    end,
     ...props
   }) => {
     const formattedMask = mask ? convertMask(mask) : mask; // Convert the mask
+    const numberValue =
+      typeof value === "undefined" ? 0 : type === "number" ? +value : 0;
 
     function getType(name) {
       if (name.includes("phone")) return "phone";
@@ -152,10 +155,12 @@ const InsideInput = React.memo(
     }
     return type === "number" ? (
       <NumberInput
-        value={value}
+        value={numberValue}
         onChange={onChangeFunc}
         max={maxValue}
         min={minValue}
+        disabled={disabled}
+        end={end}
       />
     ) : !textarea ? (
       <ReactInputMask

@@ -13,6 +13,7 @@ function FormInput({
   invalid,
   autoComplete,
   maxInput,
+  suffixPlusInput,
   ...props
 }) {
   const { control, setValue, watch, getValues } = useFormContext() ?? {
@@ -27,6 +28,10 @@ function FormInput({
       setMaxValue(d[maxInput] || 0);
     });
   }, [watch]);
+  const suffix =
+    suffixPlusInput && suffixPlusInput[name]
+      ? "+ " + suffixPlusInput[name]
+      : null;
 
   const {
     field,
@@ -60,6 +65,7 @@ function FormInput({
       required={required}
       invalid={invalidProps || invalid}
       onChange={onChangeFunc} // send value to hook form
+      end={suffix}
       value={field.value} // input value
     />
   );

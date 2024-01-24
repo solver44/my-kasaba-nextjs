@@ -2,15 +2,17 @@ import React from "react";
 import {
   Unstable_NumberInput as BaseNumberInput,
   numberInputClasses,
-} from "@mui/base/Unstable_NumberInput";
+} from "@mui/base";
 import { styled } from "@mui/system";
 import areEqual from "@/utils/areEqual";
 
 const NumberInput = React.forwardRef(function CustomNumberInput(
-  { onChange, ...props },
+  { onChange, value, ...props },
   ref
 ) {
-  const value = typeof props.value === "undefined" ? 0 : +props.value;
+  // const end = props.endAdornment;
+  // if (typeof window === "undefined") return null;
+
   return (
     <BaseNumberInput
       slots={{
@@ -35,10 +37,11 @@ const NumberInput = React.forwardRef(function CustomNumberInput(
         }, 0);
       }}
       value={value}
-      onChange={(e, val) => {
-        onChange({ target: { value: val || value } });
-      }}
+      // onChange={(e, val) => {
+      //   onChange({ target: { value: val || value } });
+      // }}
       {...props}
+      endAdornment={<InputAdornment>{props.end}</InputAdornment>}
       ref={ref}
     />
   );
@@ -64,6 +67,20 @@ const grey = {
   900: "#1C2025",
 };
 
+const InputAdornment = styled("div")(
+  ({ theme }) => `
+  margin: 8px;
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--input-inside-font-size);
+  width: auto;
+  justify-content: center;
+  grid-row: 1/3;
+  grid-column: 3/3;
+  color: ${theme.palette.mode === "dark" ? grey[500] : grey[700]};
+`
+);
+
 const StyledInputRoot = styled("div")(
   ({ theme }) => `
     font-family: 'IBM Plex Sans', sans-serif;
@@ -74,11 +91,21 @@ const StyledInputRoot = styled("div")(
     border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
     box-shadow: var(--input-shadow);
     display: grid;
-    grid-template-columns: 1fr 19px;
+    grid-template-columns: auto 1fr auto 19px;
     grid-template-rows: 1fr 1fr;
     overflow: hidden;
-    column-gap: 8px;
+    // column-gap: 8px;
     padding: 4px;
+
+    &.${numberInputClasses.disabled}{
+      background: var(--input-disabled-color1);
+      .${numberInputClasses.incrementButton}{
+        display: none;
+      }
+      .${numberInputClasses.decrementButton}{
+        display: none;
+      }
+    }
   
     &.${numberInputClasses.focused} {
       border-color: var(--input-outline-color);
@@ -101,7 +128,7 @@ const StyledInputElement = styled("input")(
     font-family: inherit;
     font-weight: 400;
     line-height: 1.5;
-    grid-column: 1/2;
+    // grid-column: 1/2;
     grid-row: 1/3;
     color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
     background: inherit;
@@ -140,7 +167,7 @@ const StyledButton = styled("button")(
     }
   
     &.${numberInputClasses.incrementButton} {
-      grid-column: 2/3;
+      grid-column: 4/5;
       grid-row: 1/2;
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
@@ -158,7 +185,7 @@ const StyledButton = styled("button")(
     }
   
     &.${numberInputClasses.decrementButton} {
-      grid-column: 2/3;
+      grid-column: 4/5;
       grid-row: 2/3;
       border-bottom-left-radius: 4px;
       border-bottom-right-radius: 4px;

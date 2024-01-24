@@ -69,6 +69,16 @@ export default function LaborApp3Page({
   }
 
   let st = (currentReport?.app3 || []).find((a) => a.quarter == quarter) || {};
+  const stAll = (currentReport?.app3 || [])
+    .filter((a) => a.quarter < quarter)
+    .reduce((current, next) => {
+      Object.keys(next).forEach((key) => {
+        if (typeof current[key] === "undefined") current[key] = 0;
+        current[key] += next[key] || 0;
+      });
+      return current;
+    }, {});
+
   useEffect(() => {
     const report1TI = (bkutData.reports || []).find((r) => {
       const cYear = r.year;
@@ -76,13 +86,15 @@ export default function LaborApp3Page({
     }) || { workersMembers: 0, studentsMembers: 0, pensionerAmount: 0 };
 
     if (isReport)
-      st = (currentReport?.app3 || []).filter((a) => a.quarter <= quarter).reduce((current, next) => {
-        Object.keys(next).forEach((key) => {
-          if (typeof current[key] === "undefined") current[key] = 0;
-          current[key] += next[key] || 0;
-        });
-        return current;
-      }, {});
+      st = (currentReport?.app3 || [])
+        .filter((a) => a.quarter <= quarter)
+        .reduce((current, next) => {
+          Object.keys(next).forEach((key) => {
+            if (typeof current[key] === "undefined") current[key] = 0;
+            current[key] += next[key] || 0;
+          });
+          return current;
+        }, {});
 
     setValues({
       orgName: bkutData.name,
@@ -210,6 +222,7 @@ export default function LaborApp3Page({
             <FormInput
               name="numberOfSpecialist"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.numberOfSpecialist}
               label={t("labor.numberOfSpecialist")}
@@ -217,6 +230,7 @@ export default function LaborApp3Page({
             <FormInput
               name="plannedActions"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.plannedActions}
               label={t("labor.plannedActions")}
@@ -228,6 +242,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="plannedActionsSpent"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.plannedActionsSpent}
                   label={t("labor.plannedActionsSpent")}
@@ -235,6 +250,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="includingActions"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.includingActions}
                   label={t("labor.includingActions")}
@@ -244,6 +260,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="includingSpentTransaction"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.includingSpentTransaction}
                   label={t("labor.includingSpentTransaction")}
@@ -251,6 +268,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="incudingSpentClothes"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.incudingSpentClothes}
                   label={t("labor.incudingSpentClothes")}
@@ -260,6 +278,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="includingSpentFood"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.includingSpentFood}
                   label={t("labor.includingSpentFood")}
@@ -267,6 +286,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="includingSpentHygiene"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.includingSpentHygiene}
                   label={t("labor.includingSpentHygiene")}
@@ -276,6 +296,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="includingSpentInsurance"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.includingSpentInsurance}
                   label={t("labor.includingSpentInsurance")}
@@ -283,6 +304,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="includingInsuranceEmp"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.includingInsuranceEmp}
                   label={t("labor.includingInsuranceEmp")}
@@ -291,6 +313,7 @@ export default function LaborApp3Page({
               <FormInput
                 name="includingSpentMedicine"
                 required
+                suffixPlusInput={stAll}
                 type="number"
                 value={values.includingSpentMedicine}
                 label={t("labor.includingSpentMedicine")}
@@ -300,6 +323,7 @@ export default function LaborApp3Page({
           <FormInput
             name="performedActions"
             required
+            suffixPlusInput={stAll}
             type="number"
             value={values.performedActions}
             label={t("labor.performedActions")}
@@ -309,6 +333,7 @@ export default function LaborApp3Page({
               <FormInput
                 name="performedActionsSpent"
                 required
+                suffixPlusInput={stAll}
                 type="number"
                 value={values.performedActionsSpent}
                 label={t("labor.performedActionsSpent")}
@@ -317,6 +342,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="including2Actions"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.including2Actions}
                   label={t("labor.including2Actions")}
@@ -324,6 +350,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="including2SpentTransaction"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.including2SpentTransaction}
                   label={t("labor.including2SpentTransaction")}
@@ -333,6 +360,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="incuding2SpentClothes"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.incuding2SpentClothes}
                   label={t("labor.incuding2SpentClothes")}
@@ -340,6 +368,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="including2SpentFood"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.including2SpentFood}
                   label={t("labor.including2SpentFood")}
@@ -348,6 +377,7 @@ export default function LaborApp3Page({
               <FormInput
                 name="including2SpentHygiene"
                 required
+                suffixPlusInput={stAll}
                 type="number"
                 value={values.including2SpentHygiene}
                 label={t("labor.including2SpentHygiene")}
@@ -356,6 +386,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="including2SpentInsurance"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.including2SpentInsurance}
                   label={t("labor.including2SpentInsurance")}
@@ -363,6 +394,7 @@ export default function LaborApp3Page({
                 <FormInput
                   name="including2InsuranceEmp"
                   required
+                  suffixPlusInput={stAll}
                   type="number"
                   value={values.including2InsuranceEmp}
                   label={t("labor.including2InsuranceEmp")}
@@ -371,6 +403,7 @@ export default function LaborApp3Page({
               <FormInput
                 name="including2SpentMedicine"
                 required
+                suffixPlusInput={stAll}
                 type="number"
                 value={values.including2SpentMedicine}
                 label={t("labor.including2SpentMedicine")}
@@ -380,6 +413,7 @@ export default function LaborApp3Page({
           <FormInput
             name="spentToEmp"
             required
+            suffixPlusInput={stAll}
             type="number"
             value={values.spentToEmp}
             label={t("labor.spentToEmp")}
@@ -387,6 +421,7 @@ export default function LaborApp3Page({
           <FormInput
             name="participatedCommissions"
             required
+            suffixPlusInput={stAll}
             type="number"
             value={values.participatedCommissions}
             label={t("labor.participatedCommissions")}
@@ -394,6 +429,7 @@ export default function LaborApp3Page({
           <FormInput
             name="accidentsInProduction"
             required
+            suffixPlusInput={stAll}
             type="number"
             value={values.accidentsInProduction}
             label={t("labor.accidentsInProduction")}
@@ -403,6 +439,7 @@ export default function LaborApp3Page({
               name="accidentsFatal"
               maxInput="accidentsInProduction"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.accidentsFatal}
               label={t("labor.accidentsFatal")}
@@ -411,6 +448,7 @@ export default function LaborApp3Page({
               name="accidentsFatal1"
               maxInput="accidentsFatal"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.accidentsFatal1}
               label={t("labor.accidentsFatal1")}
@@ -421,6 +459,7 @@ export default function LaborApp3Page({
               name="accidentsSerious"
               maxInput="accidentsInProduction"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.accidentsSerious}
               label={t("labor.accidentsSerious")}
@@ -429,6 +468,7 @@ export default function LaborApp3Page({
               name="accidentsSerious1"
               maxInput="accidentsSerious"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.accidentsSerious1}
               label={t("labor.accidentsSerious1")}
@@ -437,6 +477,7 @@ export default function LaborApp3Page({
           <FormInput
             name="levelOfDisability"
             required
+            suffixPlusInput={stAll}
             type="number"
             value={values.levelOfDisability}
             label={t("labor.levelOfDisability")}
@@ -446,6 +487,7 @@ export default function LaborApp3Page({
               name="accidentsDisabledDue"
               maxInput="levelOfDisability"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.accidentsDisabledDue}
               label={t("labor.accidentsDisabledDue")}
@@ -453,6 +495,7 @@ export default function LaborApp3Page({
             <FormInput
               name="accidentsDisabledDue1"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.accidentsDisabledDue1}
               label={t("labor.accidentsDisabledDue1")}
@@ -462,6 +505,7 @@ export default function LaborApp3Page({
             <FormInput
               name="participatedOccupational"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.participatedOccupational}
               label={t("labor.participatedOccupational")}
@@ -470,6 +514,7 @@ export default function LaborApp3Page({
               name="participatedOccupational1"
               maxInput="participatedOccupational"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.participatedOccupational1}
               label={t("labor.participatedOccupational1")}
@@ -479,6 +524,7 @@ export default function LaborApp3Page({
             <FormInput
               name="meetingsMedicals"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.meetingsMedicals}
               label={t("labor.meetingsMedicals")}
@@ -486,6 +532,7 @@ export default function LaborApp3Page({
             <FormInput
               name="meetingsMedicals1"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.meetingsMedicals1}
               label={t("labor.meetingsMedicals1")}
@@ -495,6 +542,7 @@ export default function LaborApp3Page({
             <FormInput
               name="participatedAttestation"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.participatedAttestation}
               label={t("labor.participatedAttestation")}
@@ -502,6 +550,7 @@ export default function LaborApp3Page({
             <FormInput
               name="participatedAttestation1"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.participatedAttestation1}
               label={t("labor.participatedAttestation1")}
@@ -511,6 +560,7 @@ export default function LaborApp3Page({
             <FormInput
               name="electedRepresentatives"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.electedRepresentatives}
               label={t("labor.electedRepresentatives")}
@@ -519,6 +569,7 @@ export default function LaborApp3Page({
               name="electedRepresentatives1"
               maxInput="electedRepresentatives"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.electedRepresentatives1}
               label={t("labor.electedRepresentatives1")}
@@ -528,6 +579,7 @@ export default function LaborApp3Page({
             <FormInput
               name="identifiedRepresentatives"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.identifiedRepresentatives}
               label={t("labor.identifiedRepresentatives")}
@@ -536,6 +588,7 @@ export default function LaborApp3Page({
               name="identifiedRepresentatives1"
               maxInput="identifiedRepresentatives"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.identifiedRepresentatives1}
               label={t("labor.identifiedRepresentatives1")}
@@ -545,6 +598,7 @@ export default function LaborApp3Page({
             <FormInput
               name="submittedDocuments"
               required
+              suffixPlusInput={stAll}
               type="number"
               value={values.submittedDocuments}
               label={t("labor.submittedDocuments")}
@@ -554,6 +608,7 @@ export default function LaborApp3Page({
             name="submittedDocuments1"
             maxInput="submittedDocuments"
             required
+            suffixPlusInput={stAll}
             type="number"
             value={values.submittedDocuments1}
             label={t("labor.submittedDocuments1")}

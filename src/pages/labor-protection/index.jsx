@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import LaborApp4Page from "./app4";
+import LaborApp5Page from "./app5";
 
 export const QUARTERS = (type) => [
   type != 2 && {
@@ -121,6 +122,17 @@ export default function LaborProtectionPage() {
           label: "labor.app4",
           children: (
             <LaborApp4Page
+              bkutData={bkutData}
+              data={labors}
+              years={years}
+              saveReport={saveLabor}
+            />
+          ),
+        },
+        {
+          label: "labor.app5",
+          children: (
+            <LaborApp5Page
               bkutData={bkutData}
               data={labors}
               years={years}
