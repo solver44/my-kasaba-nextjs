@@ -351,7 +351,9 @@ export default function InDataTable({ organization, filter }) {
                 {t(data?.status === "CONSIDERED" ? "to-register" : "send")}
               </LoadingButton>
             )}
-            <Button onClick={handleClose}>{t("close")}</Button>
+            <Button disabled={loading} onClick={handleClose}>
+              {t("close")}
+            </Button>
           </div>
         );
       }}
