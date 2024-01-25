@@ -31,15 +31,15 @@ const NumberInput = React.forwardRef(function CustomNumberInput(
           children: "-",
         },
       }}
-      onFocus={(e) => {
-        setTimeout(() => {
-          e.target.value = value;
-        }, 0);
-      }}
-      value={value}
-      // onChange={(e, val) => {
-      //   onChange({ target: { value: val || value } });
+      // onFocus={(e) => {
+      //   setTimeout(() => {
+      //     e.target.value = value;
+      //   }, 0);
       // }}
+      value={value}
+      onChange={(e, val) => {
+        onChange({ target: { value: val || value } });
+      }}
       {...props}
       endAdornment={<InputAdornment>{props.end}</InputAdornment>}
       ref={ref}
