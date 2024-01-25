@@ -29,14 +29,24 @@ a {
 .docx-wrapper {
   padding: 5px 0 0 0 !important;
 }
-.Mui-TableHeadCell-Content-Wrapper {
-  white-space: normal;
-}
 #pdfViewer {
   background-color: transparent;
 }
 canvas {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.Mui-TableHeadCell-Content-Wrapper {
+  white-space: normal !important;
+  text-overflow: unset !important;
+}
+.Mui-TableHeadCell-Content-Labels{
+  & > :last-child{
+    display: none !important;
+  }
+}
+th{
+  padding: 0.8rem 0.5rem !important;
 }
 // .highcharts-credits{
 //   display: none;
