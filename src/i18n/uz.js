@@ -61,7 +61,7 @@ export default {
         "Tashkilot faoliyat yuritayotgan korxona, tashkilot yoki muassasa:",
       firstOrganizationFirmSTIR:
         "Korxona, tashkilot yoki muassasa STIR(INN) raqami:",
-      firstOrganizationDirektor: "Tashkilot rahbari:",
+      firstOrganizationDirektor: "Kasaba uyushmasi qo'mitasi raisi:",
       firstOrganizationSoato: "МХОВТ(SOATO) raqami:",
       firstOrganizationAdr: "Manzil:",
       firstOrganizationTel: "Tashkilot telefon raqamlari:",
