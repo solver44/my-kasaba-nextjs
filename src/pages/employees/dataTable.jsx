@@ -49,7 +49,7 @@ export default function InDataTable({ organization, filter, onUpload, min }) {
   const actions = useActions();
 
   const columns = [
-    { field: "fio", headerName: "employees.fio", size: 280 },
+    { field: "fio", headerName: "employees.fio" },
     { field: "signDate", headerName: "join-date" },
     { field: "position", headerName: "job-position" },
     {
@@ -215,11 +215,15 @@ export default function InDataTable({ organization, filter, onUpload, min }) {
     return data;
   }
   async function deleteRow(id) {
-    const res = await deleteEmployee(id);
-    if (res) {
-      setRows((rows) => rows.filter((row) => row?.id != id));
-      actions.updateData();
-    } else enqueueSnackbar(t("delete-error"), { variant: "error" });
+    try {
+      const res = await deleteEmployee(id);
+      if (res) {
+        setRows((rows) => rows.filter((row) => row?.id != id));
+        actions.updateData();
+      } else enqueueSnackbar(t("delete-error"), { variant: "error" });
+    } catch (error) {
+      console.log(error);
+    }
   }
   async function onImportRow(rowData) {
     const forms = {
@@ -342,6 +346,8 @@ function ModalUI({ hideModal, data = {}, onFetchIndividual }) {
   } = data;
   const phone = individual.phone;
   const email = individual.email;
+
+  // console.log(data);
 
   useEffect(() => {
     const FIO = getFIO(individual);

@@ -39,6 +39,7 @@ import { useSnackbar } from "notistack";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { getStatusColors } from "@/utils/data";
 import { convertStringToFormatted } from "@/utils/date";
+import { LoadingButton } from "@mui/lab";
 
 function DataTable({
   columns = [],
@@ -74,6 +75,7 @@ function DataTable({
   const [showColumnFilters, setShowColumnFilters] = useState(false);
   const [openImportModal, setOpenImportModal] = useState(false);
   const [openExportModal, setOpenExportModal] = useState(false);
+  const [loadingAction, setLoadingAction] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const { dataLoading } = useSelector((state) => state);
@@ -456,17 +458,24 @@ function DataTable({
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={toggleDeleteDialog}>{t("no")}</Button>
-              <Button
-                onClick={() => {
-                  func2 && func2(currentRow.current.id, currentRow.current);
+              <Button disabled={loadingAction} onClick={toggleDeleteDialog}>
+                {t("no")}
+              </Button>
+              <LoadingButton
+                onClick={async () => {
+                  setLoadingAction(true);
+                  func2 &&
+                    (await func2(currentRow.current.id, currentRow.current));
+                  setLoadingAction(false);
                   toggleDeleteDialog();
                 }}
                 autoFocus
+                variant={loadingAction ? "contained" : "text"}
+                loading={loadingAction}
                 color="error"
               >
                 {t("yes")}
-              </Button>
+              </LoadingButton>
             </DialogActions>
           </div>
         </div>
