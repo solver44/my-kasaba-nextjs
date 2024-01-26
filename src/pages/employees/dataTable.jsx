@@ -347,8 +347,6 @@ function ModalUI({ hideModal, data = {}, onFetchIndividual }) {
   const phone = individual.phone;
   const email = individual.email;
 
-  // console.log(data);
-
   useEffect(() => {
     const FIO = getFIO(individual);
     if (!FIO) return;
@@ -367,6 +365,8 @@ function ModalUI({ hideModal, data = {}, onFetchIndividual }) {
       fio: getFIO(data),
       birthDate: dayjs(data.birth_date),
       gender: data.gender,
+      phone: data.phone,
+      email: data.email,
     });
   }
 
@@ -421,8 +421,8 @@ function ModalUI({ hideModal, data = {}, onFetchIndividual }) {
         />
       </div>
       <div className="modal-row">
-        <FormInput value={phone} label={t("phone-number")} name="phone" />
-        <FormInput value={email} label={t("employees.email")} name="email" />
+        <FormInput value={phone || formData?.phone} label={t("phone-number")} name="phone" />
+        <FormInput value={email || formData?.email} label={t("employees.email")} name="email" />
       </div>
       <div className="modal-row">
         <RadioGroup

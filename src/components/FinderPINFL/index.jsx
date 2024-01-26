@@ -70,6 +70,7 @@ export default function FinderPINFL({
     }
     onFetch({
       id: data?.data?.id,
+      ...data?.data,
       ...data?.data?.profile,
       experiences: data?.data?.experiences,
     });
