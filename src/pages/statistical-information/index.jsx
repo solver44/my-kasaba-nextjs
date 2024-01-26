@@ -103,14 +103,32 @@ export default function StatisticalInformation({ organization }) {
 
   const categories = [t("all"), t("statistical-information.group2")];
   const group1Data = [
-    { name: allText, y: [currentReport?.workersAmount] },
-    { name: womenText, y: [currentReport?.workersFemale] },
-    { name: adultsText, y: [currentReport?.workersAdults] },
+    {
+      name: allText,
+      y: [currentReport?.workersAmount, currentReport?.workersMembers],
+    },
+    {
+      name: womenText,
+      y: [currentReport?.workersFemale, currentReport?.workersFemaleMembers],
+    },
+    {
+      name: adultsText,
+      y: [currentReport?.workersAdults, currentReport?.workersAdultsMembers],
+    },
   ];
   const group3Data = [
-    { name: allText, y: [currentReport?.studentsAmount] },
-    { name: womenText, y: [currentReport?.studentsFemale] },
-    { name: adultsText, y: [currentReport?.studentsAdults] },
+    {
+      name: allText,
+      y: [currentReport?.studentsAmount, currentReport?.studentsMembers],
+    },
+    {
+      name: womenText,
+      y: [currentReport?.studentsFemale, currentReport?.studentsFemaleMembers],
+    },
+    {
+      name: adultsText,
+      y: [currentReport?.studentsAdults, currentReport?.studentsAdultsMembers],
+    },
   ];
   const group4Data = [{ name: allText, y: [currentReport?.pensionerAmount] }];
   const group5Data = [{ name: allText, y: [currentReport?.homemakerAmount] }];

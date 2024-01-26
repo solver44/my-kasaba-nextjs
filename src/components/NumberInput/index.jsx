@@ -7,12 +7,13 @@ import { styled } from "@mui/system";
 import areEqual from "@/utils/areEqual";
 
 const NumberInput = React.forwardRef(function CustomNumberInput(
-  { onChange, value, ...props },
+  { onChange, value, invalid, ...props },
   ref
 ) {
   // const end = props.endAdornment;
   // if (typeof window === "undefined") return null;
 
+  if (value === 0 && onChange) onChange({ target: { value } });
   return (
     <BaseNumberInput
       slots={{
@@ -22,6 +23,9 @@ const NumberInput = React.forwardRef(function CustomNumberInput(
         decrementButton: StyledButton,
       }}
       slotProps={{
+        input: {
+          "aria-valuetext": invalid,
+        },
         incrementButton: {
           type: "button",
           children: "+",
@@ -31,6 +35,7 @@ const NumberInput = React.forwardRef(function CustomNumberInput(
           children: "-",
         },
       }}
+      error={!!invalid}
       onFocus={(e) => {
         setTimeout(() => {
           e.target.value = value;
@@ -97,6 +102,9 @@ const StyledInputRoot = styled("div")(
     // column-gap: 8px;
     padding: 4px;
 
+    &.${numberInputClasses.error}{
+      border-color: red !important;
+    }
     &.${numberInputClasses.disabled}{
       background: var(--input-disabled-color1);
       .${numberInputClasses.incrementButton}{

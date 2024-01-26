@@ -10,7 +10,7 @@ import { useSnackbar } from "notistack";
 export default function FinderPINFL({
   required,
   disablePINFL,
-  removeGivenDate,
+  removeGivenDate = true,
   pinflValue = "",
   givenDate = "",
   style = {},
@@ -28,13 +28,13 @@ export default function FinderPINFL({
   async function fetchData() {
     let isValid = true;
 
-    if (!forms.givenDate && !removeGivenDate) {
-      setInputValidation((inputValidation) => ({
-        ...inputValidation,
-        givenDate: true,
-      }));
-      isValid = false;
-    }
+    // if (!forms.givenDate && !removeGivenDate) {
+    //   setInputValidation((inputValidation) => ({
+    //     ...inputValidation,
+    //     givenDate: true,
+    //   }));
+    //   isValid = false;
+    // }
     if (forms.pinfl?.length < 14) {
       setInputValidation((inputValidation) => ({
         ...inputValidation,
@@ -89,7 +89,7 @@ export default function FinderPINFL({
           setForms((forms) => ({ ...forms, [name]: e.target.value }))
         }
       />
-      {!removeGivenDate && (
+      {/* {!removeGivenDate && (
         <FormInput
           date
           invalid={inputValidation.givenDate}
@@ -99,7 +99,7 @@ export default function FinderPINFL({
           name="givenDate"
           label={t("passport-given-date")}
         />
-      )}
+      )} */}
       <LoadingButton
         loading={loading}
         loadingPosition="start"

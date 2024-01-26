@@ -160,6 +160,7 @@ const InsideInput = React.memo(
         max={maxValue}
         min={minValue}
         disabled={disabled}
+        invalid={invalid}
         end={end}
       />
     ) : !textarea ? (

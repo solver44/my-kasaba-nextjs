@@ -38,6 +38,7 @@ export default function InDataTable({ organization, filter, onUpload, min }) {
   const [rows, setRows] = useState([]);
   const [zoomQRURL, setZoomQRURL] = useState(false);
   const [ticketLoading, setTicketLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   let { bkutData = {}, isOrganization } = useSelector((states) => states);
   bkutData = organization ? organization : bkutData;
   const qrURL = useRef("");
@@ -130,51 +131,58 @@ export default function InDataTable({ organization, filter, onUpload, min }) {
   }
 
   async function sendData(_data, hideModal, isView, noAlert = false) {
-    const bkutData = bkutDataRef.current;
+    try {
+      setLoading(true);
+      const bkutData = bkutDataRef.current;
 
-    const { forms, dataModal } = _data;
-    if (!dataModal?.individual?.id) delete dataModal?.individual?.id;
-    const requestData = {
-      // ...dataModal,
-      id: dataModal.id,
-      individual: {
-        pinfl: forms.pinfl,
-        id: individualId.current,
-        ...dataModal.individual,
-        phone: forms.phone,
-        email: forms.email,
-      },
-      isKasabaActive: forms.isKasabaActive,
-      isMember: forms.isMember,
-      isFired: forms.isFired,
-      ...forms.personInfo,
-      position: {
-        id: forms.position,
-      },
-      memberJoinDate: forms.signDate,
-    };
-    if (isOrganization || organization?.id)
-      requestData.eBkutOrganization = { id: bkutData.id };
-    else requestData.bkut = { id: bkutData.id };
+      const { forms, dataModal } = _data;
+      if (!dataModal?.individual?.id) delete dataModal?.individual?.id;
+      const requestData = {
+        // ...dataModal,
+        id: dataModal.id,
+        individual: {
+          pinfl: forms.pinfl,
+          id: individualId.current,
+          ...dataModal.individual,
+          phone: forms.phone,
+          email: forms.email,
+        },
+        isKasabaActive: forms.isKasabaActive,
+        isMember: forms.isMember,
+        isFired: forms.isFired,
+        ...forms.personInfo,
+        position: {
+          id: forms.position,
+        },
+        memberJoinDate: forms.signDate,
+      };
+      if (isOrganization || organization?.id)
+        requestData.eBkutOrganization = { id: bkutData.id };
+      else requestData.bkut = { id: bkutData.id };
 
-    const response = await sendEmployee(requestData);
-    if (response?.success) {
-      const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
-      setRows((rows) => [
-        ...rows.filter((r) => r.id != newId),
-        { id: newId, ...forms },
-      ]);
-      if (!noAlert) {
-        enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+      const response = await sendEmployee(requestData);
+      if (response?.success) {
+        const newId = rows[Math.max(rows.length - 1, 0)]?.id ?? 0;
+        setRows((rows) => [
+          ...rows.filter((r) => r.id != newId),
+          { id: newId, ...forms },
+        ]);
+        if (!noAlert) {
+          enqueueSnackbar(t("successfully-saved"), { variant: "success" });
+        } else {
+          return true;
+        }
+        actions.updateData();
       } else {
-        return true;
+        enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
       }
-      actions.updateData();
-    } else {
-      enqueueSnackbar(t("error-send-bkut"), { variant: "error" });
+      if (noAlert) return false;
+      if (hideModal) hideModal();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-    if (noAlert) return false;
-    if (hideModal) hideModal();
   }
 
   async function generateTicket(employee) {
@@ -244,7 +252,7 @@ export default function InDataTable({ organization, filter, onUpload, min }) {
         onSubmitModal={onSubmitModal}
         isFormModal
         title={t("memberTitle")}
-        loading={ticketLoading}
+        loading={ticketLoading || loading}
         modalWidth="80vw"
         bottomModal={(handleSubmit, handleClose, isView, _, data) => {
           if (data.ticketCode) {
@@ -254,10 +262,16 @@ export default function InDataTable({ organization, filter, onUpload, min }) {
           return (
             <div className={styles.bottom} style={{ position: "relative" }}>
               <div className={styles.row}>
-                <Button onClick={handleSubmit} variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  onClick={handleSubmit}
+                  variant="contained"
+                >
                   {t("save")}
+                </LoadingButton>
+                <Button disabled={loading} onClick={handleClose}>
+                  {t("close")}
                 </Button>
-                <Button onClick={handleClose}>{t("close")}</Button>
               </div>
               {isView && (
                 <LoadingButton

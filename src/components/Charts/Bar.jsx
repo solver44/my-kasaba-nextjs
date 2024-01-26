@@ -37,6 +37,11 @@ export default function BarCharts({
     },
     xAxis: {
       categories,
+      labels: {
+        style: {
+          fontSize: "16px",
+        },
+      },
     },
     yAxis: {
       min: 0,
@@ -50,6 +55,7 @@ export default function BarCharts({
       },
     },
     tooltip: {
+      outside: true,
       pointFormat:
         '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}</b><br/>',
       style: {

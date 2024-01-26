@@ -70,6 +70,7 @@ export default function JSH1() {
 
   const saveStatistics = async (forms) => {
     try {
+      console.log(forms)
       const requestData = {
         reports: {
           year: getReportYear(),

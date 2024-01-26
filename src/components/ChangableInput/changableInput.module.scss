@@ -119,7 +119,13 @@
   background: var(--input-incolor);
   fieldset {
     border: 1px solid var(--input-border-color) !important;
+    border-color: var(--input-border-color) !important;
     box-shadow: var(--input-shadow);
+  }
+  &.invalid {
+    fieldset {
+      border-color: red !important;
+    }
   }
   & > :first-child > :first-child {
     padding: 2px;
@@ -133,26 +139,12 @@
 }
 .autocomplete_input {
   background: var(--input-incolor);
-  fieldset {
-    border: 1px solid var(--input-border-color) !important;
-    box-shadow: var(--input-shadow);
-  }
-  &.invalid {
-    fieldset {
-      border-color: red !important;
-    }
-  }
   border-radius: var(--input-radius);
   &.disabled {
     background: var(--input-disabled-color) !important;
     cursor: not-allowed !important;
     fieldset {
       background-color: var(--input-disabled-color) !important;
-    }
-  }
-  &.invalid {
-    fieldset {
-      border-color: red !important;
     }
   }
 }

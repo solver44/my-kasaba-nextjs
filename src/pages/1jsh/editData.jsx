@@ -133,7 +133,6 @@ export default function EditData({ currentReport = {} }) {
         />
         <FormInput
           name="ktut"
-          required
           disabled
           value={KTUTValue}
           label={t("1sh.ktut")}

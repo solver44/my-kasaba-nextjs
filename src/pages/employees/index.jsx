@@ -21,7 +21,7 @@ export default function Employees({ organization }) {
       className={[styles.containers, organization ? styles.org : ""].join(" ")}
     >
       <Tabs
-        color={organization ? "secondary" : ""}
+        color={organization ? "secondary" : undefined}
         onChange={onChangeTabs}
         value={(searchParams.get("tab") ?? 1) - 1}
         tabs={[

@@ -60,6 +60,7 @@ export async function deleteEmployee(id) {
 export async function sendIndividual(_requestData = {}, orig = false) {
   try {
     const { pinfl, ...requestData } = _requestData;
+    console.log(requestData);
     if (Object.keys(requestData).length < 2) return;
     const { data } = !orig
       ? await $axios.post(

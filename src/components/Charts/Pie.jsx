@@ -17,7 +17,7 @@ export default function PieCharts({
     title: {
       text: title,
       style: {
-        fontSize: "22px",
+        fontSize: "24px",
       },
     },
     credits: {
@@ -38,9 +38,10 @@ export default function PieCharts({
       },
     },
     tooltip: {
-      pointFormat: "{point.name}: <b>{point.percentage:.1f}%</b>",
+      outside: true,
+      pointFormat: "{point.fullText}: <b>{point.percentage:.1f}%</b>",
       style: {
-        fontSize: "18px",
+        fontSize: "20px",
       },
     },
     plotOptions: {
@@ -49,13 +50,13 @@ export default function PieCharts({
         cursor: "pointer",
         dataLabels: {
           enabled: true,
-          format: "{point.y}",
+          format: "{point.name} {point.y}",
           style: {
             fontWeight: "normal",
-            fontSize: "18px", // Set the data label font size
+            fontSize: "20px", // Set the data label font size
           },
         },
-        showInLegend: true,
+        showInLegend: false,
       },
     },
     legend: {
@@ -69,6 +70,7 @@ export default function PieCharts({
         data: data.map((item) => {
           return {
             name: item.name,
+            fullText: item.fullText,
             y: item.y[0],
           };
         }),
