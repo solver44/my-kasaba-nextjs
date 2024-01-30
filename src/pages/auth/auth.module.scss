@@ -13,6 +13,21 @@
 .left {
   padding: 150px 50px;
   width: 32%;
+  img {
+    bottom: 0;
+  }
+}
+.input {
+  label {
+    font-size: 18px;
+  }
+  input {
+    font-size: 20px !important;
+  }
+}
+.forgot {
+  text-align: end;
+  color: #9b9b9b;
 }
 .right {
   width: 68%;
@@ -61,36 +76,45 @@
   gap: 30px;
   margin-top: 30px;
 }
-.auth_title {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: 5px;
+.or {
+  margin: 0;
 }
-.button{
+.bottom {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.auth_title {
+  font-size: 32px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.button {
   background-color: #060326;
-  padding: 15px 20px;
+  padding: 12px;
   cursor: pointer;
   border: none;
   border-radius: 8px;
   color: white;
-  font-size: 16px;
+  font-size: 20px !important;
   font-weight: 500;
   letter-spacing: 2px;
-  &:active{
+  &:active {
     filter: brightness(1.2);
   }
 }
 $breakpoint-tablet: 900px;
 @media (max-width: $breakpoint-tablet) {
-  
-  .bg{
-   display: none;
+  .bg {
+    display: none;
   }
-  .left{
+  .left {
     padding: 50px;
     width: 100%;
   }
-  .right{
+  .right {
     width: 100%;
     border-radius: 0;
   }

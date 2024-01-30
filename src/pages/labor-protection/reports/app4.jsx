@@ -12,7 +12,7 @@ export default function LaborApp4Report({ data }) {
   const { bkutData = {} } = useSelector((states) => states);
 
   return (
-    <div className={styles.form}>
+    <div className={styles.app4}>
       <DocumentViewer
         documentSrc="/reports/labor-app4.docx"
         ignoreWidth

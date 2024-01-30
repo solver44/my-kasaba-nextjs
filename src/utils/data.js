@@ -153,3 +153,19 @@ export function getStatusColors(val) {
 export function getIsOrganization(text) {
   return (text ?? localStorage.getItem("type")) === "organization";
 }
+
+export function getInstance(obj = {}) {
+  return obj?._instanceName || obj?.nameUz || obj?.nameRu || obj?.name;
+}
+
+export function getSummarize(objName, filter, currentReport = {}, quarter) {
+  return (currentReport[objName] || [])
+    .filter(filter ?? ((a) => a.quarter <= quarter))
+    .reduce((current, next) => {
+      Object.keys(next).forEach((key) => {
+        if (typeof current[key] === "undefined") current[key] = 0;
+        current[key] += next[key] || 0;
+      });
+      return current;
+    }, {});
+}

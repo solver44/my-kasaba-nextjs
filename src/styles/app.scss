@@ -11,7 +11,9 @@ body {
   padding: 0;
   overscroll-behavior-y: none;
 }
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -28,6 +30,8 @@ a {
 }
 .docx-wrapper {
   padding: 5px 0 0 0 !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
 }
 #pdfViewer {
   background-color: transparent;
@@ -40,12 +44,12 @@ canvas {
   white-space: normal !important;
   text-overflow: unset !important;
 }
-.Mui-TableHeadCell-Content-Labels{
-  & > :last-child{
+.Mui-TableHeadCell-Content-Labels {
+  & > :last-child {
     display: none !important;
   }
 }
-th{
+th {
   padding: 0.8rem 0.5rem !important;
 }
 // .highcharts-credits{

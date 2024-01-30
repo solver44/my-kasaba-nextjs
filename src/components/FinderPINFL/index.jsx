@@ -8,7 +8,7 @@ import { fetchPINFL } from "@/http/public";
 import { useSnackbar } from "notistack";
 
 export default function FinderPINFL({
-  required,
+  required = true,
   disablePINFL,
   removeGivenDate = true,
   pinflValue = "",
@@ -78,7 +78,7 @@ export default function FinderPINFL({
   return (
     <div style={style} className={styles.wrapper}>
       <FormInput
-        required
+        required={required}
         name="pinfl"
         disabled={disablePINFL && !!pinflValue}
         validationError={inputValidation?.pinflError}

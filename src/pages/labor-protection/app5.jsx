@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import { QUARTERS } from ".";
 import ArticleIcon from "@mui/icons-material/Article";
 import FinderPINFL from "@/components/FinderPINFL";
-import { getFIO, getLastPosition, getLocalizationNames } from "@/utils/data";
+import { getFIO, getLastPosition, getLocalizationNames, getSummarize } from "@/utils/data";
 import LaborApp4Report from "./reports/app4";
 
 export default function LaborApp5Page({
@@ -70,23 +70,11 @@ export default function LaborApp5Page({
     return res + " " + t("labor.quarter");
   }
 
-  function getSummarize(objName, filter) {
-    return (currentReport[objName] || [])
-      .filter(filter ?? ((a) => a.quarter <= quarter))
-      .reduce((current, next) => {
-        Object.keys(next).forEach((key) => {
-          if (typeof current[key] === "undefined") current[key] = 0;
-          current[key] += next[key] || 0;
-        });
-        return current;
-      }, {});
-  }
-
   let st = (currentReport?.app5 || []).find((a) => a.quarter == quarter) || {};
-  let stAll = getSummarize("app5", (a) => a.quarter < quarter);
+  let stAll = getSummarize("app5", (a) => a.quarter < quarter, currentReport, quarter);
   useEffect(() => {
-    let stApp3 = getSummarize("app3");
-    let stApp4 = getSummarize("app4");
+    let stApp3 = getSummarize("app3", null, currentReport, quarter);
+    let stApp4 = getSummarize("app4", null, currentReport, quarter);
 
     setValues({
       quarter: getQuarter(quarter),

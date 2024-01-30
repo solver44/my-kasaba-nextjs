@@ -11,6 +11,9 @@ import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import LaborApp4Page from "./app4";
 import LaborApp5Page from "./app5";
+import LaborJSHPage from "./jsh";
+import LaborMedicalPage from "./medical";
+import LaborAttestationPage from "./attestation";
 
 export const QUARTERS = (type) => [
   type != 2 && {
@@ -23,7 +26,7 @@ export const QUARTERS = (type) => [
   },
   type != 2 && {
     value: 3,
-    label: "(III) 1-oktyabr uchun",
+    label: "(III) 1-oktabr uchun",
   },
   {
     value: 4,
@@ -61,7 +64,8 @@ export default function LaborProtectionPage() {
   useEffect(() => {
     if (!bkutData.id) return;
     async function initData() {
-      const labors = await getLaborProtections(bkutData.id);
+      let labors = await getLaborProtections(bkutData.id);
+      labors = Array.isArray(labors) ? labors : [];
       setLabors(labors);
       initYears(labors);
     }
@@ -133,6 +137,39 @@ export default function LaborProtectionPage() {
           label: "labor.app5",
           children: (
             <LaborApp5Page
+              bkutData={bkutData}
+              data={labors}
+              years={years}
+              saveReport={saveLabor}
+            />
+          ),
+        },
+        {
+          label: "labor.jsh",
+          children: (
+            <LaborJSHPage
+              bkutData={bkutData}
+              data={labors}
+              years={years}
+              saveReport={saveLabor}
+            />
+          ),
+        },
+        {
+          label: "labor.medical",
+          children: (
+            <LaborMedicalPage
+              bkutData={bkutData}
+              data={labors}
+              years={years}
+              saveReport={saveLabor}
+            />
+          ),
+        },
+        {
+          label: "labor.attestation",
+          children: (
+            <LaborAttestationPage
               bkutData={bkutData}
               data={labors}
               years={years}

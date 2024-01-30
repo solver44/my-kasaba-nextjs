@@ -87,7 +87,12 @@ export default function Auth() {
     <div className={styles.wrapper}>
       <div className={styles.left}>
         <div className={styles.left_content}>
-          <Image style={{ marginBottom: 20 }} src={logo} alt="kasaba logo" />
+          <Image
+            style={{ marginBottom: 20 }}
+            height={120}
+            src={logo}
+            alt="kasaba logo"
+          />
           <p className={styles.subtitle}>{t("login.title")}</p>
           <p className={styles.title}>{t("welcome")}</p>
         </div>
@@ -110,6 +115,7 @@ export default function Auth() {
             validationError="input-error.empty"
             // name="email"
             standart
+            className={styles.input}
             onChange={(e) => handleInput(e, "username")}
           />
           <Input
@@ -118,6 +124,7 @@ export default function Auth() {
             standart
             validationError="input-error.empty"
             validation={validateEmpty}
+            className={styles.input}
             invalid={inputErrors.password}
             onChange={(e) => handleInput(e, "password")}
             type={showPassword ? "text" : "password"}
@@ -137,22 +144,23 @@ export default function Auth() {
             }}
             variant="standard"
           />
-          <p className="unfocus t-center">- {t("or")} -</p>
-          <div className="center">
-            <Image
-              style={{ cursor: "pointer" }}
-              src={require("public/one_id.png")}
-              height={45}
-              width={85}
-              alt="ONE ID"
-            />
+          <div className={styles.bottom}>
+            <div className="center">
+              <Image
+                style={{ cursor: "pointer" }}
+                src={require("public/one_id.png")}
+                height={45}
+                alt="ONE ID"
+              />
+            </div>
+            <p className={"unfocus t-center " + styles.or}>- {t("or")} -</p>
+            <button onClick={login} className={styles.button}>
+              {t("loginTitle")}
+            </button>
+            <a href="#" className={styles.forgot}>
+              {t("forgot-password")}
+            </a>
           </div>
-          <button onClick={login} className={styles.button}>
-            {t("loginTitle")}
-          </button>
-          <a href="#/auth" className="unfocus t-center small">
-            {t("forgot-password")}
-          </a>
           <div className="mt-2 row g-1 j-center">
             <span className="unfocus">{t("not-registered")}</span>
             <Link href="/request" className="unfocus-link">

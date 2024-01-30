@@ -1,6 +1,26 @@
 .form {
   width: 100%;
-  // overflow: hidden;
+}
+.jsh {
+  width: 100%;
+  & > div {
+    & > div:nth-child(2) {
+      justify-content: center;
+    }
+  }
+}
+.app4 {
+  width: 100%;
+  table {
+    tr:nth-child(3) {
+      td:nth-child(n + 18):nth-child(-n + 26) {
+        p {
+          writing-mode: tb-rl;
+          transform: rotate(-180deg);
+        }
+      }
+    }
+  }
 }
 .container {
   width: 100%;

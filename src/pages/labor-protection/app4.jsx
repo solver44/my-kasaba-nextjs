@@ -252,6 +252,7 @@ export default function LaborApp4Page({
             <div datatype="list">
               <div className="modal-row">
                 <FinderPINFL
+                  required={false}
                   removeGivenDate
                   disablePINFL
                   onFetch={onFetchPINFL}

@@ -563,6 +563,10 @@ export default {
       app3: "Mehnat muhofazasi va xavfsizlik",
       app4: "Baxtsiz xodisalar",
       app5: "To'lovlar, qarzdorlik",
+      jsh: "JSh bandlari",
+      medical: "Tibbiy ko'rik",
+      attestation: "Ish o'rni attestatsiyasi",
+
       reportBtn: "Hisobot shakli",
       quarter: "chorak",
       formBtn: "Yopish",
@@ -666,17 +670,22 @@ export default {
       accicents1Light: "Yengil jarohatlandi",
       victim: "Jabrlanuvchi",
 
-
-      disabledPeople: "Mehnat qobiliyatini yoʼqotganlik darajasi oʼrnatilganlar soni",
-      personsEntitled: "Boquvchisini yoʼqotganlik tufayli zarar toʼlovi olish huquqiga ega boʼlgan shaxslar soni",
-      oneTimeSpent: "xodimning vafoti yoki sogʼligʼiga yetkazilgan zarar bilan bogʼliq bir yoʼla toʼlanadigan zarar miqdori (ming soʼm)",
+      disabledPeople:
+        "Mehnat qobiliyatini yoʼqotganlik darajasi oʼrnatilganlar soni",
+      personsEntitled:
+        "Boquvchisini yoʼqotganlik tufayli zarar toʼlovi olish huquqiga ega boʼlgan shaxslar soni",
+      oneTimeSpent:
+        "xodimning vafoti yoki sogʼligʼiga yetkazilgan zarar bilan bogʼliq bir yoʼla toʼlanadigan zarar miqdori (ming soʼm)",
       everyMonthSpent: "xar oyda toʼlanadigan zarar miqdori (ming soʼm)",
       additionalSpent: "boshqa qoʼshimcha harajatlar miqdori (ming soʼm)",
-      entitledToReceive: "Belgilangan zarar toʼlovlarini olish huquqiga ega boʼlgan jami xodim (shaxs)lar soni",
+      entitledToReceive:
+        "Belgilangan zarar toʼlovlarini olish huquqiga ega boʼlgan jami xodim (shaxs)lar soni",
       inCurrentYear: "joriy yilda",
       inEarlierYear: "oldingi yillarida",
-      spentForFixedDamage: "Belgilangan zarar toʼlovlar boʼyicha mavjud boʼlgan jami qarzdorlik miqdori (ming soʼm)",
-      oneTimeSpent1: "xodimning vafoti yoki sogʼligʼiga yetkazilgan zarar bilan bogʼliq bir yoʼla toʼlanadigan zarar miqdori (ming soʼm)",
+      spentForFixedDamage:
+        "Belgilangan zarar toʼlovlar boʼyicha mavjud boʼlgan jami qarzdorlik miqdori (ming soʼm)",
+      oneTimeSpent1:
+        "xodimning vafoti yoki sogʼligʼiga yetkazilgan zarar bilan bogʼliq bir yoʼla toʼlanadigan zarar miqdori (ming soʼm)",
       everyMonthSpent1: "xar oyda toʼlanadigan zarar miqdori (ming soʼm)",
       additionalSpent1: "boshqa qoʼshimcha harajatlar miqdori (ming soʼm)",
 
@@ -689,7 +698,68 @@ export default {
       accidents1InDeath1: "Oʼlganlar",
       accidents1Sever1: "Ogʼir jarohatlanganlar",
       accicents1Light1: "Yengil jarohatlanganlar",
-      damaged: "Jarohatlanganlar"
+      damaged: "Jarohatlanganlar",
+
+      includings:
+        "Xodimlarga sut, davolash-profilaktika oziq-ovqati, gazlangan tuzli suv, shaxsiy himoya va gigiena vositalariga ajratilgan mablagʼ miqdori",
+      medicalExaminationsSpent:
+        "Xodimlarni dastlabki va davriy tibbiy koʼriklardan oʼtkazish uchun ajratilgan mablagʼ miqdori",
+      professionalDevelopmentSpent:
+        "Xodimlarni mehnat muhofazasi boʼyicha oʼquvdan, qayta tayyorgarlikdan oʼtishini, malaka oshirishi uchun ajratilgan mablagʼ miqdori",
+      attestationSpent:
+        "Ish oʼrinlarini mehnat sharoitlari boʼyicha attestatsiyadan oʼtkazish uchun ajratilgan mablagʼ miqdori",
+      insuranceSpent:
+        "Ish beruvchining fuqarolik javobgarligini majburiy sugʼurta qilish uchun ajratilgan mablagʼ miqdori",
+      compensationSpent:
+        "Ishlab chiqarishdagi baxtsiz xodisa va kasb kasalliklari uchun ish beruvchi tomonidan zarar toʼlovlariga ajratilgan mablagʼ",
+      compensationSpent1: "shundan toʼlab berilgan mablagʼ",
+      establishmentSpent:
+        "Mehnatni muhofaza qilish jamgʼarmasining tashkil etilganligi va unga yoʼnaltirilgan mablagʼlar miqdori",
+      jshGroup1: "“Mehnatni muhofaza qilish boʼyicha Bitim”ga oid",
+      jshGroup1i1:
+        "Bitimda mehnatni muhofaza qilish boʼyicha rejalashtirilgan tadbirlar soni",
+      jshGroup1i2: "Tadbirlarga sarflangan mablagʼ miqdori",
+      spentOnEach: "Har bir xodimga sarflangan mablagʼ miqdori",
+      numberOfPerformed:
+        "Mehnatni muhofaza qilish boʼyicha bajarilgan tadbirlar soni",
+      jshGroup2: "Mehnat muhofazasi boʼyicha vakilga oid",
+      jshGroup2i1: "Jami mehnat muhofazasi boʼyicha saylangan vakillar soni",
+      representatives:
+        "shundan, joriy yilda saylangan mehnat muhofazasi boʼyicha vakillar soni",
+      jshGroup2i2: "shu jumladan oʼqitilganlari",
+      jshGroup2i3:
+        "Mehnat muhofazasi boʼyicha vakillar tomonidan aniqlangan qonun, qoida va meʼyorlar talablarining buzilishlari soni",
+      jshGroup2i4: "bartaraf qilinganlari",
+      promotions:
+        "Mehnat muhofazasi boʼyicha vakillarni ragʼbatlantirish uchun sarflangan mablagʼ",
+
+      determinedOrg: "tibbiy koʼrikdan oʼtkazilishi shart boʼlgan xodimlarning lavozimi boʼyicha kontingenti aniqlangan tashkilotlar soni",
+      drawnOrg: "dalolatnoma tuzilgan tashkilotlar soni",
+      agreedCount: "kasaba uyushmasi qoʼmitasi bilan kelishilgan, soni",
+      calendarPlan: "xodimlarning tibbiy koʼrikdan oʼtkazishning kalendarь rejasi tuzilgan, soni",
+      presented: "tibbiy koʼrikni oʼtkazuvchi davolash-profilaktika muassasasiga taqdim etilgan, soni",
+      examinedEmp: "Tibbiy koʼrikdan oʼtgan xodimlar soni, jami",
+      under18: " oʼn sakkiz yoshga toʼlmaganlar soni",
+      over50: "oltmish yoshga toʼlgan erkaklar, ellik besh yoshga toʼlgan ayollar soni",
+      disabledEmp: "nogironlar soni",
+      nightJobs: "Mehnat sharoiti noqulay ishlarda, tungi ishlarda, shuningdek transport harakati bilan bogʼliq ishlarda band boʼlganlar soni",
+      otherJobs: "Oziq-ovqat sanoatida, savdo va bevosita aholiga xizmat koʼrsatish bilan bogʼliq boʼlgan boshqa tarmoqlardagi ishlarda band boʼlganlar soni",
+      educationJobs: "Umumtaʼlim maktablari, maktabgacha tarbiya va boshqa muassasalarning bevosita bolalarga taʼlim yoki tarbiya berish bilan mashgʼul boʼlgan pedagog va boshqa xodimlar soni",
+      totalSpent: "Tibbiy koʼrik uchun jami sarflangan mablagʼ miqdori",
+      spentPerEmp: "Har bir xodim uchun oʼrtacha sarflangan mablagʼ miqdori",
+
+      harmfulJobs: "Xavfli, zararli omillari mavjud korxonalardagi ish oʼrinlari soni",
+      attestationI1: "Аttestatsiyadan oʼtkazilgan ish oʼrinlari soni",
+      percentage1: "%",
+      benefits: "Belgilangan imtiyozlar, JАMI",
+      number1: "№ 1 son roʼyxat boʼyicha",
+      number2: "№ 2 son roʼyxat boʼyicha",
+      number3: "№ 3 son roʼyxat boʼyicha",
+      extraVacation: "Qoʼshimcha mexnat taʼtiliga chiqish",
+      foodSupply: "Sut va unga tenglashtiril-gan oziq-ovqat mahsulotlari bilan taʼminlash",
+      treatment: "Davolash profilaktika oziq ovqati bilan taʼminlash",
+      specialClothes: "Maxsus kiyim, maysus poyafzal, ShXV bilan taʼminlash",
+      preferentialTerms: "Imtiyozli shartlarda pensiyaga chiqish huquqi tasdiqlandi",
     },
   },
 };
