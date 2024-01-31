@@ -5,6 +5,7 @@ import {
 } from "@mui/base";
 import { styled } from "@mui/system";
 import areEqual from "@/utils/areEqual";
+import { useEffect } from "react";
 
 const NumberInput = React.forwardRef(function CustomNumberInput(
   { onChange, value, invalid, ...props },
@@ -13,7 +14,10 @@ const NumberInput = React.forwardRef(function CustomNumberInput(
   // const end = props.endAdornment;
   // if (typeof window === "undefined") return null;
 
-  if (value === 0 && onChange) onChange({ target: { value } });
+  useEffect(() => {
+    if (value === 0 && onChange) onChange({ target: { value } });
+  }, [value]);
+
   return (
     <BaseNumberInput
       slots={{
@@ -100,7 +104,7 @@ const StyledInputRoot = styled("div")(
     grid-template-rows: 1fr 1fr;
     overflow: hidden;
     // column-gap: 8px;
-    padding: 4px;
+    padding: 2px 4px;
 
     &.${numberInputClasses.error}{
       border-color: red !important;

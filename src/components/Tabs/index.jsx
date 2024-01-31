@@ -7,6 +7,7 @@ import styles from "./tabs.module.scss";
 export default function Tabs({
   tabs = [],
   appBar,
+  appBar2,
   reverse,
   contentPadding,
   onChange,
@@ -38,7 +39,14 @@ export default function Tabs({
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", marginBottom: 1 }}>
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: "divider",
+            marginBottom: 1,
+            boxShadow: appBar2 ? "" : "",
+          }}
+        >
           <AppBarCom color="transparent" position="sticky">
             <TabList
               indicatorColor={color}

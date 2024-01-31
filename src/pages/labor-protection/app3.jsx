@@ -243,7 +243,7 @@ export default function LaborApp3Page({
                   name="plannedActionsSpent"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.plannedActionsSpent}
                   label={t("labor.plannedActionsSpent")}
                 />
@@ -261,7 +261,7 @@ export default function LaborApp3Page({
                   name="includingSpentTransaction"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.includingSpentTransaction}
                   label={t("labor.includingSpentTransaction")}
                 />
@@ -269,7 +269,7 @@ export default function LaborApp3Page({
                   name="incudingSpentClothes"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.incudingSpentClothes}
                   label={t("labor.incudingSpentClothes")}
                 />
@@ -279,7 +279,7 @@ export default function LaborApp3Page({
                   name="includingSpentFood"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.includingSpentFood}
                   label={t("labor.includingSpentFood")}
                 />
@@ -287,7 +287,7 @@ export default function LaborApp3Page({
                   name="includingSpentHygiene"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.includingSpentHygiene}
                   label={t("labor.includingSpentHygiene")}
                 />
@@ -297,7 +297,7 @@ export default function LaborApp3Page({
                   name="includingSpentInsurance"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.includingSpentInsurance}
                   label={t("labor.includingSpentInsurance")}
                 />
@@ -314,7 +314,7 @@ export default function LaborApp3Page({
                 name="includingSpentMedicine"
                 required
                 suffixPlusInput={stAll}
-                type="number"
+                type="currency"
                 value={values.includingSpentMedicine}
                 label={t("labor.includingSpentMedicine")}
               />
@@ -334,7 +334,7 @@ export default function LaborApp3Page({
                 name="performedActionsSpent"
                 required
                 suffixPlusInput={stAll}
-                type="number"
+                type="currency"
                 value={values.performedActionsSpent}
                 label={t("labor.performedActionsSpent")}
               />
@@ -351,7 +351,7 @@ export default function LaborApp3Page({
                   name="including2SpentTransaction"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.including2SpentTransaction}
                   label={t("labor.including2SpentTransaction")}
                 />
@@ -361,7 +361,7 @@ export default function LaborApp3Page({
                   name="incuding2SpentClothes"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.incuding2SpentClothes}
                   label={t("labor.incuding2SpentClothes")}
                 />
@@ -369,7 +369,7 @@ export default function LaborApp3Page({
                   name="including2SpentFood"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.including2SpentFood}
                   label={t("labor.including2SpentFood")}
                 />
@@ -378,7 +378,7 @@ export default function LaborApp3Page({
                 name="including2SpentHygiene"
                 required
                 suffixPlusInput={stAll}
-                type="number"
+                type="currency"
                 value={values.including2SpentHygiene}
                 label={t("labor.including2SpentHygiene")}
               />
@@ -387,7 +387,7 @@ export default function LaborApp3Page({
                   name="including2SpentInsurance"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.including2SpentInsurance}
                   label={t("labor.including2SpentInsurance")}
                 />
@@ -404,7 +404,7 @@ export default function LaborApp3Page({
                 name="including2SpentMedicine"
                 required
                 suffixPlusInput={stAll}
-                type="number"
+                type="currency"
                 value={values.including2SpentMedicine}
                 label={t("labor.including2SpentMedicine")}
               />
@@ -414,7 +414,7 @@ export default function LaborApp3Page({
             name="spentToEmp"
             required
             suffixPlusInput={stAll}
-            type="number"
+            type="currency"
             value={values.spentToEmp}
             label={t("labor.spentToEmp")}
           />

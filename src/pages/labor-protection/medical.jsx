@@ -179,9 +179,7 @@ export default function LaborMedicalPage({
             st.determinedOrg ? "" : styles.red,
           ].join(" ")}
         >
-          {st.determinedOrg
-            ? t("report-entered")
-            : t("report-not-entered")}
+          {st.determinedOrg ? t("report-entered") : t("report-not-entered")}
         </p>
 
         <Button
@@ -315,15 +313,16 @@ export default function LaborMedicalPage({
               name="totalSpent"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.totalSpent}
               label={t("labor.totalSpent")}
             />
             <FormInput
               name="spentPerEmp"
+              maxInput="totalSpent"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.spentPerEmp}
               label={t("labor.spentPerEmp")}
             />

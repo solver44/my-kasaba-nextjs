@@ -5,6 +5,7 @@ import areEqual from "../../utils/areEqual";
 import { useTranslation } from "react-i18next";
 import { TextField, styled } from "@mui/material";
 import NumberInput from "../NumberInput";
+import { NumericFormat } from "react-number-format";
 
 function Input({
   titleText,
@@ -146,14 +147,43 @@ const InsideInput = React.memo(
   }) => {
     const formattedMask = mask ? convertMask(mask) : mask; // Convert the mask
     const numberValue =
-      typeof value === "undefined" ? 0 : type === "number" ? +value : 0;
+      typeof value === "undefined"
+        ? 0
+        : type === "number" || type === "currency"
+        ? +value
+        : 0;
 
     function getType(name) {
       if (name.includes("phone")) return "phone";
       else if (name.includes("email")) return "email";
       return "text";
     }
-    return type === "number" ? (
+    return type === "currency" ? (
+      <TextField
+        id="outlined-basic"
+        variant={standart ? "standard" : "outlined"}
+        className={[
+          className,
+          styles.input,
+          disabled ? styles.disabled : "",
+          !!invalid ? styles.invalid : "",
+        ].join(" ")}
+        error={!!invalid}
+        helperText={invalid}
+        maxLength={maxLength}
+        disabled={disabled}
+        {...props}
+        value={numberValue}
+        onChange={onChangeFunc}
+        InputProps={{
+          inputComponent: NumericFormatCustom,
+          inputProps: {
+            minValue,
+            maxValue,
+          },
+        }}
+      />
+    ) : type === "number" ? (
       <NumberInput
         value={numberValue}
         onChange={onChangeFunc}
@@ -205,5 +235,34 @@ const InsideInput = React.memo(
   },
   areEqual
 );
+
+const NumericFormatCustom = React.forwardRef(function NumericFormatCustom(
+  props,
+  ref
+) {
+  const { onChange, minValue = 0, maxValue, ...other } = props;
+
+  return (
+    <NumericFormat
+      {...other}
+      getInputRef={ref}
+      isAllowed={(values) => {
+        const { floatValue = 0 } = values;
+        if (typeof maxValue !== "undefined")
+          return floatValue <= maxValue && floatValue >= minValue;
+        return floatValue >= minValue;
+      }}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.floatValue,
+          },
+        });
+      }}
+      thousandSeparator=" "
+    />
+  );
+});
 
 export default React.memo(Input, areEqual);

@@ -285,7 +285,7 @@ export default function LaborApp5Page({
                   name="oneTimeSpent"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.oneTimeSpent}
                   label={t("labor.oneTimeSpent")}
                 />
@@ -293,7 +293,7 @@ export default function LaborApp5Page({
                   name="everyMonthSpent"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.everyMonthSpent}
                   label={t("labor.everyMonthSpent")}
                 />
@@ -301,7 +301,7 @@ export default function LaborApp5Page({
                   name="additionalSpent"
                   required
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.additionalSpent}
                   label={t("labor.additionalSpent")}
                 />
@@ -338,7 +338,7 @@ export default function LaborApp5Page({
             name="spentForFixedDamage"
             required
             suffixPlusInput={stAll}
-            type="number"
+            type="currency"
             value={values.spentForFixedDamage}
             label={t("labor.spentForFixedDamage")}
           />
@@ -347,7 +347,7 @@ export default function LaborApp5Page({
               name="oneTimeSpent1"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.oneTimeSpent1}
               label={t("labor.oneTimeSpent1")}
             />
@@ -355,7 +355,7 @@ export default function LaborApp5Page({
               name="everyMonthSpent1"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.everyMonthSpent1}
               label={t("labor.everyMonthSpent1")}
             />
@@ -363,7 +363,7 @@ export default function LaborApp5Page({
               name="additionalSpent1"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.additionalSpent1}
               label={t("labor.additionalSpent1")}
             />

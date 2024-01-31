@@ -199,7 +199,7 @@ export default function StatisticalInformation({ organization }) {
       });
     });
     allYears.push({ value: y, label: t("for-year", { year: y }) });
-    setYears(allYears.reverse());
+    setYears(allYears.sort((a, b) => b.value - a.value));
   }, [bkutData]);
 
   useEffect(() => {

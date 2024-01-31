@@ -236,7 +236,7 @@ export default function LaborJSHPage({
               name="plannedActionsSpent"
               required
               disabled
-              type="number"
+              type="currency"
               value={values.plannedActionsSpent}
               label={t("labor.plannedActionsSpent")}
             />
@@ -245,7 +245,7 @@ export default function LaborJSHPage({
             name="includings"
             required
             disabled
-            type="number"
+            type="currency"
             value={values.includings}
             label={t("labor.includings")}
           />
@@ -254,7 +254,7 @@ export default function LaborJSHPage({
               name="medicalExaminationsSpent"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.medicalExaminationsSpent}
               label={t("labor.medicalExaminationsSpent")}
             />
@@ -262,7 +262,7 @@ export default function LaborJSHPage({
               name="professionalDevelopmentSpent"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.professionalDevelopmentSpent}
               label={t("labor.professionalDevelopmentSpent")}
             />
@@ -272,7 +272,7 @@ export default function LaborJSHPage({
               name="attestationSpent"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.attestationSpent}
               label={t("labor.attestationSpent")}
             />
@@ -280,7 +280,7 @@ export default function LaborJSHPage({
               name="insuranceSpent"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.insuranceSpent}
               label={t("labor.insuranceSpent")}
             />
@@ -290,7 +290,7 @@ export default function LaborJSHPage({
               name="compensationSpent"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.compensationSpent}
               label={t("labor.compensationSpent")}
             />
@@ -299,7 +299,7 @@ export default function LaborJSHPage({
               maxInput="compensationSpent"
               required
               suffixPlusInput={stAll}
-              type="number"
+              type="currency"
               value={values.compensationSpent1}
               label={t("labor.compensationSpent1")}
             />
@@ -308,7 +308,7 @@ export default function LaborJSHPage({
             name="establishmentSpent"
             required
             suffixPlusInput={stAll}
-            type="number"
+            type="currency"
             value={values.establishmentSpent}
             label={t("labor.establishmentSpent")}
           />
@@ -327,7 +327,7 @@ export default function LaborJSHPage({
                   name="including2SpentTransaction"
                   required
                   disabled
-                  type="number"
+                  type="currency"
                   value={values.including2SpentTransaction}
                   label={t("labor.jshGroup1i2")}
                 />
@@ -336,8 +336,9 @@ export default function LaborJSHPage({
                 <FormInput
                   name="spentOnEach"
                   required
+                  maxInput="including2SpentTransaction"
                   suffixPlusInput={stAll}
-                  type="number"
+                  type="currency"
                   value={values.spentOnEach}
                   label={t("labor.spentOnEach")}
                 />
@@ -403,7 +404,7 @@ export default function LaborJSHPage({
                 name="promotions"
                 required
                 suffixPlusInput={stAll}
-                type="number"
+                type="currency"
                 value={values.promotions}
                 label={t("labor.promotions")}
               />
