@@ -177,6 +177,9 @@ const InsideInput = React.memo(
         onChange={onChangeFunc}
         InputProps={{
           inputComponent: NumericFormatCustom,
+          endAdornment: (
+            <InputAdornment>{end ? "+" + formatMoney(end) : ""}</InputAdornment>
+          ),
           inputProps: {
             minValue,
             maxValue,
@@ -264,5 +267,45 @@ const NumericFormatCustom = React.forwardRef(function NumericFormatCustom(
     />
   );
 });
+
+function formatMoney(amount, decimalCount = 0, decimal = "", thousands = " ") {
+  try {
+    decimalCount = Math.abs(decimalCount);
+    decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+    const negativeSign = amount < 0 ? "-" : "";
+
+    let i = parseInt(
+      (amount = Math.abs(Number(amount) || 0).toFixed(decimalCount))
+    ).toString();
+    let j = i.length > 3 ? i.length % 3 : 0;
+
+    return (
+      negativeSign +
+      (j ? i.substr(0, j) + thousands : "") +
+      i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) +
+      (decimalCount
+        ? decimal +
+          Math.abs(amount - i)
+            .toFixed(decimalCount)
+            .slice(2)
+        : "")
+    );
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+const InputAdornment = styled("div")(
+  ({ theme }) => `
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--input-suffix-font-size);
+  width: auto;
+  justify-content: center;
+  text-wrap: nowrap;
+  color: #434D5B;
+`
+);
 
 export default React.memo(Input, areEqual);

@@ -30,7 +30,7 @@ function FormInput({
   }, [watch]);
   const suffix =
     suffixPlusInput && suffixPlusInput[name]
-      ? "+ " + suffixPlusInput[name]
+      ? "+" + suffixPlusInput[name]
       : null;
 
   const {

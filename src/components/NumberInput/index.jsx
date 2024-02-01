@@ -81,7 +81,7 @@ const InputAdornment = styled("div")(
   margin: 8px;
   display: inline-flex;
   align-items: center;
-  font-size: var(--input-inside-font-size);
+  font-size: var(--input-suffix-font-size);
   width: auto;
   justify-content: center;
   grid-row: 1/3;
