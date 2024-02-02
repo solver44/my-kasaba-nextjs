@@ -47,7 +47,7 @@ const NumberInput = React.forwardRef(function CustomNumberInput(
       }}
       value={value}
       onChange={(e, val) => {
-        onChange({ target: { value: val || value } });
+        onChange({ target: { value: val ?? value } });
       }}
       {...props}
       endAdornment={<InputAdornment>{props.end}</InputAdornment>}
