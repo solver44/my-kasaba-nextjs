@@ -64,12 +64,12 @@ export function getYearFrom(date) {
       : d.year()
     : d.year();
 }
-export function getReportDate(deadline) {
+export function getReportDate(deadline, year) {
   if (deadline)
     return dayjs(
       getReportYear() + 1 + (deadline ? deadline.slice(4) : "-01-27")
     ).format("YYYY-MM-DD");
-  return dayjs(getReportYear() + "-12-31").format("YYYY-MM-DD");
+  return dayjs((year || getReportYear()) + "-12-31").format("YYYY-MM-DD");
 }
 
 // export function isOutdatedReport(deadline) {
@@ -112,4 +112,8 @@ export function checkQuarter(quarter, type) {
     else if (now.isBefore(q) && i == quarter) return true;
   }
   return false;
+}
+
+export function getDateFromYear(year) {
+  return year ? dayjs(year + "-01-01") : year;
 }

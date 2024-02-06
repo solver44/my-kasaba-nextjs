@@ -11,6 +11,7 @@ import {
   Diversity3,
   LibraryBooks,
   PeopleAlt,
+  Construction,
 } from "@mui/icons-material";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -47,6 +48,11 @@ export default function AllMenu({ collapsed }) {
       icon: PeopleAlt,
       title: "employeesTitle",
       path: "/employees",
+    },
+    {
+      icon: Construction,
+      title: "basicTools.title",
+      path: "/basic-tools",
     },
     {
       icon: HealthAndSafetyIcon,

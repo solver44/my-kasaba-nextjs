@@ -40,9 +40,10 @@ export default function JSH1() {
     if (!bkutData.id) return;
     const allYears = [];
     const y = getReportYear(settings);
+    const prevY = y - 1;
     (bkutData.collectiveAgreementsReports || []).forEach((r) => {
       const cYear = r.year;
-      if (cYear == y) return;
+      if (cYear == y || cYear == prevY) return;
       allYears.push({
         value: cYear,
         label: t("for-year", { year: cYear }),
@@ -50,7 +51,8 @@ export default function JSH1() {
       });
     });
     allYears.push({ value: y, label: t("for-year", { year: y }) });
-    setYears(allYears.reverse());
+    allYears.push({ value: prevY, label: t("for-year", { year: prevY }) });
+    setYears(allYears.sort((a, b) => b.value - a.value));
   }, [bkutData]);
 
   useEffect(() => {
@@ -64,16 +66,17 @@ export default function JSH1() {
       return cYear == currentYear;
     });
     setEmployeeCount(temp1?.workersAmount || 0);
-    setCurrentReport(temp || { year: getReportYear(), date: getReportDate() });
+    setCurrentReport(
+      temp || { year: currentYear, date: getReportDate(null, currentYear) }
+    );
     if (!temp?.bhutForm && !editMode) setEditMode(true);
   }, [currentYear, bkutData]);
 
   const saveStatistics = async (forms) => {
     try {
-      console.log(forms)
       const requestData = {
         reports: {
-          year: getReportYear(),
+          year: currentReport.year,
           date: forms.date,
           bhutForm: forms.bhutForm,
           ifutForm: forms.ifutForm,

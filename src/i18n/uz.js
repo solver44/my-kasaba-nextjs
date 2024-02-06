@@ -733,22 +733,30 @@ export default {
       promotions:
         "Mehnat muhofazasi boʼyicha vakillarni ragʼbatlantirish uchun sarflangan mablagʼ",
 
-      determinedOrg: "tibbiy koʼrikdan oʼtkazilishi shart boʼlgan xodimlarning lavozimi boʼyicha kontingenti aniqlangan tashkilotlar soni",
+      determinedOrg:
+        "tibbiy koʼrikdan oʼtkazilishi shart boʼlgan xodimlarning lavozimi boʼyicha kontingenti aniqlangan tashkilotlar soni",
       drawnOrg: "dalolatnoma tuzilgan tashkilotlar soni",
       agreedCount: "kasaba uyushmasi qoʼmitasi bilan kelishilgan, soni",
-      calendarPlan: "xodimlarning tibbiy koʼrikdan oʼtkazishning kalendarь rejasi tuzilgan, soni",
-      presented: "tibbiy koʼrikni oʼtkazuvchi davolash-profilaktika muassasasiga taqdim etilgan, soni",
+      calendarPlan:
+        "xodimlarning tibbiy koʼrikdan oʼtkazishning kalendarь rejasi tuzilgan, soni",
+      presented:
+        "tibbiy koʼrikni oʼtkazuvchi davolash-profilaktika muassasasiga taqdim etilgan, soni",
       examinedEmp: "Tibbiy koʼrikdan oʼtgan xodimlar soni, jami",
       under18: " oʼn sakkiz yoshga toʼlmaganlar soni",
-      over50: "oltmish yoshga toʼlgan erkaklar, ellik besh yoshga toʼlgan ayollar soni",
+      over50:
+        "oltmish yoshga toʼlgan erkaklar, ellik besh yoshga toʼlgan ayollar soni",
       disabledEmp: "nogironlar soni",
-      nightJobs: "Mehnat sharoiti noqulay ishlarda, tungi ishlarda, shuningdek transport harakati bilan bogʼliq ishlarda band boʼlganlar soni",
-      otherJobs: "Oziq-ovqat sanoatida, savdo va bevosita aholiga xizmat koʼrsatish bilan bogʼliq boʼlgan boshqa tarmoqlardagi ishlarda band boʼlganlar soni",
-      educationJobs: "Umumtaʼlim maktablari, maktabgacha tarbiya va boshqa muassasalarning bevosita bolalarga taʼlim yoki tarbiya berish bilan mashgʼul boʼlgan pedagog va boshqa xodimlar soni",
+      nightJobs:
+        "Mehnat sharoiti noqulay ishlarda, tungi ishlarda, shuningdek transport harakati bilan bogʼliq ishlarda band boʼlganlar soni",
+      otherJobs:
+        "Oziq-ovqat sanoatida, savdo va bevosita aholiga xizmat koʼrsatish bilan bogʼliq boʼlgan boshqa tarmoqlardagi ishlarda band boʼlganlar soni",
+      educationJobs:
+        "Umumtaʼlim maktablari, maktabgacha tarbiya va boshqa muassasalarning bevosita bolalarga taʼlim yoki tarbiya berish bilan mashgʼul boʼlgan pedagog va boshqa xodimlar soni",
       totalSpent: "Tibbiy koʼrik uchun jami sarflangan mablagʼ miqdori",
       spentPerEmp: "Har bir xodim uchun oʼrtacha sarflangan mablagʼ miqdori",
 
-      harmfulJobs: "Xavfli, zararli omillari mavjud korxonalardagi ish oʼrinlari soni",
+      harmfulJobs:
+        "Xavfli, zararli omillari mavjud korxonalardagi ish oʼrinlari soni",
       attestationI1: "Аttestatsiyadan oʼtkazilgan ish oʼrinlari soni",
       percentage1: "%",
       benefits: "Belgilangan imtiyozlar, JАMI",
@@ -756,10 +764,39 @@ export default {
       number2: "№ 2 son roʼyxat boʼyicha",
       number3: "№ 3 son roʼyxat boʼyicha",
       extraVacation: "Qoʼshimcha mexnat taʼtiliga chiqish",
-      foodSupply: "Sut va unga tenglashtiril-gan oziq-ovqat mahsulotlari bilan taʼminlash",
+      foodSupply:
+        "Sut va unga tenglashtiril-gan oziq-ovqat mahsulotlari bilan taʼminlash",
       treatment: "Davolash profilaktika oziq ovqati bilan taʼminlash",
       specialClothes: "Maxsus kiyim, maysus poyafzal, ShXV bilan taʼminlash",
-      preferentialTerms: "Imtiyozli shartlarda pensiyaga chiqish huquqi tasdiqlandi",
+      preferentialTerms:
+        "Imtiyozli shartlarda pensiyaga chiqish huquqi tasdiqlandi",
+    },
+
+    basicTools: {
+      title: "Asosiy vositalar",
+      tab1: "Bino va inshootlar",
+      tab2: "Transport vositalari",
+      tab3: "Orgtexnika vositalari",
+      tab4: "Moddiy boyliklar",
+      seriesNumber: "Guvohnoma seriyasi va raqami",
+      seriesNumber1:
+        "Bino, inshootni davlat roʼyxatidan oʼtkazish haqidagi guvoxnoma seriyasi va raqami",
+      buildName: "Bino va inshoot nomi",
+      org: "Tashkilot",
+      soato: "MXOBT (СОАТО) bo'yicha hudud",
+      buildYear: "Qurilgan yili",
+      startYear: "Ishga tushirilgan yili",
+      floors: "Qavatlar soni",
+      commonArea: "Umumiy maydoni (m2)",
+      initial: "Boshlangʼich balans qiymati",
+      stateNumber: "Davlat raqami",
+      modelVhicle: "Transport vositasining rusumi",
+      yearMade: "Ishlab chiqarilgan yili",
+      yearPurchase: "Sotib olingan yili",
+      initialBalance: "Boshlangʼich balans qiymati",
+      color: "Rangi",
+      engineNumber: "Dvigatel raqami",
+      bodyNumber: "Kuzov raqami",
     },
   },
 };

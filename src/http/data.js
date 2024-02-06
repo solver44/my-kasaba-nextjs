@@ -248,3 +248,54 @@ export async function getLaborProtections(bkutId) {
     return error;
   }
 }
+
+export async function getEntityOfBKUT(name, bkutId, fetchPlan) {
+  try {
+    const { data } = await $axios.post(
+      `/rest/entities/${name}/search`,
+      {
+        fetchPlan,
+        filter: {
+          conditions: [
+            {
+              property: "eBKUT.id",
+              operator: "=",
+              value: bkutId,
+            },
+          ],
+        },
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    return error;
+  }
+}
+export async function deleteEntityRow(name, id) {
+  try {
+    const data = await $axios.delete(`/rest/entities/${name}/${id}`);
+    return getDeleteResponse(data);
+  } catch (error) {
+    return false;
+  }
+}
+export async function sendBasicTools(_data = {}, name) {
+  try {
+    const { id, ...data } = _data;
+    const { data: response } = id
+      ? await $axios.put(`/rest/entities/${name}/${id}`, data, {
+          headers: { "Content-Type": "application/json" },
+        })
+      : await $axios.post("/rest/entities/" + name, data, {
+          headers: { "Content-Type": "application/json" },
+        });
+    return response?.id
+      ? { ...response, success: true }
+      : { ...response, success: false };
+  } catch (error) {
+    return error;
+  }
+}

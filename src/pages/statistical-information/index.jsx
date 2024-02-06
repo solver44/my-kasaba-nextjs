@@ -189,15 +189,17 @@ export default function StatisticalInformation({ organization }) {
     if (!bkutData.id) return;
     const allYears = [];
     const y = getReportYear();
+    const prevY = y - 1;
     (bkutData.reports || []).forEach((r) => {
       const cYear = r.year;
-      if (cYear == y) return;
+      if (cYear == y || cYear == prevY) return;
       allYears.push({
         value: cYear,
         label: t("for-year", { year: cYear }),
         labelRu: t("for-year", { year: cYear }),
       });
     });
+    allYears.push({ value: prevY, label: t("for-year", { year: prevY }) });
     allYears.push({ value: y, label: t("for-year", { year: y }) });
     setYears(allYears.sort((a, b) => b.value - a.value));
   }, [bkutData]);
@@ -208,7 +210,9 @@ export default function StatisticalInformation({ organization }) {
       const cYear = r.year;
       return cYear == currentYear;
     });
-    setCurrentReport(temp || { year: getReportYear(), date: getReportDate() });
+    setCurrentReport(
+      temp || { year: currentYear, date: getReportDate(null, currentYear) }
+    );
   }, [currentYear, bkutData]);
 
   return (
@@ -241,17 +245,16 @@ export default function StatisticalInformation({ organization }) {
               {t("change")}
             </Button>
           ) : (
-            currentReport?.year == getReportYear() && (
-              <LoadingButton
-                variant="contained"
-                type="submit"
-                // disabled={!isChanged}
-                startIcon={<EditIcon />}
-                loading={loadingEditMode}
-              >
-                {t("save")}
-              </LoadingButton>
-            )
+            // currentReport?.year == getReportYear() &&
+            <LoadingButton
+              variant="contained"
+              type="submit"
+              // disabled={!isChanged}
+              startIcon={<EditIcon />}
+              loading={loadingEditMode}
+            >
+              {t("save")}
+            </LoadingButton>
           )}
           {!editMode && (
             <ChangableInput

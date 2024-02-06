@@ -17,11 +17,14 @@ export default function InputDate({
   disabled,
   maxDate,
   minDate,
+  openTo,
 }) {
   const { t } = useTranslation();
   const onChangeFunc = (e) => {
     if (!e) return;
-    const value = e ? e.format("YYYY-MM-DD") : null;
+    const value = e
+      ? e.format(openTo === "year" ? "YYYY" : "YYYY-MM-DD")
+      : null;
     if (!onChange) return;
     onChange({ target: { value } }, name);
   };
@@ -44,6 +47,7 @@ export default function InputDate({
           className={className}
           maxDate={maxDate}
           minDate={minDate}
+          openTo={openTo}
         />
       </label>
     </div>
@@ -57,6 +61,7 @@ export default function InputDate({
       className={className}
       maxDate={maxDate}
       minDate={minDate}
+      openTo={openTo}
     />
   );
 }
@@ -70,6 +75,7 @@ const InsideInput = ({
   className,
   maxDate,
   minDate,
+  openTo,
 }) => {
   const [internalValue, setInternalValue] = useState(value);
   useEffect(() => {
@@ -98,7 +104,8 @@ const InsideInput = ({
     <DatePicker
       maxDate={mxDate}
       minDate={minDate}
-      format="DD.MM.YYYY"
+      format={openTo === "year" ? "YYYY" : "DD.MM.YYYY"}
+      views={openTo === "year" && ["year"]}
       disabled={disabled}
       value={
         internalValue == "Invalid Date" || !internalValue ? null : internalValue
