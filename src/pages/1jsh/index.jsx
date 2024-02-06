@@ -145,17 +145,16 @@ export default function JSH1() {
                 {t("change")}
               </Button>
             ) : (
-              currentReport?.year == getReportYear(settings) && (
-                <LoadingButton
-                  variant="contained"
-                  type="submit"
-                  // disabled={!isChanged}
-                  startIcon={<Edit />}
-                  loading={loadingEditMode}
-                >
-                  {t("save")}
-                </LoadingButton>
-              )
+              // currentReport?.year == getReportYear(settings) &&
+              <LoadingButton
+                variant="contained"
+                type="submit"
+                // disabled={!isChanged}
+                startIcon={<Edit />}
+                loading={loadingEditMode}
+              >
+                {t("save")}
+              </LoadingButton>
             )}
             {!editMode && (
               <ChangableInput
