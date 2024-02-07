@@ -76,6 +76,16 @@ export async function getXXTUT() {
   }
 }
 
+export async function getFixedAssetType() {
+  try {
+    const { data } = await $axios.get(`/rest/entities/HFixedAssetType`);
+
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function getSettings() {
   try {
     const { data } = await $axios.get(`/rest/entities/Settings`, {

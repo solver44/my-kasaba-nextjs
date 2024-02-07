@@ -797,6 +797,16 @@ export default {
       color: "Rangi",
       engineNumber: "Dvigatel raqami",
       bodyNumber: "Kuzov raqami",
+
+      inventoryNumber: "Inventor raqami",
+      name: "Nomi",
+      amount: "Miqdori",
+      yearPurchase: "Sotib olingan yili",
+      invintialSheet: "Boshlangʼich balans qiymati",
+      group: "Gurux",
+      unitOfMeasure: "O'lchov birligi",
     },
+    PIECE: "Dona",
+    COUPLE: "Juft",
   },
 };
