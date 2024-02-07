@@ -35,31 +35,37 @@ export default function Tab3({ organization }) {
   useEffect(() => {
     if (!bkutData?.id) return;
     async function fetchData() {
-      const response = await getEntityOfBKUT(
-        entityName,
-        bkutData.id,
-        fetchPlan
-      );
-      setData(response);
-      setRows(
-        response.map((forms) => ({
-          id: forms.id,
-          inventoryNumber: forms.inventoryNumber,
-          name: forms.name,
-          amount: forms.amount,
-          yearPurchase: forms.yearPurchase,
-          invintialSheet: forms.invintialSheet,
-          unitOfMeasure: t(forms.unitOfMeasure),
-          group: getInstance(forms.group),
-        }))
-      );
+      try {
+        setLoading(true);
+        const response = await getEntityOfBKUT(
+          entityName,
+          bkutData.id,
+          fetchPlan
+        );
+        setData(response);
+        setRows(
+          response.map((forms) => ({
+            id: forms.id,
+            inventoryNumber: forms.inventoryNumber,
+            name: forms.name,
+            amount: forms.amount,
+            yearPurchase: forms.yearPurchase,
+            invintialSheet: forms.invintialSheet,
+            unitOfMeasure: t(forms.unitOfMeasure),
+            group: getInstance(forms.group),
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
   }, [bkutData]);
   async function onSubmitModal(forms, hideModal) {
     try {
       setLoading(true);
-
       const requestData = {
         id: forms.id,
         inventoryNumber: forms.inventoryNumber,

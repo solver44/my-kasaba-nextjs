@@ -36,25 +36,32 @@ export default function Tab2({ organization }) {
   useEffect(() => {
     if (!bkutData?.id) return;
     async function fetchData() {
-      const response = await getEntityOfBKUT(
-        entityName,
-        bkutData.id,
-        fetchPlan
-      );
-      setData(response);
-      setRows(
-        response.map((forms) => ({
-          id: forms.id,
-          stateNumber: forms.stateNumber,
-          modelVhicle: forms.modelVhicle,
-          yearMade: forms.yearMade,
-          yearPurchase: forms.yearPurchase,
-          initialBalance: forms.initialBalance,
-          color: forms.color,
-          engineNumber: forms.engineNumber,
-          bodyNumber: forms.bodyNumber,
-        }))
-      );
+      try {
+        setLoading(true);
+        const response = await getEntityOfBKUT(
+          entityName,
+          bkutData.id,
+          fetchPlan
+        );
+        setData(response);
+        setRows(
+          response.map((forms) => ({
+            id: forms.id,
+            stateNumber: forms.stateNumber,
+            modelVhicle: forms.modelVhicle,
+            yearMade: forms.yearMade,
+            yearPurchase: forms.yearPurchase,
+            initialBalance: forms.initialBalance,
+            color: forms.color,
+            engineNumber: forms.engineNumber,
+            bodyNumber: forms.bodyNumber,
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
   }, [bkutData]);

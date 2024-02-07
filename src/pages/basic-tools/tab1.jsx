@@ -37,25 +37,32 @@ export default function Tab1({ organization }) {
   useEffect(() => {
     if (!bkutData?.id) return;
     async function fetchData() {
-      const response = await getEntityOfBKUT(
-        entityName,
-        bkutData.id,
-        fetchPlan
-      );
-      setData(response);
-      setRows(
-        response.map((e) => ({
-          id: e.id,
-          seriesNumberBuild: e.seriesNumberBuild,
-          buildName: e.buildName,
-          buildYear: e.buildYear,
-          startDateBuild: e.startDateBuild,
-          numberFloors: e.numberFloors,
-          commonArea: e.commonArea,
-          initialStateValue: e.initialStateValue,
-          soato: getInstance(e.soato),
-        }))
-      );
+      try {
+        setLoading(true);
+        const response = await getEntityOfBKUT(
+          entityName,
+          bkutData.id,
+          fetchPlan
+        );
+        setData(response);
+        setRows(
+          response.map((e) => ({
+            id: e.id,
+            seriesNumberBuild: e.seriesNumberBuild,
+            buildName: e.buildName,
+            buildYear: e.buildYear,
+            startDateBuild: e.startDateBuild,
+            numberFloors: e.numberFloors,
+            commonArea: e.commonArea,
+            initialStateValue: e.initialStateValue,
+            soato: getInstance(e.soato),
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
   }, [bkutData]);
