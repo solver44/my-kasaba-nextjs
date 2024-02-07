@@ -105,7 +105,7 @@ const InsideInput = ({
       maxDate={mxDate}
       minDate={minDate}
       format={openTo === "year" ? "YYYY" : "DD.MM.YYYY"}
-      views={openTo === "year" && ["year"]}
+      views={openTo === "year" ? ["year"] : undefined}
       disabled={disabled}
       value={
         internalValue == "Invalid Date" || !internalValue ? null : internalValue
