@@ -201,7 +201,7 @@ export default function JSH1() {
               organization_president: getPresidentBKUT(bkutData) || "",
               employees_count: currentReport.employeesCount || "0",
 
-              bhut_form: currentReport.bhutForm || "",
+              bhut_form: "071002",
               colAgrAmount: currentReport.colAgrAmount || "",
               colAgrFinishedAmount: currentReport.colAgrFinishedAmount || "",
               includingLaborCommission:
@@ -209,13 +209,11 @@ export default function JSH1() {
               labors: `${showOrNot(
                 currentReport.includingLaborConsidered
               )}/${showOrNot(currentReport.includingLaborSolved)}`,
-              spentColAgrSum: currentReport.spentColAgrSum || "",
-              resultSpentAmount: currentReport.employeesCount
-                ? (
-                    (currentReport.spentColAgrSum || 0) /
-                    (currentReport.employeesCount || 0)
-                  ).toFixed(2)
-                : 0,
+              spentColAgrSum: (currentReport.spentColAgrSum || 0).toFixed(),
+              resultSpentAmount: (
+                (currentReport.spentColAgrSum || 0) /
+                (currentReport.employeesCount || 0)
+              ).toFixed(2),
             }}
             documentSrc="/1jsh.docx"
             fileName={bkutData.name + " 1jsh hisoboti"}

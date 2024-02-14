@@ -141,11 +141,6 @@ export default function EditData({ currentReport = {} }) {
       </div>
       <div className="modal-row">
         <FormInput
-          name="bhutForm"
-          value={values.bhutForm}
-          label={t("1sh.bhut")}
-        />
-        <FormInput
           name="xxtut"
           required
           select
@@ -154,8 +149,6 @@ export default function EditData({ currentReport = {} }) {
           value={values.xxtut}
           label={t("1sh.xxtut")}
         />
-      </div>
-      <div className="modal-row">
         <FormInput
           name="ifut"
           required
@@ -165,6 +158,8 @@ export default function EditData({ currentReport = {} }) {
           value={values.ifut}
           label={t("1sh.ifut")}
         />
+      </div>
+      <div className="modal-row">
         <FormInput
           name="soato"
           required
@@ -174,8 +169,6 @@ export default function EditData({ currentReport = {} }) {
           value={values.soato}
           label={t("1sh.soato")}
         />
-      </div>
-      <div className="modal-row">
         <FormInput
           name="txt"
           required
@@ -185,6 +178,8 @@ export default function EditData({ currentReport = {} }) {
           value={values.opf}
           label={t("1sh.txt")}
         />
+      </div>
+      <div className="modal-row">
         <FormInput
           name="msht"
           required
@@ -194,13 +189,13 @@ export default function EditData({ currentReport = {} }) {
           value={values.ownership}
           label={t("1sh.msht")}
         />
+        <FormInput
+          name="mainActivity"
+          required
+          value={values.mainActivity}
+          label={t("1sh.mainActivity")}
+        />
       </div>
-      <FormInput
-        name="mainActivity"
-        required
-        value={values.mainActivity}
-        label={t("1sh.mainActivity")}
-      />
       <div className="modal-row">
         <FormInput
           name="colAgrAmount"

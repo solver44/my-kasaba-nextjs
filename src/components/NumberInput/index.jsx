@@ -97,7 +97,7 @@ const StyledInputRoot = styled("div")(
     border-radius: var(--input-radius);
     color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
     background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
-    border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
+    border: 1px solid var(--input-border-color);
     box-shadow: var(--input-shadow);
     display: grid;
     grid-template-columns: auto 1fr auto 19px;
