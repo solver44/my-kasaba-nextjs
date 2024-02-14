@@ -86,6 +86,7 @@ export default function JSH1() {
           includingLaborConsidered: forms.includingLaborConsidered,
           includingLaborSolved: forms.includingLaborSolved,
           spentColAgrSum: forms.spentColAgrSum,
+          employeesCount: forms.employeesCount,
         },
         mainActivity: forms.mainActivity,
         dbibt: forms.dbibt.value,
@@ -209,10 +210,11 @@ export default function JSH1() {
                 currentReport.includingLaborConsidered
               )}/${showOrNot(currentReport.includingLaborSolved)}`,
               spentColAgrSum: currentReport.spentColAgrSum || "",
-              resultSpentAmount: employeeCount
-                ? ((currentReport.spentColAgrSum || 0) / employeeCount).toFixed(
-                    2
-                  )
+              resultSpentAmount: currentReport.employeesCount
+                ? (
+                    (currentReport.spentColAgrSum || 0) /
+                    (currentReport.employeesCount || 0)
+                  ).toFixed(2)
                 : 0,
             }}
             documentSrc="/1jsh.docx"

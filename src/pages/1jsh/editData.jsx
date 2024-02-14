@@ -42,6 +42,7 @@ export default function EditData({ currentReport = {} }) {
     includingLaborConsidered: st.includingLaborConsidered,
     includingLaborSolved: st.includingLaborSolved,
     spentColAgrSum: st.spentColAgrSum,
+    employeesCount: st.employeesCount,
   });
 
   async function initData() {
@@ -240,13 +241,22 @@ export default function EditData({ currentReport = {} }) {
           label={t("1sh.input5")}
         />
       </div>
-      <FormInput
-        name="spentColAgrSum"
-        required
-        type="number"
-        value={values.spentColAgrSum}
-        label={t("1sh.input6")}
-      />
+      <div className="modal-row">
+        <FormInput
+          name="spentColAgrSum"
+          required
+          type="number"
+          value={values.spentColAgrSum}
+          label={t("1sh.input6")}
+        />
+        <FormInput
+          name="employeesCount"
+          required
+          type="number"
+          value={values.employeesCount}
+          label={t("1sh.input7")}
+        />
+      </div>
     </div>
   );
 }

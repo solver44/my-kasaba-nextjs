@@ -270,6 +270,7 @@ export default {
       input5: "Shundan hal etilgan nizolar soni",
       input6:
         "Jamoa shartnomasi tadbirlarini bajarish uchun yil davomida sarf qilingan jami mablagʼ (soʼm)",
+      input7: "Xodimlarning oʼrtacha yillik roʼyxatdagi soni",
     },
 
     pinfl: "JShShIR",
