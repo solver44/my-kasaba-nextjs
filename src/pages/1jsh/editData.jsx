@@ -245,7 +245,7 @@ export default function EditData({ currentReport = {} }) {
         <FormInput
           name="spentColAgrSum"
           required
-          type="number"
+          type="currency"
           value={values.spentColAgrSum}
           label={t("1sh.input6")}
         />
