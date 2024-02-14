@@ -199,7 +199,7 @@ export default function JSH1() {
               organization_ownership:
                 bkutData.eLegalEntity?.ownership?.nameUz || "",
               organization_president: getPresidentBKUT(bkutData) || "",
-              employees_count: employeeCount || "0",
+              employees_count: currentReport.employeesCount || "0",
 
               bhut_form: currentReport.bhutForm || "",
               colAgrAmount: currentReport.colAgrAmount || "",
