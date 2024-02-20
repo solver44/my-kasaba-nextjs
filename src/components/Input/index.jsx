@@ -160,7 +160,11 @@ const InsideInput = React.memo(
     }
 
     useEffect(() => {
-      if (numberValue === 0 && type === "currency")
+      if (
+        typeof value === "undefined" &&
+        numberValue === 0 &&
+        type === "currency"
+      )
         onChangeFunc({ target: { value: 0 } });
     }, [numberValue]);
 

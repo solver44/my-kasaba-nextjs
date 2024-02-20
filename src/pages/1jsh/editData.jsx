@@ -46,7 +46,7 @@ export default function EditData({ currentReport = {} }) {
     signed: st.signed,
     spentColAgrSum: st.spentColAgrSum,
     employeesCount: st.employeesCount,
-    spentColAgrSumAll: st.resultSpentAmount || 0,
+    spentColAgrSumAll: st.resultSpentAmount,
   });
 
   async function initData() {
