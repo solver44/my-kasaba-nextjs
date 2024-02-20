@@ -11,7 +11,9 @@ function FormValidation({
   onSubmit,
   onChanged,
 }) {
-  const methods = useForm();
+  const methods = useForm({
+    shouldUseNativeValidation: true,
+  });
   const initialData = useRef();
   const timeOut = useRef();
   const useEffectTimeOut = useRef();

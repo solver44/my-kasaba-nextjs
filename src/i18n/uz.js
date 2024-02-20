@@ -263,14 +263,24 @@ export default {
       txt: "THT (ОПФ) boʼyicha tashkiliy huquqiy shakli",
       msht: "MShT boʼyicha mulkchilik shakli",
       mainActivity: "Аsosiy faoliyat turi",
-      input1: "01. Jamoa shartnomasiga kiritilgan jami bandlar",
+      input1:
+        "01. Jamoa shartnomasi (jamoa shartnomalari)ga kiritilgan jami bandlar",
       input2: "02. Shulardan bajarilgani",
-      input3: "03. Shu jumladan, tuzilgan yakka mehnat nizolari komissiyalari",
-      input4: "04. Yakka mehnat nizolari komissiyalari tomonidan koʼrilgan nizolar",
-      input5: "04.1. Shundan hal etilgan nizolar soni",
       input6:
-        "05. Jamoa shartnomasi tadbirlarini bajarish uchun yil davomida sarf qilingan jami mablagʼ (soʼm)",
-      input7: "06. Xodimlarning oʼrtacha yillik roʼyxatdagi soni",
+        "03. Jamoa shartnomasi (jamoa shartnomalari) tadbirlarini bajarish uchun yil davomida sarf qilingan jami mablagʼ (ming soʼm)",
+      input7: "04. Xodimlarning oʼrtacha yillik roʼyxatdagi soni",
+      input4:
+        "05. Jamoa shartnomasi (jamoa shartnomalari) tadbirlarini bajarish uchun oʼrta hisobda bir xodimga yil davomida sarflangan mablagʼ (ming soʼm) (03 satr : 04 satr)",
+      input5: "06. Tashkilotning alohida bo'linmalari soni",
+      input3: "07. Ulardan jamoa shartnomasi tuzganlar",
+      input8: "Kimga taqdim etiladi",
+      input9: "Qabul qiluvchining nomi",
+      input10: "Manzili",
+      input11: "Vazirlik (idora), kontsern, uyushma",
+      input12: "Birlashma korxona tashkilot",
+      input13: "Tashkiliy-huquqiy shakli",
+      groupTitle:
+        "Jamoa shartnomasi (jamoa shartnomalari)ning asosiy ko'rsatkichlari",
     },
 
     pinfl: "JShShIR",

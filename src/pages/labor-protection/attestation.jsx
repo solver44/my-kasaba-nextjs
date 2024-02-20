@@ -46,8 +46,8 @@ export default function LaborAttestationPage({
 
   function initQuarter(value) {
     const qr = getCurrentQuarter(value, 2);
-    if (qr === false) setEditMode(false);
-    else setEditMode(true);
+    // if (qr === false) setEditMode(false);
+    // else setEditMode(true);
     setQuarter(qr || 2);
   }
 
@@ -182,11 +182,11 @@ export default function LaborAttestationPage({
           select
           dataSelect={quarters}
           onChange={({ target: { value } }) => {
-            setEditMode(checkQuarter(value, 2));
+            // setEditMode(checkQuarter(value, 2));
             setQuarter(value);
           }}
         />
-        {!isReport && editMode && currentReport?.year == dayjs().year() && (
+        {!isReport && editMode  && (
           <LoadingButton
             variant="contained"
             type="submit"
@@ -198,11 +198,11 @@ export default function LaborAttestationPage({
           </LoadingButton>
         )}
         <p
-          className={[styles.titleYear, st.harmfulJobs ? "" : styles.red].join(
+          className={[styles.titleYear, st.id ? "" : styles.red].join(
             " "
           )}
         >
-          {st.harmfulJobs ? t("report-entered") : t("report-not-entered")}
+          {st.id ? t("report-entered") : t("report-not-entered")}
         </p>
 
         <Button

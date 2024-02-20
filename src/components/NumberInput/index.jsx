@@ -46,6 +46,10 @@ const NumberInput = React.forwardRef(function CustomNumberInput(
         }, 0);
       }}
       value={value}
+      onInputChange={(e) => {
+        const val = e.target.value || 0;
+        onChange({ target: { value: val ?? value } });
+      }}
       onChange={(e, val) => {
         onChange({ target: { value: val ?? value } });
       }}

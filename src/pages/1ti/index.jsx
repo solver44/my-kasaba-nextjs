@@ -4,9 +4,7 @@ import DocumentViewer from "@/components/DocumentViewer";
 import { useSelector } from "react-redux";
 import ChangableInput from "@/components/ChangableInput";
 import styles from "./1ti.module.scss";
-import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
-import { getPresidentBKUT } from "@/utils/data";
 import { getReportDate, getReportYear, getYearFrom } from "@/utils/date";
 import { getReport1ti } from "@/http/reports";
 import useActions from "@/hooks/useActions";
@@ -24,17 +22,19 @@ export default function OneTI() {
     if (!bkutData.id) return;
     const allYears = [];
     const y = getReportYear();
+    const prevY = y - 1;
     (bkutData.reports || []).forEach((r) => {
       const cYear = r.year;
-      if (cYear == y) return;
+      if (cYear == y || cYear == prevY) return;
       allYears.push({
         value: cYear,
         label: t("for-year", { year: cYear }),
         labelRu: t("for-year", { year: cYear }),
       });
     });
+    allYears.push({ value: prevY, label: t("for-year", { year: prevY }) });
     allYears.push({ value: y, label: t("for-year", { year: y }) });
-    setYears(allYears.reverse());
+    setYears(allYears.sort((a, b) => b.value - a.value));
   }, [bkutData]);
 
   useEffect(() => {

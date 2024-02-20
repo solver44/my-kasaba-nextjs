@@ -6,7 +6,7 @@ import areEqual from "@/utils/areEqual";
 
 function FormInput({
   required,
-  name,
+  name = "",
   onChange,
   value,
   hidden,
@@ -39,7 +39,7 @@ function FormInput({
   } = !control
     ? { field: { value, name }, fieldState: { invalid } }
     : useController({
-        name: name ?? "",
+        name,
         control,
         rules: {
           required: !!required,
@@ -47,6 +47,7 @@ function FormInput({
       });
 
   useEffect(() => {
+    if (typeof value === "undefined") return;
     if (setValue) setValue(name, getEmptyValue(value));
   }, [value]);
 

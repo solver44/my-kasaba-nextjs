@@ -34,8 +34,8 @@ export default function LaborApp3Page({
 
   function initQuarter(value) {
     const qr = getCurrentQuarter(value);
-    if (qr === false) setEditMode(false);
-    else setEditMode(true);
+    // if (qr === false) setEditMode(false);
+    // else setEditMode(true);
     setQuarter(qr || 1);
   }
 
@@ -178,11 +178,13 @@ export default function LaborApp3Page({
           select
           dataSelect={quarters}
           onChange={({ target: { value } }) => {
-            setEditMode(checkQuarter(value));
+            // setEditMode(checkQuarter(value));
             setQuarter(value);
           }}
         />
-        {!isReport && editMode && currentReport?.year == dayjs().year() && (
+        {!isReport && editMode && 
+        // currentReport?.year == dayjs().year() && 
+        (
           <LoadingButton
             variant="contained"
             type="submit"
@@ -196,10 +198,10 @@ export default function LaborApp3Page({
         <p
           className={[
             styles.titleYear,
-            st.plannedActions ? "" : styles.red,
+            st.id ? "" : styles.red,
           ].join(" ")}
         >
-          {st.plannedActions ? t("report-entered") : t("report-not-entered")}
+          {st.id ? t("report-entered") : t("report-not-entered")}
         </p>
 
         <Button

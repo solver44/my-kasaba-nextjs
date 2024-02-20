@@ -4,6 +4,27 @@
   gap: 22px;
   height: 100%;
   padding: 5px 0;
+  &.left {
+    .modal-row > * {
+      & > :first-child {
+        display: block !important;
+      }
+    }
+    & > .modal-row > * {
+      flex-direction: row;
+      & > :first-child {
+        max-width: 320px;
+        display: block !important;
+        &::after {
+          max-width: 310px;
+          // display: none !important;
+        }
+      }
+      & > :last-child {
+        width: 100%;
+      }
+    }
+  }
 }
 .modal-row {
   display: flex;

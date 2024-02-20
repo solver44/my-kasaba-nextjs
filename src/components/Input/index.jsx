@@ -158,6 +158,12 @@ const InsideInput = React.memo(
       else if (name.includes("email")) return "email";
       return "text";
     }
+
+    useEffect(() => {
+      if (numberValue === 0 && type === "currency")
+        onChangeFunc({ target: { value: 0 } });
+    }, [numberValue]);
+
     return type === "currency" ? (
       <TextField
         id="outlined-basic"

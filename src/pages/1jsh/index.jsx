@@ -69,11 +69,18 @@ export default function JSH1() {
     setCurrentReport(
       temp || { year: currentYear, date: getReportDate(null, currentYear) }
     );
-    if (!temp?.bhutForm && !editMode) setEditMode(true);
+    if (!temp?.id && !editMode) setEditMode(true);
   }, [currentYear, bkutData]);
+
+  function validValue(num) {
+    return isNaN(num) || num == Infinity ? 0 : num;
+  }
 
   const saveStatistics = async (forms) => {
     try {
+      const v1 = forms.spentColAgrSum || 0,
+        v2 = forms.employeesCount || 0;
+
       const requestData = {
         reports: {
           year: currentReport.year,
@@ -82,11 +89,11 @@ export default function JSH1() {
           ifutForm: forms.ifutForm,
           colAgrAmount: forms.colAgrAmount,
           colAgrFinishedAmount: forms.colAgrFinishedAmount,
-          includingLaborCommission: forms.includingLaborCommission,
-          includingLaborConsidered: forms.includingLaborConsidered,
-          includingLaborSolved: forms.includingLaborSolved,
-          spentColAgrSum: forms.spentColAgrSum,
-          employeesCount: forms.employeesCount,
+          signed: forms.signed,
+          seperateDepartments: forms.seperateDepartments,
+          spentColAgrSum: v1.toFixed(2),
+          employeesCount: v2,
+          resultSpentAmount: validValue((v1 / v2).toFixed(2)),
         },
         mainActivity: forms.mainActivity,
         dbibt: forms.dbibt.value,
@@ -95,6 +102,8 @@ export default function JSH1() {
         ownership: forms.msht.value,
         ifut: forms.ifut.value,
         xxtut: forms.xxtut.value,
+        receiverJsh: forms.receiverJsh || "",
+        receiverAddress: forms.receiverAddress || "",
       };
       if (isOrganization)
         requestData.reports.eBkutOrganization = { id: bkutData.id };
@@ -121,6 +130,8 @@ export default function JSH1() {
     setLoadingEditMode(false);
     setIsChanged(false);
   };
+
+  const lEntity = bkutData.eLegalEntity || {};
 
   return (
     <FormValidation className={styles.form} onSubmit={handleSubmit}>
@@ -170,10 +181,10 @@ export default function JSH1() {
             <p
               className={[
                 styles.titleYear,
-                currentReport?.colAgrAmount ? "" : styles.red,
+                currentReport?.id ? "" : styles.red,
               ].join(" ")}
             >
-              {currentReport?.colAgrAmount
+              {currentReport?.id
                 ? t("report-entered")
                 : t("report-not-entered")}
             </p>
@@ -183,40 +194,39 @@ export default function JSH1() {
           <DocumentViewer
             generateData={{
               year: currentReport?.year,
-              dbibt: bkutData.eLegalEntity?.soogu?.code || "",
-              dbibt_name: bkutData.eLegalEntity?.soogu?.nameUz || "",
-              ktut_form: bkutData.eLegalEntity?.soogu?.ktutCode || "",
-              txt_form: bkutData.eLegalEntity?.opf?.code || "",
-              txt: bkutData.eLegalEntity?.opf?.nameUz || "",
-              msht_form: bkutData.eLegalEntity?.ownership?.code || "",
-              main_activity: bkutData.eLegalEntity?.mainActivity || "",
-              xxtut_form: bkutData.eLegalEntity?.okonx?.code || "",
-              ifut_form: bkutData.eLegalEntity?.oked?.code || "",
+              dbibt: lEntity.soogu?.code || "",
+              dbibt_name: lEntity.soogu?.nameUz || "",
+              ktut_form: lEntity.soogu?.ktutCode || "",
+              txt_form: lEntity.opf?.code || "",
+              txt: lEntity.opf?.nameUz || "",
+              msht_form: lEntity.ownership?.code || "",
+              main_activity: lEntity.mainActivity || "",
+              xxtut_form: lEntity.okonx?.code || "",
+              ifut_form: lEntity.oked?.code || "",
               stir: bkutData.tin || "",
-              soato: bkutData.eLegalEntity?.soato?.code || "",
+              soato: lEntity.soato?.code || "",
               organization_name: bkutData.name || "",
+              receiver: lEntity.receiverJsh
+                ? `${lEntity.receiverJsh}, ${lEntity.receiverAddress || ""}`
+                : "",
+              day: dayjs().daysInMonth(),
+              month: dayjs().month(),
               organization_address: bkutData.address || "",
               organization_ownership:
                 bkutData.eLegalEntity?.ownership?.nameUz || "",
               organization_president: getPresidentBKUT(bkutData) || "",
-              employees_count: currentReport.employeesCount || "0",
 
               bhut_form: "071002",
-              colAgrAmount: currentReport.colAgrAmount || "",
-              colAgrFinishedAmount: currentReport.colAgrFinishedAmount || "",
-              includingLaborCommission:
-                currentReport.includingLaborCommission || "",
-              labors: `${showOrNot(
-                currentReport.includingLaborConsidered
-              )}/${showOrNot(currentReport.includingLaborSolved)}`,
-              spentColAgrSum: (currentReport.spentColAgrSum || 0).toFixed(),
-              resultSpentAmount: (
-                (currentReport.spentColAgrSum || 0) /
-                (currentReport.employeesCount || 0)
-              ).toFixed(2),
+              colAgrAmount: currentReport.colAgrAmount || 0,
+              colAgrFinishedAmount: currentReport.colAgrFinishedAmount || 0,
+              spentColAgrSum: currentReport.spentColAgrSum || 0,
+              employees_count: currentReport.employeesCount || 0,
+              seperateDepartments: currentReport.seperateDepartments || 0,
+              signed: currentReport.signed || 0,
+              resultSpentAmount: currentReport.resultSpentAmount || 0,
             }}
             documentSrc="/1jsh.docx"
-            fileName={bkutData.name + " 1jsh hisoboti"}
+            fileName={bkutData.name + " (1JSh hisoboti)"}
           />
         ) : (
           <EditData currentReport={currentReport} />
@@ -226,5 +236,5 @@ export default function JSH1() {
   );
 }
 JSH1.layout = function (Component, t) {
-  return <HomeWrapper title="1JSH hisoboti">{Component}</HomeWrapper>;
+  return <HomeWrapper title="1JSh hisoboti">{Component}</HomeWrapper>;
 };

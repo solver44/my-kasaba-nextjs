@@ -48,17 +48,19 @@ export default function LaborProtectionPage() {
   async function initYears(labors = []) {
     const allYears = [];
     const y = dayjs().year();
+    const prevY = y - 1;
     labors.forEach((r) => {
       const cYear = r.year;
-      if (cYear == y) return;
+      if (cYear == y || cYear == prevY) return;
       allYears.push({
         value: cYear,
         label: t("on-year", { year: cYear }),
         labelRu: t("on-year", { year: cYear }),
       });
     });
+    allYears.push({ value: prevY, label: t("on-year", { year: prevY }) });
     allYears.push({ value: y, label: t("on-year", { year: y }) });
-    setYears(allYears.reverse());
+    setYears(allYears.sort((a, b) => b.value - a.value));
   }
 
   useEffect(() => {
