@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import HomeWrapper from "../home/wrapper";
 import styles from "./statistical-information.module.scss";
 import useAnimation from "@/hooks/useAnimation";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
 import EditIcon from "@mui/icons-material/Edit";
@@ -276,6 +276,18 @@ export default function StatisticalInformation({ organization }) {
               ? t("report-entered")
               : t("report-not-entered")}
           </p>
+          {currentReport.workersAmountOrg && (
+            <Alert severity="info" className={styles.alert}>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: t("workersOrg", {
+                    value1: currentReport.workersAmountOrg,
+                    value2: currentReport.workersFemaleOrg,
+                  }),
+                }}
+              ></span>
+            </Alert>
+          )}
         </div>
         {!editMode ? (
           <div className={styles.grid}>

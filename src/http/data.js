@@ -37,9 +37,9 @@ export async function getBKUTData(id, isOrg, bkutData) {
     const { data } = await $axios.get(
       isOrg
         ? `/rest/entities/EBkutOrganizations/${bkutId}`
-        : `/rest/entities/EBKUT/${bkutId}`,
+        : `/rest/services/bkut/get`,
       {
-        params: { fetchPlan: isOrg ? "all-organization" : "bkut-cabinet" },
+        params: isOrg ? { fetchPlan: "all-organization" } : { id: bkutId },
       }
     );
     return data;

@@ -156,7 +156,7 @@ const InsideInput = React.memo(
     function getType(name) {
       if (name.includes("phone")) return "phone";
       else if (name.includes("email")) return "email";
-      return "text";
+      return type || "text";
     }
 
     useEffect(() => {

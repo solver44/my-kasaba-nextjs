@@ -283,6 +283,7 @@ export default {
         "Jamoa shartnomasi (jamoa shartnomalari)ning asosiy ko'rsatkichlari",
     },
 
+    "workersOrg": "Jami band bo'lganlar soni: <span class='bold'>{{value1}}</span>, shulardan ayollar: <span class='bold'>{{value2}}</span>",
     pinfl: "JShShIR",
     "passport-given-date": "Pasport berilgan sana",
     "first-name": "Ismi",
