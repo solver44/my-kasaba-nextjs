@@ -107,7 +107,7 @@ export default function Step1({ bkutData = {}, isOrganization, canChange }) {
           disabled
           name="seniorOrganization"
           label={t("seniorOrganization")}
-          value={bkutData?.parent?._instanceName}
+          value={bkutData?.parent?.legalEntity?.name}
         />
 
         <FormInput

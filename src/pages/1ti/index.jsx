@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { getReportDate, getReportYear, getYearFrom } from "@/utils/date";
 import { getReport1ti } from "@/http/reports";
 import useActions from "@/hooks/useActions";
+import { Alert } from "@mui/material";
 
 export default function OneTI() {
   const { bkutData = {} } = useSelector((states) => states);
@@ -43,12 +44,9 @@ export default function OneTI() {
       const cYear = r.year;
       return cYear == currentYear;
     });
-    if (typeof temp === "object")
-      temp.date = temp?.date || getReportDate();
+    if (typeof temp === "object") temp.date = temp?.date || getReportDate();
 
-    setCurrentReport(
-      temp || { year: getReportYear(), date: getReportDate() }
-    );
+    setCurrentReport(temp || { year: getReportYear(), date: getReportDate() });
   }, [currentYear, bkutData]);
 
   useEffect(() => {
@@ -120,6 +118,18 @@ export default function OneTI() {
               ? t("report-entered")
               : t("report-not-entered")}
           </p>
+          {currentReport.workersAmountOrg && (
+            <Alert severity="info" className={styles.alert}>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: t("workersOrg", {
+                    value1: currentReport.workersAmountOrg,
+                    value2: currentReport.workersFemaleOrg,
+                  }),
+                }}
+              ></span>
+            </Alert>
+          )}
         </div>
 
         <DocumentViewer

@@ -3,7 +3,12 @@ import HomeWrapper from "../home/wrapper";
 import styles from "./passort-primary-organization.module.scss";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-import { getFIO, getLocalizationNames, showOrNot } from "@/utils/data";
+import {
+  getFIO,
+  getLocalizationNames,
+  getPresidentBKUT,
+  showOrNot,
+} from "@/utils/data";
 import { getFile, initFile, sendEBKUT } from "@/http/data";
 import DownloadLink from "@/components/DownloadLink";
 import { Button } from "@mui/material";
@@ -41,12 +46,6 @@ export default function PassortPrimaryOrganization() {
     protocolFile: { loading: true },
     decisionFile: { loading: true },
   });
-
-  const filteredEmployees = bkutData?.employees
-    ? bkutData.employees
-        .filter((employee) => employee.position?.id === 1)
-        .map((employee) => employee._instanceName)
-    : [];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -240,7 +239,7 @@ export default function PassortPrimaryOrganization() {
                 {t("passort-primary-organization.firstOrganizationOrg")}
               </label>
               <span style={{ textAlign: "left" }}>
-                {showOrNot(bkutData?.parent?._instanceName)}
+                {showOrNot(bkutData?.parent?.legalEntity?.name)}
               </span>
             </div>
             <div className={styles.flex}>
@@ -258,7 +257,7 @@ export default function PassortPrimaryOrganization() {
                 {t("passort-primary-organization.firstOrganizationDirektor")}
               </label>
               <span style={{ textAlign: "left" }}>
-                {showOrNot(filteredEmployees.join(", "))}
+                {showOrNot(getPresidentBKUT(bkutData))}
               </span>
             </div>
             <div className={styles.flex}>
