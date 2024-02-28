@@ -8,7 +8,7 @@ import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./labor.module.scss";
-import { checkQuarter, getCurrentQuarter } from "@/utils/date";
+import { checkQuarter, getCurrentQuarter, getReportDate } from "@/utils/date";
 import Group from "@/components/Group";
 import dayjs from "dayjs";
 import { QUARTERS } from ".";
@@ -52,7 +52,7 @@ export default function LaborApp5Page({
       return cYear == currentYear;
     });
     setCurrentReport(
-      temp || { year: dayjs().year(), date: dayjs().format("YYYY-MM-DD") }
+      temp || { year: currentYear, date: getReportDate(null, currentYear) }
     );
   }, [currentYear, data]);
 
@@ -106,6 +106,7 @@ export default function LaborApp5Page({
   const handleSubmit = async (forms, oldForms) => {
     setLoadingEditMode(true);
     currentReport.quarter = quarter;
+    
     const result = await saveReport(forms, currentReport, "app5");
     setLoadingEditMode(false);
   };

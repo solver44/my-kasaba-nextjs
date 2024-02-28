@@ -8,7 +8,12 @@ import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./labor.module.scss";
-import { checkQuarter, getCurrentQuarter, getReportYear } from "@/utils/date";
+import {
+  checkQuarter,
+  getCurrentQuarter,
+  getReportDate,
+  getReportYear,
+} from "@/utils/date";
 import Group from "@/components/Group";
 import dayjs from "dayjs";
 import { QUARTERS } from ".";
@@ -50,7 +55,7 @@ export default function LaborApp3Page({
       return cYear == currentYear;
     });
     setCurrentReport(
-      temp || { year: dayjs().year(), date: dayjs().format("YYYY-MM-DD") }
+      temp || { year: currentYear, date: getReportDate(null, currentYear) }
     );
   }, [currentYear, data]);
 
@@ -182,9 +187,8 @@ export default function LaborApp3Page({
             setQuarter(value);
           }}
         />
-        {!isReport && editMode && 
-        // currentReport?.year == dayjs().year() && 
-        (
+        {!isReport && editMode && (
+          // currentReport?.year == dayjs().year() &&
           <LoadingButton
             variant="contained"
             type="submit"
@@ -195,12 +199,7 @@ export default function LaborApp3Page({
             {t("save")}
           </LoadingButton>
         )}
-        <p
-          className={[
-            styles.titleYear,
-            st.id ? "" : styles.red,
-          ].join(" ")}
-        >
+        <p className={[styles.titleYear, st.id ? "" : styles.red].join(" ")}>
           {st.id ? t("report-entered") : t("report-not-entered")}
         </p>
 

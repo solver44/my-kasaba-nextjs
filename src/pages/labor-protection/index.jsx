@@ -80,6 +80,9 @@ export default function LaborProtectionPage() {
   async function saveLabor(forms, currentReport, name) {
     const quarter = currentReport.quarter;
     delete currentReport.quarter;
+    if (!currentReport.id) {
+      delete forms.id;
+    }
     const requestData = {
       ...currentReport,
       date: currentReport.date,

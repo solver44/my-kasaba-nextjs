@@ -15,8 +15,8 @@
   margin-bottom: 20px;
 }
 .alert {
-  font-size: var(--input-inside-font-size);
-  padding: 0 10px;
+  font-size: var(--input-inside-font-size) !important;
+  padding: 0 10px !important;
   & > :first-child {
     display: flex;
     align-items: center;
