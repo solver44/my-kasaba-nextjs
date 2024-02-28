@@ -220,7 +220,7 @@ export default function LaborAttestationPage({
         </div>
       ) : (
         <div style={{ marginTop: 20 }} className="modal-content">
-          <FormInput name="id" hidden value={st?.id} />
+          <FormInput name="id" hidden value={st.id || ""} />
           <FormInput name="all" hidden value={values.all} />
           <FormInput name="harmfulCount" hidden value={values.harmfulCount} />
           <FormInput

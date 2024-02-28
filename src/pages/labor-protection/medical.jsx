@@ -198,7 +198,7 @@ export default function LaborMedicalPage({
         </div>
       ) : (
         <div style={{ marginTop: 20 }} className="modal-content">
-          <FormInput name="id" hidden value={st?.id} />
+          <FormInput name="id" hidden value={st.id || ""} />
           <FormInput
             name="determinedOrg"
             required

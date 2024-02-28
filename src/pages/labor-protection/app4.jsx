@@ -227,7 +227,7 @@ export default function LaborApp4Page({
         </div>
       ) : (
         <div style={{ marginTop: 20 }} className="modal-content">
-          <FormInput name="id" hidden value={st?.id} />
+          <FormInput name="id" hidden value={st.id || ""} />
           <div className="modal-row">
             <FormInput
               name="nameOfThePlace"

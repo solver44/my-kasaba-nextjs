@@ -215,7 +215,7 @@ export default function LaborJSHPage({
         </div>
       ) : (
         <div style={{ marginTop: 20 }} className="modal-content">
-          <FormInput name="id" hidden value={st?.id} />
+          <FormInput name="id" hidden value={st.id || ""} />
           <FormInput
             name="plannedActions"
             required
