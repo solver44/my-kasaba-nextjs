@@ -12,6 +12,11 @@ export async function findPINFL(pinfl, givenDate) {
   }
 }
 
+function getBasicAuthHeader(client, secret) {
+  let str = client + ":" + secret;
+  let encodedStr = Buffer.from(str).toString("base64");
+  return "Basic " + encodedStr;
+}
 export async function refreshToken(
   username = "frontoffice",
   password = "6yvqwfzPVU7mUvw"
@@ -26,7 +31,8 @@ export async function refreshToken(
       },
       {
         headers: {
-          Authorization: "Basic Y2xpZW50OnNlY3JldA==",
+          // Authorization: "Basic Y2xpZW50OnNlY3JldA==",
+          Authorization: getBasicAuthHeader("client", "secret"),
           "Content-Type": "application/x-www-form-urlencoded",
         },
       }
