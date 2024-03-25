@@ -31,8 +31,7 @@ export async function refreshToken(
       },
       {
         headers: {
-          // Authorization: "Basic Y2xpZW50OnNlY3JldA==",
-          Authorization: getBasicAuthHeader("client", "secret"),
+          Authorization: getBasicAuthHeader("mykasaba", "mykasaba@123"),
           "Content-Type": "application/x-www-form-urlencoded",
         },
       }
