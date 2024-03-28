@@ -1,10 +1,17 @@
 import axios from "axios";
 import { $axios, BASE_URL } from ".";
+import * as https from "https";
+// export const BASE_URL = "http://localhost:8000";
+
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false,
+});
 
 export async function findPINFL(pinfl, givenDate) {
   try {
     const { data } = await $axios.get("/integration/passport", {
       params: { pinfl, givenDate },
+      httpsAgent,
     });
     return data;
   } catch (error) {
@@ -34,6 +41,7 @@ export async function refreshToken(
           Authorization: getBasicAuthHeader("mykasaba", "mykasaba@123"),
           "Content-Type": "application/x-www-form-urlencoded",
         },
+        httpsAgent,
       }
     );
     return data;
@@ -57,6 +65,7 @@ export async function findBKUT(tin) {
     };
     const { data } = await $axios.post("/rest/entities/EBKUT/search", request, {
       headers: { "Content-Type": "application/json" },
+      httpsAgent,
     });
     return data;
   } catch (error) {
@@ -69,6 +78,7 @@ export async function findSTIR(tin) {
     const { data } = await $axios.get("/integration/legal-entity", {
       params: { tin },
       headers: { "Content-Type": "application/json" },
+      httpsAgent,
     });
     return data;
   } catch (error) {
@@ -130,6 +140,7 @@ export async function sendApplication(_data) {
       requestData,
       {
         headers: { "Content-Type": "application/json" },
+        httpsAgent,
       }
     );
 

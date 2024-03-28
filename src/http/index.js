@@ -2,12 +2,18 @@ import TOKENS from "@/utils/config";
 import { readJSONFile } from "@/utils/jsonUtils";
 import axios from "axios";
 export const BASE_URL = "https://kiat.kasaba.uz";
+import * as https from "https";
 // export const BASE_URL = "http://localhost:8000";
+
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false,
+});
 
 const config = {
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
   },
+  httpsAgent,
 };
 
 export function getDeleteResponse(data) {
@@ -20,6 +26,7 @@ export const $axios = axios.create({
 
 export const $publicAxios = axios.create({
   baseURL: "/api",
+  httpsAgent,
 });
 
 // Interceptor to handle 401 errors and refresh the token
@@ -59,9 +66,9 @@ $axios.interceptors.response.use(
           return $axios.request(error.config); // Use $axios to make the request
 
         window.clearTimeout(globalThis.relTimeout);
-        globalThis.relTimeout = window.setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        // globalThis.relTimeout = window.setTimeout(() => {
+        //   window.location.reload();
+        // }, 500);
       } catch (refreshError) {
         throw refreshError;
       }

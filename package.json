@@ -28,6 +28,7 @@
     "fs-extra": "^11.1.1",
     "highcharts": "^11.2.0",
     "highcharts-react-official": "^3.2.1",
+    "https": "^1.0.0",
     "i18next": "^23.5.1",
     "material-react-table": "^1.15.1",
     "next": "^13.5.4",
